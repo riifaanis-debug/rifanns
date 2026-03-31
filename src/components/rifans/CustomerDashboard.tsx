@@ -1128,8 +1128,6 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                     <div className="h-[2px] bg-gradient-to-r from-transparent via-[#C7A969]/60 to-transparent"></div>
                   </div>
                 </div>
-                  </div>
-               </div>
 
                {/* Info Sections with Improved Design */}
                <div className="space-y-5">
