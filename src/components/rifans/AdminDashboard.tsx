@@ -46,7 +46,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const contractContentRef = useRef<HTMLDivElement>(null);
-
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [chatTargetUser, setChatTargetUser] = useState<{ id: string; name: string } | null>(null);
   const handleDownloadPdf = useCallback(async () => {
     const el = contractContentRef.current;
     if (!el || !selectedContract) return;
