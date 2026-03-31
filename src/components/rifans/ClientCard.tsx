@@ -74,7 +74,7 @@ const ClientCard: React.FC = () => {
 
           <div className="absolute inset-0 flex flex-col justify-between p-5 z-10">
             {/* Top Row: QR left, Logo right */}
-            <div className="flex items-start justify-between">
+            <div className="flex items-start justify-between" dir="ltr">
               <div className="bg-[#C7A969]/10 rounded-md p-1.5 border border-[#C7A969]/15">
                 <QRCodeSVG
                   value={data.url || window.location.href}
