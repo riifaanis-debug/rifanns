@@ -253,6 +253,19 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
 
   const renderHome = () => (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div>
+        <h3 className="text-base sm:text-lg font-bold text-brand mb-4 sm:mb-6 flex items-center gap-2">
+          <TrendingUp size={20} className="text-gold" />
+          ملخص سريع
+        </h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <StatCard icon={<Clock className="text-blue-500" />} label="طلبات جديدة" value={stats.newRequests} color="blue" />
+          <StatCard icon={<RefreshCw className="text-indigo-500" />} label="تحت الإجراء" value={stats.processing} color="indigo" />
+          <StatCard icon={<FileClock className="text-amber-600" />} label="بانتظار التوقيع" value={stats.pendingSignature} color="amber" />
+          <StatCard icon={<FileCheck className="text-emerald-600" />} label="عقود موقعة" value={stats.signedContracts} color="emerald" />
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         <MenuCard 
           icon={<LayoutDashboard size={20} className="text-indigo-600" />} 
@@ -304,19 +317,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
           color="gold"
           badge={notifications.filter(n => !n.is_read).length}
         />
-      </div>
-
-      <div className="mt-8">
-        <h3 className="text-base sm:text-lg font-bold text-brand mb-4 sm:mb-6 flex items-center gap-2">
-          <TrendingUp size={20} className="text-gold" />
-          ملخص سريع
-        </h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <StatCard icon={<Clock className="text-blue-500" />} label="طلبات جديدة" value={stats.newRequests} color="blue" />
-          <StatCard icon={<RefreshCw className="text-indigo-500" />} label="تحت الإجراء" value={stats.processing} color="indigo" />
-          <StatCard icon={<FileClock className="text-amber-600" />} label="بانتظار التوقيع" value={stats.pendingSignature} color="amber" />
-          <StatCard icon={<FileCheck className="text-emerald-600" />} label="عقود موقعة" value={stats.signedContracts} color="emerald" />
-        </div>
       </div>
     </div>
   );
