@@ -1033,76 +1033,94 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                
                 {/* Bank-style Client Card */}
                 <div className="mb-6">
-                  <div ref={cardSaveRef} className="relative w-full aspect-[1.586/1] rounded-[16px] overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.5)]" style={{ background: 'linear-gradient(135deg, #1a0830 0%, #2d0845 40%, #3a0a55 60%, #1a0830 100%)' }}>
+                  <div ref={cardSaveRef} className="relative w-full rounded-[16px] overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.5)]" style={{ background: 'linear-gradient(135deg, #1a0830 0%, #2d0845 40%, #3a0a55 60%, #1a0830 100%)' }}>
                     
-                    {/* Subtle pattern overlay */}
+                    {/* Pattern overlay */}
                     <div className="absolute inset-0 opacity-[0.04] pointer-events-none" style={{ backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(199,169,105,0.1) 35px, rgba(199,169,105,0.1) 36px)' }}></div>
                     
-                    {/* Holographic strip effect */}
+                    {/* Holographic glow */}
                     <div className="absolute top-0 right-0 w-[40%] h-full opacity-[0.06] pointer-events-none" style={{ background: 'radial-gradient(ellipse at 80% 50%, rgba(199,169,105,0.4), transparent 70%)' }}></div>
 
-                    <div className="absolute inset-0 p-5 flex flex-col justify-between z-10">
+                    <div className="relative z-10 p-5">
                       
-                      {/* Top Row: Logo + Contactless */}
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <div className="text-[16px] font-black text-[#C7A969] leading-none">ريفانس المالية</div>
-                          <div className="text-[7px] font-bold text-[#C7A969]/50 tracking-[0.25em] mt-0.5 uppercase">RIFANS FINANCE</div>
+                      {/* Top: Logo + Chip + Contactless */}
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-[40px] h-[30px] rounded-[5px] overflow-hidden" style={{ background: 'linear-gradient(135deg, #C7A969 0%, #E8D5A3 30%, #B8953F 50%, #E8D5A3 70%, #C7A969 100%)' }}>
+                            <div className="w-full h-full grid grid-cols-3 grid-rows-3 gap-[1px] p-[3px]">
+                              {[...Array(9)].map((_, i) => (
+                                <div key={i} className="bg-[#B8953F]/30 rounded-[1px]"></div>
+                              ))}
+                            </div>
+                          </div>
+                          <div>
+                            <div className="text-[15px] font-black text-[#C7A969] leading-none">ريفانس المالية</div>
+                            <div className="text-[7px] font-bold text-[#C7A969]/50 tracking-[0.25em] uppercase">RIFANS FINANCE</div>
+                          </div>
                         </div>
-                        {/* Contactless icon */}
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-[#C7A969]/60">
-                          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="none"/>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" className="text-[#C7A969]/60 mt-1">
                           <path d="M8.5 8.5c2-2 5-2 7 0" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                           <path d="M9.5 11c1.2-1.2 3-1.2 4.2 0" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                           <circle cx="11.6" cy="13" r="0.8" fill="currentColor"/>
                         </svg>
                       </div>
 
-                      {/* Chip */}
-                      <div className="flex items-center gap-3">
-                        <div className="w-[42px] h-[32px] rounded-[6px] overflow-hidden" style={{ background: 'linear-gradient(135deg, #C7A969 0%, #E8D5A3 30%, #B8953F 50%, #E8D5A3 70%, #C7A969 100%)' }}>
-                          <div className="w-full h-full grid grid-cols-3 grid-rows-3 gap-[1px] p-[3px]">
-                            {[...Array(9)].map((_, i) => (
-                              <div key={i} className="bg-[#B8953F]/30 rounded-[1px]"></div>
-                            ))}
-                          </div>
+                      {/* Divider */}
+                      <div className="h-px bg-gradient-to-r from-transparent via-[#C7A969]/20 to-transparent mb-4"></div>
+
+                      {/* Data fields */}
+                      <div className="space-y-3 mb-4">
+                        <div className="flex items-center justify-between">
+                          <div className="text-[10px] font-bold text-[#C7A969]/60">الاسم</div>
+                          <div className="text-[13px] font-[800] text-white">{userData.fullName}</div>
                         </div>
-                        <div className="bg-white rounded-md p-[3px] shadow-sm">
+                        <div className="h-px bg-[#C7A969]/10"></div>
+                        <div className="flex items-center justify-between">
+                          <div className="text-[10px] font-bold text-[#C7A969]/60">رقم الملف</div>
+                          <div className="text-[13px] font-[800] text-white font-mono tracking-wider" dir="ltr">{userData.fileNumber || 'RF-0000-0000'}</div>
+                        </div>
+                        <div className="h-px bg-[#C7A969]/10"></div>
+                        <div className="flex items-center justify-between">
+                          <div className="text-[10px] font-bold text-[#C7A969]/60">رقم الهوية الوطنية</div>
+                          <div className="text-[13px] font-[800] text-white font-mono tracking-wider" dir="ltr">{userData.nationalId}</div>
+                        </div>
+                        <div className="h-px bg-[#C7A969]/10"></div>
+                        <div className="flex items-center justify-between">
+                          <div className="text-[10px] font-bold text-[#C7A969]/60">رقم الجوال</div>
+                          <div className="text-[13px] font-[800] text-white font-mono tracking-wider" dir="ltr">{userData.mobile || '9665XXXXXXXX'}</div>
+                        </div>
+                        <div className="h-px bg-[#C7A969]/10"></div>
+                        <div className="flex items-center justify-between">
+                          <div className="text-[10px] font-bold text-[#C7A969]/60">رقم الطلب</div>
+                          <div className="text-[13px] font-[800] text-white font-mono tracking-wider" dir="ltr">{requests.length > 0 ? requests[0].id?.slice(0, 12) : '---'}</div>
+                        </div>
+                      </div>
+
+                      {/* Divider */}
+                      <div className="h-px bg-gradient-to-r from-transparent via-[#C7A969]/20 to-transparent mb-3"></div>
+
+                      {/* Bottom: QR + Save */}
+                      <div className="flex items-end justify-between">
+                        <div className="bg-white rounded-lg p-[3px] shadow-sm">
                           <QRCodeSVG
                             value={`${window.location.origin}/#/client-card?file=${userData.fileNumber || ''}&name=${encodeURIComponent(userData.fullName)}&id=${userData.nationalId}&mobile=${userData.mobile || ''}`}
-                            size={28}
+                            size={48}
                             level="L"
                             bgColor="#ffffff"
                             fgColor="#1a0830"
                           />
                         </div>
-                      </div>
-
-                      {/* Card Number (File Number) */}
-                      <div>
-                        <div className="text-[17px] font-bold text-white font-mono tracking-[0.2em] drop-shadow-sm" dir="ltr">
-                          {userData.fileNumber || 'RF-0000-0000'}
-                        </div>
-                      </div>
-
-                      {/* Bottom Row: Name + ID info */}
-                      <div className="flex items-end justify-between">
-                        <div className="flex-1">
-                          <div className="text-[7px] text-[#C7A969]/50 uppercase tracking-wider mb-0.5">CARD HOLDER</div>
-                          <div className="text-[13px] font-bold text-white truncate max-w-[180px]">{userData.fullName}</div>
-                        </div>
                         <div className="text-left">
-                          <div className="text-[7px] text-[#C7A969]/50 uppercase tracking-wider mb-0.5">ID</div>
-                          <div className="text-[11px] font-bold text-white/90 font-mono" dir="ltr">{userData.nationalId}</div>
+                          <div className="text-[7px] text-[#C7A969]/30 tracking-widest uppercase">Digital Client Card</div>
                         </div>
                       </div>
                     </div>
 
                     {/* Bottom gold edge */}
-                    <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-gradient-to-r from-[#C7A969]/60 via-[#E8D5A3] to-[#C7A969]/60"></div>
+                    <div className="h-[3px] bg-gradient-to-r from-[#C7A969]/60 via-[#E8D5A3] to-[#C7A969]/60"></div>
                   </div>
 
-                  {/* Save button below card */}
+                  {/* Save button */}
                   <button
                     onClick={handleSaveCard}
                     disabled={savingCard}
