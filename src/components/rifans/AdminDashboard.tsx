@@ -251,6 +251,24 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
     }
   };
 
+  const [statPopup, setStatPopup] = useState<{ label: string; items: any[] } | null>(null);
+
+  const getStatItems = (type: string) => {
+    switch (type) {
+      case 'pending': return submissions.filter(s => s.status === 'pending').map(s => ({ name: s.user_name || 'عميل', id: s.id, date: s.created_at, type: s.type }));
+      case 'processing': return submissions.filter(s => s.status === 'processing').map(s => ({ name: s.user_name || 'عميل', id: s.id, date: s.created_at, type: s.type }));
+      case 'executing': return submissions.filter(s => s.status === 'executing').map(s => ({ name: s.user_name || 'عميل', id: s.id, date: s.created_at, type: s.type }));
+      case 'completed': return submissions.filter(s => s.status === 'completed').map(s => ({ name: s.user_name || 'عميل', id: s.id, date: s.created_at, type: s.type }));
+      case 'rejected': return submissions.filter(s => s.status === 'rejected').map(s => ({ name: s.user_name || 'عميل', id: s.id, date: s.created_at, type: s.type }));
+      case 'pendingSignature': return contracts.filter(c => !c.signed_at).map(c => ({ name: c.user_name || 'عميل', id: c.id, date: c.created_at }));
+      case 'signedContracts': return contracts.filter(c => !!c.signed_at).map(c => ({ name: c.user_name || 'عميل', id: c.id, date: c.signed_at }));
+      case 'contractsSent': return contracts.map(c => ({ name: c.user_name || 'عميل', id: c.id, date: c.created_at }));
+      case 'totalUsers': return users.map(u => ({ name: u.name || u.full_name || 'عميل', id: u.id, date: u.created_at }));
+      case 'totalRequests': return submissions.map(s => ({ name: s.user_name || 'عميل', id: s.id, date: s.created_at, type: s.type }));
+      default: return [];
+    }
+  };
+
   const renderHome = () => (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div>
@@ -259,10 +277,10 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
           ملخص سريع
         </h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <StatCard icon={<Clock className="text-blue-500" />} label="طلبات جديدة" value={stats.newRequests} color="blue" />
-          <StatCard icon={<RefreshCw className="text-indigo-500" />} label="تحت الإجراء" value={stats.processing} color="indigo" />
-          <StatCard icon={<FileClock className="text-amber-600" />} label="بانتظار التوقيع" value={stats.pendingSignature} color="amber" />
-          <StatCard icon={<FileCheck className="text-emerald-600" />} label="عقود موقعة" value={stats.signedContracts} color="emerald" />
+          <StatCard icon={<Clock className="text-blue-500" />} label="طلبات جديدة" value={stats.newRequests} color="blue" onClick={() => setStatPopup({ label: 'طلبات جديدة', items: getStatItems('pending') })} />
+          <StatCard icon={<RefreshCw className="text-indigo-500" />} label="تحت الإجراء" value={stats.processing} color="indigo" onClick={() => setStatPopup({ label: 'تحت الإجراء', items: getStatItems('processing') })} />
+          <StatCard icon={<FileClock className="text-amber-600" />} label="بانتظار التوقيع" value={stats.pendingSignature} color="amber" onClick={() => setStatPopup({ label: 'بانتظار التوقيع', items: getStatItems('pendingSignature') })} />
+          <StatCard icon={<FileCheck className="text-emerald-600" />} label="عقود موقعة" value={stats.signedContracts} color="emerald" onClick={() => setStatPopup({ label: 'عقود موقعة', items: getStatItems('signedContracts') })} />
         </div>
       </div>
 
