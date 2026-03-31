@@ -61,51 +61,51 @@ const ClientCard: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-[#0a0612] via-[#12031a] to-[#1a0525] flex flex-col items-center justify-center p-6 font-['Tajawal']" dir="rtl">
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap');`}</style>
 
-      <div className="w-full max-w-[420px]">
-        <div ref={cardRef} className="relative w-full aspect-[1.78/1] rounded-[14px] overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.6)]">
+      <div className="w-full max-w-[340px]">
+        <div ref={cardRef} className="relative w-full rounded-[10px] overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.6)]" style={{ aspectRatio: '85.6 / 53.98' }}>
           {/* Background */}
           <div className="absolute inset-0" style={{ background: 'linear-gradient(145deg, #2a1045 0%, #1e0a3c 40%, #2d1050 70%, #1a0830 100%)' }}></div>
           <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 70% 50%, transparent 40%, rgba(0,0,0,0.3) 100%)' }}></div>
 
           {/* Large R Watermark */}
-          <div className="absolute left-[5%] top-[10%] w-[50%] h-[80%] opacity-[0.08] pointer-events-none" style={{ background: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 500'%3E%3Cpath d='M150 80h115c75 0 125 40 125 115 0 63-35 102-86 113l112 112-58 58-140-140h-30v140h-78V80zm78 70v118h40c35 0 56-20 56-59 0-39-21-59-56-59h-40z' fill='%23C7A969'/%3E%3C/svg%3E") center/contain no-repeat` }}></div>
+          <div className="absolute left-[5%] top-[10%] w-[45%] h-[80%] opacity-[0.06] pointer-events-none" style={{ background: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 500'%3E%3Cpath d='M150 80h115c75 0 125 40 125 115 0 63-35 102-86 113l112 112-58 58-140-140h-30v140h-78V80zm78 70v118h40c35 0 56-20 56-59 0-39-21-59-56-59h-40z' fill='%23C7A969'/%3E%3C/svg%3E") center/contain no-repeat` }}></div>
 
-          <div className="absolute inset-0 flex flex-col justify-between p-5 z-10">
+          <div className="absolute inset-0 flex flex-col justify-between p-3.5 z-10">
             {/* Top Row: QR left, Logo right */}
             <div className="flex items-start justify-between" dir="ltr">
-              <div className="bg-[#C7A969]/10 rounded-md p-1.5 border border-[#C7A969]/15">
+              <div className="bg-[#C7A969]/10 rounded p-1 border border-[#C7A969]/15">
                 <QRCodeSVG
                   value={data.url || window.location.href}
-                  size={44}
+                  size={34}
                   level="L"
                   bgColor="transparent"
                   fgColor="#C7A969"
                 />
               </div>
               <div className="text-right">
-                <div className="text-[17px] font-[900] text-[#C7A969] leading-none">ريفانس المالية</div>
-                <div className="w-full h-[1px] bg-gradient-to-l from-[#C7A969]/70 via-[#C7A969]/30 to-transparent mt-1.5 mb-1"></div>
-                <div className="text-[8px] font-bold text-[#C7A969]/50 tracking-[0.3em] uppercase">RIFANIS FINANCE</div>
+                <div className="text-[13px] font-[900] text-[#C7A969] leading-none">ريفانس المالية</div>
+                <div className="w-full h-[1px] bg-gradient-to-l from-[#C7A969]/70 via-[#C7A969]/30 to-transparent mt-1 mb-0.5"></div>
+                <div className="text-[6px] font-bold text-[#C7A969]/50 tracking-[0.25em] uppercase">RIFANIS FINANCE</div>
               </div>
             </div>
 
             {/* Data Fields - right side */}
-            <div className="flex flex-col justify-end gap-[10px] w-[55%] ml-auto mt-auto">
+            <div className="flex flex-col justify-end gap-[6px] w-[58%] ml-auto mt-auto">
               <div className="text-right">
-                <div className="text-[9px] text-[#C7A969]/60">الاسم / Name</div>
-                <div className="text-[13px] font-[700] text-[#C7A969]">{data.name}</div>
+                <div className="text-[7px] text-[#C7A969]/55 leading-none">الاسم / Name</div>
+                <div className="text-[10px] font-[700] text-[#C7A969] leading-tight mt-px">{data.name}</div>
               </div>
               <div className="text-right">
-                <div className="text-[9px] text-[#C7A969]/60">رقم الملف / File No</div>
-                <div className="text-[13px] font-[700] text-[#C7A969] font-mono tracking-wide">{data.file}</div>
+                <div className="text-[7px] text-[#C7A969]/55 leading-none">رقم الملف / File No</div>
+                <div className="text-[10px] font-[700] text-[#C7A969] font-mono tracking-wide leading-tight mt-px">{data.file}</div>
               </div>
               <div className="text-right">
-                <div className="text-[9px] text-[#C7A969]/60">رقم الهوية / ID</div>
-                <div className="text-[13px] font-[700] text-[#C7A969] font-mono tracking-wide">{data.id}</div>
+                <div className="text-[7px] text-[#C7A969]/55 leading-none">رقم الهوية / ID</div>
+                <div className="text-[10px] font-[700] text-[#C7A969] font-mono tracking-wide leading-tight mt-px">{data.id}</div>
               </div>
               <div className="text-right">
-                <div className="text-[9px] text-[#C7A969]/60">رقم الجوال / Mobile No</div>
-                <div className="text-[13px] font-[700] text-[#C7A969] font-mono tracking-wide">{data.mobile}</div>
+                <div className="text-[7px] text-[#C7A969]/55 leading-none">رقم الجوال / Mobile</div>
+                <div className="text-[10px] font-[700] text-[#C7A969] font-mono tracking-wide leading-tight mt-px">{data.mobile}</div>
               </div>
             </div>
           </div>
@@ -113,7 +113,7 @@ const ClientCard: React.FC = () => {
       </div>
 
       {/* Action Buttons */}
-      <div className="flex flex-col gap-3 mt-6 w-full max-w-[420px]">
+      <div className="flex flex-col gap-3 mt-5 w-full max-w-[340px]">
         <button
           className="w-full bg-gradient-to-r from-[#C7A969] to-[#E8D5A3] text-[#1a0830] py-3.5 rounded-2xl font-[800] text-[13px] transition-all duration-300 flex items-center justify-center gap-2 hover:-translate-y-0.5 active:scale-[0.98] shadow-[0_8px_24px_rgba(199,169,105,0.25)]"
           onClick={handleSaveCard}
