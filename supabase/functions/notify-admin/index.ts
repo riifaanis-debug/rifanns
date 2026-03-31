@@ -13,6 +13,13 @@ serve(async (req) => {
   try {
     const { requestData, userData } = await req.json();
 
+    // Format number with commas: 5002969 → 5,002,969.00
+    function formatAmount(val: any): string {
+      const num = typeof val === 'string' ? parseFloat(val.replace(/,/g, '')) : Number(val);
+      if (isNaN(num)) return String(val);
+      return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
     const ADMIN_EMAIL = Deno.env.get('ADMIN_EMAIL');
     const ADMIN_EMAIL_PASSWORD = Deno.env.get('ADMIN_EMAIL_PASSWORD');
 
