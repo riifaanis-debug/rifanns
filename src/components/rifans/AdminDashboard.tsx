@@ -849,6 +849,11 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
             title="المحادثات الفورية"
           >
             <MessageCircle size={20} />
+            {unreadChatCount > 0 && (
+              <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center px-1">
+                {unreadChatCount > 99 ? '99+' : unreadChatCount}
+              </span>
+            )}
           </button>
           <button 
             onClick={fetchAllData}
