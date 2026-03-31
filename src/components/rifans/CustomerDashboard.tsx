@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { UserProfile, CustomerRequest, UserProduct, UserDocument } from '../../types';
-import { X, User, Phone, CreditCard, LogOut, FileText, Clock, Briefcase, Edit, CheckCircle2, AlertTriangle, MapPin, Building2, Wallet, Plus, Trash2, FolderOpen, Upload, Paperclip, QrCode, Loader2, ArrowRight, Bell, PenTool, UserPlus, ChevronDown, Scale, Home, Receipt, BarChart3, MessageSquare, Download, Shield, Copy, CheckCircle } from 'lucide-react';
+import { X, User, Phone, CreditCard, LogOut, FileText, Clock, Briefcase, Edit, CheckCircle2, AlertTriangle, MapPin, Building2, Wallet, Plus, Trash2, FolderOpen, Upload, Paperclip, QrCode, Loader2, ArrowRight, Bell, PenTool, UserPlus, ChevronDown, Scale, Home, Receipt, BarChart3, MessageSquare, Download, Shield, Copy, CheckCircle, MessageCircle } from 'lucide-react';
+import ChatPage from './ChatPage';
 import { QRCodeSVG } from 'qrcode.react';
 import { toPng } from 'html-to-image';
 import { Button } from './Shared';
@@ -67,6 +68,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
   const [isUploading, setIsUploading] = useState(false);
   const [savingCard, setSavingCard] = useState(false);
   const cardSaveRef = useRef<HTMLDivElement>(null);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   const handleSaveCard = useCallback(async () => {
     if (!cardSaveRef.current || savingCard) return;
@@ -615,6 +617,9 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
           </div>
         )}
         
+        {/* Chat */}
+        <ChatPage isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
+        
         {/* Header */}
         <div className="bg-white dark:bg-[#12031a] p-5 border-b border-gold/10 flex items-center justify-between sticky top-0 z-10">
            <div className="flex items-center gap-3">
@@ -626,9 +631,18 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                  <p className="text-[10px] text-muted">ملف رقم: <span className="font-mono text-gold">{userData.fileNumber || ''}</span></p>
               </div>
            </div>
-           <button onClick={onClose} className="w-8 h-8 rounded-full bg-gray-50 dark:bg-white/5 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
-             <X size={18} />
-           </button>
+           <div className="flex items-center gap-2">
+              <button 
+                onClick={() => setIsChatOpen(true)} 
+                className="w-9 h-9 rounded-full bg-brand/10 dark:bg-white/5 flex items-center justify-center hover:bg-brand/20 dark:hover:bg-white/10 transition-colors relative"
+                title="المحادثة الفورية"
+              >
+                <MessageCircle size={18} className="text-brand dark:text-gold" />
+              </button>
+              <button onClick={onClose} className="w-8 h-8 rounded-full bg-gray-50 dark:bg-white/5 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
+                <X size={18} />
+              </button>
+           </div>
         </div>
 
         {/* Tabs */}

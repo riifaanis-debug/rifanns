@@ -7,8 +7,9 @@ import {
   IdCard, ChevronRight, ChevronLeft, MoreVertical, Trash2, Eye, 
   FileCheck, FileClock, History, UserCheck, UserPlus, TrendingUp,
   ArrowUpRight, ArrowDownRight, Calendar, Mail, Phone, MapPin,
-  CreditCard, Briefcase, Hash, Menu, Printer
+  CreditCard, Briefcase, Hash, Menu, Printer, MessageCircle
 } from 'lucide-react';
+import ChatPage from './ChatPage';
 import { Button, Card } from './Shared';
 import { motion, AnimatePresence } from 'motion/react';
 import { SubmissionHistory, Notification, Contract, UserProfile } from '../../types';
@@ -45,7 +46,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const contractContentRef = useRef<HTMLDivElement>(null);
-
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [chatTargetUser, setChatTargetUser] = useState<{ id: string; name: string } | null>(null);
   const handleDownloadPdf = useCallback(async () => {
     const el = contractContentRef.current;
     if (!el || !selectedContract) return;
@@ -797,6 +799,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
 
   return (
     <div className="fixed inset-0 z-[100] bg-[#F5F4FA] dark:bg-[#06010a] flex flex-col font-['Tajawal'] overflow-hidden" dir="rtl">
+      {/* Chat */}
+      <ChatPage 
+        isOpen={isChatOpen} 
+        onClose={() => { setIsChatOpen(false); setChatTargetUser(null); }} 
+        targetUserId={chatTargetUser?.id} 
+        targetUserName={chatTargetUser?.name} 
+      />
       {/* Header */}
       <header className="bg-brand text-white p-3 md:p-6 flex items-center justify-between sticky top-0 z-[102] shadow-xl print-hidden">
         <div className="flex items-center gap-3 md:gap-4">
@@ -815,6 +824,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
           </div>
         </div>
         <div className="flex items-center gap-3">
+          <button 
+            onClick={() => setIsChatOpen(true)}
+            className="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all text-gold border border-white/10"
+            title="المحادثات الفورية"
+          >
+            <MessageCircle size={20} />
+          </button>
           <button 
             onClick={fetchAllData}
             className="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all text-gold border border-white/10"
