@@ -43,6 +43,26 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
   const [isConfirmingSendContract, setIsConfirmingSendContract] = useState(false);
   const [pendingContractData, setPendingContractData] = useState<{ userId: string, submissionId: string } | null>(null);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const contractContentRef = useRef<HTMLDivElement>(null);
+
+  const handleDownloadPdf = useCallback(async () => {
+    const el = contractContentRef.current;
+    if (!el || !selectedContract) return;
+    setIsDownloading(true);
+    try {
+      const dataUrl = await toPng(el, { quality: 0.95, backgroundColor: '#ffffff', pixelRatio: 2 });
+      const link = document.createElement('a');
+      link.download = `contract-${selectedContract.file_number || selectedContract.id}.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch (err) {
+      console.error('Download failed:', err);
+      alert('فشل تحميل العقد، يرجى المحاولة مرة أخرى');
+    } finally {
+      setIsDownloading(false);
+    }
+  }, [selectedContract]);
 
   useEffect(() => {
     fetchAllData();
