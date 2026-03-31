@@ -49,7 +49,7 @@ serve(async (req) => {
     const productsHtml = data.products
       ? `<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold;">المنتجات</td><td style="padding:8px;border:1px solid #ddd;">${
           Array.isArray(data.products)
-            ? data.products.map((p: any) => `${p.type}: ${p.amount} ريال`).join('<br/>')
+            ? data.products.map((p: any) => `${p.type}: ${formatAmount(p.amount)} ريال`).join('<br/>')
             : String(data.products)
         }</td></tr>`
       : '';
