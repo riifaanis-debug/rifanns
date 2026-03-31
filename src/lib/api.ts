@@ -130,7 +130,14 @@ export const getAdminSubmissions = async () => {
 
 export const getAdminUsers = async () => {
   const { data } = await supabase.from('app_users').select('*').neq('role', 'admin');
-  return (data || []).map(u => ({ ...u, name: u.full_name, created_at: u.created_at }));
+  return (data || []).map(u => ({
+    ...u,
+    name: u.full_name,
+    fileNumber: u.file_number,
+    nationalId: u.national_id,
+    mobile: u.phone,
+    jobStatus: u.job_status,
+  }));
 };
 
 export const getAdminNotifications = async () => {
