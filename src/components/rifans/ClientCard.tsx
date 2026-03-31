@@ -109,12 +109,10 @@ const ClientCard: React.FC = () => {
               </div>
             </div>
           </div>
-        </div>
-      </div>
       </div>
 
       {/* Action Buttons */}
-      <div className="flex flex-col gap-3 mt-6 w-full max-w-[420px]">
+      <div className="flex flex-col gap-3 mt-5 w-full max-w-[340px]">
         <button
           className="w-full bg-gradient-to-r from-[#C7A969] to-[#E8D5A3] text-[#1a0830] py-3.5 rounded-2xl font-[800] text-[13px] transition-all duration-300 flex items-center justify-center gap-2 hover:-translate-y-0.5 active:scale-[0.98] shadow-[0_8px_24px_rgba(199,169,105,0.25)]"
           onClick={handleSaveCard}
