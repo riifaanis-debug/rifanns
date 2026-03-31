@@ -69,6 +69,28 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
   const [savingCard, setSavingCard] = useState(false);
   const cardSaveRef = useRef<HTMLDivElement>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [unreadChatCount, setUnreadChatCount] = useState(0);
+
+  // Fetch unread chat messages count
+  useEffect(() => {
+    const currentUserId = authUser?.id?.toString() || '';
+    if (!currentUserId) return;
+    const fetchUnread = async () => {
+      const { count } = await import('@/integrations/supabase/client').then(m => 
+        m.supabase.from('chat_messages').select('*', { count: 'exact', head: true })
+          .eq('receiver_id', currentUserId).eq('is_read', false)
+      );
+      setUnreadChatCount(count || 0);
+    };
+    fetchUnread();
+    const channel = (async () => {
+      const { supabase } = await import('@/integrations/supabase/client');
+      return supabase.channel('unread-chat-customer')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'chat_messages' }, () => fetchUnread())
+        .subscribe();
+    })();
+    return () => { channel.then(ch => import('@/integrations/supabase/client').then(m => m.supabase.removeChannel(ch))); };
+  }, [authUser?.id]);
 
   const handleSaveCard = useCallback(async () => {
     if (!cardSaveRef.current || savingCard) return;
