@@ -68,6 +68,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
   const [isUploading, setIsUploading] = useState(false);
   const [savingCard, setSavingCard] = useState(false);
   const cardSaveRef = useRef<HTMLDivElement>(null);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   const handleSaveCard = useCallback(async () => {
     if (!cardSaveRef.current || savingCard) return;
