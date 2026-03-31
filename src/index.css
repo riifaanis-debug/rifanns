@@ -1,0 +1,121 @@
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 280 78% 9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 280 78% 9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 280 78% 9%;
+
+    --primary: 280 78% 9%;
+    --primary-foreground: 43 38% 60%;
+
+    --secondary: 43 38% 95%;
+    --secondary-foreground: 280 78% 9%;
+
+    --muted: 43 10% 55%;
+    --muted-foreground: 43 10% 45%;
+
+    --accent: 43 38% 60%;
+    --accent-foreground: 280 78% 9%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 43 30% 85%;
+    --input: 43 30% 85%;
+    --ring: 43 38% 60%;
+
+    --radius: 0.5rem;
+
+    /* Brand tokens */
+    --brand: 280 78% 9%;
+    --gold: 43 38% 60%;
+    --gold-light: 43 40% 80%;
+    --page: 40 33% 97%;
+
+    --sidebar-background: 280 78% 6%;
+    --sidebar-foreground: 43 38% 90%;
+    --sidebar-primary: 43 38% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 280 60% 12%;
+    --sidebar-accent-foreground: 43 38% 90%;
+    --sidebar-border: 280 40% 15%;
+    --sidebar-ring: 43 38% 60%;
+  }
+
+  .dark {
+    --background: 280 80% 3%;
+    --foreground: 43 38% 90%;
+
+    --card: 280 70% 5%;
+    --card-foreground: 43 38% 90%;
+
+    --popover: 280 70% 5%;
+    --popover-foreground: 43 38% 90%;
+
+    --primary: 43 38% 90%;
+    --primary-foreground: 280 78% 9%;
+
+    --secondary: 280 50% 12%;
+    --secondary-foreground: 43 38% 90%;
+
+    --muted: 280 30% 20%;
+    --muted-foreground: 43 10% 65%;
+
+    --accent: 280 50% 12%;
+    --accent-foreground: 43 38% 90%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 280 30% 15%;
+    --input: 280 30% 15%;
+    --ring: 43 38% 60%;
+
+    --brand: 280 78% 9%;
+    --gold: 43 38% 60%;
+    --gold-light: 43 40% 75%;
+    --page: 280 80% 2%;
+
+    --sidebar-background: 280 78% 4%;
+    --sidebar-foreground: 43 38% 90%;
+    --sidebar-primary: 43 38% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 280 60% 8%;
+    --sidebar-accent-foreground: 43 38% 90%;
+    --sidebar-border: 280 40% 10%;
+    --sidebar-ring: 43 38% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-tajawal;
+  }
+}
+
+@layer utilities {
+  .bg-card-gradient {
+    background: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(40 33% 97%) 100%);
+  }
+  .bg-story-gradient {
+    background: linear-gradient(135deg, hsl(40 40% 97%) 0%, hsl(43 40% 92%) 100%);
+  }
+}
