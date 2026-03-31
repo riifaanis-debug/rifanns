@@ -48,7 +48,7 @@ const ClientCard: React.FC = () => {
     if (!cardRef.current || saving) return;
     setSaving(true);
     try {
-      const dataUrl = await toPng(cardRef.current, { quality: 1, pixelRatio: 3, backgroundColor: '#0a0612' });
+      const dataUrl = await toPng(cardRef.current, { quality: 1, pixelRatio: 3, backgroundColor: '#1a0830' });
       const link = document.createElement('a');
       link.download = `بطاقة-عميل-${data.file}.png`;
       link.href = dataUrl;
@@ -56,6 +56,8 @@ const ClientCard: React.FC = () => {
     } catch { alert("تعذر حفظ البطاقة."); }
     finally { setSaving(false); }
   };
+
+  const logoSvg = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23E8D5A3'/%3E%3Cstop offset='50%25' stop-color='%23C7A969'/%3E%3Cstop offset='100%25' stop-color='%23A88B4A'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M35 25h30c20 0 35 12 35 32 0 16-10 28-25 32l30 31h-20L55 90h-5v30H35V25zm15 20v30h15c12 0 18-7 18-15s-6-15-18-15H50z' fill='url(%23g)'/%3E%3Cpath d='M60 10L80 25V15L60 5z' fill='url(%23g)' opacity='0.8'/%3E%3Cpath d='M75 15l15 12V20L75 10z' fill='url(%23g)' opacity='0.6'/%3E%3C/svg%3E`;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0a0612] via-[#12031a] to-[#1a0525] flex flex-col items-center justify-center p-6 font-['Tajawal']" dir="rtl">
@@ -67,55 +69,86 @@ const ClientCard: React.FC = () => {
         }
       `}</style>
 
-      <div className="w-full max-w-[340px]">
-        <div ref={cardRef} className="relative w-full rounded-[10px] overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.6)]" style={{ aspectRatio: '85.6 / 53.98' }}>
+      <div className="w-full max-w-[420px]">
+        <div ref={cardRef} className="relative w-full rounded-[16px] overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.6)]" style={{ aspectRatio: '85.6 / 53.98' }}>
           {/* Shine effect */}
-          <div className="absolute inset-0 z-20 pointer-events-none overflow-hidden rounded-[10px]">
-            <div className="absolute top-0 -left-[50%] w-[40%] h-[200%] opacity-[0.12]" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent)', animation: 'card-shine 3s ease-in-out infinite' }}></div>
+          <div className="absolute inset-0 z-20 pointer-events-none overflow-hidden rounded-[16px]">
+            <div className="absolute top-0 -left-[50%] w-[40%] h-[200%] opacity-[0.1]" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent)', animation: 'card-shine 3.5s ease-in-out infinite' }}></div>
           </div>
+
           {/* Background */}
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(145deg, #2a1045 0%, #1e0a3c 40%, #2d1050 70%, #1a0830 100%)' }}></div>
-          <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 70% 50%, transparent 40%, rgba(0,0,0,0.3) 100%)' }}></div>
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(145deg, #2e1555 0%, #22103d 30%, #1a0830 60%, #22103d 100%)' }}></div>
+          <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 80% 20%, rgba(199,169,105,0.05) 0%, transparent 50%)' }}></div>
 
-          {/* Large R Watermark */}
-          <div className="absolute left-[5%] top-[10%] w-[45%] h-[80%] opacity-[0.06] pointer-events-none" style={{ background: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 500'%3E%3Cpath d='M150 80h115c75 0 125 40 125 115 0 63-35 102-86 113l112 112-58 58-140-140h-30v140h-78V80zm78 70v118h40c35 0 56-20 56-59 0-39-21-59-56-59h-40z' fill='%23C7A969'/%3E%3C/svg%3E") center/contain no-repeat` }}></div>
+          {/* Large R Watermark - center-left */}
+          <div className="absolute left-[10%] top-[15%] w-[50%] h-[75%] opacity-[0.08] pointer-events-none" style={{ background: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 500'%3E%3Cpath d='M150 80h115c75 0 125 40 125 115 0 63-35 102-86 113l112 112-58 58-140-140h-30v140h-78V80zm78 70v118h40c35 0 56-20 56-59 0-39-21-59-56-59h-40z' fill='%23C7A969'/%3E%3C/svg%3E") center/contain no-repeat` }}></div>
 
-          <div className="absolute inset-0 flex flex-col justify-between p-3.5 z-10">
-            {/* Top Row: QR left, Logo right */}
+          <div className="absolute inset-0 flex flex-col justify-between p-[5%] z-10">
+            {/* Top Row: QR left, Logo+Name right */}
             <div className="flex items-start justify-between" dir="ltr">
-              <div className="bg-[#C7A969]/10 rounded p-1 border border-[#C7A969]/15">
+              {/* QR Code - top left */}
+              <div className="bg-[#C7A969]/10 rounded-[6px] p-[3px] border border-[#C7A969]/20">
                 <QRCodeSVG
                   value={data.url || window.location.href}
-                  size={34}
+                  size={48}
                   level="L"
                   bgColor="transparent"
                   fgColor="#C7A969"
                 />
               </div>
-              <div className="text-right">
-                <div className="text-[13px] font-[900] text-[#C7A969] leading-none">ريفانس المالية</div>
-                <div className="w-full h-[1px] bg-gradient-to-l from-[#C7A969]/70 via-[#C7A969]/30 to-transparent mt-1 mb-0.5"></div>
-                <div className="text-[6px] font-bold text-[#C7A969]/50 tracking-[0.25em] uppercase">RIFANIS FINANCE</div>
+
+              {/* Logo + Company Name - top right */}
+              <div className="flex items-center gap-2" dir="rtl">
+                <div className="text-right">
+                  <div className="text-[14px] font-[800] text-[#C7A969] leading-none tracking-wide">ريفانس المالية</div>
+                  <div className="text-[8px] font-bold text-[#C7A969]/60 tracking-[0.3em] uppercase mt-0.5">RIFANIS FINANCE</div>
+                </div>
+                <div className="w-[36px] h-[36px] flex-shrink-0">
+                  <img src={logoSvg} alt="logo" className="w-full h-full object-contain" />
+                </div>
               </div>
             </div>
 
-            {/* Data Fields - right side */}
-            <div className="flex flex-col justify-end gap-[6px] w-[58%] ml-auto mt-auto">
-              <div className="text-right">
-                <div className="text-[7px] text-[#C7A969]/55 leading-none">الاسم / Name</div>
-                <div className="text-[10px] font-[700] text-[#C7A969] leading-tight mt-px">{data.name}</div>
+            {/* Data Fields */}
+            <div className="flex flex-col gap-[6%] mt-auto" dir="rtl">
+              {/* Name */}
+              <div className="flex items-center gap-[4%]">
+                <div className="text-[9px] text-[#C7A969]/70 whitespace-nowrap text-right min-w-[28%] leading-tight">
+                  <span>الاسم / </span><span className="font-mono">Name</span>
+                </div>
+                <div className="flex-1 border border-[#C7A969]/40 rounded-[4px] px-[6px] py-[3px]">
+                  <div className="text-[11px] font-[700] text-[#C7A969] text-right leading-tight">{data.name}</div>
+                </div>
               </div>
-              <div className="text-right">
-                <div className="text-[7px] text-[#C7A969]/55 leading-none">رقم الملف / File No</div>
-                <div className="text-[10px] font-[700] text-[#C7A969] font-mono tracking-wide leading-tight mt-px">{data.file}</div>
+
+              {/* File No */}
+              <div className="flex items-center gap-[4%]">
+                <div className="text-[9px] text-[#C7A969]/70 whitespace-nowrap text-right min-w-[28%] leading-tight">
+                  <span>رقم الملف / </span><span className="font-mono">File No</span>
+                </div>
+                <div className="flex-1 border border-[#C7A969]/40 rounded-[4px] px-[6px] py-[3px]">
+                  <div className="text-[11px] font-[700] text-[#C7A969] font-mono tracking-wide text-right leading-tight">{data.file}</div>
+                </div>
               </div>
-              <div className="text-right">
-                <div className="text-[7px] text-[#C7A969]/55 leading-none">رقم الهوية / ID</div>
-                <div className="text-[10px] font-[700] text-[#C7A969] font-mono tracking-wide leading-tight mt-px">{data.id}</div>
+
+              {/* ID */}
+              <div className="flex items-center gap-[4%]">
+                <div className="text-[9px] text-[#C7A969]/70 whitespace-nowrap text-right min-w-[28%] leading-tight">
+                  <span>رقم الهوية / </span><span className="font-mono">ID</span>
+                </div>
+                <div className="flex-1 border border-[#C7A969]/40 rounded-[4px] px-[6px] py-[3px]">
+                  <div className="text-[11px] font-[700] text-[#C7A969] font-mono tracking-wide text-right leading-tight">{data.id}</div>
+                </div>
               </div>
-              <div className="text-right">
-                <div className="text-[7px] text-[#C7A969]/55 leading-none">رقم الجوال / Mobile</div>
-                <div className="text-[10px] font-[700] text-[#C7A969] font-mono tracking-wide leading-tight mt-px">{data.mobile}</div>
+
+              {/* Mobile */}
+              <div className="flex items-center gap-[4%]">
+                <div className="text-[9px] text-[#C7A969]/70 whitespace-nowrap text-right min-w-[28%] leading-tight">
+                  <span>رقم الجوال / </span><span className="font-mono">Mobile No</span>
+                </div>
+                <div className="flex-1 border border-[#C7A969]/40 rounded-[4px] px-[6px] py-[3px]">
+                  <div className="text-[11px] font-[700] text-[#C7A969] font-mono tracking-wide text-right leading-tight">{data.mobile}</div>
+                </div>
               </div>
             </div>
           </div>
@@ -123,7 +156,7 @@ const ClientCard: React.FC = () => {
       </div>
 
       {/* Action Buttons */}
-      <div className="flex flex-col gap-3 mt-5 w-full max-w-[340px]">
+      <div className="flex flex-col gap-3 mt-5 w-full max-w-[420px]">
         <button
           className="w-full bg-gradient-to-r from-[#C7A969] to-[#E8D5A3] text-[#1a0830] py-3.5 rounded-2xl font-[800] text-[13px] transition-all duration-300 flex items-center justify-center gap-2 hover:-translate-y-0.5 active:scale-[0.98] shadow-[0_8px_24px_rgba(199,169,105,0.25)]"
           onClick={handleSaveCard}
