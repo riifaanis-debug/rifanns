@@ -90,22 +90,22 @@ const ClientCard: React.FC = () => {
             </div>
 
             {/* Data Fields - right aligned */}
-            <div className="flex flex-col gap-2 items-end mt-auto">
-              <div className="text-right">
+            <div className="flex flex-col gap-2 w-full mt-auto">
+              <div className="w-full text-right">
                 <div className="text-[9px] text-[#C7A969]/50 mb-0.5">Name / الاسم</div>
-                <div className="text-[15px] font-[800] text-white">{data.name}</div>
+                <div className="text-[15px] font-[800] text-white text-right">{data.name}</div>
               </div>
-              <div className="text-right">
+              <div className="w-full text-right">
                 <div className="text-[9px] text-[#C7A969]/50 mb-0.5">File No / رقم الملف</div>
-                <div className="text-[15px] font-[800] text-white font-mono tracking-wide" dir="ltr">{data.file}</div>
+                <div className="text-[15px] font-[800] text-white font-mono tracking-wide text-right">{data.file}</div>
               </div>
-              <div className="text-right">
+              <div className="w-full text-right">
                 <div className="text-[9px] text-[#C7A969]/50 mb-0.5">ID / رقم الهوية</div>
-                <div className="text-[15px] font-[800] text-white font-mono tracking-wide" dir="ltr">{data.id}</div>
+                <div className="text-[15px] font-[800] text-white font-mono tracking-wide text-right">{data.id}</div>
               </div>
-              <div className="text-right">
+              <div className="w-full text-right">
                 <div className="text-[9px] text-[#C7A969]/50 mb-0.5">Mobile No / رقم الجوال</div>
-                <div className="text-[15px] font-[800] text-white font-mono tracking-wide" dir="ltr">{data.mobile}</div>
+                <div className="text-[15px] font-[800] text-white font-mono tracking-wide text-right">{data.mobile}</div>
               </div>
             </div>
           </div>
