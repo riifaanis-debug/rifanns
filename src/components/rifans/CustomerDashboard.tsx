@@ -1045,8 +1045,8 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
 
                     <div className="absolute inset-0 flex flex-col justify-between p-[14px] z-10">
                       {/* Top Row: QR left, Logo right */}
-                      <div className="flex items-start justify-between">
-                        {/* QR Code - top left */}
+                      <div className="flex items-start justify-between" dir="ltr">
+                        {/* QR Code - left */}
                         <div className="bg-[#C7A969]/10 rounded-md p-1.5 border border-[#C7A969]/15">
                           <QRCodeSVG
                             value={window.location.origin + `/#/client-card?file=${userData.fileNumber}&name=${encodeURIComponent(userData.fullName || '')}`}
@@ -1057,7 +1057,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                           />
                         </div>
 
-                        {/* Logo - top right */}
+                        {/* Logo - right */}
                         <div className="text-right">
                           <div className="text-[14px] font-[900] text-[#C7A969] leading-none">ريفانس المالية</div>
                           <div className="w-full h-[1px] bg-gradient-to-l from-[#C7A969]/70 via-[#C7A969]/30 to-transparent mt-1.5 mb-1"></div>
