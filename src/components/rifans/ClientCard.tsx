@@ -59,10 +59,20 @@ const ClientCard: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0a0612] via-[#12031a] to-[#1a0525] flex flex-col items-center justify-center p-6 font-['Tajawal']" dir="rtl">
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap');`}</style>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap');
+        @keyframes card-shine {
+          0% { transform: translateX(-100%) rotate(25deg); }
+          100% { transform: translateX(200%) rotate(25deg); }
+        }
+      `}</style>
 
       <div className="w-full max-w-[340px]">
         <div ref={cardRef} className="relative w-full rounded-[10px] overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.6)]" style={{ aspectRatio: '85.6 / 53.98' }}>
+          {/* Shine effect */}
+          <div className="absolute inset-0 z-20 pointer-events-none overflow-hidden rounded-[10px]">
+            <div className="absolute top-0 -left-[50%] w-[40%] h-[200%] opacity-[0.12]" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent)', animation: 'card-shine 3s ease-in-out infinite' }}></div>
+          </div>
           {/* Background */}
           <div className="absolute inset-0" style={{ background: 'linear-gradient(145deg, #2a1045 0%, #1e0a3c 40%, #2d1050 70%, #1a0830 100%)' }}></div>
           <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 70% 50%, transparent 40%, rgba(0,0,0,0.3) 100%)' }}></div>
