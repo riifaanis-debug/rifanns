@@ -16,6 +16,7 @@ interface ContractPageProps {
 const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) => {
   const { token, user } = useAuth();
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const contractRef = useRef<HTMLDivElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [hasSignature, setHasSignature] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
