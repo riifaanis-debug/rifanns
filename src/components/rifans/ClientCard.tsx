@@ -143,11 +143,11 @@ const ClientCard: React.FC = () => {
 
               {/* Mobile */}
               <div className="flex items-center gap-[4%]">
-                <div className="text-[9px] text-[#C7A969]/70 whitespace-nowrap text-right min-w-[28%] leading-tight">
+                <div className="text-[7px] text-[#C7A969]/70 whitespace-nowrap text-right min-w-[28%] leading-tight">
                   <span>رقم الجوال / </span><span className="font-mono">Mobile No</span>
                 </div>
-                <div className="flex-1 border border-[#C7A969]/40 rounded-[4px] px-[6px] py-[3px]">
-                  <div className="text-[11px] font-[700] text-[#C7A969] font-mono tracking-wide text-right leading-tight">{data.mobile}</div>
+                <div className="flex-1 border border-[#C7A969]/40 rounded-[4px] px-[5px] py-[2px]">
+                  <div className="text-[9px] font-[700] text-[#C7A969] font-mono tracking-wide text-right leading-tight">{data.mobile}</div>
                 </div>
               </div>
             </div>
