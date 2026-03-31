@@ -15,6 +15,7 @@ import { SubmissionHistory, Notification, Contract, UserProfile } from '../../ty
 import { safeStringify, safeParse } from '../../utils/safeJson';
 import { getAdminSubmissions, getAdminUsers, getAdminNotifications, getAdminContracts, updateSubmissionStatus, sendContract as apiSendContract, getSubmissionHistory as apiGetSubmissionHistory } from '../../lib/api';
 import { formatAmount } from '../../lib/formatNumber';
+import { toPng } from 'html-to-image';
 
 interface AdminDashboardProps {
   onClose: () => void;
