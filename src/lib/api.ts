@@ -272,3 +272,31 @@ export const submitSignature = async (submissionId: string, signatureData: strin
 
   await supabase.from('requests').update({ status: 'executing' }).eq('id', submissionId);
 };
+
+export const notifyAdminContractSigned = async (submissionId: string, contractPdfFile?: { fileName: string; filePath: string }) => {
+  const userId = getCurrentUserId();
+  if (!userId) return;
+
+  const { data: user } = await supabase.from('app_users').select('full_name, phone, national_id, email').eq('id', userId).single();
+  const { data: req } = await supabase.from('requests').select('*').eq('id', submissionId).single();
+
+  const files = contractPdfFile ? [contractPdfFile] : [];
+
+  await supabase.functions.invoke('notify-admin', {
+    body: {
+      requestData: {
+        id: submissionId,
+        type: 'contract_signed',
+        details: `قام العميل بتوقيع العقد رقم ${submissionId} بنجاح`,
+        data: req?.data || {},
+        files,
+      },
+      userData: {
+        fullName: user?.full_name || 'غير محدد',
+        phone: user?.phone || 'غير محدد',
+        national_id: user?.national_id || 'غير محدد',
+        email: user?.email || 'غير محدد',
+      },
+    },
+  });
+};

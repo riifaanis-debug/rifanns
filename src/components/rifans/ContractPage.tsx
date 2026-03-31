@@ -4,8 +4,9 @@ import { X, CheckCircle, Download, Printer, ShieldCheck, PenTool, ArrowRight, Lo
 import { Button } from './Shared';
 import { useAuth } from '../../contexts/AuthContext';
 import { safeStringify, safeParse } from '../../utils/safeJson';
-import { getSubmission, submitSignature } from '../../lib/api';
+import { getSubmission, submitSignature, notifyAdminContractSigned, uploadDocument } from '../../lib/api';
 import { formatAmount } from '../../lib/formatNumber';
+import { toPng } from 'html-to-image';
 
 interface ContractPageProps {
   submissionId: string;
