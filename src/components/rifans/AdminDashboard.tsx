@@ -799,6 +799,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
 
   return (
     <div className="fixed inset-0 z-[100] bg-[#F5F4FA] dark:bg-[#06010a] flex flex-col font-['Tajawal'] overflow-hidden" dir="rtl">
+      {/* Chat */}
+      <ChatPage 
+        isOpen={isChatOpen} 
+        onClose={() => { setIsChatOpen(false); setChatTargetUser(null); }} 
+        targetUserId={chatTargetUser?.id} 
+        targetUserName={chatTargetUser?.name} 
+      />
       {/* Header */}
       <header className="bg-brand text-white p-3 md:p-6 flex items-center justify-between sticky top-0 z-[102] shadow-xl print-hidden">
         <div className="flex items-center gap-3 md:gap-4">
