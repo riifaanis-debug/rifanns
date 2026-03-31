@@ -39,6 +39,7 @@ serve(async (req) => {
       'financial_consultation': 'استشارة مالية',
       'contact': 'تواصل',
       'general': 'طلب عام',
+      'contract_signed': 'توقيع عقد',
     };
     const requestType = typeMap[requestData?.type] || requestData?.type || 'عام';
     const requestId = requestData?.id || 'غير محدد';

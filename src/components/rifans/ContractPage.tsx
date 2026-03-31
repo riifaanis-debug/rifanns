@@ -4,8 +4,9 @@ import { X, CheckCircle, Download, Printer, ShieldCheck, PenTool, ArrowRight, Lo
 import { Button } from './Shared';
 import { useAuth } from '../../contexts/AuthContext';
 import { safeStringify, safeParse } from '../../utils/safeJson';
-import { getSubmission, submitSignature } from '../../lib/api';
+import { getSubmission, submitSignature, notifyAdminContractSigned, uploadDocument } from '../../lib/api';
 import { formatAmount } from '../../lib/formatNumber';
+import { toPng } from 'html-to-image';
 
 interface ContractPageProps {
   submissionId: string;
@@ -15,6 +16,7 @@ interface ContractPageProps {
 const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) => {
   const { token, user } = useAuth();
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const contractRef = useRef<HTMLDivElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [hasSignature, setHasSignature] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -136,6 +138,24 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
       try {
         await submitSignature(submissionId, signatureData);
         setIsSuccess(true);
+
+        // Capture contract as image and send email to admin
+        try {
+          const contractEl = contractRef.current;
+          if (contractEl) {
+            const dataUrl = await toPng(contractEl, { quality: 0.95, backgroundColor: '#ffffff' });
+            const res = await fetch(dataUrl);
+            const blob = await res.blob();
+            const file = new File([blob], `contract-${submissionId}.png`, { type: 'image/png' });
+            const uploaded = await uploadDocument(file);
+            await notifyAdminContractSigned(submissionId, uploaded);
+          } else {
+            await notifyAdminContractSigned(submissionId);
+          }
+        } catch (emailErr) {
+          console.error('Failed to send contract email to admin:', emailErr);
+          // Don't block success - signature was saved
+        }
       } catch (error) {
         console.error('Error submitting signature:', error);
         alert('فشل حفظ التوقيع');
@@ -232,7 +252,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
 
       {/* Main Content Area */}
       <div className="flex-1 p-4 sm:p-6 scrollbar-hide print:p-0 bg-[#F0F2F5] print:bg-white overflow-y-auto">
-        <div className="max-w-[210mm] min-h-[297mm] mx-auto bg-white shadow-[0_10px_30px_rgba(0,0,0,0.05)] border border-gray-200 p-6 sm:p-10 relative overflow-hidden font-['Tajawal'] print:shadow-none print:border-none print:p-0 print:w-full">
+        <div ref={contractRef} className="max-w-[210mm] min-h-[297mm] mx-auto bg-white shadow-[0_10px_30px_rgba(0,0,0,0.05)] border border-gray-200 p-6 sm:p-10 relative overflow-hidden font-['Tajawal'] print:shadow-none print:border-none print:p-0 print:w-full">
           
           {/* Official Watermark */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.015] select-none rotate-[-35deg]">
