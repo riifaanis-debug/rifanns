@@ -1509,12 +1509,12 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   طباعة العقد
                 </Button>
                 <Button 
-                  
-                  onClick={() => window.print()} 
+                  disabled={isDownloading}
+                  onClick={handleDownloadPdf} 
                   className="bg-brand text-gold gap-1.5 text-[10px] sm:text-xs h-7 sm:h-9 shadow-lg shadow-brand/20"
                 >
                   <Download size={12} />
-                  تحميل بصيغة PDF
+                  {isDownloading ? 'جاري التحميل...' : 'تحميل العقد'}
                 </Button>
               </div>
             </motion.div>
