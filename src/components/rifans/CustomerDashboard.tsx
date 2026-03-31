@@ -1,6 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { UserProfile, CustomerRequest, UserProduct, UserDocument } from '../../types';
-import { X, User, Phone, CreditCard, LogOut, FileText, Clock, Briefcase, Edit, CheckCircle2, AlertTriangle, MapPin, Building2, Wallet, Plus, Trash2, FolderOpen, Upload, Paperclip, QrCode, Loader2, ArrowRight, Bell, PenTool, UserPlus, ChevronDown, Scale, Home, Receipt, BarChart3, MessageSquare } from 'lucide-react';
+import { X, User, Phone, CreditCard, LogOut, FileText, Clock, Briefcase, Edit, CheckCircle2, AlertTriangle, MapPin, Building2, Wallet, Plus, Trash2, FolderOpen, Upload, Paperclip, QrCode, Loader2, ArrowRight, Bell, PenTool, UserPlus, ChevronDown, Scale, Home, Receipt, BarChart3, MessageSquare, Download, Shield, Copy, CheckCircle } from 'lucide-react';
+import { QRCodeSVG } from 'qrcode.react';
+import { toPng } from 'html-to-image';
 import { Button } from './Shared';
 import { useAuth } from '../../contexts/AuthContext';
 import Logo from './Logo';
