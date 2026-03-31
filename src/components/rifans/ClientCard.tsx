@@ -62,50 +62,52 @@ const ClientCard: React.FC = () => {
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap');`}</style>
 
       <div className="w-full max-w-[420px]">
-        <div ref={cardRef} className="relative w-full aspect-[1.7/1] rounded-[20px] overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.6)]" style={{ background: 'linear-gradient(135deg, #22042C 0%, #2d0845 50%, #1a0525 100%)' }}>
+        <div ref={cardRef} className="relative w-full aspect-[1.75/1] rounded-[16px] overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.6)]">
+          {/* Background */}
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(145deg, #2a1045 0%, #1e0a3c 40%, #2d1050 70%, #1a0830 100%)' }}></div>
           
-          {/* Subtle glow */}
-          <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 30% 50%, rgba(199,169,105,0.3), transparent 60%)' }}></div>
+          {/* Subtle vignette */}
+          <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 70% 50%, transparent 40%, rgba(0,0,0,0.3) 100%)' }}></div>
 
           {/* Large R Watermark */}
-          <div className="absolute left-[2%] top-[15%] w-[45%] h-[75%] opacity-[0.07] pointer-events-none" style={{ background: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 500'%3E%3Cpath d='M150 80h115c75 0 125 40 125 115 0 63-35 102-86 113l112 112-58 58-140-140h-30v140h-78V80zm78 70v118h40c35 0 56-20 56-59 0-39-21-59-56-59h-40z' fill='%23C7A969'/%3E%3C/svg%3E") center/contain no-repeat` }}></div>
+          <div className="absolute left-[5%] top-[10%] w-[50%] h-[80%] opacity-[0.08] pointer-events-none" style={{ background: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 500'%3E%3Cpath d='M150 80h115c75 0 125 40 125 115 0 63-35 102-86 113l112 112-58 58-140-140h-30v140h-78V80zm78 70v118h40c35 0 56-20 56-59 0-39-21-59-56-59h-40z' fill='%23C7A969'/%3E%3C/svg%3E") center/contain no-repeat` }}></div>
 
-          <div className="absolute inset-0 flex flex-col justify-between p-4 z-10">
+          <div className="absolute inset-0 flex flex-col justify-between p-5 z-10">
             {/* Top Row: QR left, Logo right */}
             <div className="flex items-start justify-between">
-              <div className="bg-[#C7A969]/15 rounded-md p-1 border border-[#C7A969]/20">
+              <div className="bg-[#C7A969]/10 rounded-md p-1.5 border border-[#C7A969]/15">
                 <QRCodeSVG
                   value={data.url || window.location.href}
-                  size={40}
+                  size={44}
                   level="L"
                   bgColor="transparent"
                   fgColor="#C7A969"
                 />
               </div>
               <div className="text-right">
-                <div className="text-[14px] font-[900] text-[#C7A969] leading-none">ريفانس المالية</div>
-                <div className="w-full h-[1px] bg-gradient-to-l from-[#C7A969]/80 via-[#C7A969]/40 to-transparent mt-1 mb-0.5"></div>
-                <div className="text-[7px] font-bold text-[#C7A969]/60 tracking-[0.25em] uppercase">RIFANIS FINANCE</div>
+                <div className="text-[17px] font-[900] text-[#C7A969] leading-none">ريفانس المالية</div>
+                <div className="w-full h-[1px] bg-gradient-to-l from-[#C7A969]/70 via-[#C7A969]/30 to-transparent mt-1.5 mb-1"></div>
+                <div className="text-[8px] font-bold text-[#C7A969]/50 tracking-[0.3em] uppercase">RIFANIS FINANCE</div>
               </div>
             </div>
 
-            {/* Data Fields - right aligned */}
-            <div className="flex flex-col gap-[4px] w-full mt-auto">
-              <div className="w-full text-right">
-                <div className="text-[7px] text-[#C7A969]/50 leading-tight">Name / الاسم</div>
-                <div className="text-[12px] font-[700] text-white text-right leading-tight">{data.name}</div>
+            {/* Data Fields - right side */}
+            <div className="flex flex-col justify-end gap-[10px] w-[60%] mr-0 ml-auto mt-auto">
+              <div className="text-right">
+                <div className="text-[10px] text-[#C7A969]/70 mb-[2px]">الاسم / Name</div>
+                <div className="text-[13px] font-[700] text-[#C7A969] leading-tight">{data.name}</div>
               </div>
-              <div className="w-full text-right">
-                <div className="text-[7px] text-[#C7A969]/50 leading-tight">File No / رقم الملف</div>
-                <div className="text-[12px] font-[700] text-white font-mono tracking-wide text-right leading-tight">{data.file}</div>
+              <div className="text-right">
+                <div className="text-[10px] text-[#C7A969]/70 mb-[2px]">رقم الملف / File No</div>
+                <div className="text-[13px] font-[700] text-[#C7A969] font-mono tracking-wide leading-tight">{data.file}</div>
               </div>
-              <div className="w-full text-right">
-                <div className="text-[7px] text-[#C7A969]/50 leading-tight">ID / رقم الهوية</div>
-                <div className="text-[12px] font-[700] text-white font-mono tracking-wide text-right leading-tight">{data.id}</div>
+              <div className="text-right">
+                <div className="text-[10px] text-[#C7A969]/70 mb-[2px]">رقم الهوية / ID</div>
+                <div className="text-[13px] font-[700] text-[#C7A969] font-mono tracking-wide leading-tight">{data.id}</div>
               </div>
-              <div className="w-full text-right">
-                <div className="text-[7px] text-[#C7A969]/50 leading-tight">Mobile / الجوال</div>
-                <div className="text-[12px] font-[700] text-white font-mono tracking-wide text-right leading-tight">{data.mobile}</div>
+              <div className="text-right">
+                <div className="text-[10px] text-[#C7A969]/70 mb-[2px]">رقم الجوال / Mobile No</div>
+                <div className="text-[13px] font-[700] text-[#C7A969] font-mono tracking-wide leading-tight">{data.mobile}</div>
               </div>
             </div>
           </div>
