@@ -48,6 +48,25 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
   const contractContentRef = useRef<HTMLDivElement>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatTargetUser, setChatTargetUser] = useState<{ id: string; name: string } | null>(null);
+  const [unreadChatCount, setUnreadChatCount] = useState(0);
+
+  // Fetch unread chat messages for admin
+  useEffect(() => {
+    const fetchUnread = async () => {
+      const { supabase } = await import('@/integrations/supabase/client');
+      const { count } = await supabase.from('chat_messages').select('*', { count: 'exact', head: true })
+        .eq('receiver_id', 'admin').eq('is_read', false);
+      setUnreadChatCount(count || 0);
+    };
+    fetchUnread();
+    const channel = (async () => {
+      const { supabase } = await import('@/integrations/supabase/client');
+      return supabase.channel('unread-chat-admin')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'chat_messages' }, () => fetchUnread())
+        .subscribe();
+    })();
+    return () => { channel.then(ch => import('@/integrations/supabase/client').then(m => m.supabase.removeChannel(ch))); };
+  }, []);
   const handleDownloadPdf = useCallback(async () => {
     const el = contractContentRef.current;
     if (!el || !selectedContract) return;
@@ -826,10 +845,15 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
         <div className="flex items-center gap-3">
           <button 
             onClick={() => setIsChatOpen(true)}
-            className="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all text-gold border border-white/10"
+            className="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all text-gold border border-white/10 relative"
             title="المحادثات الفورية"
           >
             <MessageCircle size={20} />
+            {unreadChatCount > 0 && (
+              <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center px-1">
+                {unreadChatCount > 99 ? '99+' : unreadChatCount}
+              </span>
+            )}
           </button>
           <button 
             onClick={fetchAllData}

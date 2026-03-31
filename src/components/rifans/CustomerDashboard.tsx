@@ -69,6 +69,28 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
   const [savingCard, setSavingCard] = useState(false);
   const cardSaveRef = useRef<HTMLDivElement>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [unreadChatCount, setUnreadChatCount] = useState(0);
+
+  // Fetch unread chat messages count
+  useEffect(() => {
+    const currentUserId = authUser?.id?.toString() || '';
+    if (!currentUserId) return;
+    const fetchUnread = async () => {
+      const { count } = await import('@/integrations/supabase/client').then(m => 
+        m.supabase.from('chat_messages').select('*', { count: 'exact', head: true })
+          .eq('receiver_id', currentUserId).eq('is_read', false)
+      );
+      setUnreadChatCount(count || 0);
+    };
+    fetchUnread();
+    const channel = (async () => {
+      const { supabase } = await import('@/integrations/supabase/client');
+      return supabase.channel('unread-chat-customer')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'chat_messages' }, () => fetchUnread())
+        .subscribe();
+    })();
+    return () => { channel.then(ch => import('@/integrations/supabase/client').then(m => m.supabase.removeChannel(ch))); };
+  }, [authUser?.id]);
 
   const handleSaveCard = useCallback(async () => {
     if (!cardSaveRef.current || savingCard) return;
@@ -636,9 +658,14 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                 onClick={() => setIsChatOpen(true)} 
                 className="w-9 h-9 rounded-full bg-brand/10 dark:bg-white/5 flex items-center justify-center hover:bg-brand/20 dark:hover:bg-white/10 transition-colors relative"
                 title="المحادثة الفورية"
-              >
+               >
                 <MessageCircle size={18} className="text-brand dark:text-gold" />
-              </button>
+                {unreadChatCount > 0 && (
+                  <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center px-1">
+                    {unreadChatCount > 99 ? '99+' : unreadChatCount}
+                  </span>
+                )}
+               </button>
               <button onClick={onClose} className="w-8 h-8 rounded-full bg-gray-50 dark:bg-white/5 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
                 <X size={18} />
               </button>
