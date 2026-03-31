@@ -1049,20 +1049,18 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                       />
                     </div>
 
-                    {/* Data values overlay - positioned on the right side */}
-                    <div className="absolute right-[5%] top-[38%] bottom-[6%] flex flex-col justify-between z-10 text-right w-[52%]">
-                      <div>
-                        <div className="text-[11px] font-[700] text-[#C7A969]">{userData.fullName || '---'}</div>
-                      </div>
-                      <div>
-                        <div className="text-[11px] font-[700] text-[#C7A969] font-mono tracking-wide">{userData.fileNumber || 'RF-0000-0000'}</div>
-                      </div>
-                      <div>
-                        <div className="text-[11px] font-[700] text-[#C7A969] font-mono tracking-wide">{userData.nationalId || '---'}</div>
-                      </div>
-                      <div>
-                        <div className="text-[11px] font-[700] text-[#C7A969] font-mono tracking-wide">{userData.mobile || '---'}</div>
-                      </div>
+                    {/* Data values - each positioned individually to match label positions */}
+                    <div className="absolute right-[5%] top-[36%] z-10 text-right w-[50%]">
+                      <div className="text-[10px] font-[700] text-[#C7A969]">{userData.fullName || '---'}</div>
+                    </div>
+                    <div className="absolute right-[5%] top-[52%] z-10 text-right w-[50%]">
+                      <div className="text-[10px] font-[700] text-[#C7A969] font-mono tracking-wide">{userData.fileNumber || 'RF-0000-0000'}</div>
+                    </div>
+                    <div className="absolute right-[5%] top-[68%] z-10 text-right w-[50%]">
+                      <div className="text-[10px] font-[700] text-[#C7A969] font-mono tracking-wide">{userData.nationalId || '---'}</div>
+                    </div>
+                    <div className="absolute right-[5%] top-[84%] z-10 text-right w-[50%]">
+                      <div className="text-[10px] font-[700] text-[#C7A969] font-mono tracking-wide">{userData.mobile || '---'}</div>
                     </div>
                   </div>
 
