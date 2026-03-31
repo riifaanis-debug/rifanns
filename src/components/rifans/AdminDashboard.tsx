@@ -428,75 +428,92 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
         <table className="w-full text-right border-collapse">
           <thead>
             <tr className="text-xs font-bold text-muted bg-gray-50 dark:bg-black/20 border-b border-gold/10">
-              <th className="p-4 whitespace-nowrap">العميل</th>
-              <th className="p-4 whitespace-nowrap">رقم الملف</th>
-              <th className="p-4 whitespace-nowrap">رقم الهوية</th>
-              <th className="p-4 whitespace-nowrap">الجوال</th>
-              <th className="p-4 whitespace-nowrap">تاريخ الانضمام</th>
-              <th className="p-4 whitespace-nowrap">الإجراءات</th>
+              <th className="p-3 whitespace-nowrap">#</th>
+              <th className="p-3 whitespace-nowrap">العميل</th>
+              <th className="p-3 whitespace-nowrap">رقم الملف</th>
+              <th className="p-3 whitespace-nowrap">رقم الهوية</th>
+              <th className="p-3 whitespace-nowrap">الجوال</th>
+              <th className="p-3 whitespace-nowrap">البريد</th>
+              <th className="p-3 whitespace-nowrap">المنطقة</th>
+              <th className="p-3 whitespace-nowrap">المدينة</th>
+              <th className="p-3 whitespace-nowrap">البنك</th>
+              <th className="p-3 whitespace-nowrap">الحالة الوظيفية</th>
+              <th className="p-3 whitespace-nowrap">العمر</th>
+              <th className="p-3 whitespace-nowrap">تاريخ التسجيل</th>
+              <th className="p-3 whitespace-nowrap">الإجراءات</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gold/5">
-            {filteredUsers.map(u => (
+            {filteredUsers.map((u, idx) => (
               <tr key={u.id} className="hover:bg-gold/5 transition-colors group">
-                <td className="p-4 whitespace-nowrap">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-full bg-brand text-gold flex items-center justify-center font-bold text-sm shadow-sm">
-                      {(u.name || u.national_id || '؟')[0]}
+                <td className="p-3 text-xs text-muted">{idx + 1}</td>
+                <td className="p-3 whitespace-nowrap">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-full bg-brand text-gold flex items-center justify-center font-bold text-xs shadow-sm">
+                      {(u.name || '؟')[0]}
                     </div>
-                    <div>
-                      <div className="text-sm font-bold text-brand dark:text-white group-hover:text-gold transition-colors">{u.name || 'عميل ريفانس'}</div>
-                      <div className="text-[10px] text-muted">{u.email || 'لا يوجد بريد'}</div>
-                    </div>
+                    <span className="text-xs font-bold text-brand dark:text-white group-hover:text-gold transition-colors">{u.name || '---'}</span>
                   </div>
                 </td>
-                <td className="p-4 text-xs font-mono text-muted whitespace-nowrap">{u.fileNumber || '---'}</td>
-                <td className="p-4 text-xs text-brand dark:text-gray-300 whitespace-nowrap">{u.national_id || u.nationalId}</td>
-                <td className="p-4 text-xs text-brand dark:text-gray-300 whitespace-nowrap" dir="ltr">{u.phone || u.mobile}</td>
-                <td className="p-4 text-xs text-muted whitespace-nowrap">{new Date(u.created_at || '').toLocaleDateString('ar-SA')}</td>
-                <td className="p-4">
-                  <div className="flex items-center gap-2">
-                    <button onClick={() => setSelectedUser(u)} className="p-2 hover:bg-gold/10 text-gold rounded-lg transition-colors" title="عرض الملف"><Eye size={16} /></button>
-                    <button className="p-2 hover:bg-gold/10 text-gold rounded-lg transition-colors" title="تعديل"><PenTool size={16} /></button>
+                <td className="p-3 text-xs font-mono text-muted whitespace-nowrap">{u.file_number || '---'}</td>
+                <td className="p-3 text-xs text-brand dark:text-gray-300 whitespace-nowrap">{u.national_id || '---'}</td>
+                <td className="p-3 text-xs text-brand dark:text-gray-300 whitespace-nowrap" dir="ltr">{u.phone || '---'}</td>
+                <td className="p-3 text-xs text-muted whitespace-nowrap">{u.email || '---'}</td>
+                <td className="p-3 text-xs text-muted whitespace-nowrap">{u.region || '---'}</td>
+                <td className="p-3 text-xs text-muted whitespace-nowrap">{u.city || '---'}</td>
+                <td className="p-3 text-xs text-muted whitespace-nowrap">{u.bank || '---'}</td>
+                <td className="p-3 text-xs text-muted whitespace-nowrap">{u.job_status || '---'}</td>
+                <td className="p-3 text-xs text-muted whitespace-nowrap">{u.age || '---'}</td>
+                <td className="p-3 text-xs text-muted whitespace-nowrap">{new Date(u.created_at || '').toLocaleDateString('ar-SA')}</td>
+                <td className="p-3">
+                  <div className="flex items-center gap-1">
+                    <button onClick={() => setSelectedUser(u)} className="p-1.5 hover:bg-gold/10 text-gold rounded-lg transition-colors" title="عرض الملف"><Eye size={15} /></button>
                     <button 
                       onClick={() => {
                         const sub = submissions.find(s => s.userId === u.id);
                         if (sub) { setSelectedSubmission(sub); fetchSubmissionHistory(sub.id); } else { alert('لا يوجد طلبات نشطة لهذا العميل'); }
                       }}
-                      className="p-2 hover:bg-gold/10 text-gold rounded-lg transition-colors" title="فتح الطلب"
-                    ><ExternalLink size={16} /></button>
+                      className="p-1.5 hover:bg-gold/10 text-gold rounded-lg transition-colors" title="فتح الطلب"
+                    ><ExternalLink size={15} /></button>
                   </div>
                 </td>
               </tr>
             ))}
+            {filteredUsers.length === 0 && (
+              <tr><td colSpan={13} className="p-8 text-center text-muted text-sm">لا يوجد عملاء مسجلين</td></tr>
+            )}
           </tbody>
         </table>
       </div>
       {/* Mobile Cards */}
       <div className="md:hidden divide-y divide-gold/5">
-        {filteredUsers.map(u => (
+        {filteredUsers.map((u, idx) => (
           <div key={u.id} className="p-3 space-y-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-brand text-gold flex items-center justify-center font-bold text-xs shadow-sm">{(u.name || u.national_id || '؟')[0]}</div>
+                <div className="w-8 h-8 rounded-full bg-brand text-gold flex items-center justify-center font-bold text-xs shadow-sm">{(u.name || '؟')[0]}</div>
                 <div>
-                  <div className="text-xs font-bold text-brand dark:text-white">{u.name || 'عميل ريفانس'}</div>
-                  <div className="text-[9px] text-muted">{u.email || 'لا يوجد بريد'}</div>
+                  <div className="text-xs font-bold text-brand dark:text-white">{u.name || '---'}</div>
+                  <div className="text-[9px] text-muted">{u.email || '---'}</div>
                 </div>
               </div>
               <div className="flex items-center gap-1">
                 <button onClick={() => setSelectedUser(u)} className="p-1.5 hover:bg-gold/10 text-gold rounded-lg"><Eye size={14} /></button>
-                <button className="p-1.5 hover:bg-gold/10 text-gold rounded-lg"><PenTool size={14} /></button>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-[10px] pr-10">
-              <div><span className="text-muted">رقم الملف:</span> <span className="font-mono text-brand dark:text-gray-300">{u.fileNumber || '---'}</span></div>
-              <div><span className="text-muted">رقم الهوية:</span> <span className="text-brand dark:text-gray-300">{u.national_id || u.nationalId}</span></div>
-              <div><span className="text-muted">الجوال:</span> <span className="text-brand dark:text-gray-300" dir="ltr">{u.phone || u.mobile}</span></div>
-              <div><span className="text-muted">الانضمام:</span> <span className="text-muted">{new Date(u.created_at || '').toLocaleDateString('ar-SA')}</span></div>
+              <div><span className="text-muted">رقم الملف:</span> <span className="font-mono text-brand dark:text-gray-300">{u.file_number || '---'}</span></div>
+              <div><span className="text-muted">رقم الهوية:</span> <span className="text-brand dark:text-gray-300">{u.national_id || '---'}</span></div>
+              <div><span className="text-muted">الجوال:</span> <span className="text-brand dark:text-gray-300" dir="ltr">{u.phone || '---'}</span></div>
+              <div><span className="text-muted">المنطقة:</span> <span className="text-muted">{u.region || '---'}</span></div>
+              <div><span className="text-muted">البنك:</span> <span className="text-muted">{u.bank || '---'}</span></div>
+              <div><span className="text-muted">التسجيل:</span> <span className="text-muted">{new Date(u.created_at || '').toLocaleDateString('ar-SA')}</span></div>
             </div>
           </div>
         ))}
+        {filteredUsers.length === 0 && (
+          <div className="p-8 text-center text-muted text-sm">لا يوجد عملاء مسجلين</div>
+        )}
       </div>
     </Card>
     </div>
