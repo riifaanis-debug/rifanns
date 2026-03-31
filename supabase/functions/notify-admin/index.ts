@@ -83,7 +83,7 @@ serve(async (req) => {
             ${data.city ? `<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold;background:#f9f9f9;">المدينة</td><td style="padding:8px;border:1px solid #ddd;">${data.city}</td></tr>` : ''}
             ${data.bank ? `<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold;background:#f9f9f9;">الجهة المالية</td><td style="padding:8px;border:1px solid #ddd;">${data.bank}</td></tr>` : ''}
             ${data.jobStatus ? `<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold;background:#f9f9f9;">الحالة الوظيفية</td><td style="padding:8px;border:1px solid #ddd;">${data.jobStatus}</td></tr>` : ''}
-            ${data.totalAmount ? `<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold;background:#f9f9f9;">إجمالي المبلغ</td><td style="padding:8px;border:1px solid #ddd;">${data.totalAmount} ريال</td></tr>` : ''}
+            ${data.totalAmount ? `<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold;background:#f9f9f9;">إجمالي المبلغ</td><td style="padding:8px;border:1px solid #ddd;">${formatAmount(data.totalAmount)} ريال</td></tr>` : ''}
             ${productsHtml}
             ${details ? `<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold;background:#f9f9f9;">التفاصيل</td><td style="padding:8px;border:1px solid #ddd;">${details}</td></tr>` : ''}
             ${filesHtml}
