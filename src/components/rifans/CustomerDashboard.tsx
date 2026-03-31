@@ -1066,22 +1066,22 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                       </div>
 
                       {/* Data Fields - right aligned, stacked */}
-                      <div className="flex flex-col gap-[6px] items-end mt-auto">
-                        <div className="text-right">
+                      <div className="flex flex-col gap-[6px] w-full mt-auto">
+                        <div className="w-full text-right">
                           <div className="text-[8px] text-[#C7A969]/50 mb-0.5">Name / الاسم</div>
-                          <div className="text-[13px] font-[800] text-white">{userData.fullName || '---'}</div>
+                          <div className="text-[13px] font-[800] text-white text-right">{userData.fullName || '---'}</div>
                         </div>
-                        <div className="text-right">
+                        <div className="w-full text-right">
                           <div className="text-[8px] text-[#C7A969]/50 mb-0.5">File No / رقم الملف</div>
-                          <div className="text-[13px] font-[800] text-white font-mono tracking-wide" dir="ltr">{userData.fileNumber || 'RF-0000-0000'}</div>
+                          <div className="text-[13px] font-[800] text-white font-mono tracking-wide text-right">{userData.fileNumber || 'RF-0000-0000'}</div>
                         </div>
-                        <div className="text-right">
+                        <div className="w-full text-right">
                           <div className="text-[8px] text-[#C7A969]/50 mb-0.5">ID / رقم الهوية</div>
-                          <div className="text-[13px] font-[800] text-white font-mono tracking-wide" dir="ltr">{userData.nationalId || '---'}</div>
+                          <div className="text-[13px] font-[800] text-white font-mono tracking-wide text-right">{userData.nationalId || '---'}</div>
                         </div>
-                        <div className="text-right">
+                        <div className="w-full text-right">
                           <div className="text-[8px] text-[#C7A969]/50 mb-0.5">Mobile No / رقم الجوال</div>
-                          <div className="text-[13px] font-[800] text-white font-mono tracking-wide" dir="ltr">{userData.mobile || '---'}</div>
+                          <div className="text-[13px] font-[800] text-white font-mono tracking-wide text-right">{userData.mobile || '---'}</div>
                         </div>
                       </div>
                     </div>
