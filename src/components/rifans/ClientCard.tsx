@@ -100,8 +100,8 @@ const ClientCard: React.FC = () => {
               {/* Logo + Company Name - top right */}
               <div className="flex items-center gap-2" dir="rtl">
                 <div className="text-right">
-                  <div className="text-[14px] font-[800] text-[#C7A969] leading-none tracking-wide">ريفانس المالية</div>
-                  <div className="text-[8px] font-bold text-[#C7A969]/60 tracking-[0.3em] uppercase mt-0.5">RIFANIS FINANCE</div>
+                  <div className="text-[11px] font-[800] text-[#C7A969] leading-none tracking-wide">ريفانس المالية</div>
+                  <div className="text-[6px] font-bold text-[#C7A969]/60 tracking-[0.3em] uppercase mt-0.5">RIFANIS FINANCE</div>
                 </div>
                 <div className="w-[36px] h-[36px] flex-shrink-0">
                   <img src={logoSvg} alt="logo" className="w-full h-full object-contain" />
@@ -113,41 +113,41 @@ const ClientCard: React.FC = () => {
             <div className="flex flex-col gap-[6%] mt-auto" dir="rtl">
               {/* Name */}
               <div className="flex items-center gap-[4%]">
-                <div className="text-[9px] text-[#C7A969]/70 whitespace-nowrap text-right min-w-[28%] leading-tight">
+                <div className="text-[7px] text-[#C7A969]/70 whitespace-nowrap text-right min-w-[28%] leading-tight">
                   <span>الاسم / </span><span className="font-mono">Name</span>
                 </div>
-                <div className="flex-1 border border-[#C7A969]/40 rounded-[4px] px-[6px] py-[3px]">
-                  <div className="text-[11px] font-[700] text-[#C7A969] text-right leading-tight">{data.name}</div>
+                <div className="flex-1 border border-[#C7A969]/40 rounded-[4px] px-[5px] py-[2px]">
+                  <div className="text-[9px] font-[700] text-[#C7A969] text-right leading-tight">{data.name}</div>
                 </div>
               </div>
 
               {/* File No */}
               <div className="flex items-center gap-[4%]">
-                <div className="text-[9px] text-[#C7A969]/70 whitespace-nowrap text-right min-w-[28%] leading-tight">
+                <div className="text-[7px] text-[#C7A969]/70 whitespace-nowrap text-right min-w-[28%] leading-tight">
                   <span>رقم الملف / </span><span className="font-mono">File No</span>
                 </div>
-                <div className="flex-1 border border-[#C7A969]/40 rounded-[4px] px-[6px] py-[3px]">
-                  <div className="text-[11px] font-[700] text-[#C7A969] font-mono tracking-wide text-right leading-tight">{data.file}</div>
+                <div className="flex-1 border border-[#C7A969]/40 rounded-[4px] px-[5px] py-[2px]">
+                  <div className="text-[9px] font-[700] text-[#C7A969] font-mono tracking-wide text-right leading-tight">{data.file}</div>
                 </div>
               </div>
 
               {/* ID */}
               <div className="flex items-center gap-[4%]">
-                <div className="text-[9px] text-[#C7A969]/70 whitespace-nowrap text-right min-w-[28%] leading-tight">
+                <div className="text-[7px] text-[#C7A969]/70 whitespace-nowrap text-right min-w-[28%] leading-tight">
                   <span>رقم الهوية / </span><span className="font-mono">ID</span>
                 </div>
-                <div className="flex-1 border border-[#C7A969]/40 rounded-[4px] px-[6px] py-[3px]">
-                  <div className="text-[11px] font-[700] text-[#C7A969] font-mono tracking-wide text-right leading-tight">{data.id}</div>
+                <div className="flex-1 border border-[#C7A969]/40 rounded-[4px] px-[5px] py-[2px]">
+                  <div className="text-[9px] font-[700] text-[#C7A969] font-mono tracking-wide text-right leading-tight">{data.id}</div>
                 </div>
               </div>
 
               {/* Mobile */}
               <div className="flex items-center gap-[4%]">
-                <div className="text-[9px] text-[#C7A969]/70 whitespace-nowrap text-right min-w-[28%] leading-tight">
+                <div className="text-[7px] text-[#C7A969]/70 whitespace-nowrap text-right min-w-[28%] leading-tight">
                   <span>رقم الجوال / </span><span className="font-mono">Mobile No</span>
                 </div>
-                <div className="flex-1 border border-[#C7A969]/40 rounded-[4px] px-[6px] py-[3px]">
-                  <div className="text-[11px] font-[700] text-[#C7A969] font-mono tracking-wide text-right leading-tight">{data.mobile}</div>
+                <div className="flex-1 border border-[#C7A969]/40 rounded-[4px] px-[5px] py-[2px]">
+                  <div className="text-[9px] font-[700] text-[#C7A969] font-mono tracking-wide text-right leading-tight">{data.mobile}</div>
                 </div>
               </div>
             </div>
