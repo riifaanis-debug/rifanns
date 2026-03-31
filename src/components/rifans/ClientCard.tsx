@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Copy, CheckCircle, Download } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { toPng } from 'html-to-image';
+import cardBgImg from '../../assets/client-card-bg.jpg';
 
 const ClientCard: React.FC = () => {
   const cardRef = useRef<HTMLDivElement>(null);
