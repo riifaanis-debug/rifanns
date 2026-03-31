@@ -825,6 +825,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
         </div>
         <div className="flex items-center gap-3">
           <button 
+            onClick={() => setIsChatOpen(true)}
+            className="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all text-gold border border-white/10"
+            title="المحادثات الفورية"
+          >
+            <MessageCircle size={20} />
+          </button>
+          <button 
             onClick={fetchAllData}
             className="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all text-gold border border-white/10"
             title="تحديث البيانات"
