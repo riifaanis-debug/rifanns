@@ -78,20 +78,18 @@ const ClientCard: React.FC = () => {
             />
           </div>
 
-          {/* Data values overlay - positioned on the right side */}
-          <div className="absolute right-[5%] top-[38%] bottom-[6%] flex flex-col justify-between z-10 text-right w-[52%]">
-            <div>
-              <div className="text-[13px] font-[700] text-[#C7A969]">{data.name}</div>
-            </div>
-            <div>
-              <div className="text-[13px] font-[700] text-[#C7A969] font-mono tracking-wide">{data.file}</div>
-            </div>
-            <div>
-              <div className="text-[13px] font-[700] text-[#C7A969] font-mono tracking-wide">{data.id}</div>
-            </div>
-            <div>
-              <div className="text-[13px] font-[700] text-[#C7A969] font-mono tracking-wide">{data.mobile}</div>
-            </div>
+          {/* Data values - each positioned individually to match label positions */}
+          <div className="absolute right-[5%] top-[36%] z-10 text-right w-[50%]">
+            <div className="text-[12px] font-[700] text-[#C7A969]">{data.name}</div>
+          </div>
+          <div className="absolute right-[5%] top-[52%] z-10 text-right w-[50%]">
+            <div className="text-[12px] font-[700] text-[#C7A969] font-mono tracking-wide">{data.file}</div>
+          </div>
+          <div className="absolute right-[5%] top-[68%] z-10 text-right w-[50%]">
+            <div className="text-[12px] font-[700] text-[#C7A969] font-mono tracking-wide">{data.id}</div>
+          </div>
+          <div className="absolute right-[5%] top-[84%] z-10 text-right w-[50%]">
+            <div className="text-[12px] font-[700] text-[#C7A969] font-mono tracking-wide">{data.mobile}</div>
           </div>
         </div>
       </div>
