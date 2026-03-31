@@ -1013,44 +1013,103 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
            {activeTab === 'profile' && (
              <div className="space-y-4 pb-10">
                
-               {/* Digital ID Card */}
-               <div className="mb-6">
-                  <div className="relative w-full aspect-[1.58/1] rounded-[32px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-white/10 bg-[#2d053a] group">
+                {/* Digital ID Card - Enhanced */}
+                <div className="mb-6">
+                  <div ref={cardSaveRef} className="relative w-full rounded-[24px] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.4)] border border-[#C7A969]/40 bg-gradient-to-br from-[#1a0830] via-[#250940] to-[#1a0428]">
+                    {/* Top gold line */}
+                    <div className="h-[2px] bg-gradient-to-r from-transparent via-[#C7A969] to-transparent"></div>
+                    
                     {/* Grain Overlay */}
-                    <div className="absolute inset-0 opacity-[0.12] mix-blend-overlay pointer-events-none" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.15'/%3E%3C/svg%3E")` }}></div>
+                    <div className="absolute inset-0 opacity-[0.06] mix-blend-overlay pointer-events-none" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.15'/%3E%3C/svg%3E")` }}></div>
                     
                     {/* Watermark */}
-                    <div className="absolute left-[20%] top-1/2 -translate-y-1/2 w-[45%] h-[65%] opacity-[0.08] pointer-events-none" style={{ background: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 500'%3E%3Cpath d='M150 80h115c75 0 125 40 125 115 0 63-35 102-86 113l112 112-58 58-140-140h-30v140h-78V80zm78 70v118h40c35 0 56-20 56-59 0-39-21-59-56-59h-40z' fill='%23f4d48a'/%3E%3C/svg%3E") center/contain no-repeat` }}></div>
+                    <div className="absolute left-[15%] top-1/2 -translate-y-1/2 w-[50%] h-[60%] opacity-[0.03] pointer-events-none" style={{ background: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 500'%3E%3Cpath d='M150 80h115c75 0 125 40 125 115 0 63-35 102-86 113l112 112-58 58-140-140h-30v140h-78V80zm78 70v118h40c35 0 56-20 56-59 0-39-21-59-56-59h-40z' fill='%23f4d48a'/%3E%3C/svg%3E") center/contain no-repeat` }}></div>
 
-                    <div className="absolute inset-0 p-6 flex flex-col z-10">
-                        {/* Header */}
-                        <div className="flex justify-start items-start">
-                            <div className="text-right">
-                                <div className="text-[20px] font-black text-[#f4d48a] leading-none">ريفانس المالية</div>
-                                <div className="text-[10px] font-bold text-[#f4d48a] tracking-widest mt-1 border-t border-[#f4d48a]/40 pt-0.5">RIFANIS FINANCE</div>
-                            </div>
+                    <div className="relative z-10 p-5">
+                      {/* Header */}
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="text-right">
+                          <div className="text-[18px] font-black text-[#C7A969] leading-none">ريفانس المالية</div>
+                          <div className="text-[8px] font-bold text-[#C7A969]/50 tracking-[0.3em] mt-1 uppercase">RIFANS FINANCE</div>
                         </div>
+                        <div className="flex items-center gap-1.5 bg-[#C7A969]/10 border border-[#C7A969]/20 rounded-full px-2.5 py-1">
+                          <Shield size={10} className="text-[#4ade80]" />
+                          <span className="text-[8px] font-bold text-[#4ade80] tracking-wider">موثّق</span>
+                        </div>
+                      </div>
 
-                        {/* Details */}
-                        <div className="flex flex-col gap-2 my-auto w-full">
-                            <div className="flex justify-start items-center gap-2 text-white w-full border-b border-gold/10 pb-1.5">
-                                <div className="text-[11px] font-bold text-[#f4d48a] shrink-0">الاسم :</div>
-                                <div className="text-[12px] font-black text-right">{userData.fullName}</div>
-                            </div>
-                            <div className="flex justify-start items-center gap-2 text-white w-full border-b border-gold/10 pb-1.5">
-                                <div className="text-[10px] font-bold text-[#f4d48a] shrink-0">رقم الملف :</div>
-                                <div className="text-[11px] font-black font-mono tracking-wider text-right" dir="ltr">{userData.fileNumber || 'RF-0000-0000'}</div>
-                            </div>
-                            <div className="flex justify-start items-center gap-2 text-white w-full border-b border-gold/10 pb-1.5">
-                                <div className="text-[10px] font-bold text-[#f4d48a] shrink-0">رقم الهوية :</div>
-                                <div className="text-[11px] font-black font-mono tracking-wider text-right" dir="ltr">{userData.nationalId}</div>
-                            </div>
-                            <div className="flex justify-start items-center gap-2 text-white w-full border-b border-gold/10 pb-1.5">
-                                <div className="text-[10px] font-bold text-[#f4d48a] shrink-0">رقم الجوال :</div>
-                                <div className="text-[11px] font-black font-mono tracking-wider text-right" dir="ltr">{userData.mobile || '9665XXXXXXXX'}</div>
-                            </div>
+                      {/* Client name section */}
+                      <div className="flex items-center gap-3 mb-4 bg-[#C7A969]/[0.06] rounded-2xl p-3 border border-[#C7A969]/10">
+                        <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#C7A969]/30 to-[#C7A969]/10 border border-[#C7A969]/30 flex items-center justify-center shrink-0">
+                          <User size={20} className="text-[#C7A969]" />
                         </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-[8px] font-bold text-[#C7A969]/40 uppercase tracking-widest mb-0.5">اسم العميل</div>
+                          <div className="text-[15px] font-[800] text-white leading-tight truncate">{userData.fullName}</div>
+                        </div>
+                      </div>
+
+                      {/* Data fields */}
+                      <div className="space-y-2.5 mb-4">
+                        <div className="flex items-center gap-2.5 bg-[#C7A969]/[0.04] rounded-xl px-3 py-2 border border-[#C7A969]/[0.08]">
+                          <div className="w-6 h-6 rounded-lg bg-[#C7A969]/10 flex items-center justify-center shrink-0">
+                            <FileText size={12} className="text-[#C7A969]" />
+                          </div>
+                          <div className="flex-1">
+                            <div className="text-[7px] font-bold text-[#C7A969]/40 uppercase tracking-wider">رقم الملف / File No.</div>
+                            <div className="text-[12px] font-[800] text-white font-mono tracking-wider" dir="ltr">{userData.fileNumber || 'RF-0000-0000'}</div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2.5 bg-[#C7A969]/[0.04] rounded-xl px-3 py-2 border border-[#C7A969]/[0.08]">
+                          <div className="w-6 h-6 rounded-lg bg-[#C7A969]/10 flex items-center justify-center shrink-0">
+                            <CreditCard size={12} className="text-[#C7A969]" />
+                          </div>
+                          <div className="flex-1">
+                            <div className="text-[7px] font-bold text-[#C7A969]/40 uppercase tracking-wider">رقم الهوية / ID No.</div>
+                            <div className="text-[12px] font-[800] text-white font-mono tracking-wider" dir="ltr">{userData.nationalId}</div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2.5 bg-[#C7A969]/[0.04] rounded-xl px-3 py-2 border border-[#C7A969]/[0.08]">
+                          <div className="w-6 h-6 rounded-lg bg-[#C7A969]/10 flex items-center justify-center shrink-0">
+                            <Phone size={12} className="text-[#C7A969]" />
+                          </div>
+                          <div className="flex-1">
+                            <div className="text-[7px] font-bold text-[#C7A969]/40 uppercase tracking-wider">رقم الجوال / Mobile</div>
+                            <div className="text-[12px] font-[800] text-white font-mono tracking-wider" dir="ltr">{userData.mobile || '9665XXXXXXXX'}</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Bottom: QR + date + save */}
+                      <div className="flex items-end justify-between">
+                        <div className="bg-white rounded-xl p-1.5 shadow-lg">
+                          <QRCodeSVG
+                            value={`${window.location.origin}/#/client-card?file=${userData.fileNumber || ''}&name=${encodeURIComponent(userData.fullName)}&id=${userData.nationalId}&mobile=${userData.mobile || ''}`}
+                            size={60}
+                            level="M"
+                            bgColor="#ffffff"
+                            fgColor="#1a0830"
+                          />
+                        </div>
+                        <div className="text-left flex flex-col items-end gap-1">
+                          <div className="text-[7px] text-[#C7A969]/40 tracking-wider">تاريخ الإصدار</div>
+                          <div className="text-[9px] text-[#C7A969]/70 font-bold">{new Date().toLocaleDateString('ar-SA', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
+                          <button
+                            onClick={handleSaveCard}
+                            disabled={savingCard}
+                            className="mt-1 flex items-center gap-1 bg-[#C7A969]/15 hover:bg-[#C7A969]/25 border border-[#C7A969]/30 text-[#C7A969] px-3 py-1.5 rounded-lg text-[9px] font-bold transition-all"
+                          >
+                            {savingCard ? <Loader2 size={10} className="animate-spin" /> : <Download size={10} />}
+                            {savingCard ? 'جاري الحفظ...' : 'حفظ البطاقة'}
+                          </button>
+                        </div>
+                      </div>
                     </div>
+                    
+                    {/* Bottom gold line */}
+                    <div className="h-[2px] bg-gradient-to-r from-transparent via-[#C7A969]/60 to-transparent"></div>
+                  </div>
+                </div>
                   </div>
                </div>
 
