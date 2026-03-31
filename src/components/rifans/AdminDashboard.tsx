@@ -1283,7 +1283,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   const totalDebt = products.reduce((acc: number, p: any) => acc + (Number(p.amount) || 0), 0) || 0;
 
                   return (
-                    <div className="bg-white dark:bg-white/5 rounded-xl border border-gold/10 p-4 sm:p-12 shadow-inner relative font-['Tajawal'] min-h-[800px]">
+                    <div ref={contractContentRef} className="bg-white dark:bg-white/5 rounded-xl border border-gold/10 p-4 sm:p-12 shadow-inner relative font-['Tajawal'] min-h-[800px]">
                       {/* Official Watermark */}
                       <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.02] select-none rotate-[-35deg]">
                         <span className="text-[80px] font-black text-[#22042C]">RIFANS FINANCIAL</span>
