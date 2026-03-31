@@ -110,7 +110,7 @@ const ClientCard: React.FC = () => {
             </div>
 
             {/* Data Fields */}
-            <div className="flex flex-col gap-[6%] mt-auto" dir="rtl">
+            <div className="flex flex-col gap-[6%] mb-[8%]" dir="rtl">
               {/* Name */}
               <div className="flex items-center gap-[4%]">
                 <div className="text-[7px] text-[#C7A969]/70 whitespace-nowrap text-right min-w-[28%] leading-tight">
