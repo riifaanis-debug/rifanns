@@ -117,7 +117,7 @@ const ClientCard: React.FC = () => {
                   <span>الاسم / </span><span className="font-mono">Name</span>
                 </div>
                 <div className="flex-1 border border-[#C7A969]/40 rounded-[4px] px-[5px] py-[2px]">
-                  <div className="text-[7px] font-[700] text-[#C7A969] text-right leading-tight">{data.name}</div>
+                  <div className="text-[6px] font-[400] text-[#C7A969] text-right leading-tight">{data.name}</div>
                 </div>
               </div>
 
@@ -127,7 +127,7 @@ const ClientCard: React.FC = () => {
                   <span>رقم الملف / </span><span className="font-mono">File No</span>
                 </div>
                 <div className="flex-1 border border-[#C7A969]/40 rounded-[4px] px-[5px] py-[2px]">
-                  <div className="text-[7px] font-[700] text-[#C7A969] font-mono tracking-wide text-right leading-tight">{data.file}</div>
+                  <div className="text-[6px] font-[400] text-[#C7A969] font-mono tracking-wide text-right leading-tight">{data.file}</div>
                 </div>
               </div>
 
@@ -137,7 +137,7 @@ const ClientCard: React.FC = () => {
                   <span>رقم الهوية / </span><span className="font-mono">ID</span>
                 </div>
                 <div className="flex-1 border border-[#C7A969]/40 rounded-[4px] px-[5px] py-[2px]">
-                  <div className="text-[7px] font-[700] text-[#C7A969] font-mono tracking-wide text-right leading-tight">{data.id}</div>
+                  <div className="text-[6px] font-[400] text-[#C7A969] font-mono tracking-wide text-right leading-tight">{data.id}</div>
                 </div>
               </div>
 
@@ -147,7 +147,7 @@ const ClientCard: React.FC = () => {
                   <span>رقم الجوال / </span><span className="font-mono">Mobile No</span>
                 </div>
                 <div className="flex-1 border border-[#C7A969]/40 rounded-[4px] px-[5px] py-[2px]">
-                  <div className="text-[7px] font-[700] text-[#C7A969] font-mono tracking-wide text-right leading-tight">{data.mobile}</div>
+                  <div className="text-[6px] font-[400] text-[#C7A969] font-mono tracking-wide text-right leading-tight">{data.mobile}</div>
                 </div>
               </div>
             </div>
