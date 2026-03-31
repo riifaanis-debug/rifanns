@@ -7,8 +7,9 @@ import {
   IdCard, ChevronRight, ChevronLeft, MoreVertical, Trash2, Eye, 
   FileCheck, FileClock, History, UserCheck, UserPlus, TrendingUp,
   ArrowUpRight, ArrowDownRight, Calendar, Mail, Phone, MapPin,
-  CreditCard, Briefcase, Hash, Menu, Printer
+  CreditCard, Briefcase, Hash, Menu, Printer, MessageCircle
 } from 'lucide-react';
+import ChatPage from './ChatPage';
 import { Button, Card } from './Shared';
 import { motion, AnimatePresence } from 'motion/react';
 import { SubmissionHistory, Notification, Contract, UserProfile } from '../../types';
