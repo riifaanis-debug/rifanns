@@ -97,7 +97,8 @@ export const updateProfile = async (profileData: any) => {
 };
 
 export const uploadDocument = async (file: File) => {
-  const fileName = `${Date.now()}-${file.name}`;
+  const ext = file.name.split('.').pop() || 'pdf';
+  const fileName = `${Date.now()}-${crypto.randomUUID()}.${ext}`;
   const { data, error } = await supabase.storage.from('uploads').upload(fileName, file);
   if (error) throw error;
   const { data: urlData } = supabase.storage.from('uploads').getPublicUrl(fileName);

@@ -13,6 +13,13 @@ serve(async (req) => {
   try {
     const { requestData, userData } = await req.json();
 
+    // Format number with commas: 5002969 → 5,002,969.00
+    function formatAmount(val: any): string {
+      const num = typeof val === 'string' ? parseFloat(val.replace(/,/g, '')) : Number(val);
+      if (isNaN(num)) return String(val);
+      return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
     const ADMIN_EMAIL = Deno.env.get('ADMIN_EMAIL');
     const ADMIN_EMAIL_PASSWORD = Deno.env.get('ADMIN_EMAIL_PASSWORD');
 
@@ -42,7 +49,7 @@ serve(async (req) => {
     const productsHtml = data.products
       ? `<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold;">المنتجات</td><td style="padding:8px;border:1px solid #ddd;">${
           Array.isArray(data.products)
-            ? data.products.map((p: any) => `${p.type}: ${p.amount} ريال`).join('<br/>')
+            ? data.products.map((p: any) => `${p.type}: ${formatAmount(p.amount)} ريال`).join('<br/>')
             : String(data.products)
         }</td></tr>`
       : '';
@@ -76,7 +83,7 @@ serve(async (req) => {
             ${data.city ? `<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold;background:#f9f9f9;">المدينة</td><td style="padding:8px;border:1px solid #ddd;">${data.city}</td></tr>` : ''}
             ${data.bank ? `<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold;background:#f9f9f9;">الجهة المالية</td><td style="padding:8px;border:1px solid #ddd;">${data.bank}</td></tr>` : ''}
             ${data.jobStatus ? `<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold;background:#f9f9f9;">الحالة الوظيفية</td><td style="padding:8px;border:1px solid #ddd;">${data.jobStatus}</td></tr>` : ''}
-            ${data.totalAmount ? `<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold;background:#f9f9f9;">إجمالي المبلغ</td><td style="padding:8px;border:1px solid #ddd;">${data.totalAmount} ريال</td></tr>` : ''}
+            ${data.totalAmount ? `<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold;background:#f9f9f9;">إجمالي المبلغ</td><td style="padding:8px;border:1px solid #ddd;">${formatAmount(data.totalAmount)} ريال</td></tr>` : ''}
             ${productsHtml}
             ${details ? `<tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold;background:#f9f9f9;">التفاصيل</td><td style="padding:8px;border:1px solid #ddd;">${details}</td></tr>` : ''}
             ${filesHtml}
