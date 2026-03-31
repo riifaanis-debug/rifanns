@@ -1589,16 +1589,16 @@ const MenuCard = ({ icon, label, description, onClick, color, badge }: { icon: R
 );
 
 const StatCard = ({ icon, label, value, color, onClick }: { icon: React.ReactNode, label: string, value: number, color: string, onClick?: () => void }) => (
-  <Card className={`p-3 sm:p-4 border-gold/10 hover:border-gold/30 hover:shadow-lg transition-all group overflow-hidden relative ${onClick ? 'cursor-pointer' : ''}`} onClick={onClick}>
+  <div className={`p-3 sm:p-4 rounded-2xl border border-gold/10 bg-white dark:bg-[#06010a] hover:border-gold/30 hover:shadow-lg transition-all group overflow-hidden relative ${onClick ? 'cursor-pointer active:scale-[0.97]' : ''}`} onClick={onClick}>
     <div className={`absolute top-0 right-0 w-1 h-full bg-${color}-500 opacity-0 group-hover:opacity-100 transition-all`}></div>
     <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
-      <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-gray-50 dark:bg-white/5 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform`}>
+      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-gray-50 dark:bg-white/5 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
         {icon}
       </div>
       <span className="text-[10px] font-bold text-muted uppercase tracking-tight">{label}</span>
     </div>
     <div className="text-xl sm:text-2xl font-black text-brand dark:text-white tracking-tight">{typeof value === 'number' ? formatAmount(value) : value}</div>
-  </Card>
+  </div>
 );
 
 const NavButton = ({ active, onClick, icon, label, badge }: { active: boolean, onClick: () => void, icon: React.ReactNode, label: string, badge?: number }) => (
