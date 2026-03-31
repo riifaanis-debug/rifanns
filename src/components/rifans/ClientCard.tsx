@@ -100,8 +100,8 @@ const ClientCard: React.FC = () => {
               {/* Logo + Company Name - top right */}
               <div className="flex items-center gap-2" dir="rtl">
                 <div className="text-right">
-                  <div className="text-[14px] font-[800] text-[#C7A969] leading-none tracking-wide">ريفانس المالية</div>
-                  <div className="text-[8px] font-bold text-[#C7A969]/60 tracking-[0.3em] uppercase mt-0.5">RIFANIS FINANCE</div>
+                  <div className="text-[11px] font-[800] text-[#C7A969] leading-none tracking-wide">ريفانس المالية</div>
+                  <div className="text-[6px] font-bold text-[#C7A969]/60 tracking-[0.3em] uppercase mt-0.5">RIFANIS FINANCE</div>
                 </div>
                 <div className="w-[36px] h-[36px] flex-shrink-0">
                   <img src={logoSvg} alt="logo" className="w-full h-full object-contain" />
