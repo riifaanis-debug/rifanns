@@ -1035,40 +1035,53 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                 <div className="mb-6">
                   <div ref={cardSaveRef} className="relative w-full aspect-[1.7/1] rounded-[20px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.45)]" dir="rtl">
                     {/* Background */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#22042C] via-[#2d0845] to-[#22042C]"></div>
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#22042C] via-[#2d0845] to-[#1a0525]"></div>
                     
-                    {/* Watermark R */}
-                    <div className="absolute left-[5%] top-[20%] w-[40%] h-[70%] opacity-[0.06] pointer-events-none" style={{ background: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 500'%3E%3Cpath d='M150 80h115c75 0 125 40 125 115 0 63-35 102-86 113l112 112-58 58-140-140h-30v140h-78V80zm78 70v118h40c35 0 56-20 56-59 0-39-21-59-56-59h-40z' fill='%23C7A969'/%3E%3C/svg%3E") center/contain no-repeat` }}></div>
+                    {/* Subtle texture */}
+                    <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 30% 50%, rgba(199,169,105,0.3), transparent 60%)' }}></div>
 
-                    <div className="absolute inset-0 flex flex-col justify-between p-5 z-10">
-                      {/* Header */}
-                      <div className="text-center">
-                        <div className="text-[18px] font-[900] text-[#C7A969] leading-none">ريفانس المالية</div>
-                        <div className="w-[60%] mx-auto h-px bg-[#C7A969]/40 mt-1.5 mb-1"></div>
-                        <div className="text-[9px] font-bold text-[#C7A969]/70 tracking-[0.3em] uppercase">RIFANIS FINANCE</div>
+                    {/* Large R Watermark - center left */}
+                    <div className="absolute left-[2%] top-[15%] w-[45%] h-[75%] opacity-[0.07] pointer-events-none" style={{ background: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 500'%3E%3Cpath d='M150 80h115c75 0 125 40 125 115 0 63-35 102-86 113l112 112-58 58-140-140h-30v140h-78V80zm78 70v118h40c35 0 56-20 56-59 0-39-21-59-56-59h-40z' fill='%23C7A969'/%3E%3C/svg%3E") center/contain no-repeat` }}></div>
+
+                    <div className="absolute inset-0 flex flex-col justify-between p-4 z-10">
+                      {/* Top Row: QR left, Logo right */}
+                      <div className="flex items-start justify-between">
+                        {/* QR Code - top left */}
+                        <div className="bg-[#C7A969]/15 rounded-lg p-1.5 border border-[#C7A969]/20">
+                          <QRCodeSVG
+                            value={window.location.origin + `/#/client-card?file=${userData.fileNumber}&name=${encodeURIComponent(userData.fullName || '')}`}
+                            size={44}
+                            level="L"
+                            bgColor="transparent"
+                            fgColor="#C7A969"
+                          />
+                        </div>
+
+                        {/* Logo - top right */}
+                        <div className="text-right">
+                          <div className="text-[16px] font-[900] text-[#C7A969] leading-none">ريفانس المالية</div>
+                          <div className="w-full h-[1.5px] bg-gradient-to-l from-[#C7A969]/80 via-[#C7A969]/40 to-transparent mt-1.5 mb-1"></div>
+                          <div className="text-[8px] font-bold text-[#C7A969]/60 tracking-[0.3em] uppercase">RIFANIS FINANCE</div>
+                        </div>
                       </div>
 
-                      {/* Data rows */}
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2 border-b border-[#C7A969]/15 pb-2">
-                          <div className="text-[10px] font-bold text-[#C7A969] shrink-0 w-[70px]">الاسم :</div>
-                          <div className="text-[13px] font-[900] text-white flex-1 text-right">{userData.fullName}</div>
+                      {/* Data Fields - right aligned, stacked */}
+                      <div className="flex flex-col gap-[6px] items-end mt-auto">
+                        <div className="text-right">
+                          <div className="text-[8px] text-[#C7A969]/50 mb-0.5">Name / الاسم</div>
+                          <div className="text-[13px] font-[800] text-white">{userData.fullName || '---'}</div>
                         </div>
-                        <div className="flex items-center gap-2 border-b border-[#C7A969]/15 pb-2">
-                          <div className="text-[10px] font-bold text-[#C7A969] shrink-0 w-[70px]">رقم الملف :</div>
-                          <div className="text-[13px] font-[900] text-white flex-1 text-right font-mono tracking-wide" dir="ltr">{userData.fileNumber || 'RF-0000-0000'}</div>
+                        <div className="text-right">
+                          <div className="text-[8px] text-[#C7A969]/50 mb-0.5">File No / رقم الملف</div>
+                          <div className="text-[13px] font-[800] text-white font-mono tracking-wide" dir="ltr">{userData.fileNumber || 'RF-0000-0000'}</div>
                         </div>
-                        <div className="flex items-center gap-2 border-b border-[#C7A969]/15 pb-2">
-                          <div className="text-[10px] font-bold text-[#C7A969] shrink-0 w-[70px]">رقم الهوية :</div>
-                          <div className="text-[13px] font-[900] text-white flex-1 text-right font-mono tracking-wide" dir="ltr">{userData.nationalId}</div>
+                        <div className="text-right">
+                          <div className="text-[8px] text-[#C7A969]/50 mb-0.5">ID / رقم الهوية</div>
+                          <div className="text-[13px] font-[800] text-white font-mono tracking-wide" dir="ltr">{userData.nationalId || '---'}</div>
                         </div>
-                        <div className="flex items-center gap-2 border-b border-[#C7A969]/15 pb-2">
-                          <div className="text-[10px] font-bold text-[#C7A969] shrink-0 w-[70px]">رقم الجوال :</div>
-                          <div className="text-[13px] font-[900] text-white flex-1 text-right font-mono tracking-wide" dir="ltr">{userData.mobile || '9665XXXXXXXX'}</div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="text-[10px] font-bold text-[#C7A969] shrink-0 w-[70px]">رقم الطلب :</div>
-                          <div className="text-[13px] font-[900] text-white flex-1 text-right font-mono tracking-wide" dir="ltr">{requests.length > 0 ? requests[0].id?.slice(0, 14) : '---'}</div>
+                        <div className="text-right">
+                          <div className="text-[8px] text-[#C7A969]/50 mb-0.5">Mobile No / رقم الجوال</div>
+                          <div className="text-[13px] font-[800] text-white font-mono tracking-wide" dir="ltr">{userData.mobile || '---'}</div>
                         </div>
                       </div>
                     </div>
