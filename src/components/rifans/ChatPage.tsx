@@ -273,10 +273,10 @@ const ChatPage: React.FC<ChatPageProps> = ({ isOpen, onClose, targetUserId, targ
                         animate={{ opacity: 1, y: 0 }}
                         className={`flex ${isMine ? 'justify-start' : 'justify-end'}`}
                       >
-                        <div className={`max-w-[80%] px-4 py-2.5 rounded-2xl text-[13px] leading-relaxed ${
+                        <div className={`max-w-[85%] px-3 py-1.5 rounded-xl text-[13px] leading-snug ${
                           isMine 
-                            ? 'bg-brand text-white rounded-br-md' 
-                            : 'bg-gray-100 dark:bg-white/10 text-brand dark:text-white rounded-bl-md'
+                            ? 'bg-brand text-white rounded-br-sm' 
+                            : 'bg-gray-100 dark:bg-white/10 text-brand dark:text-white rounded-bl-sm'
                         }`}>
                           <p>{msg.message}</p>
                           <p className={`text-[9px] mt-1 ${isMine ? 'text-white/50' : 'text-muted'}`}>
