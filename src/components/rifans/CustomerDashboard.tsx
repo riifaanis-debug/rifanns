@@ -1031,93 +1031,47 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
            {activeTab === 'profile' && (
              <div className="space-y-4 pb-10">
                
-                {/* Bank-style Client Card */}
+                {/* Client Card */}
                 <div className="mb-6">
-                  <div ref={cardSaveRef} className="relative w-full rounded-[16px] overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.5)]" style={{ background: 'linear-gradient(135deg, #1a0830 0%, #2d0845 40%, #3a0a55 60%, #1a0830 100%)' }}>
+                  <div ref={cardSaveRef} className="relative w-full aspect-[1.7/1] rounded-[20px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.45)]" dir="rtl">
+                    {/* Background */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#22042C] via-[#2d0845] to-[#22042C]"></div>
                     
-                    {/* Pattern overlay */}
-                    <div className="absolute inset-0 opacity-[0.04] pointer-events-none" style={{ backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(199,169,105,0.1) 35px, rgba(199,169,105,0.1) 36px)' }}></div>
-                    
-                    {/* Holographic glow */}
-                    <div className="absolute top-0 right-0 w-[40%] h-full opacity-[0.06] pointer-events-none" style={{ background: 'radial-gradient(ellipse at 80% 50%, rgba(199,169,105,0.4), transparent 70%)' }}></div>
+                    {/* Watermark R */}
+                    <div className="absolute left-[5%] top-[20%] w-[40%] h-[70%] opacity-[0.06] pointer-events-none" style={{ background: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 500'%3E%3Cpath d='M150 80h115c75 0 125 40 125 115 0 63-35 102-86 113l112 112-58 58-140-140h-30v140h-78V80zm78 70v118h40c35 0 56-20 56-59 0-39-21-59-56-59h-40z' fill='%23C7A969'/%3E%3C/svg%3E") center/contain no-repeat` }}></div>
 
-                    <div className="relative z-10 p-5">
-                      
-                      {/* Top: Logo + Chip + Contactless */}
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-[40px] h-[30px] rounded-[5px] overflow-hidden" style={{ background: 'linear-gradient(135deg, #C7A969 0%, #E8D5A3 30%, #B8953F 50%, #E8D5A3 70%, #C7A969 100%)' }}>
-                            <div className="w-full h-full grid grid-cols-3 grid-rows-3 gap-[1px] p-[3px]">
-                              {[...Array(9)].map((_, i) => (
-                                <div key={i} className="bg-[#B8953F]/30 rounded-[1px]"></div>
-                              ))}
-                            </div>
-                          </div>
-                          <div>
-                            <div className="text-[15px] font-black text-[#C7A969] leading-none">ريفانس المالية</div>
-                            <div className="text-[7px] font-bold text-[#C7A969]/50 tracking-[0.25em] uppercase">RIFANS FINANCE</div>
-                          </div>
-                        </div>
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" className="text-[#C7A969]/60 mt-1">
-                          <path d="M8.5 8.5c2-2 5-2 7 0" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                          <path d="M9.5 11c1.2-1.2 3-1.2 4.2 0" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                          <circle cx="11.6" cy="13" r="0.8" fill="currentColor"/>
-                        </svg>
+                    <div className="absolute inset-0 flex flex-col justify-between p-5 z-10">
+                      {/* Header */}
+                      <div className="text-center">
+                        <div className="text-[18px] font-[900] text-[#C7A969] leading-none">ريفانس المالية</div>
+                        <div className="w-[60%] mx-auto h-px bg-[#C7A969]/40 mt-1.5 mb-1"></div>
+                        <div className="text-[9px] font-bold text-[#C7A969]/70 tracking-[0.3em] uppercase">RIFANIS FINANCE</div>
                       </div>
 
-                      {/* Divider */}
-                      <div className="h-px bg-gradient-to-r from-transparent via-[#C7A969]/20 to-transparent mb-4"></div>
-
-                      {/* Data fields */}
-                      <div className="space-y-3 mb-4">
-                        <div className="flex items-center justify-between">
-                          <div className="text-[10px] font-bold text-[#C7A969]/60">الاسم</div>
-                          <div className="text-[13px] font-[800] text-white">{userData.fullName}</div>
+                      {/* Data rows */}
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2 border-b border-[#C7A969]/15 pb-2">
+                          <div className="text-[10px] font-bold text-[#C7A969] shrink-0 w-[70px]">الاسم :</div>
+                          <div className="text-[13px] font-[900] text-white flex-1 text-right">{userData.fullName}</div>
                         </div>
-                        <div className="h-px bg-[#C7A969]/10"></div>
-                        <div className="flex items-center justify-between">
-                          <div className="text-[10px] font-bold text-[#C7A969]/60">رقم الملف</div>
-                          <div className="text-[13px] font-[800] text-white font-mono tracking-wider" dir="ltr">{userData.fileNumber || 'RF-0000-0000'}</div>
+                        <div className="flex items-center gap-2 border-b border-[#C7A969]/15 pb-2">
+                          <div className="text-[10px] font-bold text-[#C7A969] shrink-0 w-[70px]">رقم الملف :</div>
+                          <div className="text-[13px] font-[900] text-white flex-1 text-right font-mono tracking-wide" dir="ltr">{userData.fileNumber || 'RF-0000-0000'}</div>
                         </div>
-                        <div className="h-px bg-[#C7A969]/10"></div>
-                        <div className="flex items-center justify-between">
-                          <div className="text-[10px] font-bold text-[#C7A969]/60">رقم الهوية الوطنية</div>
-                          <div className="text-[13px] font-[800] text-white font-mono tracking-wider" dir="ltr">{userData.nationalId}</div>
+                        <div className="flex items-center gap-2 border-b border-[#C7A969]/15 pb-2">
+                          <div className="text-[10px] font-bold text-[#C7A969] shrink-0 w-[70px]">رقم الهوية :</div>
+                          <div className="text-[13px] font-[900] text-white flex-1 text-right font-mono tracking-wide" dir="ltr">{userData.nationalId}</div>
                         </div>
-                        <div className="h-px bg-[#C7A969]/10"></div>
-                        <div className="flex items-center justify-between">
-                          <div className="text-[10px] font-bold text-[#C7A969]/60">رقم الجوال</div>
-                          <div className="text-[13px] font-[800] text-white font-mono tracking-wider" dir="ltr">{userData.mobile || '9665XXXXXXXX'}</div>
+                        <div className="flex items-center gap-2 border-b border-[#C7A969]/15 pb-2">
+                          <div className="text-[10px] font-bold text-[#C7A969] shrink-0 w-[70px]">رقم الجوال :</div>
+                          <div className="text-[13px] font-[900] text-white flex-1 text-right font-mono tracking-wide" dir="ltr">{userData.mobile || '9665XXXXXXXX'}</div>
                         </div>
-                        <div className="h-px bg-[#C7A969]/10"></div>
-                        <div className="flex items-center justify-between">
-                          <div className="text-[10px] font-bold text-[#C7A969]/60">رقم الطلب</div>
-                          <div className="text-[13px] font-[800] text-white font-mono tracking-wider" dir="ltr">{requests.length > 0 ? requests[0].id?.slice(0, 12) : '---'}</div>
-                        </div>
-                      </div>
-
-                      {/* Divider */}
-                      <div className="h-px bg-gradient-to-r from-transparent via-[#C7A969]/20 to-transparent mb-3"></div>
-
-                      {/* Bottom: QR + Save */}
-                      <div className="flex items-end justify-between">
-                        <div className="bg-white rounded-lg p-[3px] shadow-sm">
-                          <QRCodeSVG
-                            value={`${window.location.origin}/#/client-card?file=${userData.fileNumber || ''}&name=${encodeURIComponent(userData.fullName)}&id=${userData.nationalId}&mobile=${userData.mobile || ''}`}
-                            size={48}
-                            level="L"
-                            bgColor="#ffffff"
-                            fgColor="#1a0830"
-                          />
-                        </div>
-                        <div className="text-left">
-                          <div className="text-[7px] text-[#C7A969]/30 tracking-widest uppercase">Digital Client Card</div>
+                        <div className="flex items-center gap-2">
+                          <div className="text-[10px] font-bold text-[#C7A969] shrink-0 w-[70px]">رقم الطلب :</div>
+                          <div className="text-[13px] font-[900] text-white flex-1 text-right font-mono tracking-wide" dir="ltr">{requests.length > 0 ? requests[0].id?.slice(0, 14) : '---'}</div>
                         </div>
                       </div>
                     </div>
-
-                    {/* Bottom gold edge */}
-                    <div className="h-[3px] bg-gradient-to-r from-[#C7A969]/60 via-[#E8D5A3] to-[#C7A969]/60"></div>
                   </div>
 
                   {/* Save button */}
