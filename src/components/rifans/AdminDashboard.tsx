@@ -1588,8 +1588,8 @@ const MenuCard = ({ icon, label, description, onClick, color, badge }: { icon: R
   </button>
 );
 
-const StatCard = ({ icon, label, value, color }: { icon: React.ReactNode, label: string, value: number, color: string }) => (
-  <Card className="p-3 sm:p-4 border-gold/10 hover:border-gold/30 hover:shadow-lg transition-all group overflow-hidden relative">
+const StatCard = ({ icon, label, value, color, onClick }: { icon: React.ReactNode, label: string, value: number, color: string, onClick?: () => void }) => (
+  <Card className={`p-3 sm:p-4 border-gold/10 hover:border-gold/30 hover:shadow-lg transition-all group overflow-hidden relative ${onClick ? 'cursor-pointer' : ''}`} onClick={onClick}>
     <div className={`absolute top-0 right-0 w-1 h-full bg-${color}-500 opacity-0 group-hover:opacity-100 transition-all`}></div>
     <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
       <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-gray-50 dark:bg-white/5 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform`}>
