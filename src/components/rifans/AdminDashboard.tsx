@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import rifansStampImg from '@/assets/rifans-stamp.png';
 import { useAuth } from '../../contexts/AuthContext';
 import { 
@@ -15,6 +15,7 @@ import { SubmissionHistory, Notification, Contract, UserProfile } from '../../ty
 import { safeStringify, safeParse } from '../../utils/safeJson';
 import { getAdminSubmissions, getAdminUsers, getAdminNotifications, getAdminContracts, updateSubmissionStatus, sendContract as apiSendContract, getSubmissionHistory as apiGetSubmissionHistory } from '../../lib/api';
 import { formatAmount } from '../../lib/formatNumber';
+import { toPng } from 'html-to-image';
 
 interface AdminDashboardProps {
   onClose: () => void;
@@ -42,6 +43,26 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
   const [isConfirmingSendContract, setIsConfirmingSendContract] = useState(false);
   const [pendingContractData, setPendingContractData] = useState<{ userId: string, submissionId: string } | null>(null);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const contractContentRef = useRef<HTMLDivElement>(null);
+
+  const handleDownloadPdf = useCallback(async () => {
+    const el = contractContentRef.current;
+    if (!el || !selectedContract) return;
+    setIsDownloading(true);
+    try {
+      const dataUrl = await toPng(el, { quality: 0.95, backgroundColor: '#ffffff', pixelRatio: 2 });
+      const link = document.createElement('a');
+      link.download = `contract-${selectedContract.file_number || selectedContract.id}.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch (err) {
+      console.error('Download failed:', err);
+      alert('فشل تحميل العقد، يرجى المحاولة مرة أخرى');
+    } finally {
+      setIsDownloading(false);
+    }
+  }, [selectedContract]);
 
   useEffect(() => {
     fetchAllData();
@@ -1262,7 +1283,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   const totalDebt = products.reduce((acc: number, p: any) => acc + (Number(p.amount) || 0), 0) || 0;
 
                   return (
-                    <div className="bg-white dark:bg-white/5 rounded-xl border border-gold/10 p-4 sm:p-12 shadow-inner relative font-['Tajawal'] min-h-[800px]">
+                    <div ref={contractContentRef} className="bg-white dark:bg-white/5 rounded-xl border border-gold/10 p-4 sm:p-12 shadow-inner relative font-['Tajawal'] min-h-[800px]">
                       {/* Official Watermark */}
                       <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.02] select-none rotate-[-35deg]">
                         <span className="text-[80px] font-black text-[#22042C]">RIFANS FINANCIAL</span>
@@ -1488,12 +1509,12 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   طباعة العقد
                 </Button>
                 <Button 
-                  
-                  onClick={() => window.print()} 
+                  disabled={isDownloading}
+                  onClick={handleDownloadPdf} 
                   className="bg-brand text-gold gap-1.5 text-[10px] sm:text-xs h-7 sm:h-9 shadow-lg shadow-brand/20"
                 >
                   <Download size={12} />
-                  تحميل بصيغة PDF
+                  {isDownloading ? 'جاري التحميل...' : 'تحميل العقد'}
                 </Button>
               </div>
             </motion.div>
