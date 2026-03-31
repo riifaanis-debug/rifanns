@@ -1544,6 +1544,53 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
         )}
       </AnimatePresence>
 
+      {/* Stat Popup */}
+      <AnimatePresence>
+        {statPopup && (
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4" onClick={() => setStatPopup(null)}>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-black/40"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative z-10 bg-white dark:bg-[#12031a] rounded-2xl border border-gold/20 shadow-2xl w-full max-w-md max-h-[70vh] flex flex-col overflow-hidden"
+              dir="rtl"
+            >
+              <div className="p-4 border-b border-gold/10 flex items-center justify-between bg-brand text-white rounded-t-2xl">
+                <h3 className="text-sm font-bold">{statPopup.label} ({statPopup.items.length})</h3>
+                <button onClick={() => setStatPopup(null)} className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center hover:bg-white/20"><X size={14} /></button>
+              </div>
+              <div className="flex-1 overflow-y-auto p-3 space-y-2">
+                {statPopup.items.length === 0 ? (
+                  <div className="text-center text-muted text-sm py-8">لا توجد عناصر</div>
+                ) : (
+                  statPopup.items.map((item, i) => (
+                    <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10">
+                      <div className="flex items-center gap-2">
+                        <div className="w-7 h-7 rounded-full bg-brand text-gold flex items-center justify-center font-bold text-[10px]">
+                          {(item.name || '؟')[0]}
+                        </div>
+                        <div>
+                          <div className="text-xs font-bold text-brand dark:text-white">{item.name}</div>
+                          {item.type && <div className="text-[9px] text-muted">{item.type === 'waive_request' ? 'إعفاء' : item.type === 'rescheduling_request' ? 'جدولة' : item.type}</div>}
+                        </div>
+                      </div>
+                      <div className="text-[9px] text-muted">{new Date(item.date || '').toLocaleDateString('ar-SA')}</div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
       {/* Success Message Toast */}
       <AnimatePresence>
         {showSuccessMessage && (
