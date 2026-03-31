@@ -109,6 +109,7 @@ const ClientCard: React.FC = () => {
               </div>
             </div>
           </div>
+        </div>
       </div>
 
       {/* Action Buttons */}
