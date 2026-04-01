@@ -15,6 +15,7 @@ import { motion } from 'motion/react';
 import { useLanguage, LanguageProvider } from './contexts/LanguageContext';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import FloatingWhatsApp from './components/rifans/FloatingWhatsApp';
+import CompanyIntro from './components/rifans/CompanyIntro';
 import { Terms, Privacy, Complaints, Contact, AboutPage, GoalPage, VisionPage, MessagePage, MissionPage, ServicesPage, AcceptableUse, CookiePolicy, IntellectualProperty } from './components/rifans/StaticPages';
 import { ServiceDetailPage } from './components/rifans/ServiceDetailPage';
 import WaiveRequestForm from './components/rifans/WaiveRequestForm';
@@ -171,7 +172,8 @@ const LandingPage: React.FC = () => (
   <>
     <Header />
     <Hero />
-    <div className="relative mt-10 z-10">
+    <CompanyIntro />
+    <div className="relative z-10">
       <About />
       <StorySection />
       <WhySection />
