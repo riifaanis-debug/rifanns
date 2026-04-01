@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
+import heroSlide4 from '../../assets/hero-slide-4.jpg';
+import heroSlide5 from '../../assets/hero-slide-5.jpg';
+import heroSlide6 from '../../assets/hero-slide-6.jpg';
 
 const Hero: React.FC = () => {
   const { direction } = useLanguage();
