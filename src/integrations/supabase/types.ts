@@ -32,6 +32,7 @@ export type Database = {
           national_id: string | null
           password_hash: string | null
           phone: string | null
+          phone_verified: boolean | null
           products: Json | null
           region: string | null
           role: string
@@ -56,6 +57,7 @@ export type Database = {
           national_id?: string | null
           password_hash?: string | null
           phone?: string | null
+          phone_verified?: boolean | null
           products?: Json | null
           region?: string | null
           role?: string
@@ -80,6 +82,7 @@ export type Database = {
           national_id?: string | null
           password_hash?: string | null
           phone?: string | null
+          phone_verified?: boolean | null
           products?: Json | null
           region?: string | null
           role?: string
@@ -208,6 +211,51 @@ export type Database = {
           },
           {
             foreignKeyName: "notifications_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "app_users_safe"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      otp_codes: {
+        Row: {
+          code: string
+          created_at: string | null
+          expires_at: string
+          id: string
+          phone: string
+          user_id: string | null
+          verified: boolean | null
+        }
+        Insert: {
+          code: string
+          created_at?: string | null
+          expires_at: string
+          id?: string
+          phone: string
+          user_id?: string | null
+          verified?: boolean | null
+        }
+        Update: {
+          code?: string
+          created_at?: string | null
+          expires_at?: string
+          id?: string
+          phone?: string
+          user_id?: string | null
+          verified?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "otp_codes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "app_users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "otp_codes_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "app_users_safe"
