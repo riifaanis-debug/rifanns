@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 
 const IntroVideo: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -14,7 +14,6 @@ const IntroVideo: React.FC = () => {
           loop
           playsInline
           className="w-full object-contain"
-          onEnded={() => setEnded(true)}
         />
       </div>
     </div>
