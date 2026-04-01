@@ -7,7 +7,7 @@ const CompanyIntro: React.FC = () => {
   return (
     <div className="max-w-[520px] mx-auto px-4 py-8">
       {/* Company Name */}
-      <div className="text-center mb-3">
+      <div className="text-right mb-3">
         <h1 className="text-xl font-black text-brand dark:text-gold tracking-tight transition-colors">
           ريفانس المالية | Revans Finance
         </h1>
