@@ -107,7 +107,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
         // Phone already verified - login directly
         login({ user: foundUser, token: `session-${foundUser.id}` });
 
-        if (loggedInUser.role === 'admin') {
+        if (foundUser.role === 'admin') {
           window.location.hash = '#/admin';
         } else {
           window.location.hash = '#/dashboard';
