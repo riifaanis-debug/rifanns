@@ -7,7 +7,7 @@ const corsHeaders = {
 };
 
 const GATEWAY_URL = 'https://connector-gateway.lovable.dev/twilio';
-const TWILIO_FROM = '+14788003019';
+const TWILIO_FROM = '+14785518214';
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
