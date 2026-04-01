@@ -19,7 +19,7 @@ const Logo: React.FC<LogoProps> = ({ className = "h-14", variant = 'default', sh
           alt="Rifans Financial Transparent Logo" 
           className={`max-w-full max-h-full object-contain transition-all duration-500 
             ${isWhite 
-              ? 'brightness-0 invert' 
+              ? 'brightness-0 invert opacity-85' 
               : isGold
                 ? 'brightness-110 contrast-125'
                 : 'dark:brightness-110 dark:contrast-110'
