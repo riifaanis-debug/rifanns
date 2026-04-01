@@ -122,6 +122,27 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
     }
   };
 
+  if (showOtp && pendingUser) {
+    return (
+      <OtpVerification
+        phone={pendingUser.phone}
+        userId={pendingUser.id}
+        onVerified={() => {
+          if (pendingUser.role === 'admin') {
+            window.location.hash = '#/admin';
+          } else {
+            window.location.hash = '#/dashboard';
+          }
+          onClose();
+        }}
+        onCancel={() => {
+          setShowOtp(false);
+          setPendingUser(null);
+        }}
+      />
+    );
+  }
+
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/60 backdrop-blur-md" onClick={onClose} />
