@@ -87,6 +87,20 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
     try {
       if (isUserMode) {
         const loggedInUser = await loginOrRegisterUser(formData.nationalId, formData.mobile);
+        
+        // Check if phone is verified - if not, show OTP
+        const { data: userData } = await (await import('@/integrations/supabase/client')).supabase
+          .from('app_users')
+          .select('phone_verified')
+          .eq('id', loggedInUser.id)
+          .single();
+
+        if (!userData?.phone_verified) {
+          setPendingUser({ id: loggedInUser.id, phone: formData.mobile, role: loggedInUser.role || 'user' });
+          setShowOtp(true);
+          return;
+        }
+
         if (loggedInUser.role === 'admin') {
           window.location.hash = '#/admin';
         } else {
