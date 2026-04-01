@@ -2,7 +2,6 @@ import React, { useRef, useState } from 'react';
 
 const IntroVideo: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [ended, setEnded] = useState(false);
 
   return (
     <div className="w-full bg-black">
