@@ -13,7 +13,7 @@ const IntroVideo: React.FC = () => {
           autoPlay
           muted
           playsInline
-          className="w-full aspect-square object-cover"
+          className="w-full object-contain"
           onEnded={() => setEnded(true)}
         />
       </div>
