@@ -107,7 +107,7 @@ const Header: React.FC = () => {
 
           {/* Center: Logo */}
           <a href="/" onClick={(e) => { e.preventDefault(); window.scrollTo({top:0, behavior:'smooth'}); }} className="flex-shrink-0 flex items-center justify-center order-2 transition-transform hover:scale-105 active:scale-95 mx-4">
-            <Logo className="w-[150px] md:w-[200px] h-auto" variant="default" />
+            <Logo className="w-[150px] md:w-[200px] h-auto" variant={isScrolled ? "white" : "default"} />
           </a>
 
           {/* Left: Menu & Controls (RTL: Left edge) */}
