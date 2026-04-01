@@ -3,6 +3,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { Button } from './Shared';
 import { User, Phone, CreditCard, ArrowRight, Loader2, AlertCircle, Lock, UserPlus, LogIn } from 'lucide-react';
 import Logo from './Logo';
+import OtpVerification from './OtpVerification';
 
 interface AuthPageProps {
   onClose: () => void;
@@ -18,6 +19,8 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showOtp, setShowOtp] = useState(false);
+  const [pendingUser, setPendingUser] = useState<{ id: string; phone: string; role: string } | null>(null);
   
   const { loginOrRegisterUser, loginWithEmail, loginWithGoogle, loginWithApple } = useAuth();
 
@@ -84,6 +87,20 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
     try {
       if (isUserMode) {
         const loggedInUser = await loginOrRegisterUser(formData.nationalId, formData.mobile);
+        
+        // Check if phone is verified - if not, show OTP
+        const { data: userData } = await (await import('@/integrations/supabase/client')).supabase
+          .from('app_users')
+          .select('phone_verified')
+          .eq('id', loggedInUser.id)
+          .single();
+
+        if (!userData?.phone_verified) {
+          setPendingUser({ id: loggedInUser.id, phone: formData.mobile, role: loggedInUser.role || 'user' });
+          setShowOtp(true);
+          return;
+        }
+
         if (loggedInUser.role === 'admin') {
           window.location.hash = '#/admin';
         } else {
@@ -104,6 +121,27 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
       setIsLoading(false);
     }
   };
+
+  if (showOtp && pendingUser) {
+    return (
+      <OtpVerification
+        phone={pendingUser.phone}
+        userId={pendingUser.id}
+        onVerified={() => {
+          if (pendingUser.role === 'admin') {
+            window.location.hash = '#/admin';
+          } else {
+            window.location.hash = '#/dashboard';
+          }
+          onClose();
+        }}
+        onCancel={() => {
+          setShowOtp(false);
+          setPendingUser(null);
+        }}
+      />
+    );
+  }
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
