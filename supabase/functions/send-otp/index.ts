@@ -78,7 +78,7 @@ serve(async (req) => {
       body: new URLSearchParams({
         To: formattedPhone,
         From: TWILIO_FROM,
-        Body: `رمز التحقق الخاص بك في ريفانز هو: ${code}`,
+        Body: `مرحبًا،\n\nرمز التحقق الخاص بك في ريفانس المالية هو: ${code}\n\nهذا الرمز صالح لمدة 5 دقائق. يرجى عدم مشاركته مع أي شخص حفاظًا على أمان حسابك.\n\nRifans Finance`,
       }),
     });
 
