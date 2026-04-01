@@ -7,7 +7,7 @@ const corsHeaders = {
 };
 
 const GATEWAY_URL = 'https://connector-gateway.lovable.dev/twilio';
-const TWILIO_FROM = '+966553550496';
+const TWILIO_FROM = 'Rifans Finance';
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
