@@ -98,7 +98,7 @@ const ClientCard: React.FC = () => {
           </div>
 
           {/* Card content */}
-          <div className="absolute inset-0 flex flex-col justify-between p-[6%] z-10">
+          <div className="absolute inset-0 flex flex-col justify-start gap-[8%] p-[6%] pb-[10%] z-10">
 
             {/* Top: QR left, Logo right */}
             <div className="flex items-start justify-between" dir="ltr">
