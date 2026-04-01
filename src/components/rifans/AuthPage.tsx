@@ -22,7 +22,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
   const [showOtp, setShowOtp] = useState(false);
   const [pendingUser, setPendingUser] = useState<{ id: string; phone: string; role: string } | null>(null);
   
-  const { loginOrRegisterUser, loginWithEmail, loginWithGoogle, loginWithApple } = useAuth();
+  const { loginOrRegisterUser, lookupOrCreateUser, loginWithEmail, loginWithGoogle, loginWithApple, login } = useAuth();
 
   const handleGoogleLogin = async () => {
     setIsLoading(true);

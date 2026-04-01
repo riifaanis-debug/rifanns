@@ -26,6 +26,7 @@ interface AuthContextType {
   logout: () => void;
   isLoading: boolean;
   loginOrRegisterUser: (nationalId: string, phone: string) => Promise<User>;
+  lookupOrCreateUser: (nationalId: string, phone: string) => Promise<User>;
   loginWithEmail: (email: string, password: string) => Promise<User>;
   loginWithGoogle: () => Promise<User>;
   loginWithApple: () => Promise<User>;
