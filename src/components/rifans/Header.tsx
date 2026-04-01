@@ -98,7 +98,7 @@ const Header: React.FC = () => {
               <button 
                 onClick={handleOpenAuth} 
                 className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all active:scale-95 border
-                  border-gold/50 text-brand dark:text-gold hover:bg-gold/10 whitespace-nowrap`}
+                  ${isScrolled ? 'border-gold/50 text-brand dark:text-gold hover:bg-gold/10' : 'border-white/50 text-white/85 hover:bg-white/10'} whitespace-nowrap`}
               >
                 {t('login_register')}
               </button>
