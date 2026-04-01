@@ -293,6 +293,7 @@ const AppContent: React.FC = () => {
       {getComponent()}
       {showAuth && !user && <AuthPage onClose={() => setShowAuth(false)} />}
       {showWaiveForm && <WaiveRequestForm prefill={waivePrefill} onClose={() => { setShowWaiveForm(false); setWaivePrefill(null); }} />}
+      <ProfileCompletionModal />
     </main>
   );
 };
