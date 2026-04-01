@@ -172,7 +172,8 @@ const LandingPage: React.FC = () => (
   <>
     <Header />
     <Hero />
-    <div className="relative mt-10 z-10">
+    <CompanyIntro />
+    <div className="relative z-10">
       <About />
       <StorySection />
       <WhySection />
