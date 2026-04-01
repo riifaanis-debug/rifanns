@@ -1,5 +1,5 @@
 import React from 'react';
-
+import rifansLogo from '../../assets/rifans-logo.png';
 interface LogoProps {
   className?: string;
   variant?: 'default' | 'white' | 'gold';
