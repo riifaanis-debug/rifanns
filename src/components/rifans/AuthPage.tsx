@@ -134,6 +134,8 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
         phone={pendingUser.phone}
         userId={pendingUser.id}
         onVerified={() => {
+          // Now login after OTP verification
+          login({ user: { id: pendingUser.id, role: pendingUser.role as 'admin' | 'user' }, token: `session-${pendingUser.id}` });
           if (pendingUser.role === 'admin') {
             window.location.hash = '#/admin';
           } else {
