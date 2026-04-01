@@ -3,6 +3,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { Button } from './Shared';
 import { User, Phone, CreditCard, ArrowRight, Loader2, AlertCircle, Lock, UserPlus, LogIn } from 'lucide-react';
 import Logo from './Logo';
+import OtpVerification from './OtpVerification';
 
 interface AuthPageProps {
   onClose: () => void;
@@ -18,6 +19,8 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showOtp, setShowOtp] = useState(false);
+  const [pendingUser, setPendingUser] = useState<{ id: string; phone: string; role: string } | null>(null);
   
   const { loginOrRegisterUser, loginWithEmail, loginWithGoogle, loginWithApple } = useAuth();
 
