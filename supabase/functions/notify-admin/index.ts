@@ -40,6 +40,7 @@ serve(async (req) => {
       'contact': 'تواصل',
       'general': 'طلب عام',
       'contract_signed': 'توقيع عقد',
+      'new_client': 'عميل جديد',
     };
     const requestType = typeMap[requestData?.type] || requestData?.type || 'عام';
     const requestId = requestData?.id || 'غير محدد';

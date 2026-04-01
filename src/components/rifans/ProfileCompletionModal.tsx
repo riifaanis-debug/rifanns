@@ -100,6 +100,27 @@ const ProfileCompletionModal: React.FC = () => {
         token: token || undefined,
       });
 
+      // Send admin notification for new client
+      try {
+        await supabase.functions.invoke('notify-admin', {
+          body: {
+            requestData: {
+              id: user.id,
+              type: 'new_client',
+              details: 'عميل جديد أكمل تسجيل بياناته الأساسية',
+            },
+            userData: {
+              fullName: fullName,
+              phone: phone.trim(),
+              national_id: nationalId.trim(),
+              email: user.email || '',
+            },
+          },
+        });
+      } catch (notifyErr) {
+        console.error('Failed to notify admin:', notifyErr);
+      }
+
       setNeedsCompletion(false);
     } catch (err: any) {
       setError(err.message || 'حدث خطأ أثناء حفظ البيانات');
