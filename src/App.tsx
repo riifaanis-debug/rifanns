@@ -169,28 +169,59 @@ const TimelineSection = () => {
   );
 };
 
-const LandingPage: React.FC = () => (
-  <>
-    <Header />
-    <IntroVideo />
-    <CompanyIntro />
-    <div className="relative z-10">
-      <About />
-      <StorySection />
-      <WhySection />
-      <Services />
-      <Performance />
-      <Calculator />
-      <AudienceSection />
-      <WaiveServices />
-      <FAQ />
-      <CTASection />
-      <TimelineSection />
-      <Footer />
+const LoginPrompt: React.FC = () => {
+  const handleOpenAuth = () => {
+    window.dispatchEvent(new CustomEvent('open-auth'));
+  };
+  return (
+    <div className="max-w-[520px] mx-auto px-4 py-10 text-center">
+      <div className="flex items-center justify-center gap-3 mb-5">
+        <span className="h-[1px] w-10 bg-gold/40" />
+        <Lock size={20} className="text-gold" />
+        <span className="h-[1px] w-10 bg-gold/40" />
+      </div>
+      <p className="text-sm text-muted dark:text-gray-300 leading-relaxed mb-5 transition-colors">
+        لتصفح الموقع والاطلاع على جميع الأقسام والخدمات يرجى تسجيل الدخول
+      </p>
+      <button
+        onClick={handleOpenAuth}
+        className="px-6 py-2.5 rounded-xl bg-gold text-brand font-bold text-sm hover:bg-gold/90 transition-all active:scale-95 shadow-md"
+      >
+        تسجيل الدخول
+      </button>
     </div>
-    <BackToTop />
-  </>
-);
+  );
+};
+
+const LandingPage: React.FC = () => {
+  const { user } = useAuth();
+  return (
+    <>
+      <Header />
+      <IntroVideo />
+      <CompanyIntro />
+      {user ? (
+        <div className="relative z-10">
+          <About />
+          <StorySection />
+          <WhySection />
+          <Services />
+          <Performance />
+          <Calculator />
+          <AudienceSection />
+          <WaiveServices />
+          <FAQ />
+          <CTASection />
+          <TimelineSection />
+          <Footer />
+        </div>
+      ) : (
+        <LoginPrompt />
+      )}
+      <BackToTop />
+    </>
+  );
+};
 
 const AppContent: React.FC = () => {
   const [route, setRoute] = useState(window.location.hash);
