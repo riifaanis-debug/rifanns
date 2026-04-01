@@ -181,7 +181,9 @@ const LoginPrompt: React.FC = () => {
         <span className="h-[1px] w-10 bg-gold/40" />
       </div>
       <p className="text-sm text-muted dark:text-gray-300 leading-relaxed mb-5 transition-colors">
-        لتصفح الموقع والاطلاع على جميع الأقسام والخدمات يرجى تسجيل الدخول
+        لتصفح الموقع والاطلاع على جميع الأقسام والخدمات
+        <br />
+        يرجى تسجيل الدخول
       </p>
       <button
         onClick={handleOpenAuth}
