@@ -14,22 +14,22 @@ const Hero: React.FC = () => {
 
   const slides = [
     {
-      image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1920",
+      image: heroSlide1,
       title: "ريفانس المالية",
       subtitle: "نبتكر الحلول المالية الذكية لمستقبل مالي مستدام",
       tag: "حلول تمويلية"
     },
     {
-      image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=1920",
+      image: heroSlide2,
       title: "تمكين مالي رقمي",
       subtitle: "نحول طموحاتك المالية إلى واقع ملموس عبر تقنياتنا المتقدمة",
       tag: "تقنية مالية"
     },
     {
-      image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=1920",
-      title: "استشارات احترافية",
-      subtitle: "فريق من الخبراء يقودك نحو أفضل القرارات الاستثمارية والتمويلية",
-      tag: "خبرة مصرفية"
+      image: heroSlide3,
+      title: "أمان مالي متقدم",
+      subtitle: "نحمي استثماراتك بأحدث تقنيات الحماية والتشفير المالي",
+      tag: "حماية مالية"
     },
     {
       image: heroSlide4,
