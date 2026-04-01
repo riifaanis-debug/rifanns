@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Header from './components/rifans/Header';
+import IntroVideo from './components/rifans/IntroVideo';
 import Hero from './components/rifans/Hero';
 import About from './components/rifans/About';
 import Calculator from './components/rifans/Calculator';
