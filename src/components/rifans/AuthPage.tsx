@@ -22,7 +22,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
   const [showOtp, setShowOtp] = useState(false);
   const [pendingUser, setPendingUser] = useState<{ id: string; phone: string; role: string } | null>(null);
   
-  const { loginOrRegisterUser, loginWithEmail, loginWithGoogle, loginWithApple } = useAuth();
+  const { loginOrRegisterUser, lookupOrCreateUser, loginWithEmail, loginWithGoogle, loginWithApple, login } = useAuth();
 
   const handleGoogleLogin = async () => {
     setIsLoading(true);
@@ -86,22 +86,28 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
 
     try {
       if (isUserMode) {
-        const loggedInUser = await loginOrRegisterUser(formData.nationalId, formData.mobile);
+        // Lookup user WITHOUT logging in yet
+        const foundUser = await lookupOrCreateUser(formData.nationalId, formData.mobile);
         
-        // Check if phone is verified - if not, show OTP
+        // Check if phone is verified
         const { data: userData } = await (await import('@/integrations/supabase/client')).supabase
           .from('app_users')
           .select('phone_verified')
-          .eq('id', loggedInUser.id)
+          .eq('id', foundUser.id)
           .single();
 
         if (!userData?.phone_verified) {
-          setPendingUser({ id: loggedInUser.id, phone: formData.mobile, role: loggedInUser.role || 'user' });
+          // Show OTP - don't login yet
+          setPendingUser({ id: foundUser.id, phone: formData.mobile, role: foundUser.role || 'user' });
           setShowOtp(true);
+          setIsLoading(false);
           return;
         }
 
-        if (loggedInUser.role === 'admin') {
+        // Phone already verified - login directly
+        login({ user: foundUser, token: `session-${foundUser.id}` });
+
+        if (foundUser.role === 'admin') {
           window.location.hash = '#/admin';
         } else {
           window.location.hash = '#/dashboard';
@@ -128,6 +134,8 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
         phone={pendingUser.phone}
         userId={pendingUser.id}
         onVerified={() => {
+          // Now login after OTP verification
+          login({ user: { id: pendingUser.id, role: pendingUser.role as 'admin' | 'user' }, token: `session-${pendingUser.id}` });
           if (pendingUser.role === 'admin') {
             window.location.hash = '#/admin';
           } else {

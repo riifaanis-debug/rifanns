@@ -26,6 +26,7 @@ interface AuthContextType {
   logout: () => void;
   isLoading: boolean;
   loginOrRegisterUser: (nationalId: string, phone: string) => Promise<User>;
+  lookupOrCreateUser: (nationalId: string, phone: string) => Promise<User>;
   loginWithEmail: (email: string, password: string) => Promise<User>;
   loginWithGoogle: () => Promise<User>;
   loginWithApple: () => Promise<User>;
@@ -133,58 +134,59 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     window.location.hash = '#/';
   };
 
+  // Lookup or create user WITHOUT logging in (for OTP flow)
+  const lookupOrCreateUser = async (nationalId: string, phone: string): Promise<User> => {
+    const { data: existingUsers, error: lookupError } = await supabase
+      .from('app_users')
+      .select('*')
+      .eq('national_id', nationalId)
+      .limit(1);
+
+    if (lookupError) throw new Error('خطأ في قاعدة البيانات');
+
+    let appUser: any;
+
+    if (!existingUsers || existingUsers.length === 0) {
+      const newUser = {
+        id: Date.now().toString(),
+        full_name: `عميل ${nationalId.slice(-4)}`,
+        email: '',
+        phone: phone,
+        national_id: nationalId,
+        role: 'user',
+      };
+      const { data: inserted, error: insertError } = await supabase
+        .from('app_users')
+        .insert(newUser)
+        .select()
+        .single();
+
+      if (insertError) throw new Error('خطأ في إنشاء الحساب');
+      appUser = inserted;
+    } else {
+      appUser = existingUsers[0];
+      if (appUser.phone !== phone) {
+        await supabase.from('app_users').update({ phone }).eq('id', appUser.id);
+        appUser.phone = phone;
+      }
+    }
+
+    return {
+      id: appUser.id,
+      fullName: appUser.full_name,
+      name: appUser.full_name,
+      email: appUser.email,
+      phone: appUser.phone,
+      national_id: appUser.national_id,
+      role: appUser.role as 'admin' | 'user',
+    };
+  };
+
   const loginOrRegisterUser = async (nationalId: string, phone: string): Promise<User> => {
     setIsLoading(true);
     try {
-      // Look up user by national_id
-      const { data: existingUsers, error: lookupError } = await supabase
-        .from('app_users')
-        .select('*')
-        .eq('national_id', nationalId)
-        .limit(1);
-
-      if (lookupError) throw new Error('خطأ في قاعدة البيانات');
-
-      let appUser: any;
-
-      if (!existingUsers || existingUsers.length === 0) {
-        // Create new user
-        const newUser = {
-          id: Date.now().toString(),
-          full_name: `عميل ${nationalId.slice(-4)}`,
-          email: '',
-          phone: phone,
-          national_id: nationalId,
-          role: 'user',
-        };
-        const { data: inserted, error: insertError } = await supabase
-          .from('app_users')
-          .insert(newUser)
-          .select()
-          .single();
-
-        if (insertError) throw new Error('خطأ في إنشاء الحساب');
-        appUser = inserted;
-      } else {
-        appUser = existingUsers[0];
-        // Update phone if different
-        if (appUser.phone !== phone) {
-          await supabase.from('app_users').update({ phone }).eq('id', appUser.id);
-          appUser.phone = phone;
-        }
-      }
-
-      const userData: User = {
-        id: appUser.id,
-        fullName: appUser.full_name,
-        name: appUser.full_name,
-        email: appUser.email,
-        phone: appUser.phone,
-        national_id: appUser.national_id,
-        role: appUser.role as 'admin' | 'user',
-      };
-
-      login({ user: userData, token: `session-${appUser.id}` });
+      const userData = await lookupOrCreateUser(nationalId, phone);
+      login({ user: userData, token: `session-${userData.id}` });
       return userData;
     } finally {
       setIsLoading(false);
@@ -257,7 +259,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, isLoading, loginOrRegisterUser, loginWithEmail, loginWithGoogle, loginWithApple }}>
+    <AuthContext.Provider value={{ user, token, login, logout, isLoading, loginOrRegisterUser, lookupOrCreateUser, loginWithEmail, loginWithGoogle, loginWithApple }}>
       {children}
     </AuthContext.Provider>
   );
