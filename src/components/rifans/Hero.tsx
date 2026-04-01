@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
+import heroSlide4 from '../../assets/hero-slide-4.jpg';
+import heroSlide5 from '../../assets/hero-slide-5.jpg';
+import heroSlide6 from '../../assets/hero-slide-6.jpg';
 
 const Hero: React.FC = () => {
   const { direction } = useLanguage();
@@ -24,6 +27,24 @@ const Hero: React.FC = () => {
       title: "استشارات احترافية",
       subtitle: "فريق من الخبراء يقودك نحو أفضل القرارات الاستثمارية والتمويلية",
       tag: "خبرة مصرفية"
+    },
+    {
+      image: heroSlide4,
+      title: "استثمار المستقبل",
+      subtitle: "نصنع فرصاً استثمارية متميزة في أبرز المدن والمشاريع الرائدة",
+      tag: "فرص استثمارية"
+    },
+    {
+      image: heroSlide5,
+      title: "شراكات استراتيجية",
+      subtitle: "نبني علاقات مهنية متينة قائمة على الثقة والشفافية والنتائج",
+      tag: "شراكة موثوقة"
+    },
+    {
+      image: heroSlide6,
+      title: "تمويل عقاري متكامل",
+      subtitle: "حلول تمويلية مرنة تحقق حلمك في امتلاك العقار المثالي",
+      tag: "تمويل عقاري"
     }
   ];
 
