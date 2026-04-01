@@ -25,6 +25,7 @@ import AdminDashboard from './components/rifans/AdminDashboard';
 import CustomerDashboard from './components/rifans/CustomerDashboard';
 import ContractPage from './components/rifans/ContractPage';
 import ClientCard from './components/rifans/ClientCard';
+import ProfileCompletionModal from './components/rifans/ProfileCompletionModal';
 
 const StorySection = () => {
   const { t, direction } = useLanguage();
