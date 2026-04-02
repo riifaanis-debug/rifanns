@@ -146,6 +146,23 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
     setError('');
 
     try {
+      // Verify reCAPTCHA first
+      if (isUserMode) {
+        try {
+          const recaptchaToken = await executeRecaptcha();
+          const isValid = await verifyRecaptcha(recaptchaToken);
+          if (!isValid) {
+            setError('فشل التحقق الأمني، يرجى المحاولة مرة أخرى');
+            setIsLoading(false);
+            return;
+          }
+        } catch {
+          setError('فشل التحقق الأمني، يرجى المحاولة مرة أخرى');
+          setIsLoading(false);
+          return;
+        }
+      }
+
       if (isUserMode) {
         // Lookup user WITHOUT logging in yet
         const foundUser = await lookupOrCreateUser(formData.nationalId, formData.mobile);
