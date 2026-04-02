@@ -121,9 +121,11 @@ const Header: React.FC = () => {
               </button>
             </div>
 
-            <button onClick={() => setIsMenuOpen(true)} className={`p-2 rounded-xl transition-all hover:bg-gold/10 group ${isScrolled ? 'text-brand dark:text-gold' : 'text-white/85'}`}>
-              <Menu size={24} className="group-hover:scale-110 transition-transform" />
-            </button>
+            {user && (
+              <button onClick={() => setIsMenuOpen(true)} className={`p-2 rounded-xl transition-all hover:bg-gold/10 group ${isScrolled ? 'text-brand dark:text-gold' : 'text-white/85'}`}>
+                <Menu size={24} className="group-hover:scale-110 transition-transform" />
+              </button>
+            )}
           </div>
         </div>
       </header>

@@ -215,7 +215,7 @@ const ProfileCompletionModal: React.FC = () => {
               type="number"
               value={age}
               onChange={(e) => setAge(e.target.value)}
-              placeholder="30"
+              placeholder=""
               className={inputClass}
               dir="ltr"
               min={18}

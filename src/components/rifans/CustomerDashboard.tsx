@@ -1139,21 +1139,21 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                   {/* Personal Info */}
                   <div className="bg-white dark:bg-[#12031a] rounded-[28px] border border-gold/20 p-6 shadow-sm relative overflow-hidden">
                      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold/30 to-transparent"></div>
-                     <div className="flex items-center justify-between mb-6">
-                        <div className="flex items-center gap-3">
-                           <div className="w-8 h-8 rounded-xl bg-gold/10 flex items-center justify-center text-gold border border-gold/20">
-                              <User size={18} />
-                           </div>
-                           <h3 className="text-[15px] font-black text-brand dark:text-gold">البيانات الشخصية</h3>
-                        </div>
-                        <button 
-                           onClick={() => setShowCompleteProfile(true)}
-                           className="text-[10px] font-bold text-white bg-brand dark:bg-gold dark:text-brand px-3 py-1 rounded-full shadow-lg hover:scale-105 transition-transform flex items-center gap-1.5"
-                        >
-                           <UserPlus size={12} />
-                           إكمال الملف الشخصي
-                        </button>
-                     </div>
+                      <div className="flex flex-col gap-3 mb-6">
+                         <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-xl bg-gold/10 flex items-center justify-center text-gold border border-gold/20">
+                               <User size={18} />
+                            </div>
+                            <h3 className="text-[15px] font-black text-brand dark:text-gold">البيانات الشخصية</h3>
+                         </div>
+                         <button 
+                            onClick={() => setShowCompleteProfile(true)}
+                            className="text-[9px] font-bold text-white bg-brand dark:bg-gold dark:text-brand px-2.5 py-0.5 rounded-full shadow hover:scale-105 transition-transform flex items-center gap-1 w-fit self-end"
+                         >
+                            <UserPlus size={10} />
+                            إكمال الملف الشخصي
+                         </button>
+                      </div>
 
                   <div className="grid grid-cols-1 gap-4">
                     {/* Triple Name */}
