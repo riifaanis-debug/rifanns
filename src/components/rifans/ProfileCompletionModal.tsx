@@ -154,7 +154,7 @@ const ProfileCompletionModal: React.FC = () => {
                 type="text"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
-                placeholder="محمد"
+                placeholder=""
                 className={inputClass}
                 dir="rtl"
               />
