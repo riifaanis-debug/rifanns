@@ -393,6 +393,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
             >
               إلغاء والرجوع للرئيسية
             </button>
+            <div ref={recaptchaRef}></div>
           </form>
         </div>
       </div>
