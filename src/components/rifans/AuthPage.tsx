@@ -1,9 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { Button } from './Shared';
 import { User, Phone, CreditCard, ArrowRight, Loader2, AlertCircle, Lock, UserPlus, LogIn } from 'lucide-react';
 import Logo from './Logo';
 import OtpVerification from './OtpVerification';
+import { supabase } from '@/integrations/supabase/client';
+
+declare global {
+  interface Window {
+    grecaptcha: any;
+    onRecaptchaLoaded: () => void;
+  }
+}
+
+const RECAPTCHA_SITE_KEY = '6Le1g6lsAAAAAG9T0w8jD0eRN1zt6dZTjgYM_BaE';
 
 interface AuthPageProps {
   onClose: () => void;
@@ -22,7 +32,58 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
   const [showOtp, setShowOtp] = useState(false);
   const [pendingUser, setPendingUser] = useState<{ id: string; phone: string; role: string } | null>(null);
   
+  const recaptchaRef = useRef<HTMLDivElement>(null);
+  const recaptchaWidgetId = useRef<number | null>(null);
+
   const { loginOrRegisterUser, lookupOrCreateUser, loginWithEmail, loginWithGoogle, loginWithApple, login } = useAuth();
+
+  // Initialize invisible reCAPTCHA
+  useEffect(() => {
+    const renderRecaptcha = () => {
+      if (window.grecaptcha && recaptchaRef.current && recaptchaWidgetId.current === null) {
+        recaptchaWidgetId.current = window.grecaptcha.render(recaptchaRef.current, {
+          sitekey: RECAPTCHA_SITE_KEY,
+          size: 'invisible',
+          callback: () => {}, // handled via execute promise
+        });
+      }
+    };
+
+    if (window.grecaptcha && window.grecaptcha.render) {
+      renderRecaptcha();
+    } else {
+      window.onRecaptchaLoaded = renderRecaptcha;
+    }
+
+    return () => {
+      recaptchaWidgetId.current = null;
+    };
+  }, []);
+
+  const executeRecaptcha = (): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      if (!window.grecaptcha || recaptchaWidgetId.current === null) {
+        reject(new Error('reCAPTCHA غير جاهز'));
+        return;
+      }
+      window.grecaptcha.reset(recaptchaWidgetId.current);
+      window.grecaptcha.execute(recaptchaWidgetId.current)
+        .then((token: string) => resolve(token))
+        .catch((err: any) => reject(err));
+    });
+  };
+
+  const verifyRecaptcha = async (token: string): Promise<boolean> => {
+    try {
+      const { data, error } = await supabase.functions.invoke('verify-recaptcha', {
+        body: { token },
+      });
+      if (error) return false;
+      return data?.success === true;
+    } catch {
+      return false;
+    }
+  };
 
   const handleGoogleLogin = async () => {
     setIsLoading(true);
@@ -85,6 +146,23 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
     setError('');
 
     try {
+      // Verify reCAPTCHA first
+      if (isUserMode) {
+        try {
+          const recaptchaToken = await executeRecaptcha();
+          const isValid = await verifyRecaptcha(recaptchaToken);
+          if (!isValid) {
+            setError('فشل التحقق الأمني، يرجى المحاولة مرة أخرى');
+            setIsLoading(false);
+            return;
+          }
+        } catch {
+          setError('فشل التحقق الأمني، يرجى المحاولة مرة أخرى');
+          setIsLoading(false);
+          return;
+        }
+      }
+
       if (isUserMode) {
         // Lookup user WITHOUT logging in yet
         const foundUser = await lookupOrCreateUser(formData.nationalId, formData.mobile);
@@ -315,6 +393,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
             >
               إلغاء والرجوع للرئيسية
             </button>
+            <div ref={recaptchaRef}></div>
           </form>
         </div>
       </div>

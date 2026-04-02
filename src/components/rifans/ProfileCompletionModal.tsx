@@ -154,7 +154,7 @@ const ProfileCompletionModal: React.FC = () => {
                 type="text"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
-                placeholder="محمد"
+                placeholder=""
                 className={inputClass}
                 dir="rtl"
               />
@@ -165,7 +165,7 @@ const ProfileCompletionModal: React.FC = () => {
                 type="text"
                 value={middleName}
                 onChange={(e) => setMiddleName(e.target.value)}
-                placeholder="عبدالله"
+                placeholder=""
                 className={inputClass}
                 dir="rtl"
               />
@@ -176,7 +176,7 @@ const ProfileCompletionModal: React.FC = () => {
                 type="text"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
-                placeholder="الأحمد"
+                placeholder=""
                 className={inputClass}
                 dir="rtl"
               />
@@ -215,7 +215,7 @@ const ProfileCompletionModal: React.FC = () => {
               type="number"
               value={age}
               onChange={(e) => setAge(e.target.value)}
-              placeholder="30"
+              placeholder=""
               className={inputClass}
               dir="ltr"
               min={18}
