@@ -1,9 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { Button } from './Shared';
 import { User, Phone, CreditCard, ArrowRight, Loader2, AlertCircle, Lock, UserPlus, LogIn } from 'lucide-react';
 import Logo from './Logo';
 import OtpVerification from './OtpVerification';
+import { supabase } from '@/integrations/supabase/client';
+
+declare global {
+  interface Window {
+    grecaptcha: any;
+    onRecaptchaLoaded: () => void;
+  }
+}
+
+const RECAPTCHA_SITE_KEY = '6Le1g6lsAAAAAG9T0w8jD0eRN1zt6dZTjgYM_BaE';
 
 interface AuthPageProps {
   onClose: () => void;
