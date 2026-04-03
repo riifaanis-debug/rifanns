@@ -8,7 +8,7 @@ import { Button } from './Shared';
 import { useAuth } from '../../contexts/AuthContext';
 import Logo from './Logo';
 import { safeStringify, safeParse } from '../../utils/safeJson';
-import { getMyRequests, getMyNotifications, getMyContracts, getProfile, updateProfile, markAllNotificationsRead, uploadDocument } from '../../lib/api';
+import { getMyRequests, getMyNotifications, getMyContracts, getMyInvoices, getProfile, updateProfile, markAllNotificationsRead, uploadDocument } from '../../lib/api';
 import { formatAmount } from '../../lib/formatNumber';
 
 interface CustomerDashboardProps {
