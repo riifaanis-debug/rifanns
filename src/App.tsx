@@ -267,6 +267,10 @@ const AppContent: React.FC = () => {
       const submissionId = route.replace('#/contract/', '');
       return user ? <ContractPage submissionId={submissionId} onClose={() => window.location.hash = '#/dashboard?tab=contracts'} /> : <LandingPage />;
     }
+    if (route.startsWith('#/invoice/')) {
+      const submissionId = route.replace('#/invoice/', '');
+      return user ? <InvoicePage submissionId={submissionId} onClose={() => window.location.hash = '#/dashboard?tab=contracts'} /> : <LandingPage />;
+    }
     switch(route) {
       case '#/services': return <ServicesPage />;
       case '#/terms': return <Terms />;

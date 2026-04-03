@@ -1640,6 +1640,49 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
         )}
       </AnimatePresence>
 
+      {/* Confirmation Modal for Sending Invoice */}
+      <AnimatePresence>
+        {isConfirmingSendInvoice && (
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-brand/60 backdrop-blur-md" 
+              onClick={() => setIsConfirmingSendInvoice(false)} 
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-md bg-white dark:bg-[#12031a] rounded-[32px] shadow-2xl overflow-hidden p-8 text-right"
+            >
+              <div className="w-20 h-20 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-6 text-gold">
+                <FileText size={40} />
+              </div>
+              <h3 className="text-xl font-bold text-brand dark:text-white mb-4">تأكيد إرسال الفاتورة</h3>
+              <p className="text-muted mb-8">هل ترغب بإرسال فاتورة الطلب للعميل؟ سيتم احتساب الأتعاب تلقائياً حسب نوع الخدمة.</p>
+              
+              <div className="flex items-center gap-4">
+                <Button 
+                  onClick={handleConfirmSendInvoice}
+                  className="flex-1 bg-gold text-brand py-4 rounded-2xl font-bold shadow-lg shadow-gold/20"
+                >
+                  إرسال الفاتورة
+                </Button>
+                <Button 
+                  onClick={() => setIsConfirmingSendInvoice(false)}
+                  variant="outline"
+                  className="flex-1 py-4 rounded-2xl font-bold border-gray-200"
+                >
+                  إلغاء
+                </Button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
       {/* Stat Popup */}
       <AnimatePresence>
         {statPopup && (
