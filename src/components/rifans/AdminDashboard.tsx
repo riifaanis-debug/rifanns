@@ -222,11 +222,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
       alert('حدث خطأ في إرسال الفاتورة');
     }
   };
-      fetchAllData();
-    } catch (err) {
-      console.error(err);
-    }
-  };
+
 
   // Stats calculation
   const stats = useMemo(() => {
