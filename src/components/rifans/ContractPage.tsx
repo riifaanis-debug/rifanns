@@ -268,8 +268,8 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
                 <p className="text-[18px] font-black text-[#22042C]">شركة ريفانس المالية</p>
                 <div className="mt-3 space-y-1">
                   <p className="text-[16px] font-black text-[#22042C]">
-                    {isRescheduling ? 'عقد تفويض ومتابعة طلب جدولة منتجات تمويلية' : 'عقد تفويض ومتابعة طلب إعفاء تمويلي'}
-                  </p>
+                     {isRescheduling ? 'عقد تفويض ومتابعة طلب جدولة منتجات تمويلية' : isSeizedAmounts ? 'عقد تفويض ومتابعة طلب إتاحة النسبة النظامية' : 'عقد تفويض ومتابعة طلب إعفاء تمويلي'}
+                   </p>
                   <p className="text-[11px] font-bold text-[#22042C]">رقم ملف العميل: <span className="font-mono">{submissionId}</span></p>
                   <p className="text-[11px] font-bold text-[#22042C]">رقم العقد: <span className="font-mono">{submissionId}</span></p>
                   <p className="text-[11px] font-bold text-[#22042C]">التاريخ: {new Date(submission.timestamp).toLocaleDateString('ar-SA')}</p>
