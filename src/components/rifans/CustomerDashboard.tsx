@@ -1002,8 +1002,52 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                     <p className="text-[12px]">لا توجد عقود حالياً</p>
                  </div>
                )}
-             </div>
-           )}
+
+               {/* Invoices Section */}
+               <h3 className="text-[13px] font-bold text-brand dark:text-white mt-6 mb-2 px-1">الفواتير</h3>
+               {invoices.length > 0 ? (
+                 invoices.map((inv) => {
+                   const req = requests.find(r => r.id === inv.submission_id) || { type: inv.type };
+                   return (
+                     <div key={inv.id} className="bg-white dark:bg-[#12031a] p-4 rounded-[16px] border border-gold/20 shadow-sm group hover:border-gold/50 transition-all text-right">
+                       <div className="flex justify-between items-start mb-2">
+                         <div className="flex items-center gap-2">
+                           <Receipt className="text-gold" size={16} />
+                           <h3 className="text-[13px] font-bold text-brand dark:text-white">
+                             فاتورة رقم {inv.id}
+                           </h3>
+                         </div>
+                         <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${inv.status === 'paid' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>
+                           {inv.status === 'paid' ? 'مسددة' : 'في انتظار السداد'}
+                         </span>
+                       </div>
+                       <p className="text-[11px] text-muted mb-2">
+                         {inv.type === 'waive_request' ? 'طلب إعفاء من الالتزامات' : 
+                          inv.type === 'rescheduling_request' ? 'إعادة جدولة المنتجات التمويلية' : 
+                          inv.type === 'seized_amounts_request' ? 'إتاحة النسبة النظامية والمبالغ المستثناه' : 'طلب استشارة مالية'}
+                       </p>
+                       <div className="flex justify-between items-center mb-3">
+                         <span className="text-[11px] text-muted">{new Date(inv.created_at).toLocaleDateString('ar-SA')}</span>
+                         <span className="text-sm font-black text-gold">{formatAmount(inv.amount)} ر.س</span>
+                       </div>
+                       <button 
+                         onClick={() => window.location.hash = `#/invoice/${inv.submission_id}`}
+                         className="w-full py-2.5 bg-white text-brand font-bold text-[12px] rounded-xl shadow-sm hover:bg-gray-50 transition-all flex items-center justify-center gap-2 border border-gold/30"
+                       >
+                         <FileText size={14} />
+                         عرض الفاتورة
+                       </button>
+                     </div>
+                   );
+                 })
+               ) : (
+                 <div className="text-right py-6 text-muted flex flex-col items-start gap-2">
+                   <Receipt size={32} className="opacity-20" />
+                   <p className="text-[12px]">لا توجد فواتير حالياً</p>
+                 </div>
+               )}
+              </div>
+            )}
 
            {activeTab === 'notifications' && (
              <div className="space-y-3">
