@@ -283,8 +283,9 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
   const fetchContracts = async () => {
     if (!authUser) return;
     try {
-      const data = await getMyContracts();
-      setContracts(data);
+      const [contractsData, invoicesData] = await Promise.all([getMyContracts(), getMyInvoices()]);
+      setContracts(contractsData);
+      setInvoices(invoicesData);
     } catch (err) {
       console.error(err);
     }
