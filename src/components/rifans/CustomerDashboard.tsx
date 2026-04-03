@@ -62,6 +62,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
   const [userData, setUserData] = useState<UserProfile>(user);
   const [requests, setRequests] = useState<any[]>([]);
   const [contracts, setContracts] = useState<any[]>([]);
+  const [invoices, setInvoices] = useState<any[]>([]);
   const [notifications, setNotifications] = useState<any[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
