@@ -1100,6 +1100,20 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                         </button>
                       )}
 
+                      {notif.type === 'invoice' && !notif.is_read && (
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            window.location.hash = `#/invoice/${notif.submission_id}`;
+                            markAsRead(notif.id);
+                          }}
+                          className="w-full mt-2 py-2 bg-gold text-brand font-bold text-[11px] rounded-lg shadow-sm hover:bg-gold/90 transition-all flex items-center justify-center gap-2"
+                        >
+                          <Receipt size={12} />
+                          عرض الفاتورة
+                        </button>
+                      )}
+
                      <div className="text-[9px] text-muted flex items-center gap-1 justify-end mt-2">
                        <Clock size={10} />
                        {new Date(notif.created_at).toLocaleString('ar-SA')}
