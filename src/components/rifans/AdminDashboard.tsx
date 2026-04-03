@@ -183,6 +183,11 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
     setIsConfirmingSendContract(true);
   };
 
+  const sendInvoice = async (userId: string, submissionId: string) => {
+    setPendingInvoiceData({ userId, submissionId });
+    setIsConfirmingSendInvoice(true);
+  };
+
   const handleConfirmSendContract = async () => {
     if (!pendingContractData) return;
     const { userId, submissionId } = pendingContractData;
@@ -193,6 +198,30 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
       setPendingContractData(null);
       setShowSuccessMessage(true);
       setTimeout(() => setShowSuccessMessage(false), 3000);
+      fetchContracts();
+      fetchSubmissions();
+    } catch (err) {
+      console.error(err);
+      alert('حدث خطأ');
+    }
+  };
+
+  const handleConfirmSendInvoice = async () => {
+    if (!pendingInvoiceData) return;
+    const { userId, submissionId } = pendingInvoiceData;
+    
+    try {
+      await apiSendInvoice(userId, submissionId);
+      setIsConfirmingSendInvoice(false);
+      setPendingInvoiceData(null);
+      setShowSuccessMessage(true);
+      setTimeout(() => setShowSuccessMessage(false), 3000);
+      fetchSubmissions();
+    } catch (err) {
+      console.error(err);
+      alert('حدث خطأ في إرسال الفاتورة');
+    }
+  };
       fetchAllData();
     } catch (err) {
       console.error(err);
