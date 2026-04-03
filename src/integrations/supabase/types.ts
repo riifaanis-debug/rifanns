@@ -170,6 +170,63 @@ export type Database = {
           },
         ]
       }
+      invoices: {
+        Row: {
+          amount: number | null
+          created_at: string
+          id: string
+          notes: string | null
+          paid_at: string | null
+          percentage: number | null
+          status: string | null
+          submission_id: string
+          total_debt: number | null
+          type: string | null
+          user_id: string
+        }
+        Insert: {
+          amount?: number | null
+          created_at?: string
+          id: string
+          notes?: string | null
+          paid_at?: string | null
+          percentage?: number | null
+          status?: string | null
+          submission_id: string
+          total_debt?: number | null
+          type?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          paid_at?: string | null
+          percentage?: number | null
+          status?: string | null
+          submission_id?: string
+          total_debt?: number | null
+          type?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoices_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "app_users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoices_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "app_users_safe"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notifications: {
         Row: {
           created_at: string
