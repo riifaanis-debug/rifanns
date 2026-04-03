@@ -1204,6 +1204,14 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                             عرض العقد الموثق
                           </button>
                         )}
+
+                        <button 
+                          onClick={() => sendInvoice(selectedSubmission.userId, selectedSubmission.id)}
+                          className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gold text-brand rounded-xl text-sm font-bold hover:bg-gold/90 transition-all shadow-lg"
+                        >
+                          <FileText size={18} />
+                          إرسال فاتورة الطلب
+                        </button>
                       </div>
                     </div>
 
