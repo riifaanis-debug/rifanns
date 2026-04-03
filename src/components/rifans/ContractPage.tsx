@@ -194,6 +194,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
   }
 
   const isRescheduling = submission?.type === 'rescheduling_request' || submission?.type === 'scheduling_request';
+  const isSeizedAmounts = submission?.type === 'seized_amounts_request';
 
   return (
     <div className="min-h-screen bg-[#F0F2F5] flex flex-col overflow-x-hidden print-container">
