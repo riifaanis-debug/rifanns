@@ -24,6 +24,7 @@ import AuthPage from './components/rifans/AuthPage';
 import AdminDashboard from './components/rifans/AdminDashboard';
 import CustomerDashboard from './components/rifans/CustomerDashboard';
 import ContractPage from './components/rifans/ContractPage';
+import InvoicePage from './components/rifans/InvoicePage';
 import ClientCard from './components/rifans/ClientCard';
 import ProfileCompletionModal from './components/rifans/ProfileCompletionModal';
 
@@ -265,6 +266,10 @@ const AppContent: React.FC = () => {
     if (route.startsWith('#/contract/')) {
       const submissionId = route.replace('#/contract/', '');
       return user ? <ContractPage submissionId={submissionId} onClose={() => window.location.hash = '#/dashboard?tab=contracts'} /> : <LandingPage />;
+    }
+    if (route.startsWith('#/invoice/')) {
+      const submissionId = route.replace('#/invoice/', '');
+      return user ? <InvoicePage submissionId={submissionId} onClose={() => window.location.hash = '#/dashboard?tab=contracts'} /> : <LandingPage />;
     }
     switch(route) {
       case '#/services': return <ServicesPage />;

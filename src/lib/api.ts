@@ -300,3 +300,73 @@ export const notifyAdminContractSigned = async (submissionId: string, contractPd
     },
   });
 };
+
+// ---- INVOICES ----
+export const getMyInvoices = async () => {
+  const userId = getCurrentUserId();
+  if (!userId) return [];
+  const { data } = await supabase.from('invoices').select('*').eq('user_id', userId).order('created_at', { ascending: false });
+  return data || [];
+};
+
+export const getAdminInvoices = async () => {
+  const { data: invoices } = await supabase.from('invoices').select('*').order('created_at', { ascending: false });
+  if (!invoices) return [];
+  
+  const userIds = [...new Set(invoices.map((inv: any) => inv.user_id))];
+  const { data: users } = await supabase.from('app_users').select('id, full_name').in('id', userIds);
+  const userMap = new Map((users || []).map(u => [u.id, u.full_name]));
+
+  return invoices.map((inv: any) => ({
+    ...inv,
+    user_name: userMap.get(inv.user_id) || 'غير معروف',
+  }));
+};
+
+export const sendInvoice = async (userId: string, submissionId: string) => {
+  const invoiceId = `INV-${Date.now()}`;
+  const { data: req } = await supabase.from('requests').select('type, data').eq('id', submissionId).single();
+  
+  const reqData = req?.data as Record<string, any> || {};
+  const products = reqData?.products || [];
+  const totalDebt = Array.isArray(products) ? products.reduce((acc: number, p: any) => acc + (Number(p.amount) || 0), 0) : 0;
+  
+  const type = req?.type || 'general';
+  let percentage = 4; // default waive
+  if (type === 'rescheduling_request' || type === 'scheduling_request') {
+    percentage = 0; // fixed amount
+  } else if (type === 'seized_amounts_request') {
+    percentage = 1;
+  }
+  
+  const amount = type === 'rescheduling_request' || type === 'scheduling_request' 
+    ? 2000 
+    : Math.round(totalDebt * percentage / 100);
+
+  await supabase.from('invoices').insert({
+    id: invoiceId,
+    submission_id: submissionId,
+    user_id: userId,
+    type,
+    amount,
+    percentage,
+    total_debt: totalDebt,
+    status: 'pending',
+  });
+
+  await supabase.from('notifications').insert({
+    id: `NOT-${Date.now()}-inv`,
+    user_id: userId,
+    submission_id: submissionId,
+    title: 'فاتورة جديدة',
+    message: 'تم إصدار فاتورة جديدة لطلبك، يرجى المراجعة.',
+    type: 'invoice',
+  });
+
+  return invoiceId;
+};
+
+export const getInvoiceBySubmission = async (submissionId: string) => {
+  const { data } = await supabase.from('invoices').select('*').eq('submission_id', submissionId).order('created_at', { ascending: false }).limit(1);
+  return data && data.length > 0 ? data[0] : null;
+};
