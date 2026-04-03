@@ -327,7 +327,8 @@ export const sendInvoice = async (userId: string, submissionId: string) => {
   const invoiceId = `INV-${Date.now()}`;
   const { data: req } = await supabase.from('requests').select('type, data').eq('id', submissionId).single();
   
-  const products = req?.data?.products || [];
+  const reqData = req?.data as Record<string, any> || {};
+  const products = reqData?.products || [];
   const totalDebt = Array.isArray(products) ? products.reduce((acc: number, p: any) => acc + (Number(p.amount) || 0), 0) : 0;
   
   const type = req?.type || 'general';
