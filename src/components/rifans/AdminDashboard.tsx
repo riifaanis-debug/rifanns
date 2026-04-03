@@ -14,7 +14,7 @@ import { Button, Card } from './Shared';
 import { motion, AnimatePresence } from 'motion/react';
 import { SubmissionHistory, Notification, Contract, UserProfile } from '../../types';
 import { safeStringify, safeParse } from '../../utils/safeJson';
-import { getAdminSubmissions, getAdminUsers, getAdminNotifications, getAdminContracts, updateSubmissionStatus, sendContract as apiSendContract, getSubmissionHistory as apiGetSubmissionHistory } from '../../lib/api';
+import { getAdminSubmissions, getAdminUsers, getAdminNotifications, getAdminContracts, updateSubmissionStatus, sendContract as apiSendContract, sendInvoice as apiSendInvoice, getSubmissionHistory as apiGetSubmissionHistory, getAdminInvoices } from '../../lib/api';
 import { formatAmount } from '../../lib/formatNumber';
 import { toPng } from 'html-to-image';
 
