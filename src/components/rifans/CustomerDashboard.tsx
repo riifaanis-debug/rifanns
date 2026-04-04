@@ -1633,6 +1633,60 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                    </div>
                 </div>
 
+               {/* My Invoices Section */}
+               <div className="bg-white dark:bg-[#12031a] rounded-[28px] border border-gold/20 p-6 shadow-sm relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold/30 to-transparent"></div>
+                  <div className="flex items-center justify-between mb-6">
+                     <h3 className="text-[15px] font-black text-gold flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-xl bg-gold/10 flex items-center justify-center text-gold border border-gold/20">
+                          <Receipt size={18} />
+                         </div>
+                         فواتيري
+                      </h3>
+                   </div>
+                   <div className="space-y-3">
+                     {invoices.length > 0 ? (
+                       invoices.map((inv) => (
+                         <div key={inv.id} className="flex items-center justify-between p-3 bg-white dark:bg-white/5 rounded-xl border border-gray-50 dark:border-white/5 group hover:border-gold/30 transition-all">
+                           <div className="flex items-center gap-3">
+                             <div className="w-8 h-8 rounded-lg bg-gold/10 flex items-center justify-center text-gold">
+                               <Receipt size={14} />
+                             </div>
+                             <div className="text-right">
+                               <div className="text-[11px] font-bold text-brand dark:text-white">فاتورة رقم {inv.id}</div>
+                               <div className="text-[9px] text-muted">
+                                 {inv.type === 'waive_request' ? 'طلب إعفاء' : 
+                                  inv.type === 'rescheduling_request' ? 'إعادة جدولة' : 
+                                  inv.type === 'seized_amounts_request' ? 'إتاحة النسبة النظامية' : 'طلب استشارة'}
+                                 {' • '}{new Date(inv.created_at).toLocaleDateString('ar-SA')}
+                               </div>
+                             </div>
+                           </div>
+                           <div className="flex items-center gap-3">
+                             <div className="text-left">
+                               <div className="text-[12px] font-black text-gold">{formatAmount(inv.amount)} ر.س</div>
+                               <span className={`text-[9px] font-bold ${inv.status === 'paid' ? 'text-green-600' : 'text-amber-600'}`}>
+                                 {inv.status === 'paid' ? 'مسددة' : 'في انتظار السداد'}
+                               </span>
+                             </div>
+                             <button 
+                               onClick={() => window.location.hash = `#/invoice/${inv.submission_id}`}
+                               className="p-1.5 text-gold hover:bg-gold/10 rounded-lg transition-colors"
+                               title="عرض الفاتورة"
+                             >
+                               <Eye size={14} />
+                             </button>
+                           </div>
+                         </div>
+                       ))
+                     ) : (
+                       <div className="text-center py-6 text-[11px] text-muted border border-dashed border-gray-100 dark:border-white/10 rounded-xl">
+                         لا توجد فواتير حالياً
+                       </div>
+                     )}
+                   </div>
+                </div>
+
                {isEditing && (
                   <div className="mt-4">
                      <button 
