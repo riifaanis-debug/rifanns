@@ -1244,8 +1244,42 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                           <div className="text-[10px] text-muted italic">لا يوجد سجل تحديثات حالياً</div>
                         )}
                       </div>
-                    </div>
-                  </div>
+                     </div>
+
+                     {/* Client Contracts for this submission */}
+                     {contracts.filter(c => c.submission_id === selectedSubmission.id).length > 0 && (
+                       <div className="space-y-4">
+                         <h3 className="text-sm font-bold text-brand dark:text-gold flex items-center gap-2">
+                           <PenTool size={18} />
+                           عقود العميل
+                         </h3>
+                         <div className="space-y-3">
+                           {contracts.filter(c => c.submission_id === selectedSubmission.id).map(c => (
+                             <div key={c.id} className="bg-gray-50 dark:bg-white/5 p-4 rounded-2xl border border-gold/10 hover:border-gold/30 transition-all">
+                               <div className="flex items-center justify-between mb-2">
+                                 <span className="text-xs font-bold text-brand dark:text-white">عقد رقم {c.file_number || c.id}</span>
+                                 <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${c.signed_at ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-amber-50 text-amber-600 border-amber-100'}`}>
+                                   {c.signed_at ? 'تم التوقيع' : 'بانتظار التوقيع'}
+                                 </span>
+                               </div>
+                               <div className="text-[10px] text-muted space-y-1">
+                                 <div>نوع العقد: {c.type === 'waive_request' ? 'عقد إعفاء' : c.type === 'rescheduling_request' ? 'عقد جدولة' : 'عقد خدمة'}</div>
+                                 <div>تاريخ الإرسال: {new Date(c.created_at).toLocaleDateString('ar-SA')}</div>
+                                 {c.signed_at && <div>تاريخ التوقيع: {new Date(c.signed_at).toLocaleString('ar-SA')}</div>}
+                               </div>
+                               <button 
+                                 onClick={() => setSelectedContract(c)}
+                                 className="mt-2 w-full flex items-center justify-center gap-2 px-3 py-2 bg-gold/10 text-gold rounded-xl text-xs font-bold hover:bg-gold/20 transition-all border border-gold/20"
+                               >
+                                 <Eye size={14} />
+                                 عرض العقد
+                               </button>
+                             </div>
+                           ))}
+                         </div>
+                       </div>
+                     )}
+                   </div>
                 </div>
               </div>
 
