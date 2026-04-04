@@ -161,7 +161,7 @@ const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
               </div>
               <div>
                 <span className="text-muted">الجوال:</span>
-                <span className="block font-bold text-brand mt-0.5 font-mono" dir="ltr">{submission.data?.mobile || '---'}</span>
+                <span className="block font-bold text-brand mt-0.5 font-mono text-right" dir="ltr">{submission.data?.mobile || '---'}</span>
               </div>
               <div>
                 <span className="text-muted">رقم الملف:</span>
