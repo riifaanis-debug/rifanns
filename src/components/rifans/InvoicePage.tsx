@@ -278,8 +278,7 @@ const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
               </div>
             ) : (
               <div className="space-y-3">
-                <div id={`paypal-container-${invoice.id}`}></div>
-                <PayPalButton containerId={`paypal-container-${invoice.id}`} />
+                <PayPalFormButton />
               </div>
             )}
           </div>

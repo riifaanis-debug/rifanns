@@ -183,11 +183,24 @@ const LoginPrompt: React.FC = () => {
         <Lock size={20} className="text-gold" />
         <span className="h-[1px] w-10 bg-gold/40" />
       </div>
-      <p className="text-sm text-muted dark:text-gray-300 leading-relaxed mb-5 transition-colors">
+      <p className="text-sm text-muted dark:text-gray-300 leading-relaxed mb-6 transition-colors">
         لتصفح الموقع والاطلاع على جميع الأقسام والخدمات
         <br />
         يرجى تسجيل الدخول
       </p>
+
+      {/* SAMA & CMA Logos */}
+      <div className="flex justify-center mb-4">
+        <img src={samaCmaLogos} alt="البنك المركزي السعودي وهيئة السوق المالية" className="h-12 w-auto object-contain" />
+      </div>
+
+      <div className="text-center mb-6 space-y-1">
+        <p className="text-sm font-black text-brand dark:text-white">ريفانس المالية | Revans Finance</p>
+        <p className="text-xs text-muted dark:text-gray-400">مرخصة من قِبل البنك المركزي السعودي</p>
+        <p className="text-xs text-muted dark:text-gray-400">خاضعة لإشراف ورقابة هيئة السوق المالية</p>
+        <p className="text-[10px] text-brand/50 dark:text-gray-500 mt-2">جميع الحقوق محفوظة | ريفانس المالية 2026</p>
+      </div>
+
       <button
         onClick={handleOpenAuth}
         className="px-6 py-2.5 rounded-xl bg-gold text-brand font-bold text-sm hover:bg-gold/90 transition-all active:scale-95 shadow-md"
