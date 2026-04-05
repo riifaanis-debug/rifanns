@@ -32,6 +32,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
   const [users, setUsers] = useState<any[]>([]);
   const [notifications, setNotifications] = useState<any[]>([]);
   const [contracts, setContracts] = useState<any[]>([]);
+  const [adminInvoices, setAdminInvoices] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
