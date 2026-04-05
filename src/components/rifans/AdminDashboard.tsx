@@ -109,7 +109,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
         fetchSubmissions(),
         fetchUsers(),
         fetchNotifications(),
-        fetchContracts()
+        fetchContracts(),
+        fetchInvoices()
       ]);
     } catch (err) {
       console.error("Error fetching dashboard data:", err);
