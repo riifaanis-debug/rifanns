@@ -15,6 +15,7 @@ import { Check, Scale, MessageCircle, Lock, Monitor, FileText, Bell, ChevronRigh
 import { motion } from 'motion/react';
 import { useLanguage, LanguageProvider } from './contexts/LanguageContext';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import samaCmaLogos from './assets/sama-cma-logos.jpeg';
 import FloatingWhatsApp from './components/rifans/FloatingWhatsApp';
 import CompanyIntro from './components/rifans/CompanyIntro';
 import { Terms, Privacy, Complaints, Contact, AboutPage, GoalPage, VisionPage, MessagePage, MissionPage, ServicesPage, AcceptableUse, CookiePolicy, IntellectualProperty } from './components/rifans/StaticPages';
