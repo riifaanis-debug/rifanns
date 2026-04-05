@@ -235,17 +235,22 @@ const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
 
           {/* Payment Status */}
           <div className="p-6 sm:p-8 border-b border-gray-100">
-            <div className={`flex items-center justify-between p-4 rounded-xl ${invoice.status === 'paid' ? 'bg-green-50 border border-green-200' : 'bg-amber-50 border border-amber-200'}`}>
-              <div className="flex items-center gap-2">
-                <div className={`w-3 h-3 rounded-full ${invoice.status === 'paid' ? 'bg-green-500' : 'bg-amber-500 animate-pulse'}`}></div>
-                <span className={`text-sm font-bold ${invoice.status === 'paid' ? 'text-green-700' : 'text-amber-700'}`}>
-                  {invoice.status === 'paid' ? 'تم السداد' : 'في انتظار السداد'}
-                </span>
+            {invoice.status === 'paid' ? (
+              <div className="flex items-center justify-between p-4 rounded-xl bg-green-50 border border-green-200">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                  <span className="text-sm font-bold text-green-700">تم السداد</span>
+                </div>
+                {invoice.paid_at && (
+                  <span className="text-xs text-green-600">{new Date(invoice.paid_at).toLocaleDateString('ar-SA')}</span>
+                )}
               </div>
-              {invoice.paid_at && (
-                <span className="text-xs text-green-600">{new Date(invoice.paid_at).toLocaleDateString('ar-SA')}</span>
-              )}
-            </div>
+            ) : (
+              <div className="space-y-3">
+                <div id={`paypal-container-${invoice.id}`}></div>
+                <PayPalButton containerId={`paypal-container-${invoice.id}`} />
+              </div>
+            )}
           </div>
 
           {/* Footer with stamp */}
