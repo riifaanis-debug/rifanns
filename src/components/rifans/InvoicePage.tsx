@@ -16,10 +16,10 @@ interface InvoicePageProps {
 
 const PayPalFormButton: React.FC = () => (
   <div className="flex justify-center">
-    <form action="https://www.paypal.com/ncp/payment/M996MBSU63AEQ" method="post" target="_blank" style={{ display: 'inline-grid', justifyItems: 'center', alignContent: 'start', gap: '0.5rem' }}>
+    <form action="https://www.paypal.com/ncp/payment/7JC8Q2G4NFSP4" method="post" target="_blank" style={{ display: 'inline-grid', justifyItems: 'center', alignContent: 'start', gap: '0.5rem' }}>
       <input
         type="submit"
-        value="شراء الآن"
+        value="سداد الفاتورة"
         style={{
           textAlign: 'center',
           border: 'none',
