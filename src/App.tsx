@@ -196,9 +196,9 @@ const LoginPrompt: React.FC = () => {
 
       <div className="text-center mb-6 space-y-1">
         <p className="text-sm font-black text-brand dark:text-white">ريفانس المالية | Revans Finance</p>
-        <p className="text-xs text-muted dark:text-gray-400">مرخصة من قِبل البنك المركزي السعودي</p>
-        <p className="text-xs text-muted dark:text-gray-400">خاضعة لإشراف ورقابة هيئة السوق المالية</p>
-        <p className="text-[10px] text-brand/50 dark:text-gray-500 mt-2">جميع الحقوق محفوظة | ريفانس المالية 2026</p>
+        <p className="text-xs text-brand dark:text-purple-300 font-medium">مرخصة من قِبل البنك المركزي السعودي</p>
+        <p className="text-xs text-brand dark:text-purple-300 font-medium">خاضعة لإشراف ورقابة هيئة السوق المالية</p>
+        <p className="text-[10px] text-brand dark:text-purple-400 mt-2 font-bold">جميع الحقوق محفوظة | ريفانس المالية 2026</p>
       </div>
 
       <button
