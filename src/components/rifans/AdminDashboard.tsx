@@ -155,6 +155,15 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
     }
   };
 
+  const fetchInvoices = async () => {
+    try {
+      const data = await getAdminInvoices();
+      setAdminInvoices(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const fetchSubmissionHistory = async (id: string) => {
     setIsHistoryLoading(true);
     try {
