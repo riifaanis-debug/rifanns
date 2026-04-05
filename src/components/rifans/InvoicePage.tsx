@@ -14,6 +14,35 @@ interface InvoicePageProps {
   onClose: () => void;
 }
 
+const PayPalButton: React.FC<{ containerId: string }> = ({ containerId }) => {
+  useEffect(() => {
+    const renderButton = () => {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      container.innerHTML = '';
+      if ((window as any).paypal?.HostedButtons) {
+        (window as any).paypal.HostedButtons({
+          hostedButtonId: "M996MBSU63AEQ",
+        }).render(`#${containerId}`);
+      }
+    };
+
+    if ((window as any).paypal?.HostedButtons) {
+      renderButton();
+    } else {
+      const interval = setInterval(() => {
+        if ((window as any).paypal?.HostedButtons) {
+          clearInterval(interval);
+          renderButton();
+        }
+      }, 500);
+      return () => clearInterval(interval);
+    }
+  }, [containerId]);
+
+  return null;
+};
+
 const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
   const { token } = useAuth();
   const invoiceRef = useRef<HTMLDivElement>(null);

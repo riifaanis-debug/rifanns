@@ -1290,6 +1290,34 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                          </div>
                        </div>
                      )}
+
+                     {/* Client Invoices for this submission */}
+                     {adminInvoices.filter(inv => inv.submission_id === selectedSubmission.id).length > 0 && (
+                       <div className="space-y-4">
+                         <h3 className="text-sm font-bold text-brand dark:text-gold flex items-center gap-2">
+                           <CreditCard size={18} />
+                           فواتير العميل
+                         </h3>
+                         <div className="space-y-3">
+                           {adminInvoices.filter(inv => inv.submission_id === selectedSubmission.id).map(inv => (
+                             <div key={inv.id} className="bg-gray-50 dark:bg-white/5 p-4 rounded-2xl border border-gold/10 hover:border-gold/30 transition-all">
+                               <div className="flex items-center justify-between mb-2">
+                                 <span className="text-xs font-bold text-brand dark:text-white">فاتورة رقم {inv.id}</span>
+                                 <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${inv.status === 'paid' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-amber-50 text-amber-600 border-amber-100'}`}>
+                                   {inv.status === 'paid' ? 'مسددة' : 'بانتظار السداد'}
+                                 </span>
+                               </div>
+                               <div className="text-[10px] text-muted space-y-1">
+                                 <div>المبلغ: <span className="font-bold text-brand dark:text-white">{formatAmount(inv.amount)} ر.س</span></div>
+                                 <div>نوع الخدمة: {inv.type === 'rescheduling_request' ? 'إعادة جدولة' : inv.type === 'seized_amounts_request' ? 'مبالغ محجوزة' : 'إعفاء'}</div>
+                                 <div>تاريخ الإصدار: {new Date(inv.created_at).toLocaleDateString('ar-SA')}</div>
+                                 {inv.paid_at && <div>تاريخ السداد: {new Date(inv.paid_at).toLocaleDateString('ar-SA')}</div>}
+                               </div>
+                             </div>
+                           ))}
+                         </div>
+                       </div>
+                     )}
                    </div>
                 </div>
               </div>
