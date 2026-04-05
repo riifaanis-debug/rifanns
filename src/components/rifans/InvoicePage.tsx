@@ -14,34 +14,36 @@ interface InvoicePageProps {
   onClose: () => void;
 }
 
-const PayPalButton: React.FC<{ containerId: string }> = ({ containerId }) => {
-  useEffect(() => {
-    const renderButton = () => {
-      const container = document.getElementById(containerId);
-      if (!container) return;
-      container.innerHTML = '';
-      if ((window as any).paypal?.HostedButtons) {
-        (window as any).paypal.HostedButtons({
-          hostedButtonId: "M996MBSU63AEQ",
-        }).render(`#${containerId}`);
-      }
-    };
-
-    if ((window as any).paypal?.HostedButtons) {
-      renderButton();
-    } else {
-      const interval = setInterval(() => {
-        if ((window as any).paypal?.HostedButtons) {
-          clearInterval(interval);
-          renderButton();
-        }
-      }, 500);
-      return () => clearInterval(interval);
-    }
-  }, [containerId]);
-
-  return null;
-};
+const PayPalFormButton: React.FC = () => (
+  <div className="flex justify-center">
+    <form action="https://www.paypal.com/ncp/payment/M996MBSU63AEQ" method="post" target="_blank" style={{ display: 'inline-grid', justifyItems: 'center', alignContent: 'start', gap: '0.5rem' }}>
+      <input
+        type="submit"
+        value="شراء الآن"
+        style={{
+          textAlign: 'center',
+          border: 'none',
+          borderRadius: '1.5rem',
+          minWidth: '11.625rem',
+          padding: '0 2rem',
+          height: '2rem',
+          fontWeight: 'bold',
+          backgroundColor: '#1F052A',
+          color: '#ffffff',
+          fontFamily: '"Helvetica Neue", Arial, sans-serif',
+          fontSize: '0.875rem',
+          lineHeight: '1.125rem',
+          cursor: 'pointer',
+        }}
+      />
+      <img src="https://www.paypalobjects.com/images/Debit_Credit_APM.svg" alt="cards" />
+      <section style={{ fontSize: '0.75rem' }}>
+        مدعوم من{' '}
+        <img src="https://www.paypalobjects.com/paypal-ui/logos/svg/paypal-wordmark-color.svg" alt="paypal" style={{ height: '0.875rem', verticalAlign: 'middle', display: 'inline' }} />
+      </section>
+    </form>
+  </div>
+);
 
 const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
   const { token } = useAuth();
@@ -276,8 +278,7 @@ const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
               </div>
             ) : (
               <div className="space-y-3">
-                <div id={`paypal-container-${invoice.id}`}></div>
-                <PayPalButton containerId={`paypal-container-${invoice.id}`} />
+                <PayPalFormButton />
               </div>
             )}
           </div>

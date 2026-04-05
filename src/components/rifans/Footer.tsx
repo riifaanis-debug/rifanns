@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
+import samaCmaLogos from '../../assets/sama-cma-logos.jpeg';
 
 const Footer: React.FC = () => {
   const { t, direction } = useLanguage();
@@ -40,7 +41,7 @@ const Footer: React.FC = () => {
             </div>
         </div>
 
-        {/* Trust & Licensing - More Elegant */}
+        {/* Trust & Licensing */}
         <div className="mb-16">
           <div className="relative group">
             <div className="absolute -inset-1 bg-gradient-to-r from-gold/30 to-brand/30 rounded-[32px] blur-md opacity-20 group-hover:opacity-40 transition duration-1000"></div>
@@ -67,10 +68,9 @@ const Footer: React.FC = () => {
               </div>
               <div className="flex flex-col items-center gap-3">
                 <img 
-                  src="https://i.top4top.io/p_3737p5hrw1.jpg" 
-                  alt="SAMA & CMA" 
-                  className="h-10 w-auto object-contain rounded-md" 
-                  referrerPolicy="no-referrer"
+                  src={samaCmaLogos}
+                  alt="البنك المركزي السعودي وهيئة السوق المالية" 
+                  className="h-12 w-auto object-contain rounded-md" 
                 />
                 <span className="text-[10px] font-bold text-muted dark:text-gray-400 uppercase tracking-widest">آمن وموثوق</span>
               </div>
