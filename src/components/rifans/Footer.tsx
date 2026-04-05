@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
+import samaCmaLogos from '../../assets/sama-cma-logos.jpeg';
 
 const Footer: React.FC = () => {
   const { t, direction } = useLanguage();
