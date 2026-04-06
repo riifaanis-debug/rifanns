@@ -330,12 +330,12 @@ const AppContent: React.FC = () => {
       {showLoginWarning && (
         <div className="fixed inset-0 z-[300] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-          <div className="relative w-full max-w-lg bg-white dark:bg-[#12031a] rounded-2xl shadow-2xl overflow-hidden" dir="rtl">
-            <div className="bg-red-600 p-4 text-white text-center">
-              <AlertCircle size={32} className="mx-auto mb-2" />
-              <h3 className="text-lg font-black">تنبيه</h3>
+          <div className="relative w-full max-w-sm bg-white dark:bg-[#12031a] rounded-2xl shadow-2xl overflow-hidden" dir="rtl">
+            <div className="bg-red-600 p-3 text-white text-center">
+              <AlertCircle size={24} className="mx-auto mb-1" />
+              <h3 className="text-sm font-black">تنبيه</h3>
             </div>
-            <div className="p-5 text-right space-y-4 text-sm leading-relaxed text-red-700 dark:text-red-400 font-medium">
+            <div className="p-4 text-right space-y-2.5 text-xs leading-relaxed text-red-700 dark:text-red-400 font-medium max-h-[50vh] overflow-y-auto">
               <p>
                 يُعدّ القيام بتقديم بيانات غير صحيحة أو مستندات غير نظامية أو مضلّلة ، مخالفة صريحة للأنظمة والتعليمات المعمول بها، ويعرّضك للمساءلة أمام الجهات المعنية والجهات القضائية المختصة ، كما قد يترتب على ذلك اتخاذ كافة الإجراءات القانونية اللازمة بحقك دون إشعار مسبق .
               </p>
