@@ -11,7 +11,7 @@ import WaiveServices from './components/rifans/WaiveServices';
 import Services from './components/rifans/Services';
 import BackToTop from './components/rifans/BackToTop';
 import { Section, SectionHeader, Card, Button, StripContainer } from './components/rifans/Shared';
-import { Check, Scale, MessageCircle, Lock, Monitor, FileText, Bell, ChevronRight, ChevronLeft } from 'lucide-react';
+import { Check, Scale, MessageCircle, Lock, Monitor, FileText, Bell, ChevronRight, ChevronLeft, AlertCircle } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useLanguage, LanguageProvider } from './contexts/LanguageContext';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
