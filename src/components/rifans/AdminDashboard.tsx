@@ -313,6 +313,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
       case 'rescheduling_requests': return 'طلبات الجدولة';
       case 'service_requests': return 'طلبات الخدمات';
       case 'contracts': return 'عقود العملاء';
+      case 'invoices': return 'فواتير العملاء';
       case 'notifications': return 'التنبيهات';
       default: return '';
     }
