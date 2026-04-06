@@ -410,6 +410,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
           color="brand"
         />
         <MenuCard 
+          icon={<CreditCard size={20} className="text-green-600" />} 
+          label="فواتير العملاء" 
+          description="إدارة ومتابعة فواتير العملاء وحالة السداد"
+          onClick={() => setActiveTab('invoices')}
+          color="green"
+        />
+        <MenuCard 
           icon={<Bell size={20} className="text-gold" />} 
           label="التنبيهات" 
           description="سجل النشاط والتنبيهات الواردة"
