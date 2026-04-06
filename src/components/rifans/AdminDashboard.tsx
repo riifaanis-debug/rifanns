@@ -938,6 +938,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
           <NavButton active={activeTab === 'service_requests'} onClick={() => { setActiveTab('service_requests'); setIsSidebarOpen(false); }} icon={<Briefcase size={18} />} label="طلبات الخدمات" />
           <div className="mt-4 mb-2 px-4 text-[10px] font-bold text-muted uppercase tracking-widest">المتابعة</div>
           <NavButton active={activeTab === 'contracts'} onClick={() => { setActiveTab('contracts'); setIsSidebarOpen(false); }} icon={<PenTool size={18} />} label="عقود العملاء" />
+          <NavButton active={activeTab === 'invoices'} onClick={() => { setActiveTab('invoices'); setIsSidebarOpen(false); }} icon={<CreditCard size={18} />} label="فواتير العملاء" />
           <NavButton active={activeTab === 'notifications'} onClick={() => { setActiveTab('notifications'); setIsSidebarOpen(false); }} icon={<Bell size={18} />} label="التنبيهات" badge={notifications.filter(n => !n.is_read).length} />
         </aside>
 
