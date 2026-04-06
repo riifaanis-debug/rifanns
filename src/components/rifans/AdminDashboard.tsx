@@ -327,6 +327,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
       case 'rescheduling_requests': return <RefreshCw size={20} />;
       case 'service_requests': return <Briefcase size={20} />;
       case 'contracts': return <PenTool size={20} />;
+      case 'invoices': return <CreditCard size={20} />;
       case 'notifications': return <Bell size={20} />;
       default: return <LayoutDashboard size={20} />;
     }
