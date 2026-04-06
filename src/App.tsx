@@ -11,7 +11,7 @@ import WaiveServices from './components/rifans/WaiveServices';
 import Services from './components/rifans/Services';
 import BackToTop from './components/rifans/BackToTop';
 import { Section, SectionHeader, Card, Button, StripContainer } from './components/rifans/Shared';
-import { Check, Scale, MessageCircle, Lock, Monitor, FileText, Bell, ChevronRight, ChevronLeft } from 'lucide-react';
+import { Check, Scale, MessageCircle, Lock, Monitor, FileText, Bell, ChevronRight, ChevronLeft, AlertCircle } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useLanguage, LanguageProvider } from './contexts/LanguageContext';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
@@ -191,7 +191,7 @@ const LoginPrompt: React.FC = () => {
 
       {/* SAMA & CMA Logos */}
       <div className="flex justify-center mb-4">
-        <img src={samaCmaLogos} alt="البنك المركزي السعودي وهيئة السوق المالية" className="h-12 w-auto object-contain" />
+        <img src={samaCmaLogos} alt="البنك المركزي السعودي وهيئة السوق المالية" className="h-20 w-auto object-contain" />
       </div>
 
       <div className="text-center mb-6 space-y-1">
@@ -246,7 +246,19 @@ const AppContent: React.FC = () => {
   const [showAuth, setShowAuth] = useState(false);
   const [waivePrefill, setWaivePrefill] = useState<any>(null);
   const [showWaiveForm, setShowWaiveForm] = useState(false);
+  const [showLoginWarning, setShowLoginWarning] = useState(false);
   const { user, logout } = useAuth();
+
+  // Show warning modal on first login
+  useEffect(() => {
+    if (user) {
+      const warningShown = sessionStorage.getItem('login_warning_shown');
+      if (!warningShown) {
+        setShowLoginWarning(true);
+        sessionStorage.setItem('login_warning_shown', 'true');
+      }
+    }
+  }, [user]);
 
   useEffect(() => {
     const handleHashChange = () => {
@@ -313,6 +325,38 @@ const AppContent: React.FC = () => {
       {showAuth && !user && <AuthPage onClose={() => setShowAuth(false)} />}
       {showWaiveForm && <WaiveRequestForm prefill={waivePrefill} onClose={() => { setShowWaiveForm(false); setWaivePrefill(null); }} />}
       <ProfileCompletionModal />
+
+      {/* Login Warning Modal */}
+      {showLoginWarning && (
+        <div className="fixed inset-0 z-[300] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+          <div className="relative w-full max-w-lg bg-white dark:bg-[#12031a] rounded-2xl shadow-2xl overflow-hidden" dir="rtl">
+            <div className="bg-red-600 p-4 text-white text-center">
+              <AlertCircle size={32} className="mx-auto mb-2" />
+              <h3 className="text-lg font-black">تنبيه</h3>
+            </div>
+            <div className="p-5 text-right space-y-4 text-sm leading-relaxed text-red-700 dark:text-red-400 font-medium">
+              <p>
+                يُعدّ القيام بتقديم بيانات غير صحيحة أو مستندات غير نظامية أو مضلّلة ، مخالفة صريحة للأنظمة والتعليمات المعمول بها، ويعرّضك للمساءلة أمام الجهات المعنية والجهات القضائية المختصة ، كما قد يترتب على ذلك اتخاذ كافة الإجراءات القانونية اللازمة بحقك دون إشعار مسبق .
+              </p>
+              <p>
+                نؤكد على ضرورة الالتزام بإدخال معلومات دقيقة وصحيحة ، والتأكد من سلامة وصحة جميع المستندات المرفقة ، حيث إنك تتحمّل كامل المسؤولية النظامية عن أي بيانات يتم تقديمها من خلال المنصة .
+              </p>
+              <p>
+                إن استخدامك للخدمة يُعد إقرارًا منك بصحة المعلومات المقدمة وموافقتك على الشروط والأحكام ذات العلاقة
+              </p>
+            </div>
+            <div className="p-4 border-t border-gray-100 dark:border-white/10">
+              <button
+                onClick={() => setShowLoginWarning(false)}
+                className="w-full py-3 rounded-xl bg-brand text-gold font-bold text-sm hover:bg-brand/90 transition-all"
+              >
+                موافق
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 };
