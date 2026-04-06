@@ -714,6 +714,94 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
     );
   };
 
+  const filteredInvoices = useMemo(() => {
+    return adminInvoices.filter(inv => {
+      const search = searchTerm.toLowerCase();
+      return (inv.user_name || '').toLowerCase().includes(search) || 
+             (inv.id || '').toLowerCase().includes(search) ||
+             (inv.submission_id || '').toLowerCase().includes(search);
+    });
+  }, [adminInvoices, searchTerm]);
+
+  const renderInvoices = () => (
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <Card className="overflow-hidden">
+      <div className="p-4 border-b border-gold/10 flex flex-col md:flex-row gap-4 items-center justify-between bg-gray-50/50 dark:bg-white/5">
+        <div className="relative w-full md:w-96">
+          <Search className="absolute right-3 top-1/2 -translate-y-1/2 text-muted" size={18} />
+          <input 
+            type="text" 
+            placeholder="بحث باسم العميل أو رقم الفاتورة..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full pr-10 pl-4 py-2.5 bg-white dark:bg-[#06010a] border border-gold/20 rounded-xl text-sm focus:border-gold outline-none shadow-sm"
+          />
+        </div>
+      </div>
+      {/* Desktop Table */}
+      <div className="hidden md:block overflow-x-auto custom-scrollbar">
+        <table className="w-full text-right border-collapse">
+          <thead>
+            <tr className="text-xs font-bold text-muted bg-gray-50 dark:bg-black/20 border-b border-gold/10">
+              <th className="p-4 whitespace-nowrap">العميل</th>
+              <th className="p-4 whitespace-nowrap">رقم الفاتورة</th>
+              <th className="p-4 whitespace-nowrap">نوع الخدمة</th>
+              <th className="p-4 whitespace-nowrap">المبلغ</th>
+              <th className="p-4 whitespace-nowrap">تاريخ الإصدار</th>
+              <th className="p-4 whitespace-nowrap">حالة السداد</th>
+              <th className="p-4 whitespace-nowrap">تاريخ السداد</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gold/5">
+            {filteredInvoices.map(inv => (
+              <tr key={inv.id} className="hover:bg-gold/5 transition-colors group">
+                <td className="p-4 whitespace-nowrap">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-brand text-gold flex items-center justify-center font-bold text-xs">{(inv.user_name || '؟')[0]}</div>
+                    <div className="text-sm font-bold text-brand dark:text-white group-hover:text-gold transition-colors">{inv.user_name || '---'}</div>
+                  </div>
+                </td>
+                <td className="p-4 text-xs font-mono text-muted whitespace-nowrap">{inv.id}</td>
+                <td className="p-4 text-xs text-brand dark:text-gray-300 whitespace-nowrap">{inv.type === 'rescheduling_request' ? 'إعادة جدولة' : inv.type === 'seized_amounts_request' ? 'مبالغ محجوزة' : 'إعفاء'}</td>
+                <td className="p-4 text-xs font-bold text-brand dark:text-white whitespace-nowrap">{formatAmount(inv.amount)} ر.س</td>
+                <td className="p-4 text-xs text-muted whitespace-nowrap">{new Date(inv.created_at).toLocaleDateString('ar-SA')}</td>
+                <td className="p-4">
+                  <span className={`text-[10px] font-bold px-3 py-1 rounded-full border whitespace-nowrap ${inv.status === 'paid' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-amber-50 text-amber-600 border-amber-100'}`}>
+                    {inv.status === 'paid' ? 'مسددة' : 'بانتظار السداد'}
+                  </span>
+                </td>
+                <td className="p-4 text-xs text-muted whitespace-nowrap">{inv.paid_at ? new Date(inv.paid_at).toLocaleDateString('ar-SA') : '---'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {/* Mobile Cards */}
+      <div className="md:hidden divide-y divide-gold/5">
+        {filteredInvoices.map(inv => (
+          <div key={inv.id} className="p-3 space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-full bg-brand text-gold flex items-center justify-center font-bold text-[10px]">{(inv.user_name || '؟')[0]}</div>
+                <div className="text-xs font-bold text-brand dark:text-white">{inv.user_name || '---'}</div>
+              </div>
+              <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${inv.status === 'paid' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-amber-50 text-amber-600 border-amber-100'}`}>
+                {inv.status === 'paid' ? 'مسددة' : 'بانتظار السداد'}
+              </span>
+            </div>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-[10px] pr-9">
+              <div><span className="text-muted">رقم الفاتورة:</span> <span className="font-mono text-muted">{inv.id}</span></div>
+              <div><span className="text-muted">نوع الخدمة:</span> <span className="text-brand dark:text-gray-300">{inv.type === 'rescheduling_request' ? 'إعادة جدولة' : 'إعفاء'}</span></div>
+              <div><span className="text-muted">المبلغ:</span> <span className="font-bold text-brand dark:text-white">{formatAmount(inv.amount)} ر.س</span></div>
+              <div><span className="text-muted">التاريخ:</span> <span className="text-muted">{new Date(inv.created_at).toLocaleDateString('ar-SA')}</span></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </Card>
+    </div>
+  );
+
   const renderContracts = () => (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <Card className="overflow-hidden">
