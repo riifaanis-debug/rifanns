@@ -246,7 +246,19 @@ const AppContent: React.FC = () => {
   const [showAuth, setShowAuth] = useState(false);
   const [waivePrefill, setWaivePrefill] = useState<any>(null);
   const [showWaiveForm, setShowWaiveForm] = useState(false);
+  const [showLoginWarning, setShowLoginWarning] = useState(false);
   const { user, logout } = useAuth();
+
+  // Show warning modal on first login
+  useEffect(() => {
+    if (user) {
+      const warningShown = sessionStorage.getItem('login_warning_shown');
+      if (!warningShown) {
+        setShowLoginWarning(true);
+        sessionStorage.setItem('login_warning_shown', 'true');
+      }
+    }
+  }, [user]);
 
   useEffect(() => {
     const handleHashChange = () => {
