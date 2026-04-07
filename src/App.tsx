@@ -28,6 +28,7 @@ import ContractPage from './components/rifans/ContractPage';
 import InvoicePage from './components/rifans/InvoicePage';
 import ClientCard from './components/rifans/ClientCard';
 import ProfileCompletionModal from './components/rifans/ProfileCompletionModal';
+import { WaiveInfoPage, SchedulingInfoPage, SeizedAmountsInfoPage } from './components/rifans/ServiceInfoPage';
 
 const StorySection = () => {
   const { t, direction } = useLanguage();
