@@ -336,7 +336,10 @@ const WaiveServices: React.FC = () => {
               <span>مشاركة</span>
             </button>
           </div>
-          <h2 className="text-2xl md:text-3xl font-black text-brand dark:text-white mb-2">إتاحة النسبة النظامية والمبالغ المستثناه من الحجز</h2>
+          <div className="flex items-center justify-between">
+            <h2 className="text-2xl md:text-3xl font-black text-brand dark:text-white mb-2">إتاحة النسبة النظامية والمبالغ المستثناه من الحجز</h2>
+            <a href="#/seized-amounts-info" className="text-xs font-bold text-gold hover:underline whitespace-nowrap">المزيد ←</a>
+          </div>
           <p className="text-sm text-muted dark:text-gray-400 max-w-2xl">نساعدك في استرداد المبالغ المستثناه من الحجز وفقاً للأنظمة السعودية، وتقديم طلبات إتاحة النسبة النظامية من الراتب والمستحقات المالية.</p>
         </div>
 
