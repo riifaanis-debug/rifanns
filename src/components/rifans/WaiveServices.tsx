@@ -367,17 +367,22 @@ const WaiveServices: React.FC = () => {
               <p className="text-xs md:text-sm text-gray-200 leading-relaxed opacity-90 max-w-[600px] mb-6">
                 نقدم خدمة متكاملة لمساعدتك في إتاحة المبالغ المستثناه من الحجز وفقاً للأنظمة، بما في ذلك حساب المواطن وبدل غلاء المعيشة والنسبة النظامية من الراتب.
               </p>
-              <Button 
-                onClick={() => handleOpenForm({
-                  id: 'seized_amounts',
-                  title: 'إتاحة النسبة النظامية والمبالغ المستثناه من الحجز',
-                  body: 'طلب إتاحة المبالغ المستثناه من الحجز',
-                  requestType: 'seized_amounts_request'
-                })}
-                className="group/btn w-full md:w-auto"
-              >
-                <span>تقدّم بطلب إتاحة</span>
-              </Button>
+              <div className="flex flex-col gap-2">
+                <Button 
+                  onClick={() => handleOpenForm({
+                    id: 'seized_amounts',
+                    title: 'إتاحة النسبة النظامية والمبالغ المستثناه من الحجز',
+                    body: 'طلب إتاحة المبالغ المستثناه من الحجز',
+                    requestType: 'seized_amounts_request'
+                  })}
+                  className="group/btn w-full md:w-auto"
+                >
+                  <span>تقدّم بطلب إتاحة</span>
+                </Button>
+                <a href="#/seized-amounts-info" className="w-full md:w-auto text-center py-2 px-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-bold hover:bg-white/20 transition-all">
+                  تعرف على الخدمة
+                </a>
+              </div>
             </div>
           </div>
         </div>
