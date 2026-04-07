@@ -265,12 +265,17 @@ const WaiveServices: React.FC = () => {
                 <p className="text-xs md:text-sm text-gray-200 leading-relaxed opacity-90 max-w-[600px] mb-6">
                    {schedulingItem.body}
                 </p>
-                <Button 
-                   onClick={() => handleOpenForm(schedulingItem)}
-                   className="group/btn w-full md:w-auto"
-                >
-                   <span>تقدّم بطلب الجدولة</span>
-                </Button>
+                <div className="flex flex-col gap-2">
+                  <Button 
+                     onClick={() => handleOpenForm(schedulingItem)}
+                     className="group/btn w-full md:w-auto"
+                  >
+                     <span>تقدّم بطلب الجدولة</span>
+                  </Button>
+                  <a href="#/scheduling-info" className="w-full md:w-auto text-center py-2 px-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-bold hover:bg-white/20 transition-all">
+                    تعرف على الخدمة
+                  </a>
+                </div>
              </div>
           </div>
         </div>
