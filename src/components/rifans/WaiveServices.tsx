@@ -92,10 +92,7 @@ const WaiveServices: React.FC = () => {
               <span>مشاركة</span>
             </button>
           </div>
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl md:text-3xl font-black text-brand dark:text-white mb-2">حلول الإعفاء من المديونيات</h2>
-            <a href="#/waive-info" className="text-xs font-bold text-gold hover:underline whitespace-nowrap">المزيد ←</a>
-          </div>
+          <h2 className="text-2xl md:text-3xl font-black text-brand dark:text-white mb-2">حلول الإعفاء من المديونيات</h2>
           <p className="text-sm text-muted dark:text-gray-400 max-w-2xl">نقدم دعماً متكاملاً لطلبات الإعفاء من الالتزامات التمويلية في الحالات الإنسانية والصحية، مع تنظيم ملف الطلب ومتابعته حتى صدور القرار.</p>
         </div>
 
@@ -151,12 +148,17 @@ const WaiveServices: React.FC = () => {
                         ))}
                       </div>
   
-                      <Button 
-                        onClick={() => handleOpenForm(item)}
-                        className="group/btn w-full md:w-auto"
-                      >
-                        <span>تقدّم بطلب إعفاء</span>
-                      </Button>
+                      <div className="flex flex-col gap-2">
+                        <Button 
+                          onClick={() => handleOpenForm(item)}
+                          className="group/btn w-full md:w-auto"
+                        >
+                          <span>تقدّم بطلب إعفاء</span>
+                        </Button>
+                        <a href="#/waive-info" className="w-full md:w-auto text-center py-2 px-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-bold hover:bg-white/20 transition-all">
+                          تعرف على الخدمة
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -235,10 +237,7 @@ const WaiveServices: React.FC = () => {
               <span>مشاركة</span>
             </button>
           </div>
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl md:text-3xl font-black text-brand dark:text-white mb-2">جدولة المديونيات والالتزامات</h2>
-            <a href="#/scheduling-info" className="text-xs font-bold text-gold hover:underline whitespace-nowrap">المزيد ←</a>
-          </div>
+          <h2 className="text-2xl md:text-3xl font-black text-brand dark:text-white mb-2">جدولة المديونيات والالتزامات</h2>
           <p className="text-sm text-muted dark:text-gray-400 max-w-2xl">نساعدك في إعادة تنظيم التزاماتك المالية مع البنوك والجهات التمويلية لتخفيف العبء الشهري وتحقيق الاستقرار المالي.</p>
         </div>
 
@@ -266,12 +265,17 @@ const WaiveServices: React.FC = () => {
                 <p className="text-xs md:text-sm text-gray-200 leading-relaxed opacity-90 max-w-[600px] mb-6">
                    {schedulingItem.body}
                 </p>
-                <Button 
-                   onClick={() => handleOpenForm(schedulingItem)}
-                   className="group/btn w-full md:w-auto"
-                >
-                   <span>تقدّم بطلب الجدولة</span>
-                </Button>
+                <div className="flex flex-col gap-2">
+                  <Button 
+                     onClick={() => handleOpenForm(schedulingItem)}
+                     className="group/btn w-full md:w-auto"
+                  >
+                     <span>تقدّم بطلب الجدولة</span>
+                  </Button>
+                  <a href="#/scheduling-info" className="w-full md:w-auto text-center py-2 px-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-bold hover:bg-white/20 transition-all">
+                    تعرف على الخدمة
+                  </a>
+                </div>
              </div>
           </div>
         </div>
@@ -336,10 +340,7 @@ const WaiveServices: React.FC = () => {
               <span>مشاركة</span>
             </button>
           </div>
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl md:text-3xl font-black text-brand dark:text-white mb-2">إتاحة النسبة النظامية والمبالغ المستثناه من الحجز</h2>
-            <a href="#/seized-amounts-info" className="text-xs font-bold text-gold hover:underline whitespace-nowrap">المزيد ←</a>
-          </div>
+          <h2 className="text-2xl md:text-3xl font-black text-brand dark:text-white mb-2">إتاحة النسبة النظامية والمبالغ المستثناه من الحجز</h2>
           <p className="text-sm text-muted dark:text-gray-400 max-w-2xl">نساعدك في استرداد المبالغ المستثناه من الحجز وفقاً للأنظمة السعودية، وتقديم طلبات إتاحة النسبة النظامية من الراتب والمستحقات المالية.</p>
         </div>
 
@@ -366,17 +367,22 @@ const WaiveServices: React.FC = () => {
               <p className="text-xs md:text-sm text-gray-200 leading-relaxed opacity-90 max-w-[600px] mb-6">
                 نقدم خدمة متكاملة لمساعدتك في إتاحة المبالغ المستثناه من الحجز وفقاً للأنظمة، بما في ذلك حساب المواطن وبدل غلاء المعيشة والنسبة النظامية من الراتب.
               </p>
-              <Button 
-                onClick={() => handleOpenForm({
-                  id: 'seized_amounts',
-                  title: 'إتاحة النسبة النظامية والمبالغ المستثناه من الحجز',
-                  body: 'طلب إتاحة المبالغ المستثناه من الحجز',
-                  requestType: 'seized_amounts_request'
-                })}
-                className="group/btn w-full md:w-auto"
-              >
-                <span>تقدّم بطلب إتاحة</span>
-              </Button>
+              <div className="flex flex-col gap-2">
+                <Button 
+                  onClick={() => handleOpenForm({
+                    id: 'seized_amounts',
+                    title: 'إتاحة النسبة النظامية والمبالغ المستثناه من الحجز',
+                    body: 'طلب إتاحة المبالغ المستثناه من الحجز',
+                    requestType: 'seized_amounts_request'
+                  })}
+                  className="group/btn w-full md:w-auto"
+                >
+                  <span>تقدّم بطلب إتاحة</span>
+                </Button>
+                <a href="#/seized-amounts-info" className="w-full md:w-auto text-center py-2 px-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-bold hover:bg-white/20 transition-all">
+                  تعرف على الخدمة
+                </a>
+              </div>
             </div>
           </div>
         </div>
