@@ -148,12 +148,17 @@ const WaiveServices: React.FC = () => {
                         ))}
                       </div>
   
-                      <Button 
-                        onClick={() => handleOpenForm(item)}
-                        className="group/btn w-full md:w-auto"
-                      >
-                        <span>تقدّم بطلب إعفاء</span>
-                      </Button>
+                      <div className="flex flex-col gap-2">
+                        <Button 
+                          onClick={() => handleOpenForm(item)}
+                          className="group/btn w-full md:w-auto"
+                        >
+                          <span>تقدّم بطلب إعفاء</span>
+                        </Button>
+                        <a href="#/waive-info" className="w-full md:w-auto text-center py-2 px-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-bold hover:bg-white/20 transition-all">
+                          تعرف على الخدمة
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>
