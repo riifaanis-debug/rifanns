@@ -413,7 +413,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
             date: new Date().toLocaleDateString('ar-SA'),
           }));
           
-          // Add products (financial obligations) to profile
+          // Replace products with current request's products (clear previous)
           const newProducts = products.filter((p: any) => p.type && p.amount).map((p: any) => ({
             id: Date.now() + Math.random(),
             type: p.type,
@@ -421,18 +421,11 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
             accountNumber: p.accountNumber || '',
           }));
           
-          // Merge without duplicates (by fileName for docs, by accountNumber+type for products)
+          // Merge docs without duplicates
           const mergedDocs = [...existingDocs];
           for (const nd of newDocs) {
             if (!mergedDocs.some(d => d.fileName === nd.fileName)) {
               mergedDocs.push(nd);
-            }
-          }
-          
-          const mergedProducts = [...existingProducts];
-          for (const np of newProducts) {
-            if (!mergedProducts.some(p => p.type === np.type && p.amount === np.amount && p.accountNumber === np.accountNumber)) {
-              mergedProducts.push(np);
             }
           }
           
@@ -453,7 +446,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
             city: profileData.city,
             bank: profileData.bank,
             documents: mergedDocs,
-            products: mergedProducts,
+            products: newProducts,
           });
         }
       } catch (syncErr) {
