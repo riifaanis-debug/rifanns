@@ -155,9 +155,9 @@ const WaiveServices: React.FC = () => {
                         >
                           <span>تقدّم بطلب إعفاء</span>
                         </Button>
-                        <a href="#/waive-info" className="w-full md:w-auto text-center py-2 px-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-bold hover:bg-white/20 transition-all">
+                        <button onClick={() => handleOpenForm(item)} className="w-full md:w-auto text-center py-2 px-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-bold hover:bg-white/20 transition-all">
                           تعرف على الخدمة
-                        </a>
+                        </button>
                       </div>
                     </div>
                   </div>
