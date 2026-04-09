@@ -802,15 +802,13 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
 
           {/* Files */}
           <div className="mb-6">
-             <div className="flex justify-between items-center mb-2">
+             <div className="mb-2">
                <label className="text-[12px] font-bold text-brand">المرفقات الداعمة</label>
-               <button type="button" onClick={addDocument} className="text-[11px] text-gold underline hover:text-brand">
-                 + إضافة مرفق
-               </button>
              </div>
              <div className="space-y-2">
-                {documents.map((doc) => (
-                   <div key={doc.id} className="flex gap-2 items-center">
+                {documents.map((doc, idx) => (
+                   <div key={doc.id} className="space-y-2">
+                     <div className="flex gap-2 items-center">
                        <select 
                          name={`docType_${doc.id}`} 
                          value={doc.type}
@@ -865,6 +863,15 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                           <Trash2 size={14} />
                         </button>
                       )}
+                     </div>
+                     {idx === documents.length - 1 && doc.type && doc.fileName && (
+                       <div className="flex justify-center pt-1">
+                         <button type="button" onClick={addDocument} className="flex items-center gap-1 text-[11px] text-brand bg-white border border-gold/40 px-4 py-1.5 rounded-full hover:bg-gold/10 transition-colors">
+                           <Plus size={12} />
+                           هل تريد إضافة مرفق آخر؟
+                         </button>
+                       </div>
+                     )}
                    </div>
                 ))}
              </div>
