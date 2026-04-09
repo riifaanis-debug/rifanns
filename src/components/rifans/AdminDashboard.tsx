@@ -52,6 +52,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatTargetUser, setChatTargetUser] = useState<{ id: string; name: string } | null>(null);
   const [unreadChatCount, setUnreadChatCount] = useState(0);
+  
+  // Document request state
+  const [docSelectedClient, setDocSelectedClient] = useState('');
+  const [docType, setDocType] = useState('');
+  const [docEmailTarget, setDocEmailTarget] = useState('');
+  const [docEmailAddress, setDocEmailAddress] = useState('');
+  const [docShowEmailField, setDocShowEmailField] = useState(false);
 
   // Fetch unread chat messages for admin
   useEffect(() => {
