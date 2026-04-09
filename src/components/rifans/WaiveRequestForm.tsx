@@ -919,6 +919,8 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
              </div>
           </div>
 
+          {!isViewOnly && (
+          <>
           {/* Consent */}
           <div className="mb-6 space-y-3 bg-[#F9F9F9] p-4 rounded-[12px] border border-gray-100">
              <label className="flex gap-2 items-start cursor-pointer group">
@@ -1049,6 +1051,22 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                </div>
              )}
           </div>
+          </>
+          )}
+
+          {/* View Only - Back Button */}
+          {isViewOnly && (
+            <div className="flex justify-center pt-6 border-t border-gold/30">
+              <button 
+                type="button" 
+                onClick={onClose} 
+                className="flex items-center gap-2 px-8 py-3 bg-brand text-white font-bold text-[13px] rounded-full shadow-lg hover:bg-brand/90 transition-all active:scale-95"
+              >
+                <ArrowRight size={16} />
+                الرجوع
+              </button>
+            </div>
+          )}
 
         </form>
 
