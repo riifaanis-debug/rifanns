@@ -645,11 +645,13 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
           {prefill?.requestType === 'seized_amounts_request' ? (
             <div className="mt-8 mb-6 bg-gradient-to-b from-white to-[#FCFAF4] rounded-[16px] border border-gold/30 p-4 shadow-inner">
               <div className="flex justify-between items-center mb-3">
-                <h3 className="text-[14px] font-bold text-brand">بيانات الحساب والمبالغ المحجوزة</h3>
+                 <h3 className="text-[14px] font-bold text-brand">بيانات الحساب والمبالغ المحجوزة</h3>
+                {!isViewOnly && (
                 <button type="button" onClick={addProduct} className="flex items-center gap-1 text-[11px] text-brand bg-white border border-gold/40 px-3 py-1.5 rounded-full hover:bg-gold/10 transition-colors">
                   <Plus size={12} />
                   إضافة حساب
                 </button>
+                )}
               </div>
               
               <div className="space-y-3">
