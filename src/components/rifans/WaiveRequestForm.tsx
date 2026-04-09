@@ -4,7 +4,7 @@ import { Button } from './Shared';
 import Footer from './Footer';
 import { useAuth } from '../../contexts/AuthContext';
 import { safeStringify, safeParse } from '../../utils/safeJson';
-import { submitRequest, uploadDocument } from '../../lib/api';
+import { submitRequest, saveDraftRequest, uploadDocument } from '../../lib/api';
 import { supabase } from '@/integrations/supabase/client';
 import { formatAmount } from '../../lib/formatNumber';
 
@@ -371,7 +371,30 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
         files: uploadedFiles,
       };
 
-      const result = await submitRequest(requestDataObj);
+      // If resuming a draft, update the existing record instead of creating new
+      let result;
+      if (prefill?.draftId) {
+        const { data: updated, error } = await supabase.from('requests').update({
+          status: 'pending',
+          details: requestDataObj.details,
+          data: requestDataObj.data as any,
+          files: requestDataObj.files as any,
+        }).eq('id', prefill.draftId).select().single();
+        if (error) throw error;
+        result = updated;
+        
+        // Create notification
+        await supabase.from('notifications').insert({
+          id: `NOT-${Date.now()}`,
+          user_id: result.user_id,
+          submission_id: result.id,
+          title: 'تم استلام طلبك',
+          message: `تم استلام طلبك بنجاح وهو قيد المراجعة الآن. نوع الطلب: ${result.type}`,
+          type: 'new_request',
+        });
+      } else {
+        result = await submitRequest(requestDataObj);
+      }
 
       // Send email notification to admin via edge function
       try {
@@ -952,20 +975,42 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                    إلغاء
                  </button>
                  <button 
-                   type="button" 
-                   onClick={() => {
-                     // Save draft to localStorage
-                     const draft = {
-                       formData,
-                       region,
-                       products,
-                       documents: documents.map(d => ({ ...d, file: null })),
-                       requestId,
-                     };
-                     localStorage.setItem(`draft_request_${user?.id}`, JSON.stringify(draft));
-                     setStatusMessage('تم حفظ الطلب بنجاح. يمكنك استكماله لاحقاً.');
-                     setTimeout(() => onClose(), 1500);
-                   }}
+                    type="button" 
+                    onClick={async () => {
+                      try {
+                        setStatusMessage('جاري حفظ المسودة...');
+                        const isSeizedAmounts = prefill?.requestType === 'seized_amounts_request';
+                        const type = isSeizedAmounts ? 'seized_amounts_request' : (prefill?.requestType === 'rescheduling_request' ? 'rescheduling_request' : (prefill?.serviceType === 'جدولة المديونيات' ? 'scheduling_request' : 'waive_request'));
+                        
+                        await saveDraftRequest({
+                          type,
+                          details: formData.summary || `مسودة طلب ${type === 'waive_request' ? 'إعفاء' : type === 'seized_amounts_request' ? 'إتاحة مبالغ مستثناه' : 'جدولة'}`,
+                          data: {
+                            requestId,
+                            firstName: formData.firstName,
+                            middleName: formData.middleName,
+                            lastName: formData.lastName,
+                            fullName: `${formData.firstName} ${formData.middleName} ${formData.lastName}`,
+                            age: formData.age,
+                            nationalId: formData.nationalId,
+                            mobile: formData.mobile,
+                            email: formData.email,
+                            jobStatus: formData.jobStatus,
+                            region,
+                            city: formData.city,
+                            bank: formData.bank,
+                            totalAmount,
+                            products,
+                            summary: formData.summary,
+                          },
+                        });
+                        setStatusMessage('تم حفظ المسودة بنجاح. يمكنك استكمالها من قسم طلباتي.');
+                        setTimeout(() => onClose(), 1500);
+                      } catch (err) {
+                        console.error('Draft save error:', err);
+                        setStatusMessage('حدث خطأ أثناء حفظ المسودة.');
+                      }
+                    }}
                    className="flex-1 min-w-[120px] px-3 py-3 rounded-full border-2 border-gold text-gold font-bold text-[12px] hover:bg-gold/10 transition-colors"
                  >
                    الحفظ والاستكمال لاحقاً
