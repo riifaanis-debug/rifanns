@@ -828,7 +828,8 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
               name="summary" 
               value={formData.summary} 
               onChange={(e) => setFormData({...formData, summary: e.target.value})} 
-              className="w-full p-3 rounded-[14px] border border-gold/30 text-[13px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none min-h-[80px]" 
+              disabled={isViewOnly}
+              className="w-full p-3 rounded-[14px] border border-gold/30 text-[13px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none min-h-[80px] disabled:bg-gray-50 disabled:cursor-not-allowed" 
               placeholder={prefill?.requestType === 'seized_amounts_request' ? "اكتب نبذة مختصرة عن وضعك وسبب طلب إتاحة المبالغ المستثناه..." : (prefill?.requestType === 'rescheduling_request' ? "اكتب نبذة مختصرة عن وضعك المالي وسبب طلب إعادة الجدولة..." : (prefill?.serviceType === 'جدولة المديونيات' ? "اكتب نبذة مختصرة عن وضعك المالي وطلب الجدولة..." : "اكتب نبذة مختصرة عن سبب طلب الإعفاء..."))}
             ></textarea>
           </div>
