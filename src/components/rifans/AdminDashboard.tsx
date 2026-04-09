@@ -330,6 +330,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
       case 'contracts': return <PenTool size={20} />;
       case 'invoices': return <CreditCard size={20} />;
       case 'notifications': return <Bell size={20} />;
+      case 'document_request': return <FileCheck size={20} />;
       default: return <LayoutDashboard size={20} />;
     }
   };
