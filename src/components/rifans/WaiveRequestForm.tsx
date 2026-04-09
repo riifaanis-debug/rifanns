@@ -906,14 +906,14 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                          </button>
                        )}
                      </div>
-                     {idx === documents.length - 1 && doc.type && doc.fileName && (
-                       <div className="flex justify-center pt-1">
-                         <button type="button" onClick={addDocument} className="flex items-center gap-1 text-[11px] text-brand bg-white border border-gold/40 px-4 py-1.5 rounded-full hover:bg-gold/10 transition-colors">
-                           <Plus size={12} />
-                           هل تريد إضافة مرفق آخر؟
-                         </button>
-                       </div>
-                     )}
+                      {!isViewOnly && idx === documents.length - 1 && doc.type && doc.fileName && (
+                        <div className="flex justify-center pt-1">
+                          <button type="button" onClick={addDocument} className="flex items-center gap-1 text-[11px] text-brand bg-white border border-gold/40 px-4 py-1.5 rounded-full hover:bg-gold/10 transition-colors">
+                            <Plus size={12} />
+                            هل تريد إضافة مرفق آخر؟
+                          </button>
+                        </div>
+                      )}
                    </div>
                 ))}
              </div>
