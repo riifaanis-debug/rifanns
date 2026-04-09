@@ -671,9 +671,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                           disabled={isViewOnly}
                           className="w-full p-2 rounded-[10px] border border-gold/20 text-[12px] disabled:bg-gray-50 disabled:cursor-not-allowed" 
                           placeholder="رقم الحساب الجاري"
-                        />
-                          placeholder="رقم الحساب الجاري"
-                        />
+                         />
                       </div>
                       <div>
                         <label className="block text-[10px] font-bold text-muted mb-1">المبلغ المحجوز في الحساب <span className="text-red-500">*</span></label>
