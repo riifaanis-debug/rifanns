@@ -7,6 +7,7 @@ import { safeStringify, safeParse } from '../../utils/safeJson';
 import { getSubmission, submitSignature, notifyAdminContractSigned, uploadDocument } from '../../lib/api';
 import { formatAmount } from '../../lib/formatNumber';
 import { toPng } from 'html-to-image';
+import { downloadContractPdf, printContractPdf } from '../../lib/generateContractPdf';
 
 interface ContractPageProps {
   submissionId: string;
