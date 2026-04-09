@@ -656,6 +656,23 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
               </div>
            </div>
            <div className="flex items-center gap-2">
+              {/* Notifications Bell */}
+              <button 
+                onClick={() => {
+                  fetchNotifications();
+                  markAllAsRead();
+                }}
+                className="w-9 h-9 rounded-full bg-brand/10 dark:bg-white/5 flex items-center justify-center hover:bg-brand/20 dark:hover:bg-white/10 transition-colors relative"
+                title="التنبيهات"
+              >
+                <Bell size={18} className="text-brand dark:text-gold" />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center px-1">
+                    {unreadCount > 99 ? '99+' : unreadCount}
+                  </span>
+                )}
+              </button>
+              {/* Chat */}
               <button 
                 onClick={() => setIsChatOpen(true)} 
                 className="w-9 h-9 rounded-full bg-brand/10 dark:bg-white/5 flex items-center justify-center hover:bg-brand/20 dark:hover:bg-white/10 transition-colors relative"
