@@ -38,6 +38,7 @@ const BANKS = [
 const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill }) => {
   console.log("WaiveRequestForm Rendered");
   const { user, token } = useAuth();
+  const isViewOnly = prefill?.viewOnly === true;
   const [requestId, setRequestId] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
