@@ -7,6 +7,7 @@ import { safeStringify, safeParse } from '../../utils/safeJson';
 import { getSubmission, submitSignature, notifyAdminContractSigned, uploadDocument } from '../../lib/api';
 import { formatAmount } from '../../lib/formatNumber';
 import { toPng } from 'html-to-image';
+import { downloadContractPdf, printContractPdf } from '../../lib/generateContractPdf';
 
 interface ContractPageProps {
   submissionId: string;
@@ -23,6 +24,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
   const [isSuccess, setIsSuccess] = useState(false);
   const [isAlreadySigned, setIsAlreadySigned] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isPdfLoading, setIsPdfLoading] = useState(false);
   const [submission, setSubmission] = useState<any>(null);
 
   const products = Array.isArray(submission?.data?.products) 
@@ -227,19 +229,31 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
           </button>
           <div className="w-px h-6 bg-gray-100 mx-1 hidden sm:block" />
           <button 
-            onClick={() => window.print()}
-            className="p-2 text-muted hover:text-brand hover:bg-gray-50 rounded-lg transition-all print:hidden" 
+            onClick={async () => {
+              if (!contractRef.current || isPdfLoading) return;
+              setIsPdfLoading(true);
+              try { await printContractPdf(contractRef.current); } catch (e) { console.error(e); }
+              setIsPdfLoading(false);
+            }}
+            disabled={isPdfLoading}
+            className="p-2 text-muted hover:text-brand hover:bg-gray-50 rounded-lg transition-all print:hidden disabled:opacity-50" 
             title="طباعة"
           >
-            <Printer size={18} />
+            {isPdfLoading ? <Loader2 size={18} className="animate-spin" /> : <Printer size={18} />}
           </button>
           <div className="w-px h-6 bg-gray-100 mx-1 hidden sm:block" />
           <button 
-            onClick={() => window.print()}
-            className="p-2 text-muted hover:text-brand hover:bg-gray-50 rounded-lg transition-all print:hidden" 
+            onClick={async () => {
+              if (!contractRef.current || isPdfLoading) return;
+              setIsPdfLoading(true);
+              try { await downloadContractPdf(contractRef.current, `عقد-${submissionId}.pdf`); } catch (e) { console.error(e); }
+              setIsPdfLoading(false);
+            }}
+            disabled={isPdfLoading}
+            className="p-2 text-muted hover:text-brand hover:bg-gray-50 rounded-lg transition-all print:hidden disabled:opacity-50" 
             title="تحميل بصيغة PDF"
           >
-            <Download size={18} />
+            {isPdfLoading ? <Loader2 size={18} className="animate-spin" /> : <Download size={18} />}
           </button>
           <div className="w-px h-6 bg-gray-100 mx-1 hidden sm:block" />
           <button 
@@ -281,7 +295,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
           </div>
 
           {/* Contract Body */}
-          <div className="space-y-4 text-right dir-rtl relative text-[10.5px] leading-[1.6] text-[#22042C]">
+          <div className="space-y-4 text-right dir-rtl relative text-[10.5px] leading-[1.6] text-[#22042C]" style={{ direction: 'rtl' }}>
             
             {/* Parties Section */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 border border-gray-200 rounded-lg p-3 bg-gray-50/30">
