@@ -7,7 +7,7 @@ import {
   IdCard, ChevronRight, ChevronLeft, MoreVertical, Trash2, Eye, 
   FileCheck, FileClock, History, UserCheck, UserPlus, TrendingUp,
   ArrowUpRight, ArrowDownRight, Calendar, Mail, Phone, MapPin,
-  CreditCard, Briefcase, Hash, Menu, Printer, MessageCircle
+  CreditCard, Briefcase, Hash, Menu, Printer, MessageCircle, Star
 } from 'lucide-react';
 import ChatPage from './ChatPage';
 import { Button, Card } from './Shared';
@@ -22,7 +22,41 @@ interface AdminDashboardProps {
   onClose: () => void;
 }
 
-type DashboardTab = 'home' | 'stats' | 'clients' | 'waive_requests' | 'rescheduling_requests' | 'service_requests' | 'contracts' | 'invoices' | 'notifications' | 'document_request';
+type DashboardTab = 'home' | 'stats' | 'clients' | 'waive_requests' | 'rescheduling_requests' | 'service_requests' | 'contracts' | 'invoices' | 'notifications' | 'document_request' | 'reviews';
+
+const AdminReviewSection: React.FC = () => {
+  const [clientName, setClientName] = React.useState('');
+  const [rating, setRating] = React.useState(5);
+  const [comment, setComment] = React.useState('');
+  const [isSending, setIsSending] = React.useState(false);
+  const [success, setSuccess] = React.useState(false);
+  const handleSubmit = async () => {
+    if (!clientName.trim() || !comment.trim()) return;
+    setIsSending(true);
+    const { supabase } = await import('@/integrations/supabase/client');
+    await supabase.from('client_reviews').insert({ client_name: clientName.trim(), rating, comment: comment.trim(), is_published: true });
+    setIsSending(false); setSuccess(true); setClientName(''); setComment(''); setRating(5);
+    setTimeout(() => setSuccess(false), 3000);
+  };
+  return (
+    <div className="space-y-4" dir="rtl">
+      {success && <div className="bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-xl p-3 text-green-700 dark:text-green-300 text-sm text-center font-bold">✅ تم إرسال التقييم بنجاح</div>}
+      <div>
+        <label className="block text-sm font-bold text-brand dark:text-gray-200 mb-1">اسم العميل</label>
+        <input value={clientName} onChange={e => setClientName(e.target.value)} className="w-full rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-[#12031a] px-3 py-2 text-sm text-brand dark:text-gray-100 outline-none focus:border-gold" placeholder="أدخل اسم العميل" />
+      </div>
+      <div>
+        <label className="block text-sm font-bold text-brand dark:text-gray-200 mb-1">التقييم</label>
+        <div className="flex gap-1">{[1,2,3,4,5].map(i => <button key={i} onClick={() => setRating(i)} className="transition-transform hover:scale-110"><Star size={28} className={i <= rating ? 'text-yellow-500 fill-yellow-500' : 'text-gray-300 dark:text-gray-600'} /></button>)}</div>
+      </div>
+      <div>
+        <label className="block text-sm font-bold text-brand dark:text-gray-200 mb-1">التعليق</label>
+        <textarea value={comment} onChange={e => setComment(e.target.value)} rows={4} className="w-full rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-[#12031a] px-3 py-2 text-sm text-brand dark:text-gray-100 outline-none focus:border-gold resize-none" placeholder="أدخل تعليق العميل" />
+      </div>
+      <button onClick={handleSubmit} disabled={isSending || !clientName.trim() || !comment.trim()} className="w-full py-2.5 rounded-xl bg-gold text-brand font-bold text-sm hover:bg-gold/90 transition-all disabled:opacity-50">{isSending ? 'جاري الإرسال...' : 'إرسال التقييم'}</button>
+    </div>
+  );
+};
 
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
   const { user: authUser } = useAuth();
@@ -323,6 +357,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
       case 'invoices': return 'فواتير العملاء';
       case 'notifications': return 'التنبيهات';
       case 'document_request': return 'طلب مستند';
+      case 'reviews': return 'إرسال تقييم';
       default: return '';
     }
   };
@@ -338,6 +373,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
       case 'invoices': return <CreditCard size={20} />;
       case 'notifications': return <Bell size={20} />;
       case 'document_request': return <FileCheck size={20} />;
+      case 'reviews': return <Star size={20} />;
       default: return <LayoutDashboard size={20} />;
     }
   };
@@ -585,6 +621,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
           description="تحميل وطباعة وإرسال مستندات العملاء عبر البريد"
           onClick={() => setActiveTab('document_request')}
           color="purple"
+        />
+        <MenuCard 
+          icon={<Star size={20} className="text-yellow-500" />} 
+          label="إرسال تقييم" 
+          description="إرسال تقييم ونجوم باسم عميل"
+          onClick={() => setActiveTab('reviews')}
+          color="yellow"
         />
         <MenuCard 
           icon={<Bell size={20} className="text-gold" />} 
@@ -1266,6 +1309,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   {activeTab === 'invoices' && renderInvoices()}
                   {activeTab === 'notifications' && renderNotifications()}
                   {activeTab === 'document_request' && renderDocumentRequest()}
+                  {activeTab === 'reviews' && <AdminReviewSection />}
                 </div>
               </motion.div>
             </div>
