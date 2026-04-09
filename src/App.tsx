@@ -333,13 +333,19 @@ const AppContent: React.FC = () => {
       {/* Login Warning Modal */}
       {showLoginWarning && (
         <div className="fixed inset-0 z-[300] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-          <div className="relative w-full max-w-sm bg-white dark:bg-[#12031a] rounded-2xl shadow-2xl overflow-hidden" dir="rtl">
-            <div className="bg-red-600 p-3 text-white text-center">
-              <AlertCircle size={24} className="mx-auto mb-1" />
-              <h3 className="text-sm font-black">تنبيه</h3>
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-md" />
+          <div className="relative w-full max-w-sm overflow-hidden rounded-2xl shadow-2xl" dir="rtl">
+            {/* Red header */}
+            <div className="bg-red-600 px-5 py-4 flex items-center justify-end gap-3">
+              <h3 className="text-base font-black text-white">إخلاء مسؤولية</h3>
+              <div className="flex gap-1">
+                <span className="w-2.5 h-2.5 rounded-full bg-white/90" />
+                <span className="w-2.5 h-2.5 rounded-full bg-white/90" />
+                <span className="w-2.5 h-2.5 rounded-full bg-white/90" />
+              </div>
             </div>
-            <div className="p-4 text-right space-y-2.5 text-xs leading-relaxed text-red-700 dark:text-red-400 font-medium max-h-[50vh] overflow-y-auto">
+            {/* Content */}
+            <div className="bg-white dark:bg-[#12031a] p-5 text-right space-y-4 text-[13px] leading-7 text-gray-800 dark:text-gray-200 max-h-[55vh] overflow-y-auto">
               <p>
                 يُعدّ القيام بتقديم بيانات غير صحيحة أو مستندات غير نظامية أو مضلّلة ، مخالفة صريحة للأنظمة والتعليمات المعمول بها، ويعرّضك للمساءلة أمام الجهات المعنية والجهات القضائية المختصة ، كما قد يترتب على ذلك اتخاذ كافة الإجراءات القانونية اللازمة بحقك دون إشعار مسبق .
               </p>
@@ -350,7 +356,8 @@ const AppContent: React.FC = () => {
                 إن استخدامك للخدمة يُعد إقرارًا منك بصحة المعلومات المقدمة وموافقتك على الشروط والأحكام ذات العلاقة
               </p>
             </div>
-            <div className="p-4 border-t border-gray-100 dark:border-white/10">
+            {/* Footer */}
+            <div className="bg-white dark:bg-[#12031a] px-5 pb-5">
               <button
                 onClick={() => setShowLoginWarning(false)}
                 className="w-full py-3 rounded-xl bg-brand text-gold font-bold text-sm hover:bg-brand/90 transition-all"
