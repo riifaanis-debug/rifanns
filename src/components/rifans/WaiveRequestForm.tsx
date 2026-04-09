@@ -371,7 +371,30 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
         files: uploadedFiles,
       };
 
-      const result = await submitRequest(requestDataObj);
+      // If resuming a draft, update the existing record instead of creating new
+      let result;
+      if (prefill?.draftId) {
+        const { data: updated, error } = await supabase.from('requests').update({
+          status: 'pending',
+          details: requestDataObj.details,
+          data: requestDataObj.data as any,
+          files: requestDataObj.files as any,
+        }).eq('id', prefill.draftId).select().single();
+        if (error) throw error;
+        result = updated;
+        
+        // Create notification
+        await supabase.from('notifications').insert({
+          id: `NOT-${Date.now()}`,
+          user_id: result.user_id,
+          submission_id: result.id,
+          title: 'تم استلام طلبك',
+          message: `تم استلام طلبك بنجاح وهو قيد المراجعة الآن. نوع الطلب: ${result.type}`,
+          type: 'new_request',
+        });
+      } else {
+        result = await submitRequest(requestDataObj);
+      }
 
       // Send email notification to admin via edge function
       try {
