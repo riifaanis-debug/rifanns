@@ -800,6 +800,16 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                          معاينة الطلب
                        </button>
 
+                       {req.status === 'draft' && (
+                          <button 
+                            onClick={() => handleResumeDraft(req)}
+                            className="mt-3 w-full py-2.5 bg-gold/10 text-gold font-bold text-[12px] rounded-xl border border-gold/30 hover:bg-gold/20 transition-all flex items-center justify-center gap-2"
+                          >
+                            <Edit size={14} />
+                            استكمال الطلب وإرساله
+                          </button>
+                        )}
+
                        {req.status === 'contract_signature' && (
                          <div className="mt-3 p-2 bg-brand/5 border border-gold/20 rounded-lg flex items-center justify-between animate-pulse">
                             <span className="text-[10px] font-bold text-brand">العقد جاهز للتوقيع</span>
