@@ -691,7 +691,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
            </div>
         </div>
 
-        {/* Tabs */}
+        {/* Tabs - بياناتي، طلباتي، عقودي، فواتيري */}
         <div className="flex p-4 gap-1.5 overflow-x-auto no-scrollbar">
            <button 
              onClick={() => setActiveTab('profile')}
@@ -718,17 +718,12 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
              عقودي
            </button>
            <button 
-             onClick={() => setActiveTab('notifications')}
-             className={`flex-1 min-w-[80px] py-2.5 rounded-[12px] text-[11px] font-bold transition-all flex flex-col items-center justify-center gap-1 relative
-               ${activeTab === 'notifications' ? 'bg-brand text-gold shadow-md' : 'bg-white text-muted border border-gray-100 hover:bg-gray-50'}`}
+             onClick={() => setActiveTab('invoices')}
+             className={`flex-1 min-w-[80px] py-2.5 rounded-[12px] text-[11px] font-bold transition-all flex flex-col items-center justify-center gap-1
+               ${activeTab === 'invoices' ? 'bg-brand text-gold shadow-md' : 'bg-white text-muted border border-gray-100 hover:bg-gray-50'}`}
            >
-             <Bell size={14} />
-             التنبيهات
-             {unreadCount > 0 && (
-               <span className="absolute top-1 right-2 w-4 h-4 bg-red-500 text-white text-[9px] flex items-center justify-center rounded-full border border-white">
-                 {unreadCount}
-               </span>
-             )}
+             <Receipt size={14} />
+             فواتيري
            </button>
         </div>
 
