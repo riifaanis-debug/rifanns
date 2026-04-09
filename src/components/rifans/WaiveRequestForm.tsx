@@ -44,7 +44,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
   const [statusMessage, setStatusMessage] = useState('');
   
   const [region, setRegion] = useState(prefill?.region || '');
-  const [products, setProducts] = useState(prefill?.products?.length > 0 ? prefill.products : [{ id: 1, type: '', amount: '', accountNumber: '' }]);
+  const [products, setProducts] = useState([{ id: 1, type: '', amount: '', accountNumber: '' }]);
   const [documents, setDocuments] = useState<any[]>(prefill?.documents?.length > 0 
     ? prefill.documents.map((d: any) => ({ 
         ...d, 
