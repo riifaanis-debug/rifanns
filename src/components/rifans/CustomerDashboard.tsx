@@ -1350,21 +1350,6 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
 
 
 
-                               className="p-1.5 text-gold hover:bg-gold/10 rounded-lg transition-colors"
-                               title="عرض الفاتورة"
-                             >
-                               <Eye size={14} />
-                             </button>
-                           </div>
-                         </div>
-                       ))
-                     ) : (
-                       <div className="text-center py-6 text-[11px] text-muted border border-dashed border-gray-100 dark:border-white/10 rounded-xl">
-                         لا توجد فواتير حالياً
-                       </div>
-                     )}
-                   </div>
-                </div>
 
                {isEditing && (
                   <div className="mt-4">
