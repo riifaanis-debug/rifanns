@@ -1044,7 +1044,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                      handleSubmit();
                    }} 
                    disabled={isSubmitting} 
-                   className="flex-[2] min-w-[140px] bg-gold-gradient text-brand font-bold py-3 rounded-full shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed text-[13px] transition-all active:scale-95 pointer-events-auto cursor-pointer"
+                   className="flex-[2] min-w-[120px] bg-gold-gradient text-brand font-bold py-1.5 rounded-full shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed text-[11px] transition-all active:scale-95 pointer-events-auto cursor-pointer"
                  >
                    {isSubmitting ? 'جاري الإرسال...' : 'إرسال الطلب'}
                  </button>
