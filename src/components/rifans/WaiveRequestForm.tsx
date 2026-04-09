@@ -582,9 +582,9 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
              <div className="col-span-2">
                <label className="block text-[11px] font-bold text-brand mb-1">الاسم الثلاثي <span className="text-red-500">*</span></label>
                <div className="flex gap-1.5">
-                 <input type="text" name="firstName" placeholder="الأول" required value={formData.firstName} onChange={(e) => setFormData({...formData, firstName: e.target.value})} className="w-full p-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none" />
-                 <input type="text" name="middleName" placeholder="الأوسط" required value={formData.middleName} onChange={(e) => setFormData({...formData, middleName: e.target.value})} className="w-full p-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none" />
-                 <input type="text" name="lastName" placeholder="العائلة" required value={formData.lastName} onChange={(e) => setFormData({...formData, lastName: e.target.value})} className="w-full p-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none" />
+                  <input type="text" name="firstName" placeholder="الأول" required value={formData.firstName} onChange={(e) => setFormData({...formData, firstName: e.target.value})} disabled={isViewOnly} className="w-full p-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none disabled:bg-gray-50 disabled:cursor-not-allowed" />
+                  <input type="text" name="middleName" placeholder="الأوسط" required value={formData.middleName} onChange={(e) => setFormData({...formData, middleName: e.target.value})} disabled={isViewOnly} className="w-full p-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none disabled:bg-gray-50 disabled:cursor-not-allowed" />
+                  <input type="text" name="lastName" placeholder="العائلة" required value={formData.lastName} onChange={(e) => setFormData({...formData, lastName: e.target.value})} disabled={isViewOnly} className="w-full p-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none disabled:bg-gray-50 disabled:cursor-not-allowed" />
                </div>
              </div>
 
