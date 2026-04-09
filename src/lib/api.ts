@@ -88,8 +88,15 @@ export const saveDraftRequest = async (requestData: any) => {
 export const getMyRequests = async () => {
   const userId = getCurrentUserId();
   if (!userId) return [];
-  const { data } = await supabase.from('requests').select('*').eq('user_id', userId).order('created_at', { ascending: false });
+  const { data } = await supabase.from('requests').select('*').eq('user_id', userId).neq('status', 'cancelled').order('created_at', { ascending: false });
   return (data || []).map(r => ({ ...r, userId: r.user_id, timestamp: r.created_at }));
+};
+
+export const deleteRequest = async (requestId: string) => {
+  const userId = getCurrentUserId();
+  if (!userId) throw new Error('غير مسجل الدخول');
+  const { error } = await supabase.from('requests').update({ status: 'cancelled' }).eq('id', requestId).eq('user_id', userId);
+  if (error) throw error;
 };
 
 export const getMyNotifications = async () => {

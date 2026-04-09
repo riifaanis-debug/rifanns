@@ -8,7 +8,7 @@ import { Button } from './Shared';
 import { useAuth } from '../../contexts/AuthContext';
 import Logo from './Logo';
 import { safeStringify, safeParse } from '../../utils/safeJson';
-import { getMyRequests, getMyNotifications, getMyContracts, getMyInvoices, getProfile, updateProfile, markAllNotificationsRead, uploadDocument } from '../../lib/api';
+import { getMyRequests, getMyNotifications, getMyContracts, getMyInvoices, getProfile, updateProfile, markAllNotificationsRead, uploadDocument, deleteRequest } from '../../lib/api';
 import { formatAmount } from '../../lib/formatNumber';
 
 interface CustomerDashboardProps {
@@ -788,22 +788,51 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                           `استشارة براتب: ${req.data?.salary || ''}`}
                        </p>
 
-                       {/* Preview Request Button */}
-                       <button 
-                         onClick={() => {
-                           const detail = JSON.stringify(req.data || {}, null, 2);
-                           alert(`تفاصيل الطلب:\n\nنوع الطلب: ${req.type === 'waive_request' ? 'إعفاء' : req.type === 'rescheduling_request' ? 'إعادة جدولة' : req.type === 'seized_amounts_request' ? 'إتاحة النسبة' : 'استشارة'}\nالحالة: ${req.status}\nالتاريخ: ${new Date(req.timestamp).toLocaleDateString('ar-SA')}\n\nالاسم: ${req.data?.fullName || ''}\nالجهة المالية: ${req.data?.bank || ''}\nالمبلغ الإجمالي: ${req.data?.totalAmount ? formatAmount(req.data.totalAmount) + ' ر.س' : 'غير محدد'}`);
-                         }}
-                         className="mt-3 w-full py-2 bg-gray-50 dark:bg-white/5 text-brand dark:text-gold font-bold text-[11px] rounded-xl border border-gold/20 hover:bg-gold/5 transition-all flex items-center justify-center gap-2"
-                       >
-                         <FileText size={12} />
-                         معاينة الطلب
-                       </button>
+                       {/* Preview & Delete Buttons */}
+                       <div className="flex gap-2 mt-3">
+                         <button 
+                           onClick={() => {
+                             window.dispatchEvent(new CustomEvent('open-waive-form', { 
+                               detail: { 
+                                 ...userData,
+                                 ...(req.data || {}),
+                                 requestType: req.type,
+                                 viewOnly: true,
+                                 viewRequestId: req.id,
+                                 viewRequestStatus: req.status,
+                               } 
+                             }));
+                           }}
+                           className="flex-1 py-2 bg-gray-50 dark:bg-white/5 text-brand dark:text-gold font-bold text-[11px] rounded-xl border border-gold/20 hover:bg-gold/5 transition-all flex items-center justify-center gap-2"
+                         >
+                           <Eye size={12} />
+                           معاينة الطلب
+                         </button>
+                         {(req.status === 'draft' || req.status === 'pending') && (
+                           <button 
+                             onClick={async () => {
+                               if (confirm('هل أنت متأكد من حذف هذا الطلب؟')) {
+                                 try {
+                                   await deleteRequest(req.id);
+                                   fetchData();
+                                 } catch (err) {
+                                   console.error(err);
+                                   alert('حدث خطأ أثناء حذف الطلب');
+                                 }
+                               }
+                             }}
+                             className="py-2 px-3 bg-red-50 dark:bg-red-900/20 text-red-500 font-bold text-[11px] rounded-xl border border-red-200 dark:border-red-800 hover:bg-red-100 dark:hover:bg-red-900/30 transition-all flex items-center justify-center gap-1"
+                           >
+                             <Trash2 size={12} />
+                             حذف
+                           </button>
+                         )}
+                       </div>
 
                        {req.status === 'draft' && (
                           <button 
                             onClick={() => handleResumeDraft(req)}
-                            className="mt-3 w-full py-2.5 bg-gold/10 text-gold font-bold text-[12px] rounded-xl border border-gold/30 hover:bg-gold/20 transition-all flex items-center justify-center gap-2"
+                            className="mt-2 w-full py-2.5 bg-gold/10 text-gold font-bold text-[12px] rounded-xl border border-gold/30 hover:bg-gold/20 transition-all flex items-center justify-center gap-2"
                           >
                             <Edit size={14} />
                             استكمال الطلب وإرساله
