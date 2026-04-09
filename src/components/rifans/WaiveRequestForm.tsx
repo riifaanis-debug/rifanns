@@ -618,7 +618,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
              {/* Row 4: Age & Job Status */}
              <div>
                 <label className="block text-[11px] font-bold text-brand mb-1">العمر <span className="text-red-500">*</span></label>
-                <input type="text" name="age" inputMode="numeric" onKeyDown={onlyNumbers} required value={formData.age} onChange={(e) => setFormData({...formData, age: e.target.value})} className="w-full p-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none" placeholder="بالسنوات" />
+                <input type="text" name="age" inputMode="numeric" onKeyDown={onlyNumbers} required value={formData.age} onChange={(e) => setFormData({...formData, age: e.target.value})} disabled={isViewOnly} className="w-full p-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none disabled:bg-gray-50 disabled:cursor-not-allowed" placeholder="بالسنوات" />
              </div>
              <div>
                 <label className="block text-[11px] font-bold text-brand mb-1">الحالة الوظيفية <span className="text-red-500">*</span></label>
