@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'motion/react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Star } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Section, SectionHeader } from './Shared';
@@ -29,6 +28,12 @@ const ReviewCard: React.FC<{ review: Review }> = ({ review }) => (
 
 const ClientReviews: React.FC = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const animationRef = useRef<number>(0);
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const scrollLeft = useRef(0);
+  const speed = 0.5; // px per frame
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -42,44 +47,86 @@ const ClientReviews: React.FC = () => {
     fetchReviews();
   }, []);
 
+  // Auto-scroll loop
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el || reviews.length === 0) return;
+
+    let paused = false;
+    const animate = () => {
+      if (!paused && el) {
+        el.scrollLeft += speed;
+        // Loop: when we've scrolled past the first set, reset
+        const halfWidth = el.scrollWidth / 2;
+        if (el.scrollLeft >= halfWidth) {
+          el.scrollLeft -= halfWidth;
+        }
+      }
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    animationRef.current = requestAnimationFrame(animate);
+
+    const pause = () => { paused = true; };
+    const resume = () => { setTimeout(() => { paused = false; }, 1500); };
+
+    el.addEventListener('pointerdown', pause);
+    el.addEventListener('pointerup', resume);
+    el.addEventListener('pointerleave', resume);
+
+    return () => {
+      cancelAnimationFrame(animationRef.current);
+      el.removeEventListener('pointerdown', pause);
+      el.removeEventListener('pointerup', resume);
+      el.removeEventListener('pointerleave', resume);
+    };
+  }, [reviews]);
+
+  // Touch/mouse drag
+  const onPointerDown = useCallback((e: React.PointerEvent) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    isDragging.current = true;
+    startX.current = e.clientX - el.offsetLeft;
+    scrollLeft.current = el.scrollLeft;
+    el.setPointerCapture(e.pointerId);
+  }, []);
+
+  const onPointerMove = useCallback((e: React.PointerEvent) => {
+    if (!isDragging.current || !scrollRef.current) return;
+    const x = e.clientX - scrollRef.current.offsetLeft;
+    const walk = (x - startX.current) * 1.5;
+    scrollRef.current.scrollLeft = scrollLeft.current - walk;
+  }, []);
+
+  const onPointerUp = useCallback(() => {
+    isDragging.current = false;
+  }, []);
+
   if (reviews.length === 0) return null;
 
-  const half = Math.ceil(reviews.length / 2);
-  const row1 = reviews.slice(0, half);
-  const row2 = reviews.slice(half);
+  // Duplicate for seamless loop
+  const loopedReviews = [...reviews, ...reviews];
 
   return (
     <Section id="client-reviews">
       <div className="px-1">
         <SectionHeader eyebrow="آراء العملاء" title="تقييمات عملائنا" subtitle="تجارب حقيقية من عملاء استفادوا من خدماتنا" />
-        
-        <div className="space-y-2 [mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)] mt-2">
-          {/* Row 1 */}
-          <div className="relative w-full overflow-hidden">
-            <motion.div
-              className="flex gap-2"
-              animate={{ x: ['0%', '-50%'] }}
-              transition={{ x: { repeat: Infinity, repeatType: 'loop', duration: 35, ease: 'linear' } }}
-              style={{ width: 'max-content' }}
-            >
-              {[...row1, ...row1].map((review, i) => (
-                <ReviewCard key={`r1-${i}`} review={review} />
-              ))}
-            </motion.div>
-          </div>
 
-          {/* Row 2 */}
-          <div className="relative w-full overflow-hidden">
-            <motion.div
-              className="flex gap-2"
-              animate={{ x: ['-50%', '0%'] }}
-              transition={{ x: { repeat: Infinity, repeatType: 'loop', duration: 40, ease: 'linear' } }}
-              style={{ width: 'max-content' }}
-            >
-              {[...row2, ...row2].map((review, i) => (
-                <ReviewCard key={`r2-${i}`} review={review} />
-              ))}
-            </motion.div>
+        <div className="[mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)] mt-2">
+          <div
+            ref={scrollRef}
+            className="flex gap-2 overflow-x-auto cursor-grab active:cursor-grabbing"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={onPointerUp}
+            onPointerCancel={onPointerUp}
+          >
+            <style>{`[id="client-reviews"] div::-webkit-scrollbar { display: none; }`}</style>
+            {loopedReviews.map((review, i) => (
+              <ReviewCard key={`r-${i}`} review={review} />
+            ))}
           </div>
         </div>
       </div>
