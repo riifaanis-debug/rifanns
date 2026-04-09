@@ -40,6 +40,51 @@ export const submitRequest = async (requestData: any) => {
   return data;
 };
 
+export const saveDraftRequest = async (requestData: any) => {
+  const userId = getCurrentUserId();
+  if (!userId) throw new Error('غير مسجل الدخول');
+
+  // Check if draft already exists for this user and type
+  const { data: existing } = await supabase
+    .from('requests')
+    .select('id')
+    .eq('user_id', userId)
+    .eq('status', 'draft')
+    .eq('type', requestData.type || 'general')
+    .maybeSingle();
+
+  if (existing) {
+    // Update existing draft
+    const { data, error } = await supabase
+      .from('requests')
+      .update({
+        details: requestData.details || '',
+        data: requestData.data || {},
+        files: requestData.files || [],
+      })
+      .eq('id', existing.id)
+      .select()
+      .single();
+    if (error) throw error;
+    return data;
+  }
+
+  // Create new draft
+  const newDraft = {
+    id: `DRAFT-${Date.now()}`,
+    user_id: userId,
+    type: requestData.type || 'general',
+    details: requestData.details || '',
+    data: requestData.data || {},
+    files: requestData.files || [],
+    status: 'draft',
+  };
+
+  const { data, error } = await supabase.from('requests').insert(newDraft).select().single();
+  if (error) throw error;
+  return data;
+};
+
 export const getMyRequests = async () => {
   const userId = getCurrentUserId();
   if (!userId) return [];
