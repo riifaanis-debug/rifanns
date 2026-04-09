@@ -1076,9 +1076,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                     </div>
                     <h2 className="text-sm sm:text-lg font-bold">{getTabTitle(activeTab)}</h2>
                   </div>
-                  <button onClick={() => setActiveTab('home')} className="w-7 h-7 sm:w-9 sm:h-9 rounded-lg bg-white/10 flex items-center justify-center hover:bg-white/20 transition-all">
-                    <X size={14} />
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button onClick={() => setActiveTab('home')} className="flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg bg-white/10 text-white text-[10px] sm:text-xs font-bold hover:bg-white/20 transition-all border border-white/10">
+                      <X size={14} />
+                      <span className="hidden sm:inline">العودة للوحة التحكم</span>
+                      <span className="sm:hidden">خروج</span>
+                    </button>
+                  </div>
                 </div>
                 
                 {/* Modal Body */}
