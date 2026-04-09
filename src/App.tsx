@@ -226,6 +226,7 @@ const LandingPage: React.FC = () => {
           <StorySection />
           <WhySection />
           <Services />
+          <ClientReviews />
           <Performance />
           <Calculator />
           <AudienceSection />
@@ -236,7 +237,10 @@ const LandingPage: React.FC = () => {
           <Footer />
         </div>
       ) : (
-        <LoginPrompt />
+        <>
+          <ClientReviews />
+          <LoginPrompt />
+        </>
       )}
       <BackToTop />
     </>
