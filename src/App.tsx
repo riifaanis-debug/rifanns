@@ -352,10 +352,10 @@ const AppContent: React.FC = () => {
               </p>
             </div>
             {/* Footer */}
-            <div className="bg-white dark:bg-[#12031a] px-4 pb-3">
+            <div className="bg-white dark:bg-[#12031a] px-4 pb-3 flex justify-center">
               <button
                 onClick={() => setShowLoginWarning(false)}
-                className="w-full py-2 rounded-lg bg-brand text-gold font-bold text-[11px] hover:bg-brand/90 transition-all"
+                className="px-8 py-1.5 rounded-md bg-red-600 text-white font-bold text-[11px] hover:bg-red-700 transition-all"
               >
                 موافق
               </button>
