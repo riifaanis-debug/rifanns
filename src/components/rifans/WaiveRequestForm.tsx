@@ -595,7 +595,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
              </div>
              <div>
                 <label className="block text-[11px] font-bold text-brand mb-1">رقم الجوال <span className="text-red-500">*</span></label>
-                <input type="text" name="mobile" inputMode="numeric" required value={formData.mobile} onChange={(e) => { const val = e.target.value.replace(/\D/g, '').slice(0, 10); setFormData({...formData, mobile: val}); }} onKeyDown={onlyNumbers} maxLength={10} className="w-full p-1.5 rounded-lg border border-gold/30 text-[12px] font-bold tracking-wider focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none text-left dir-ltr" placeholder="05xxxxxxxx" />
+                <input type="text" name="mobile" inputMode="numeric" required value={formData.mobile} onChange={(e) => { const val = e.target.value.replace(/\D/g, '').slice(0, 10); setFormData({...formData, mobile: val}); }} onKeyDown={onlyNumbers} maxLength={10} disabled={isViewOnly} className="w-full p-1.5 rounded-lg border border-gold/30 text-[12px] font-bold tracking-wider focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none text-left dir-ltr disabled:bg-gray-50 disabled:cursor-not-allowed" placeholder="05xxxxxxxx" />
                 <p className="text-[9px] text-muted mt-0.5 pr-1">يبدأ بـ 05 - 10 أرقام</p>
              </div>
 
