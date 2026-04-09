@@ -125,6 +125,33 @@ export type Database = {
         }
         Relationships: []
       }
+      client_reviews: {
+        Row: {
+          client_name: string
+          comment: string
+          created_at: string
+          id: string
+          is_published: boolean
+          rating: number
+        }
+        Insert: {
+          client_name: string
+          comment: string
+          created_at?: string
+          id?: string
+          is_published?: boolean
+          rating?: number
+        }
+        Update: {
+          client_name?: string
+          comment?: string
+          created_at?: string
+          id?: string
+          is_published?: boolean
+          rating?: number
+        }
+        Relationships: []
+      }
       contracts: {
         Row: {
           created_at: string
