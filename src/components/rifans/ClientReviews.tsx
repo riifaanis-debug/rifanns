@@ -47,16 +47,14 @@ const ClientReviews: React.FC = () => {
     fetchReviews();
   }, []);
 
-  // Auto-scroll loop
+  // Auto-scroll loop — never stops except on touch/drag
   useEffect(() => {
     const el = scrollRef.current;
     if (!el || reviews.length === 0) return;
 
-    let paused = false;
     const animate = () => {
-      if (!paused && el) {
+      if (!isDragging.current && el) {
         el.scrollLeft += speed;
-        // Loop: when we've scrolled past the first set, reset
         const halfWidth = el.scrollWidth / 2;
         if (el.scrollLeft >= halfWidth) {
           el.scrollLeft -= halfWidth;
@@ -66,13 +64,6 @@ const ClientReviews: React.FC = () => {
     };
 
     animationRef.current = requestAnimationFrame(animate);
-
-    const pause = () => { paused = true; };
-    const resume = () => { setTimeout(() => { paused = false; }, 1500); };
-
-    el.addEventListener('pointerdown', pause);
-    el.addEventListener('pointerup', resume);
-    el.addEventListener('pointerleave', resume);
 
     return () => {
       cancelAnimationFrame(animationRef.current);
