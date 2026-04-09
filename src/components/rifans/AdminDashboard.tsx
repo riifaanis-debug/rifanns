@@ -1236,7 +1236,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                className="relative w-full sm:w-[95%] max-w-7xl max-h-screen sm:max-h-[92vh] bg-[#F5F4FA] dark:bg-[#06010a] rounded-none sm:rounded-[32px] shadow-2xl overflow-hidden flex flex-col"
+                className="relative w-full sm:w-[95%] max-w-7xl h-screen sm:h-auto sm:max-h-[92vh] bg-[#F5F4FA] dark:bg-[#06010a] rounded-none sm:rounded-[32px] shadow-2xl overflow-hidden flex flex-col"
               >
                 {/* Modal Header - Fixed/Sticky */}
                 <div className="sticky top-0 z-10 p-3 sm:p-5 border-b border-gold/10 flex items-center justify-between bg-brand text-white shrink-0">
