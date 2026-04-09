@@ -336,8 +336,8 @@ const AppContent: React.FC = () => {
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowLoginWarning(false)} />
           <div className="relative w-full max-w-[340px] overflow-hidden rounded-xl shadow-2xl" dir="rtl">
             {/* Red header */}
-            <div className="bg-red-600 px-4 py-2 flex items-center justify-end gap-2">
-              <h3 className="text-[13px] font-black text-white">إخلاء مسؤولية</h3>
+            <div className="bg-red-600 px-4 py-2">
+              <h3 className="text-[13px] font-black text-white text-right">إخلاء مسؤولية</h3>
             </div>
             {/* Content */}
             <div className="bg-white dark:bg-[#12031a] px-4 py-3 text-right space-y-2 text-[10px] leading-[18px] text-gray-700 dark:text-gray-300 max-h-[40vh] overflow-y-auto">
@@ -352,10 +352,10 @@ const AppContent: React.FC = () => {
               </p>
             </div>
             {/* Footer */}
-            <div className="bg-white dark:bg-[#12031a] px-4 pb-3">
+            <div className="bg-white dark:bg-[#12031a] px-4 pb-3 flex justify-center">
               <button
                 onClick={() => setShowLoginWarning(false)}
-                className="w-full py-2 rounded-lg bg-brand text-gold font-bold text-[11px] hover:bg-brand/90 transition-all"
+                className="px-8 py-1.5 rounded-md bg-red-600 text-white font-bold text-[11px] hover:bg-red-700 transition-all"
               >
                 موافق
               </button>
