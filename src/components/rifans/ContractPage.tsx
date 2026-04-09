@@ -24,6 +24,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
   const [isSuccess, setIsSuccess] = useState(false);
   const [isAlreadySigned, setIsAlreadySigned] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isPdfLoading, setIsPdfLoading] = useState(false);
   const [submission, setSubmission] = useState<any>(null);
 
   const products = Array.isArray(submission?.data?.products) 
