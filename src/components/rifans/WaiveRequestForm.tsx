@@ -726,7 +726,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                         />
                       </div>
                     </div>
-                    {products.length > 1 && (
+                    {products.length > 1 && !isViewOnly && (
                       <div className="flex justify-end">
                         <button type="button" onClick={() => removeProduct(product.id)} className="text-red-400 p-1 hover:bg-red-50 rounded-full transition-colors flex items-center gap-1 text-[10px]">
                           <Trash2 size={14} />
