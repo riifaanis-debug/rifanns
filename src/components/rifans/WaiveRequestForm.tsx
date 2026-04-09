@@ -1032,7 +1032,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                         setStatusMessage('حدث خطأ أثناء حفظ المسودة.');
                       }
                     }}
-                   className="flex-1 min-w-[120px] px-3 py-3 rounded-full border-2 border-gold text-gold font-bold text-[12px] hover:bg-gold/10 transition-colors"
+                   className="flex-1 min-w-[100px] px-2 py-1.5 rounded-full border-2 border-gold text-gold font-bold text-[11px] hover:bg-gold/10 transition-colors"
                  >
                    الحفظ والاستكمال لاحقاً
                  </button>
