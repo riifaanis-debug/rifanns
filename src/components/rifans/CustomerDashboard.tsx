@@ -1305,9 +1305,48 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                             )}
                         </div>
 
-                    </div>
-                  </div>
-               </div>
+                     {/* Region & City in Personal Info */}
+                     <div className="grid grid-cols-2 gap-3">
+                         <div>
+                             <label className="text-[10px] text-muted block mb-1.5">المنطقة</label>
+                             {isEditing ? (
+                                <select value={userData.region || ''} onChange={(e) => setUserData({...userData, region: e.target.value, city: ''})} className="w-full p-2 rounded-[10px] border border-gray-200 text-[12px] focus:border-gold outline-none bg-white dark:bg-white/5 dark:text-white">
+                                   <option value="">اختر المنطقة</option>
+                                   {Object.keys(REGION_CITIES).map(r => <option key={r} value={r}>{r}</option>)}
+                                </select>
+                             ) : (
+                                <div className="text-[13px] font-medium text-brand dark:text-white p-2 bg-gray-50 dark:bg-white/5 rounded-[10px] border border-gray-100 dark:border-white/5">{userData.region || '---'}</div>
+                             )}
+                         </div>
+                         <div>
+                             <label className="text-[10px] text-muted block mb-1.5">المدينة</label>
+                             {isEditing ? (
+                                <select value={userData.city || ''} onChange={(e) => setUserData({...userData, city: e.target.value})} className="w-full p-2 rounded-[10px] border border-gray-200 text-[12px] focus:border-gold outline-none bg-white dark:bg-white/5 dark:text-white" disabled={!userData.region}>
+                                   <option value="">اختر المدينة</option>
+                                   {userData.region && REGION_CITIES[userData.region]?.map(c => <option key={c} value={c}>{c}</option>)}
+                                </select>
+                             ) : (
+                                <div className="text-[13px] font-medium text-brand dark:text-white p-2 bg-gray-50 dark:bg-white/5 rounded-[10px] border border-gray-100 dark:border-white/5">{userData.city || '---'}</div>
+                             )}
+                         </div>
+                     </div>
+
+                     {/* Bank / Financial Entity */}
+                     <div>
+                         <label className="text-[10px] text-muted block mb-1.5">الجهة المالية</label>
+                         {isEditing ? (
+                            <select value={userData.bank || ''} onChange={(e) => setUserData({...userData, bank: e.target.value})} className="w-full p-2.5 rounded-[10px] border border-gray-200 text-[12px] bg-white dark:bg-white/5 focus:border-gold outline-none dark:text-white">
+                               <option value="">اختر البنك أو الجهة التمويلية</option>
+                               {BANKS.map(b => <option key={b} value={b}>{b}</option>)}
+                            </select>
+                         ) : (
+                            <div className="text-[13px] font-medium text-brand dark:text-white p-2 bg-gray-50 dark:bg-white/5 rounded-[10px] border border-gray-100 dark:border-white/5">{userData.bank || '---'}</div>
+                         )}
+                     </div>
+
+                     </div>
+                   </div>
+                </div>
 
                {/* Location Info */}
                <div className="bg-white dark:bg-[#12031a] rounded-[28px] border border-gold/20 p-6 shadow-sm relative overflow-hidden">
