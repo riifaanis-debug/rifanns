@@ -712,65 +712,71 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
             </div>
           ) : (
             <div className="mt-8 mb-6 bg-gradient-to-b from-white to-[#FCFAF4] rounded-[16px] border border-gold/30 p-4 shadow-inner">
-              <div className="flex justify-between items-center mb-3">
+              <div className="mb-3">
                 <h3 className="text-[14px] font-bold text-brand">المنتجات التمويلية</h3>
-                <button type="button" onClick={addProduct} className="flex items-center gap-1 text-[11px] text-brand bg-white border border-gold/40 px-3 py-1.5 rounded-full hover:bg-gold/10 transition-colors">
-                  <Plus size={12} />
-                  إضافة منتج
-                </button>
               </div>
               
               <div className="space-y-3">
                 {products.map((product, idx) => (
-                  <div key={product.id} className="flex flex-wrap gap-2 items-end animate-in fade-in slide-in-from-right-2">
-                     <div className="flex-1 min-w-[140px]">
-                       <label className="block text-[10px] font-bold text-muted mb-1">نوع المنتج</label>
-                       <select 
-                         name={`productType_${idx}`}
-                         required
-                         value={product.type}
-                         onChange={(e) => updateProduct(product.id, 'type', e.target.value)}
-                         className="w-full p-2 rounded-[10px] border border-gold/20 text-[12px] bg-white"
-                       >
-                          <option value="">اختر النوع</option>
-                          <option value="تمويل شخصي">تمويل شخصي</option>
-                          <option value="تمويل عقاري">تمويل عقاري</option>
-                          <option value="التمويل التأجيري">التمويل التأجيري</option>
-                          <option value="بطاقة ائتمانية">بطاقة ائتمانية</option>
-                       </select>
-                     </div>
-                     <div className="flex-1 min-w-[120px]">
-                       <label className="block text-[10px] font-bold text-muted mb-1">رقم حساب التمويل (اختياري)</label>
-                       <input 
-                         type="text"
-                         name={`productAccount_${idx}`}
-                         inputMode="numeric"
-                         onKeyDown={onlyNumbers}
-                         value={product.accountNumber || ''}
-                         onChange={(e) => updateProduct(product.id, 'accountNumber', e.target.value.replace(/\D/g, ''))}
-                         className="w-full p-2 rounded-[10px] border border-gold/20 text-[12px]" 
-                         placeholder="رقم الحساب"
-                       />
-                     </div>
-                     <div className="flex-1 min-w-[120px]">
-                       <label className="block text-[10px] font-bold text-muted mb-1">المبلغ المتبقي</label>
-                       <input 
-                         type="text"
-                         name={`productAmount_${idx}`}
-                         inputMode="numeric"
-                         onKeyDown={onlyNumbers}
-                         required
-                         value={product.amount}
-                         onChange={(e) => updateProduct(product.id, 'amount', e.target.value.replace(/\D/g, ''))}
-                         className="w-full p-2 rounded-[10px] border border-gold/20 text-[12px]" 
-                         placeholder="0.00"
-                       />
-                     </div>
-                     {products.length > 1 && (
-                       <button type="button" onClick={() => removeProduct(product.id)} className="mb-1 p-2 text-red-400 hover:text-red-600">
-                         <Trash2 size={16} />
-                       </button>
-                     )}
+                  <div key={product.id} className="space-y-2 animate-in fade-in slide-in-from-right-2">
+                    <div className="flex flex-wrap gap-2 items-end">
+                       <div className="flex-1 min-w-[140px]">
+                         <label className="block text-[10px] font-bold text-muted mb-1">نوع المنتج</label>
+                         <select 
+                           name={`productType_${idx}`}
+                           required
+                           value={product.type}
+                           onChange={(e) => updateProduct(product.id, 'type', e.target.value)}
+                           className="w-full p-2 rounded-[10px] border border-gold/20 text-[12px] bg-white"
+                         >
+                            <option value="">اختر النوع</option>
+                            <option value="تمويل شخصي">تمويل شخصي</option>
+                            <option value="تمويل عقاري">تمويل عقاري</option>
+                            <option value="التمويل التأجيري">التمويل التأجيري</option>
+                            <option value="بطاقة ائتمانية">بطاقة ائتمانية</option>
+                         </select>
+                       </div>
+                       <div className="flex-1 min-w-[120px]">
+                         <label className="block text-[10px] font-bold text-muted mb-1">رقم حساب التمويل (اختياري)</label>
+                         <input 
+                           type="text"
+                           name={`productAccount_${idx}`}
+                           inputMode="numeric"
+                           onKeyDown={onlyNumbers}
+                           value={product.accountNumber || ''}
+                           onChange={(e) => updateProduct(product.id, 'accountNumber', e.target.value.replace(/\D/g, ''))}
+                           className="w-full p-2 rounded-[10px] border border-gold/20 text-[12px]" 
+                           placeholder="رقم الحساب"
+                         />
+                       </div>
+                       <div className="flex-1 min-w-[120px]">
+                         <label className="block text-[10px] font-bold text-muted mb-1">المبلغ المتبقي</label>
+                         <input 
+                           type="text"
+                           name={`productAmount_${idx}`}
+                           inputMode="numeric"
+                           onKeyDown={onlyNumbers}
+                           required
+                           value={product.amount}
+                           onChange={(e) => updateProduct(product.id, 'amount', e.target.value.replace(/\D/g, ''))}
+                           className="w-full p-2 rounded-[10px] border border-gold/20 text-[12px]" 
+                           placeholder="0.00"
+                         />
+                       </div>
+                       {products.length > 1 && (
+                         <button type="button" onClick={() => removeProduct(product.id)} className="mb-1 p-2 text-red-400 hover:text-red-600">
+                           <Trash2 size={16} />
+                         </button>
+                       )}
+                    </div>
+                    {idx === products.length - 1 && product.type && product.amount && (
+                      <div className="flex justify-center pt-1">
+                        <button type="button" onClick={addProduct} className="flex items-center gap-1 text-[11px] text-brand bg-white border border-gold/40 px-4 py-1.5 rounded-full hover:bg-gold/10 transition-colors">
+                          <Plus size={12} />
+                          هل تريد إضافة منتج آخر؟
+                        </button>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
