@@ -1111,6 +1111,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   {activeTab === 'contracts' && renderContracts()}
                   {activeTab === 'invoices' && renderInvoices()}
                   {activeTab === 'notifications' && renderNotifications()}
+                  {activeTab === 'document_request' && renderDocumentRequest()}
                 </div>
               </motion.div>
             </div>
