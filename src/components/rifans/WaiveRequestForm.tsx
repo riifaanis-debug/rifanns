@@ -108,7 +108,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
     } else if (prefill) {
       // If prefill is provided (e.g. from dashboard), use it all
       setRegion(prefill.region || '');
-      if (prefill.products?.length > 0) setProducts(prefill.products);
+      // Do NOT load products from prefill - always start with empty products
       setFormData({
         firstName: prefill.firstName || prefill.fullName?.split(' ')[0] || '',
         middleName: prefill.middleName || prefill.fullName?.split(' ')[1] || '',
