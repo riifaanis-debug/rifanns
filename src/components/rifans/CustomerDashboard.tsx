@@ -446,8 +446,33 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
     }
   };
 
+  const handleResumeDraft = (req: any) => {
+    const draftData = req.data || {};
+    window.dispatchEvent(new CustomEvent('open-waive-form', { 
+      detail: { 
+        ...userData,
+        ...draftData,
+        requestType: req.type,
+        draftId: req.id,
+        firstName: draftData.firstName,
+        middleName: draftData.middleName,
+        lastName: draftData.lastName,
+        age: draftData.age,
+        nationalId: draftData.nationalId,
+        phone: draftData.mobile,
+        jobStatus: draftData.jobStatus,
+        region: draftData.region,
+        city: draftData.city,
+        bank: draftData.bank,
+        summary: draftData.summary,
+        products: draftData.products,
+      } 
+    }));
+  };
+
   const getStatusBadge = (status: string) => {
-    const styles = {
+    const styles: Record<string, string> = {
+      draft: 'bg-gray-100 text-gray-600 border-gray-200',
       pending: 'bg-amber-100 text-amber-700 border-amber-200',
       processing: 'bg-blue-100 text-blue-700 border-blue-200',
       executing: 'bg-purple-100 text-purple-700 border-purple-200',
@@ -455,7 +480,8 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
       completed: 'bg-green-100 text-green-700 border-green-200',
       rejected: 'bg-red-100 text-red-700 border-red-200',
     };
-    const labels = {
+    const labels: Record<string, string> = {
+      draft: 'مسودة',
       pending: 'جديد',
       processing: 'تحت الإجراء',
       executing: 'قيد التنفيذ',
@@ -464,8 +490,8 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
       rejected: 'مرفوض',
     };
     return (
-      <span className={`text-[10px] px-2 py-0.5 rounded-full border ${styles[status as keyof typeof styles] || styles.pending}`}>
-        {labels[status as keyof typeof labels] || status}
+      <span className={`text-[10px] px-2 py-0.5 rounded-full border ${styles[status] || styles.pending}`}>
+        {labels[status] || status}
       </span>
     );
   };
