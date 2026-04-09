@@ -589,6 +589,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
           color="purple"
         />
         <MenuCard 
+          icon={<Star size={20} className="text-yellow-500" />} 
+          label="إرسال تقييم" 
+          description="إرسال تقييم ونجوم باسم عميل"
+          onClick={() => setActiveTab('reviews')}
+          color="yellow"
+        />
+        <MenuCard 
           icon={<Bell size={20} className="text-gold" />} 
           label="التنبيهات" 
           description="سجل النشاط والتنبيهات الواردة"
