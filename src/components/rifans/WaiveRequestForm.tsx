@@ -44,7 +44,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
   const [statusMessage, setStatusMessage] = useState('');
   
   const [region, setRegion] = useState(prefill?.region || '');
-  const [products, setProducts] = useState(prefill?.products?.length > 0 ? prefill.products : [{ id: 1, type: '', amount: '', accountNumber: '' }]);
+  const [products, setProducts] = useState<{id: number; type: string; amount: string; accountNumber: string; depositDate?: string}[]>([{ id: 1, type: '', amount: '', accountNumber: '' }]);
   const [documents, setDocuments] = useState<any[]>(prefill?.documents?.length > 0 
     ? prefill.documents.map((d: any) => ({ 
         ...d, 
@@ -108,7 +108,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
     } else if (prefill) {
       // If prefill is provided (e.g. from dashboard), use it all
       setRegion(prefill.region || '');
-      if (prefill.products?.length > 0) setProducts(prefill.products);
+      // Do NOT load products from prefill - always start with empty products
       setFormData({
         firstName: prefill.firstName || prefill.fullName?.split(' ')[0] || '',
         middleName: prefill.middleName || prefill.fullName?.split(' ')[1] || '',
