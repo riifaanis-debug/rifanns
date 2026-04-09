@@ -609,7 +609,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
              </div>
              <div>
                 <label className="block text-[11px] font-bold text-brand mb-1">المدينة <span className="text-red-500">*</span></label>
-                <select name="city" required disabled={!region} value={formData.city} onChange={(e) => setFormData({...formData, city: e.target.value})} className="w-full p-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none bg-white">
+                <select name="city" required disabled={!region || isViewOnly} value={formData.city} onChange={(e) => setFormData({...formData, city: e.target.value})} className="w-full p-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none bg-white disabled:bg-gray-50 disabled:cursor-not-allowed">
                   <option value="">اختر المدينة</option>
                   {region && REGION_CITIES[region]?.map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
