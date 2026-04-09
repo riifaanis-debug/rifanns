@@ -991,7 +991,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                  <button 
                    type="button" 
                    onClick={onClose} 
-                   className="flex-1 min-w-[80px] px-3 py-3 rounded-full border border-gold/30 text-brand font-bold text-[12px] hover:bg-gray-50 transition-colors"
+                   className="flex-1 min-w-[70px] px-2 py-1.5 rounded-full border border-gold/30 text-brand font-bold text-[11px] hover:bg-gray-50 transition-colors"
                  >
                    إلغاء
                  </button>
