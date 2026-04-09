@@ -10,30 +10,69 @@ interface Review {
   comment: string;
 }
 
+const AUTO_SCROLL_SPEED = 28;
+
 const StarRating: React.FC<{ rating: number; size?: number }> = ({ rating, size = 10 }) => (
   <div className="flex gap-0.5">
-    {[1, 2, 3, 4, 5].map(i => (
+    {[1, 2, 3, 4, 5].map((i) => (
       <Star key={i} size={size} className={i <= rating ? 'text-yellow-500 fill-yellow-500' : 'text-gray-300'} />
     ))}
   </div>
 );
 
 const ReviewCard: React.FC<{ review: Review }> = ({ review }) => (
-  <div className="min-w-[180px] max-w-[180px] bg-white dark:bg-[#12031a] rounded-xl border border-gold/30 dark:border-white/10 p-2.5 shadow-sm flex flex-col gap-1 shrink-0">
+  <div className="min-w-[180px] max-w-[180px] bg-white dark:bg-[#12031a] rounded-xl border border-gold/30 dark:border-white/10 p-2.5 shadow-sm flex shrink-0 flex-col gap-1">
     <span className="text-[11px] font-extrabold text-brand dark:text-gray-100">{review.client_name}</span>
     <StarRating rating={review.rating} />
     <p className="text-[9px] leading-[1.6] text-muted dark:text-gray-400 line-clamp-3">{review.comment}</p>
   </div>
 );
 
+const getGapValue = (element: HTMLDivElement) => {
+  const styles = window.getComputedStyle(element);
+  const gap = styles.columnGap || styles.gap || '0';
+  const parsedGap = Number.parseFloat(gap);
+  return Number.isFinite(parsedGap) ? parsedGap : 0;
+};
+
 const ClientReviews: React.FC = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const firstGroupRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number>(0);
+  const lastFrameTime = useRef<number | null>(null);
+  const cycleWidthRef = useRef(0);
+  const offsetRef = useRef(0);
   const isDragging = useRef(false);
+  const isHovered = useRef(false);
   const startX = useRef(0);
-  const scrollLeft = useRef(0);
-  const speed = 0.5; // px per frame
+  const dragStartOffset = useRef(0);
+
+  const applyTransform = useCallback(() => {
+    if (trackRef.current) {
+      trackRef.current.style.transform = `translate3d(${offsetRef.current}px, 0, 0)`;
+    }
+  }, []);
+
+  const normalizeOffset = useCallback(() => {
+    const cycleWidth = cycleWidthRef.current;
+    if (!cycleWidth) return;
+
+    while (offsetRef.current <= -cycleWidth) {
+      offsetRef.current += cycleWidth;
+    }
+
+    while (offsetRef.current > 0) {
+      offsetRef.current -= cycleWidth;
+    }
+  }, []);
+
+  const measureCycleWidth = useCallback(() => {
+    if (!trackRef.current || !firstGroupRef.current) return;
+    cycleWidthRef.current = firstGroupRef.current.getBoundingClientRect().width + getGapValue(trackRef.current);
+    normalizeOffset();
+    applyTransform();
+  }, [applyTransform, normalizeOffset]);
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -42,79 +81,122 @@ const ClientReviews: React.FC = () => {
         .select('id, client_name, rating, comment')
         .eq('is_published', true)
         .order('created_at', { ascending: false });
-      if (data) setReviews(data as Review[]);
+
+      if (data) {
+        setReviews(data as Review[]);
+      }
     };
+
     fetchReviews();
   }, []);
 
-  // Auto-scroll loop — never stops except on touch/drag
   useEffect(() => {
-    const el = scrollRef.current;
-    if (!el || reviews.length === 0) return;
+    if (reviews.length === 0 || !trackRef.current || !firstGroupRef.current) return;
 
-    const animate = () => {
-      if (!isDragging.current && el) {
-        el.scrollLeft += speed;
-        const halfWidth = el.scrollWidth / 2;
-        if (el.scrollLeft >= halfWidth) {
-          el.scrollLeft -= halfWidth;
-        }
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    measureCycleWidth();
+
+    const animate = (timestamp: number) => {
+      if (lastFrameTime.current === null) {
+        lastFrameTime.current = timestamp;
       }
+
+      const delta = timestamp - lastFrameTime.current;
+      lastFrameTime.current = timestamp;
+
+      if (!prefersReducedMotion && !isDragging.current && !isHovered.current && cycleWidthRef.current > 0) {
+        offsetRef.current -= (AUTO_SCROLL_SPEED * delta) / 1000;
+        normalizeOffset();
+        applyTransform();
+      }
+
       animationRef.current = requestAnimationFrame(animate);
     };
+
+    const resizeObserver = typeof ResizeObserver !== 'undefined'
+      ? new ResizeObserver(() => {
+          measureCycleWidth();
+        })
+      : null;
+
+    if (resizeObserver) {
+      resizeObserver.observe(trackRef.current);
+      resizeObserver.observe(firstGroupRef.current);
+    } else {
+      window.addEventListener('resize', measureCycleWidth);
+    }
 
     animationRef.current = requestAnimationFrame(animate);
 
     return () => {
       cancelAnimationFrame(animationRef.current);
+      lastFrameTime.current = null;
+      resizeObserver?.disconnect();
+      if (!resizeObserver) {
+        window.removeEventListener('resize', measureCycleWidth);
+      }
     };
-  }, [reviews]);
+  }, [reviews, applyTransform, measureCycleWidth, normalizeOffset]);
 
-  // Touch/mouse drag
-  const onPointerDown = useCallback((e: React.PointerEvent) => {
-    const el = scrollRef.current;
-    if (!el) return;
+  const onPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     isDragging.current = true;
-    startX.current = e.clientX - el.offsetLeft;
-    scrollLeft.current = el.scrollLeft;
-    el.setPointerCapture(e.pointerId);
+    startX.current = e.clientX;
+    dragStartOffset.current = offsetRef.current;
+    e.currentTarget.setPointerCapture(e.pointerId);
   }, []);
 
-  const onPointerMove = useCallback((e: React.PointerEvent) => {
-    if (!isDragging.current || !scrollRef.current) return;
-    const x = e.clientX - scrollRef.current.offsetLeft;
-    const walk = (x - startX.current) * 1.5;
-    scrollRef.current.scrollLeft = scrollLeft.current - walk;
-  }, []);
+  const onPointerMove = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (!isDragging.current) return;
+      offsetRef.current = dragStartOffset.current + (e.clientX - startX.current);
+      normalizeOffset();
+      applyTransform();
+    },
+    [applyTransform, normalizeOffset],
+  );
 
-  const onPointerUp = useCallback(() => {
+  const onPointerUp = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     isDragging.current = false;
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    }
   }, []);
 
   if (reviews.length === 0) return null;
-
-  // Duplicate for seamless loop
-  const loopedReviews = [...reviews, ...reviews];
 
   return (
     <Section id="client-reviews">
       <div className="px-1">
         <SectionHeader eyebrow="آراء العملاء" title="تقييمات عملائنا" subtitle="تجارب حقيقية من عملاء استفادوا من خدماتنا" />
 
-        <div className="[mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)] mt-2">
+        <div className="mt-2 [mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)]">
           <div
-            ref={scrollRef}
-            className="flex gap-2 overflow-x-auto cursor-grab active:cursor-grabbing"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}
+            className="cursor-grab select-none overflow-hidden active:cursor-grabbing"
+            style={{ touchAction: 'pan-y' }}
             onPointerDown={onPointerDown}
             onPointerMove={onPointerMove}
             onPointerUp={onPointerUp}
             onPointerCancel={onPointerUp}
+            onMouseEnter={() => {
+              isHovered.current = true;
+            }}
+            onMouseLeave={() => {
+              isHovered.current = false;
+            }}
           >
-            <style>{`[id="client-reviews"] div::-webkit-scrollbar { display: none; }`}</style>
-            {loopedReviews.map((review, i) => (
-              <ReviewCard key={`r-${i}`} review={review} />
-            ))}
+            <div ref={trackRef} className="flex w-max gap-2" style={{ willChange: 'transform' }}>
+              <div ref={firstGroupRef} className="flex shrink-0 gap-2">
+                {reviews.map((review) => (
+                  <ReviewCard key={review.id} review={review} />
+                ))}
+              </div>
+
+              <div className="flex shrink-0 gap-2" aria-hidden="true">
+                {reviews.map((review) => (
+                  <ReviewCard key={`${review.id}-duplicate`} review={review} />
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
