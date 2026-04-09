@@ -419,6 +419,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
           color="green"
         />
         <MenuCard 
+          icon={<FileCheck size={20} className="text-purple-600" />} 
+          label="طلب مستند" 
+          description="تحميل وطباعة وإرسال مستندات العملاء عبر البريد"
+          onClick={() => setActiveTab('document_request')}
+          color="purple"
+        />
+        <MenuCard 
           icon={<Bell size={20} className="text-gold" />} 
           label="التنبيهات" 
           description="سجل النشاط والتنبيهات الواردة"
