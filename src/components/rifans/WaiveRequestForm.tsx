@@ -634,7 +634,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
              {/* Bank */}
              <div className="col-span-2">
                 <label className="block text-[11px] font-bold text-brand mb-1">الجهة المالية <span className="text-red-500">*</span></label>
-                <select name="bank" required value={formData.bank} onChange={(e) => setFormData({...formData, bank: e.target.value})} className="w-full p-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none bg-white">
+                <select name="bank" required value={formData.bank} onChange={(e) => setFormData({...formData, bank: e.target.value})} disabled={isViewOnly} className="w-full p-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none bg-white disabled:bg-gray-50 disabled:cursor-not-allowed">
                   <option value="">اختر البنك أو الجهة التمويلية</option>
                   {BANKS.map(b => <option key={b} value={b}>{b}</option>)}
                 </select>
