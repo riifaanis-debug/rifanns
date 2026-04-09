@@ -252,8 +252,8 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 p-4 sm:p-6 scrollbar-hide print:p-0 bg-[#F0F2F5] print:bg-white overflow-y-auto">
-        <div ref={contractRef} className="max-w-[210mm] min-h-[297mm] mx-auto bg-white shadow-[0_10px_30px_rgba(0,0,0,0.05)] border border-gray-200 p-6 sm:p-10 relative overflow-hidden font-['Tajawal'] print:shadow-none print:border-none print:p-0 print:w-full">
+      <div className="flex-1 p-1.5 sm:p-6 scrollbar-hide print:p-0 bg-[#F0F2F5] print:bg-white overflow-y-auto">
+        <div ref={contractRef} className="max-w-[210mm] min-h-[297mm] mx-auto bg-white shadow-[0_10px_30px_rgba(0,0,0,0.05)] border border-gray-200 p-3 sm:p-10 relative overflow-hidden font-['Tajawal'] print:shadow-none print:border-none print:p-0 print:w-full">
           
           {/* Official Watermark */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.015] select-none rotate-[-35deg]">
