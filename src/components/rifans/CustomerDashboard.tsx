@@ -52,11 +52,11 @@ const DOCUMENT_TYPES = [
 
 const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, onLogout }) => {
   const { user: authUser } = useAuth();
-  const [activeTab, setActiveTab] = useState<'profile' | 'requests' | 'contracts' | 'notifications'>(() => {
+  const [activeTab, setActiveTab] = useState<'profile' | 'requests' | 'contracts' | 'invoices'>(() => {
     const hash = window.location.hash;
     if (hash.includes('tab=contracts')) return 'contracts';
     if (hash.includes('tab=requests')) return 'requests';
-    if (hash.includes('tab=notifications')) return 'notifications';
+    if (hash.includes('tab=invoices')) return 'invoices';
     return 'profile';
   });
   const [userData, setUserData] = useState<UserProfile>(user);
@@ -181,7 +181,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
       const hash = window.location.hash;
       if (hash.includes('tab=contracts')) setActiveTab('contracts');
       else if (hash.includes('tab=requests')) setActiveTab('requests');
-      else if (hash.includes('tab=notifications')) setActiveTab('notifications');
+      else if (hash.includes('tab=invoices')) setActiveTab('invoices');
     };
     window.addEventListener('hashchange', handleHashChange);
 
@@ -656,6 +656,23 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
               </div>
            </div>
            <div className="flex items-center gap-2">
+              {/* Notifications Bell */}
+              <button 
+                onClick={() => {
+                  fetchNotifications();
+                  markAllAsRead();
+                }}
+                className="w-9 h-9 rounded-full bg-brand/10 dark:bg-white/5 flex items-center justify-center hover:bg-brand/20 dark:hover:bg-white/10 transition-colors relative"
+                title="التنبيهات"
+              >
+                <Bell size={18} className="text-brand dark:text-gold" />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center px-1">
+                    {unreadCount > 99 ? '99+' : unreadCount}
+                  </span>
+                )}
+              </button>
+              {/* Chat */}
               <button 
                 onClick={() => setIsChatOpen(true)} 
                 className="w-9 h-9 rounded-full bg-brand/10 dark:bg-white/5 flex items-center justify-center hover:bg-brand/20 dark:hover:bg-white/10 transition-colors relative"
@@ -674,7 +691,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
            </div>
         </div>
 
-        {/* Tabs */}
+        {/* Tabs - بياناتي، طلباتي، عقودي، فواتيري */}
         <div className="flex p-4 gap-1.5 overflow-x-auto no-scrollbar">
            <button 
              onClick={() => setActiveTab('profile')}
@@ -701,17 +718,12 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
              عقودي
            </button>
            <button 
-             onClick={() => setActiveTab('notifications')}
-             className={`flex-1 min-w-[80px] py-2.5 rounded-[12px] text-[11px] font-bold transition-all flex flex-col items-center justify-center gap-1 relative
-               ${activeTab === 'notifications' ? 'bg-brand text-gold shadow-md' : 'bg-white text-muted border border-gray-100 hover:bg-gray-50'}`}
+             onClick={() => setActiveTab('invoices')}
+             className={`flex-1 min-w-[80px] py-2.5 rounded-[12px] text-[11px] font-bold transition-all flex flex-col items-center justify-center gap-1
+               ${activeTab === 'invoices' ? 'bg-brand text-gold shadow-md' : 'bg-white text-muted border border-gray-100 hover:bg-gray-50'}`}
            >
-             <Bell size={14} />
-             التنبيهات
-             {unreadCount > 0 && (
-               <span className="absolute top-1 right-2 w-4 h-4 bg-red-500 text-white text-[9px] flex items-center justify-center rounded-full border border-white">
-                 {unreadCount}
-               </span>
-             )}
+             <Receipt size={14} />
+             فواتيري
            </button>
         </div>
 
@@ -1003,127 +1015,52 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                  </div>
                )}
 
-               {/* Invoices Section */}
-               <h3 className="text-[13px] font-bold text-brand dark:text-white mt-6 mb-2 px-1">الفواتير</h3>
-               {invoices.length > 0 ? (
-                 invoices.map((inv) => {
-                   const req = requests.find(r => r.id === inv.submission_id) || { type: inv.type };
-                   return (
-                     <div key={inv.id} className="bg-white dark:bg-[#12031a] p-4 rounded-[16px] border border-gold/20 shadow-sm group hover:border-gold/50 transition-all text-right">
-                       <div className="flex justify-between items-start mb-2">
-                         <div className="flex items-center gap-2">
-                           <Receipt className="text-gold" size={16} />
-                           <h3 className="text-[13px] font-bold text-brand dark:text-white">
-                             فاتورة رقم {inv.id}
-                           </h3>
-                         </div>
-                         <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${inv.status === 'paid' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>
-                           {inv.status === 'paid' ? 'مسددة' : 'في انتظار السداد'}
-                         </span>
-                       </div>
-                       <p className="text-[11px] text-muted mb-2">
-                         {inv.type === 'waive_request' ? 'طلب إعفاء من الالتزامات' : 
-                          inv.type === 'rescheduling_request' ? 'إعادة جدولة المنتجات التمويلية' : 
-                          inv.type === 'seized_amounts_request' ? 'إتاحة النسبة النظامية والمبالغ المستثناه' : 'طلب استشارة مالية'}
-                       </p>
-                       <div className="flex justify-between items-center mb-3">
-                         <span className="text-[11px] text-muted">{new Date(inv.created_at).toLocaleDateString('ar-SA')}</span>
-                         <span className="text-sm font-black text-gold">{formatAmount(inv.amount)} ر.س</span>
-                       </div>
-                       <button 
-                         onClick={() => window.location.hash = `#/invoice/${inv.submission_id}`}
-                         className="w-full py-2.5 bg-white text-brand font-bold text-[12px] rounded-xl shadow-sm hover:bg-gray-50 transition-all flex items-center justify-center gap-2 border border-gold/30"
-                       >
-                         <FileText size={14} />
-                         عرض الفاتورة
-                       </button>
-                     </div>
-                   );
-                 })
-               ) : (
-                 <div className="text-right py-6 text-muted flex flex-col items-start gap-2">
-                   <Receipt size={32} className="opacity-20" />
-                   <p className="text-[12px]">لا توجد فواتير حالياً</p>
-                 </div>
-               )}
               </div>
-            )}
+             )}
 
-           {activeTab === 'notifications' && (
+           {/* Invoices Tab */}
+           {activeTab === 'invoices' && (
              <div className="space-y-3">
-               <div className="flex justify-between items-center mb-2 px-1">
-                 <h3 className="text-[13px] font-bold text-brand dark:text-white">التنبيهات</h3>
-                 {unreadCount > 0 && (
-                   <button onClick={markAllAsRead} className="text-[10px] text-gold hover:underline">
-                     تحديد الكل كمقروء
-                   </button>
-                 )}
-               </div>
-               
-               {notifications.length > 0 ? (
-                 notifications.map((notif) => (
-                   <div 
-                     key={notif.id} 
-                     onClick={() => !notif.is_read && markAsRead(notif.id)}
-                     className={`p-4 rounded-[16px] border transition-all text-right cursor-pointer relative
-                       ${notif.is_read 
-                         ? 'bg-white dark:bg-[#12031a] border-gray-100 dark:border-white/5 opacity-80' 
-                         : 'bg-white dark:bg-[#12031a] border-gold/30 shadow-sm ring-1 ring-gold/10'}`}
-                   >
-                     {!notif.is_read && (
-                       <span className="absolute top-4 left-4 w-2 h-2 bg-gold rounded-full"></span>
-                     )}
-                     <div className="flex items-center gap-2 mb-1">
-                       <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0
-                         ${notif.type === 'payment_reminder' ? 'bg-red-50 text-red-500' : 
-                           notif.type === 'contract_signature' ? 'bg-gold text-white' : 'bg-gold/10 text-gold'}`}>
-                         {notif.type === 'payment_reminder' ? <Wallet size={14} /> : 
-                          notif.type === 'contract_signature' ? <PenTool size={14} /> : <Bell size={14} />}
+               {isLoading ? (
+                 <div className="flex justify-center py-10">
+                   <Loader2 className="animate-spin text-gold" size={32} />
+                 </div>
+               ) : invoices.length > 0 ? (
+                 invoices.map((inv) => (
+                   <div key={inv.id} className="bg-white dark:bg-[#12031a] p-4 rounded-[16px] border border-gold/20 shadow-sm group hover:border-gold/50 transition-all text-right">
+                     <div className="flex justify-between items-start mb-2">
+                       <div className="flex items-center gap-2">
+                         <Receipt className="text-gold" size={16} />
+                         <h3 className="text-[13px] font-bold text-brand dark:text-white">
+                           فاتورة رقم {inv.id}
+                         </h3>
                        </div>
-                       <h4 className="text-[12px] font-bold text-brand dark:text-white">{notif.title}</h4>
+                       <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${inv.status === 'paid' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>
+                         {inv.status === 'paid' ? 'مسددة' : 'في انتظار السداد'}
+                       </span>
                      </div>
-                     <p className="text-[11px] text-gray-600 dark:text-gray-300 leading-relaxed mb-2">
-                       {notif.message}
+                     <p className="text-[11px] text-muted mb-2">
+                       {inv.type === 'waive_request' ? 'طلب إعفاء من الالتزامات' : 
+                        inv.type === 'rescheduling_request' ? 'إعادة جدولة المنتجات التمويلية' : 
+                        inv.type === 'seized_amounts_request' ? 'إتاحة النسبة النظامية والمبالغ المستثناه' : 'طلب استشارة مالية'}
                      </p>
-
-                      {notif.type === 'contract_signature' && !notif.is_read && (
-                        <button 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            window.location.hash = `#/contract/${notif.submission_id}`;
-                            markAsRead(notif.id);
-                          }}
-                          className="w-full mt-2 py-2 bg-gold text-brand font-bold text-[11px] rounded-lg shadow-sm hover:bg-gold/90 transition-all flex items-center justify-center gap-2"
-                        >
-                          <PenTool size={12} />
-                          توقيع العقد الآن
-                        </button>
-                      )}
-
-                      {notif.type === 'invoice' && !notif.is_read && (
-                        <button 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            window.location.hash = `#/invoice/${notif.submission_id}`;
-                            markAsRead(notif.id);
-                          }}
-                          className="w-full mt-2 py-2 bg-gold text-brand font-bold text-[11px] rounded-lg shadow-sm hover:bg-gold/90 transition-all flex items-center justify-center gap-2"
-                        >
-                          <Receipt size={12} />
-                          عرض الفاتورة
-                        </button>
-                      )}
-
-                     <div className="text-[9px] text-muted flex items-center gap-1 justify-end mt-2">
-                       <Clock size={10} />
-                       {new Date(notif.created_at).toLocaleString('ar-SA')}
+                     <div className="flex justify-between items-center mb-3">
+                       <span className="text-[11px] text-muted">{new Date(inv.created_at).toLocaleDateString('ar-SA')}</span>
+                       <span className="text-sm font-black text-gold">{formatAmount(inv.amount)} ر.س</span>
                      </div>
+                     <button 
+                       onClick={() => window.location.hash = `#/invoice/${inv.submission_id}`}
+                       className="w-full py-2.5 bg-white text-brand font-bold text-[12px] rounded-xl shadow-sm hover:bg-gray-50 transition-all flex items-center justify-center gap-2 border border-gold/30"
+                     >
+                       <FileText size={14} />
+                       عرض الفاتورة
+                     </button>
                    </div>
                  ))
                ) : (
                  <div className="text-right py-10 text-muted flex flex-col items-start gap-3">
-                    <Bell size={40} className="opacity-20" />
-                    <p className="text-[12px]">لا توجد تنبيهات حالياً</p>
+                    <Receipt size={40} className="opacity-20" />
+                    <p className="text-[12px]">لا توجد فواتير حالياً</p>
                  </div>
                )}
              </div>
@@ -1368,309 +1305,51 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                             )}
                         </div>
 
-                    </div>
-                  </div>
-               </div>
-
-               {/* Location Info */}
-               <div className="bg-white dark:bg-[#12031a] rounded-[28px] border border-gold/20 p-6 shadow-sm relative overflow-hidden">
-                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold/30 to-transparent"></div>
-                  <h3 className="text-[15px] font-black text-gold flex items-center gap-3 mb-6">
-                      <div className="w-8 h-8 rounded-xl bg-gold/10 flex items-center justify-center text-gold border border-gold/20">
-                        <MapPin size={18} />
-                      </div>
-                      العنوان
-                  </h3>
-                  <div className="grid grid-cols-2 gap-4">
-                      {/* Region */}
-                      <div className="space-y-1.5">
-                          <label className="text-[10px] font-black text-muted px-1 uppercase tracking-wider">المنطقة / Region</label>
-                          {isEditing ? (
-                             <select 
-                                value={userData.region || ''} 
-                                onChange={(e) => setUserData({...userData, region: e.target.value, city: ''})}
-                                className="w-full p-3 rounded-[14px] border border-gray-100 dark:border-white/10 bg-gray-50 dark:bg-white/5 text-[12px] focus:border-gold outline-none dark:text-white"
-                             >
-                                <option value="">اختر المنطقة</option>
-                                {Object.keys(REGION_CITIES).map(r => <option key={r} value={r}>{r}</option>)}
-                             </select>
-                          ) : (
-                             <div className="text-[13px] font-bold text-brand dark:text-white p-3 bg-gray-50 dark:bg-white/5 rounded-[14px] border border-gray-50 dark:border-white/5">
-                                {userData.region || '---'}
-                             </div>
-                          )}
-                      </div>
-                      {/* City */}
-                      <div className="space-y-1.5">
-                          <label className="text-[10px] font-black text-muted px-1 uppercase tracking-wider">المدينة / City</label>
-                          {isEditing ? (
-                             <select 
-                                value={userData.city || ''} 
-                                onChange={(e) => setUserData({...userData, city: e.target.value})}
-                                className="w-full p-3 rounded-[14px] border border-gray-100 dark:border-white/10 bg-gray-50 dark:bg-white/5 text-[12px] focus:border-gold outline-none dark:text-white"
-                                disabled={!userData.region}
-                             >
-                                <option value="">اختر المدينة</option>
-                                {userData.region && REGION_CITIES[userData.region]?.map(c => <option key={c} value={c}>{c}</option>)}
-                             </select>
-                          ) : (
-                             <div className="text-[13px] font-bold text-brand dark:text-white p-3 bg-gray-50 dark:bg-white/5 rounded-[14px] border border-gray-50 dark:border-white/5">
-                                {userData.city || '---'}
-                             </div>
-                          )}
-                      </div>
-                  </div>
-               </div>
-
-               {/* Financial Info */}
-               <div className="bg-white dark:bg-[#12031a] rounded-[28px] border border-gold/20 p-6 shadow-sm relative overflow-hidden">
-                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold/30 to-transparent"></div>
-                  <h3 className="text-[15px] font-black text-gold flex items-center gap-3 mb-6">
-                      <div className="w-8 h-8 rounded-xl bg-gold/10 flex items-center justify-center text-gold border border-gold/20">
-                        <Building2 size={18} />
-                      </div>
-                      البيانات المالية والالتزام
-                  </h3>
-                  
-                  <div className="mb-6 space-y-1.5">
-                      <label className="text-[10px] font-black text-muted px-1 uppercase tracking-wider">الجهة المالية (البنك) / Financial Entity</label>
-                      {isEditing ? (
-                          <select 
-                             value={userData.bank || ''} 
-                             onChange={(e) => setUserData({...userData, bank: e.target.value})}
-                             className="w-full p-3 rounded-[14px] border border-gray-100 dark:border-white/10 bg-gray-50 dark:bg-white/5 text-[12px] focus:border-gold outline-none dark:text-white"
-                          >
-                             <option value="">اختر البنك</option>
-                             {BANKS.map(b => <option key={b} value={b}>{b}</option>)}
-                          </select>
-                      ) : (
-                          <div className="text-[13px] font-bold text-brand dark:text-white p-3 bg-gray-50 dark:bg-white/5 rounded-[14px] border border-gray-50 dark:border-white/5">
-                             {userData.bank || '---'}
-                          </div>
-                      )}
-                  </div>
-
-                  {/* Products List */}
-                  <div className="bg-gray-50 dark:bg-black/20 rounded-[20px] p-4 border border-gray-100 dark:border-white/5">
-                      <div className="flex justify-between items-center mb-4">
-                          <label className="text-[12px] font-black text-brand dark:text-gold flex items-center gap-2">
-                             <Wallet size={14} />
-                             الالتزامات القائمة
-                          </label>
-                          {isEditing && (
-                             <button type="button" onClick={addProduct} className="text-[10px] font-black text-brand bg-gold px-3 py-1.5 rounded-full hover:bg-gold/90 flex items-center gap-1.5 shadow-sm">
-                                <Plus size={12} /> إضافة التزام
-                             </button>
-                          )}
-                      </div>
-
-                      <div className="space-y-3">
-                         {(Array.isArray(userData.products) && userData.products.length > 0) ? userData.products.map((product, idx) => (
-                            <div key={product.id} className="flex gap-3 items-center bg-white dark:bg-white/5 p-3 rounded-[16px] shadow-sm border border-gray-50 dark:border-white/5 group">
-                                 <div className="flex-1">
-                                    {isEditing ? (
-                                        <div className="grid grid-cols-1 gap-2">
-                                            <select 
-                                                value={product.type}
-                                                onChange={(e) => updateProduct(product.id, 'type', e.target.value)}
-                                                className="w-full p-2 rounded-[10px] border border-gray-100 dark:border-white/10 bg-gray-50 dark:bg-white/5 text-[11px] focus:border-gold outline-none dark:text-white"
-                                            >
-                                                <option value="">نوع المنتج</option>
-                                                <option value="تمويل شخصي">تمويل شخصي</option>
-                                                <option value="تمويل عقاري">تمويل عقاري</option>
-                                                <option value="التمويل التأجيري">التمويل التأجيري</option>
-                                                <option value="بطاقة ائتمانية">بطاقة ائتمانية</option>
-                                            </select>
-                                            <input 
-                                                type="text"
-                                                placeholder="رقم الحساب"
-                                                inputMode="numeric"
-                                                value={product.accountNumber || ''}
-                                                onChange={(e) => updateProduct(product.id, 'accountNumber', e.target.value.replace(/\D/g, ''))}
-                                                className="w-full p-2 rounded-[10px] border border-gray-100 dark:border-white/10 bg-gray-50 dark:bg-white/5 text-[11px] focus:border-gold outline-none dark:text-white"
-                                            />
-                                        </div>
-                                    ) : (
-                                        <div className="space-y-0.5">
-                                            <div className="text-[12px] font-black text-brand dark:text-white">{product.type || 'غير محدد'}</div>
-                                            <div className="text-[10px] font-mono text-muted">A/C: {product.accountNumber || '---'}</div>
-                                        </div>
-                                    )}
-                                </div>
-                                <div className="w-28">
-                                    {isEditing ? (
-                                        <div className="relative">
-                                            <input 
-                                                type="text"
-                                                inputMode="numeric"
-                                                value={product.amount}
-                                                onChange={(e) => updateProduct(product.id, 'amount', e.target.value.replace(/\D/g, ''))}
-                                                className="w-full p-2 pr-7 rounded-[10px] border border-gray-100 dark:border-white/10 bg-gray-50 dark:bg-white/5 text-[11px] font-bold focus:border-gold outline-none dark:text-white text-left"
-                                                placeholder="المبلغ"
-                                            />
-                                            <span className="absolute left-2 top-1/2 -translate-y-1/2 text-[9px] text-muted font-bold">ر.س</span>
-                                        </div>
-                                    ) : (
-                                        <div className="text-[13px] font-black text-brand dark:text-gold text-left tabular-nums">
-                                            {formatAmount(product.amount)}
-                                            <span className="text-[9px] mr-1 text-muted">ر.س</span>
-                                        </div>
-                                    )}
-                                </div>
-                                {isEditing && (userData.products!.length > 1) && (
-                                    <button onClick={() => removeProduct(product.id)} className="text-red-400 hover:text-red-600 p-1.5 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors">
-                                        <Trash2 size={16} />
-                                    </button>
-                                )}
-                            </div>
-                         )) : (
-                            <div className="text-center text-[11px] text-muted py-4 bg-white/50 dark:bg-white/5 rounded-xl border border-dashed border-gray-200 dark:border-white/10">لا توجد التزامات مضافة</div>
-                         )}
-                      </div>
-                      
-                      {/* Total */}
-                      <div className="mt-5 pt-4 border-t border-gray-200 dark:border-white/10 flex justify-between items-center">
-                         <div className="flex flex-col">
-                            <span className="text-[10px] font-black text-muted uppercase tracking-wider">إجمالي المديونية / Total Debt</span>
-                            <span className="text-[11px] text-brand/60 dark:text-gold/60 font-bold">مجموع الالتزامات القائمة</span>
+                     {/* Region & City in Personal Info */}
+                     <div className="grid grid-cols-2 gap-3">
+                         <div>
+                             <label className="text-[10px] text-muted block mb-1.5">المنطقة</label>
+                             {isEditing ? (
+                                <select value={userData.region || ''} onChange={(e) => setUserData({...userData, region: e.target.value, city: ''})} className="w-full p-2 rounded-[10px] border border-gray-200 text-[12px] focus:border-gold outline-none bg-white dark:bg-white/5 dark:text-white">
+                                   <option value="">اختر المنطقة</option>
+                                   {Object.keys(REGION_CITIES).map(r => <option key={r} value={r}>{r}</option>)}
+                                </select>
+                             ) : (
+                                <div className="text-[13px] font-medium text-brand dark:text-white p-2 bg-gray-50 dark:bg-white/5 rounded-[10px] border border-gray-100 dark:border-white/5">{userData.region || '---'}</div>
+                             )}
                          </div>
-                         <div className="text-[18px] font-black text-brand dark:text-gold tabular-nums flex items-baseline gap-1">
-                            {formatAmount((Array.isArray(userData.products) ? userData.products : []).reduce((sum, p) => sum + (parseFloat(p.amount) || 0), 0))}
-                            <span className="text-[10px] font-bold text-muted">ر.س</span>
+                         <div>
+                             <label className="text-[10px] text-muted block mb-1.5">المدينة</label>
+                             {isEditing ? (
+                                <select value={userData.city || ''} onChange={(e) => setUserData({...userData, city: e.target.value})} className="w-full p-2 rounded-[10px] border border-gray-200 text-[12px] focus:border-gold outline-none bg-white dark:bg-white/5 dark:text-white" disabled={!userData.region}>
+                                   <option value="">اختر المدينة</option>
+                                   {userData.region && REGION_CITIES[userData.region]?.map(c => <option key={c} value={c}>{c}</option>)}
+                                </select>
+                             ) : (
+                                <div className="text-[13px] font-medium text-brand dark:text-white p-2 bg-gray-50 dark:bg-white/5 rounded-[10px] border border-gray-100 dark:border-white/5">{userData.city || '---'}</div>
+                             )}
                          </div>
-                      </div>
-                  </div>
-               </div>
+                     </div>
 
-               {/* Documents Section */}
-               <div className="bg-white dark:bg-[#12031a] rounded-[28px] border border-gold/20 p-6 shadow-sm relative overflow-hidden">
-                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold/30 to-transparent"></div>
-                  <div className="flex items-center justify-between mb-6">
-                     <h3 className="text-[15px] font-black text-gold flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-xl bg-gold/10 flex items-center justify-center text-gold border border-gold/20">
-                          <FolderOpen size={18} />
-                         </div>
-                         المستندات والوثائق
-                      </h3>
-                   </div>
-
-                   <div className="space-y-4">
-                      {/* Upload Form */}
-                      <div className="bg-gray-50 dark:bg-white/5 p-4 rounded-2xl border border-dashed border-gold/30">
-                         <p className="text-[11px] font-bold text-brand dark:text-gold mb-3">رفع مستند جديد:</p>
-                         <div className="flex flex-col gap-3">
-                            <select 
-                               value={selectedDocType}
-                               onChange={(e) => setSelectedDocType(e.target.value)}
-                               className="w-full p-2.5 rounded-xl border border-gray-100 dark:border-white/10 bg-white dark:bg-white/5 text-[11px] focus:border-gold outline-none dark:text-white"
-                            >
-                               <option value="">اختر نوع المستند</option>
-                               {DOCUMENT_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
+                     {/* Bank / Financial Entity */}
+                     <div>
+                         <label className="text-[10px] text-muted block mb-1.5">الجهة المالية</label>
+                         {isEditing ? (
+                            <select value={userData.bank || ''} onChange={(e) => setUserData({...userData, bank: e.target.value})} className="w-full p-2.5 rounded-[10px] border border-gray-200 text-[12px] bg-white dark:bg-white/5 focus:border-gold outline-none dark:text-white">
+                               <option value="">اختر البنك أو الجهة التمويلية</option>
+                               {BANKS.map(b => <option key={b} value={b}>{b}</option>)}
                             </select>
-                            
-                            <div className="flex gap-2">
-                               <input 
-                                 type="file" 
-                                 ref={fileInputRef}
-                                 onChange={handleFileChange}
-                                 className="hidden"
-                                 accept=".pdf,.jpg,.jpeg,.png"
-                               />
-                               <button 
-                                 onClick={() => fileInputRef.current?.click()}
-                                 disabled={!selectedDocType || isUploading}
-                                 className={`flex-1 py-2.5 rounded-xl text-[11px] font-bold flex items-center justify-center gap-2 transition-all
-                                   ${!selectedDocType || isUploading ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-brand text-gold hover:bg-brand/90'}`}
-                               >
-                                 {isUploading ? <Loader2 size={14} className="animate-spin" /> : <Upload size={14} />}
-                                 {isUploading ? 'جاري الرفع...' : 'اختيار ورفع الملف'}
-                               </button>
-                            </div>
-                         </div>
-                      </div>
-
-                      {/* Documents List */}
-                      <div className="space-y-2">
-                         {userData.documents && userData.documents.length > 0 ? (
-                            userData.documents.map((doc) => (
-                               <div key={doc.id} className="flex items-center justify-between p-3 bg-white dark:bg-white/5 rounded-xl border border-gray-50 dark:border-white/5 group">
-                                  <div className="flex items-center gap-3">
-                                     <div className="w-8 h-8 rounded-lg bg-gold/10 flex items-center justify-center text-gold">
-                                        <Paperclip size={14} />
-                                     </div>
-                                     <div className="text-right">
-                                        <div className="text-[11px] font-bold text-brand dark:text-white">{doc.type}</div>
-                                        <div className="text-[9px] text-muted">{doc.fileName} • {doc.date}</div>
-                                     </div>
-                                  </div>
-                                  <div className="flex items-center gap-2">
-                                     {doc.filePath && (
-                                       <a 
-                                         href={doc.filePath} 
-                                         target="_blank" 
-                                         rel="noopener noreferrer"
-                                         className="p-1.5 text-gold hover:bg-gold/10 rounded-lg transition-colors"
-                                         title="عرض المستند"
-                                       >
-                                         <FolderOpen size={14} />
-                                       </a>
-                                     )}
-                                     <button 
-                                       onClick={() => removeDocument(doc.id)}
-                                       className="p-1.5 text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
-                                     >
-                                        <Trash2 size={14} />
-                                     </button>
-                                  </div>
-                               </div>
-                            ))
                          ) : (
-                            <div className="text-center py-6 text-[11px] text-muted border border-dashed border-gray-100 dark:border-white/10 rounded-xl">
-                               لا توجد مستندات مرفوعة حالياً
-                            </div>
+                            <div className="text-[13px] font-medium text-brand dark:text-white p-2 bg-gray-50 dark:bg-white/5 rounded-[10px] border border-gray-100 dark:border-white/5">{userData.bank || '---'}</div>
                          )}
-                      </div>
+                     </div>
+
+                     </div>
                    </div>
                 </div>
 
-               {/* My Invoices Section */}
-               <div className="bg-white dark:bg-[#12031a] rounded-[28px] border border-gold/20 p-6 shadow-sm relative overflow-hidden">
-                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold/30 to-transparent"></div>
-                  <div className="flex items-center justify-between mb-6">
-                     <h3 className="text-[15px] font-black text-gold flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-xl bg-gold/10 flex items-center justify-center text-gold border border-gold/20">
-                          <Receipt size={18} />
-                         </div>
-                         فواتيري
-                      </h3>
-                   </div>
-                   <div className="space-y-3">
-                     {invoices.length > 0 ? (
-                       invoices.map((inv) => (
-                         <div key={inv.id} className="flex items-center justify-between p-3 bg-white dark:bg-white/5 rounded-xl border border-gray-50 dark:border-white/5 group hover:border-gold/30 transition-all">
-                           <div className="flex items-center gap-3">
-                             <div className="w-8 h-8 rounded-lg bg-gold/10 flex items-center justify-center text-gold">
-                               <Receipt size={14} />
-                             </div>
-                             <div className="text-right">
-                               <div className="text-[11px] font-bold text-brand dark:text-white">فاتورة رقم {inv.id}</div>
-                               <div className="text-[9px] text-muted">
-                                 {inv.type === 'waive_request' ? 'طلب إعفاء' : 
-                                  inv.type === 'rescheduling_request' ? 'إعادة جدولة' : 
-                                  inv.type === 'seized_amounts_request' ? 'إتاحة النسبة النظامية' : 'طلب استشارة'}
-                                 {' • '}{new Date(inv.created_at).toLocaleDateString('ar-SA')}
-                               </div>
-                             </div>
-                           </div>
-                           <div className="flex items-center gap-3">
-                             <div className="text-left">
-                               <div className="text-[12px] font-black text-gold">{formatAmount(inv.amount)} ر.س</div>
-                               <span className={`text-[9px] font-bold ${inv.status === 'paid' ? 'text-green-600' : 'text-amber-600'}`}>
-                                 {inv.status === 'paid' ? 'مسددة' : 'في انتظار السداد'}
-                               </span>
-                             </div>
-                             <button 
-                               onClick={() => window.location.hash = `#/invoice/${inv.submission_id}`}
+
+
                                className="p-1.5 text-gold hover:bg-gold/10 rounded-lg transition-colors"
                                title="عرض الفاتورة"
                              >
