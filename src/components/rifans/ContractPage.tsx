@@ -229,19 +229,31 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
           </button>
           <div className="w-px h-6 bg-gray-100 mx-1 hidden sm:block" />
           <button 
-            onClick={() => window.print()}
-            className="p-2 text-muted hover:text-brand hover:bg-gray-50 rounded-lg transition-all print:hidden" 
+            onClick={async () => {
+              if (!contractRef.current || isPdfLoading) return;
+              setIsPdfLoading(true);
+              try { await printContractPdf(contractRef.current); } catch (e) { console.error(e); }
+              setIsPdfLoading(false);
+            }}
+            disabled={isPdfLoading}
+            className="p-2 text-muted hover:text-brand hover:bg-gray-50 rounded-lg transition-all print:hidden disabled:opacity-50" 
             title="طباعة"
           >
-            <Printer size={18} />
+            {isPdfLoading ? <Loader2 size={18} className="animate-spin" /> : <Printer size={18} />}
           </button>
           <div className="w-px h-6 bg-gray-100 mx-1 hidden sm:block" />
           <button 
-            onClick={() => window.print()}
-            className="p-2 text-muted hover:text-brand hover:bg-gray-50 rounded-lg transition-all print:hidden" 
+            onClick={async () => {
+              if (!contractRef.current || isPdfLoading) return;
+              setIsPdfLoading(true);
+              try { await downloadContractPdf(contractRef.current, `عقد-${submissionId}.pdf`); } catch (e) { console.error(e); }
+              setIsPdfLoading(false);
+            }}
+            disabled={isPdfLoading}
+            className="p-2 text-muted hover:text-brand hover:bg-gray-50 rounded-lg transition-all print:hidden disabled:opacity-50" 
             title="تحميل بصيغة PDF"
           >
-            <Download size={18} />
+            {isPdfLoading ? <Loader2 size={18} className="animate-spin" /> : <Download size={18} />}
           </button>
           <div className="w-px h-6 bg-gray-100 mx-1 hidden sm:block" />
           <button 
