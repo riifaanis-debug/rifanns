@@ -145,7 +145,7 @@ const Header: React.FC = () => {
 
                   {/* Notifications Dropdown */}
                   {showNotifications && (
-                    <div className="absolute top-12 left-0 md:left-auto md:right-0 w-[320px] max-h-[400px] bg-white dark:bg-[#12031a] rounded-2xl shadow-2xl border border-gold/20 z-[100] animate-in fade-in slide-in-from-top-2 duration-200 overflow-hidden">
+                    <div className="absolute top-12 right-0 w-[min(320px,calc(100vw-2rem))] max-h-[400px] bg-white dark:bg-[#12031a] rounded-2xl shadow-2xl border border-gold/20 z-[100] animate-in fade-in slide-in-from-top-2 duration-200 overflow-hidden">
                       <div className="flex items-center justify-between p-3 border-b border-gold/10">
                         <h3 className="text-[13px] font-bold text-brand dark:text-gold">التنبيهات</h3>
                         <button onClick={() => setShowNotifications(false)} className="w-6 h-6 rounded-full bg-gray-100 dark:bg-white/10 flex items-center justify-center">
