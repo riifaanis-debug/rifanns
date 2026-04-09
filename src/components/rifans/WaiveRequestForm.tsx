@@ -791,7 +791,8 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                            required
                            value={product.amount}
                            onChange={(e) => updateProduct(product.id, 'amount', e.target.value.replace(/\D/g, ''))}
-                           className="w-full p-2 rounded-[10px] border border-gold/20 text-[12px]" 
+                           disabled={isViewOnly}
+                           className="w-full p-2 rounded-[10px] border border-gold/20 text-[12px] disabled:bg-gray-50 disabled:cursor-not-allowed"
                            placeholder="0.00"
                          />
                        </div>
