@@ -716,12 +716,13 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                       </div>
                       <div>
                         <label className="block text-[10px] font-bold text-muted mb-1">تاريخ إيداع المبلغ في الحساب</label>
-                        <input 
+                         <input 
                           type="date"
                           name={`productDate_${idx}`}
                           value={product.depositDate || ''}
                           onChange={(e) => updateProduct(product.id, 'depositDate' as any, e.target.value)}
-                          className="w-full p-2 rounded-[10px] border border-gold/20 text-[12px]" 
+                          disabled={isViewOnly}
+                          className="w-full p-2 rounded-[10px] border border-gold/20 text-[12px] disabled:bg-gray-50 disabled:cursor-not-allowed" 
                         />
                       </div>
                     </div>
