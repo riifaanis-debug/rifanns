@@ -622,7 +622,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
              </div>
              <div>
                 <label className="block text-[11px] font-bold text-brand mb-1">الحالة الوظيفية <span className="text-red-500">*</span></label>
-                <select name="jobStatus" required value={formData.jobStatus} onChange={(e) => setFormData({...formData, jobStatus: e.target.value})} className="w-full p-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none bg-white">
+                <select name="jobStatus" required value={formData.jobStatus} onChange={(e) => setFormData({...formData, jobStatus: e.target.value})} disabled={isViewOnly} className="w-full p-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none bg-white disabled:bg-gray-50 disabled:cursor-not-allowed">
                   <option value="">اختر الحالة</option>
                   <option value="موظف حكومي">موظف حكومي</option>
                   <option value="موظف قطاع خاص">موظف قطاع خاص</option>
