@@ -991,7 +991,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                  <button 
                    type="button" 
                    onClick={onClose} 
-                   className="flex-1 min-w-[80px] px-3 py-3 rounded-full border border-gold/30 text-brand font-bold text-[12px] hover:bg-gray-50 transition-colors"
+                   className="flex-1 min-w-[70px] px-2 py-1.5 rounded-full border border-gold/30 text-brand font-bold text-[11px] hover:bg-gray-50 transition-colors"
                  >
                    إلغاء
                  </button>
@@ -1032,7 +1032,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                         setStatusMessage('حدث خطأ أثناء حفظ المسودة.');
                       }
                     }}
-                   className="flex-1 min-w-[120px] px-3 py-3 rounded-full border-2 border-gold text-gold font-bold text-[12px] hover:bg-gold/10 transition-colors"
+                   className="flex-1 min-w-[100px] px-2 py-1.5 rounded-full border-2 border-gold text-gold font-bold text-[11px] hover:bg-gold/10 transition-colors"
                  >
                    الحفظ والاستكمال لاحقاً
                  </button>
@@ -1044,7 +1044,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                      handleSubmit();
                    }} 
                    disabled={isSubmitting} 
-                   className="flex-[2] min-w-[140px] bg-gold-gradient text-brand font-bold py-3 rounded-full shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed text-[13px] transition-all active:scale-95 pointer-events-auto cursor-pointer"
+                   className="flex-[2] min-w-[120px] bg-gold-gradient text-brand font-bold py-1.5 rounded-full shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed text-[11px] transition-all active:scale-95 pointer-events-auto cursor-pointer"
                  >
                    {isSubmitting ? 'جاري الإرسال...' : 'إرسال الطلب'}
                  </button>
