@@ -181,7 +181,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
       const hash = window.location.hash;
       if (hash.includes('tab=contracts')) setActiveTab('contracts');
       else if (hash.includes('tab=requests')) setActiveTab('requests');
-      else if (hash.includes('tab=notifications')) setActiveTab('notifications');
+      else if (hash.includes('tab=invoices')) setActiveTab('invoices');
     };
     window.addEventListener('hashchange', handleHashChange);
 
