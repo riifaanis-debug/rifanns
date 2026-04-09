@@ -295,7 +295,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
           </div>
 
           {/* Contract Body */}
-          <div className="space-y-4 text-right dir-rtl relative text-[10.5px] leading-[1.6] text-[#22042C]">
+          <div className="space-y-4 text-right dir-rtl relative text-[10.5px] leading-[1.6] text-[#22042C]" style={{ direction: 'rtl' }}>
             
             {/* Parties Section */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 border border-gray-200 rounded-lg p-3 bg-gray-50/30">
