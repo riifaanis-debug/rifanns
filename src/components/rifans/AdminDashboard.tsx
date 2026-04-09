@@ -22,7 +22,7 @@ interface AdminDashboardProps {
   onClose: () => void;
 }
 
-type DashboardTab = 'home' | 'stats' | 'clients' | 'waive_requests' | 'rescheduling_requests' | 'service_requests' | 'contracts' | 'invoices' | 'notifications';
+type DashboardTab = 'home' | 'stats' | 'clients' | 'waive_requests' | 'rescheduling_requests' | 'service_requests' | 'contracts' | 'invoices' | 'notifications' | 'document_request';
 
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
   const { user: authUser } = useAuth();
