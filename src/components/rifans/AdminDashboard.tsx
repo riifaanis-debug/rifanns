@@ -409,18 +409,58 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
   const renderDocumentRequest = () => {
     const selectedClient = clientsWithActivity.find(c => c.id === docSelectedClient);
     
-    const handleDownloadDoc = () => {
-      alert('سيتم تحميل المستند بصيغة PDF');
+    // Find documents for selected client
+    const clientContracts = contracts.filter(c => c.user_id === docSelectedClient);
+    const clientInvoices = adminInvoices.filter(inv => inv.user_id === docSelectedClient);
+    const clientSubmissions = submissions.filter(s => (s.userId || s.user_id) === docSelectedClient);
+
+    const getDocuments = () => {
+      switch (docType) {
+        case 'contract': return clientContracts.map(c => ({ id: c.submission_id, label: `عقد - ${c.signed_at ? 'موقّع' : 'غير موقّع'}`, date: c.created_at, signed: !!c.signed_at, type: 'contract' as const }));
+        case 'invoice': return clientInvoices.map(inv => ({ id: inv.submission_id, label: `فاتورة - ${inv.status === 'paid' ? 'مدفوعة' : 'معلقة'}`, date: inv.created_at, signed: false, type: 'invoice' as const }));
+        case 'receipt': return clientSubmissions.map(s => ({ id: s.id, label: `إفادة استلام - ${s.type === 'waive_request' ? 'إعفاء' : s.type === 'rescheduling_request' ? 'جدولة' : 'خدمة'}`, date: s.created_at, signed: false, type: 'receipt' as const }));
+        case 'authorization': return clientSubmissions.map(s => ({ id: s.id, label: `إقرار وتفويض - ${s.type === 'waive_request' ? 'إعفاء' : s.type === 'rescheduling_request' ? 'جدولة' : 'خدمة'}`, date: s.created_at, signed: false, type: 'authorization' as const }));
+        default: return [];
+      }
     };
-    const handlePrintDoc = () => {
-      window.print();
+
+    const docs = docType ? getDocuments() : [];
+
+    const handleOpenDoc = (docId: string, docTypeVal: string) => {
+      if (docTypeVal === 'contract') {
+        window.open(`#/contract/${docId}`, '_blank');
+      } else if (docTypeVal === 'invoice') {
+        window.open(`#/invoice/${docId}`, '_blank');
+      } else {
+        // For receipt/authorization, open the submission
+        alert('سيتم فتح المستند');
+      }
     };
-    const handleSendEmail = () => {
+
+    const handleDownloadDoc = (docId: string, docTypeVal: string) => {
+      if (docTypeVal === 'contract') {
+        window.open(`#/contract/${docId}`, '_blank');
+      } else if (docTypeVal === 'invoice') {
+        window.open(`#/invoice/${docId}`, '_blank');
+      }
+    };
+
+    const handlePrintDoc = (docId: string, docTypeVal: string) => {
+      if (docTypeVal === 'contract') {
+        const w = window.open(`#/contract/${docId}`, '_blank');
+        if (w) setTimeout(() => w.print(), 2000);
+      } else if (docTypeVal === 'invoice') {
+        const w = window.open(`#/invoice/${docId}`, '_blank');
+        if (w) setTimeout(() => w.print(), 2000);
+      }
+    };
+
+    const handleSendEmail = async (docId: string, docTypeVal: string) => {
       if (!docEmailAddress) {
         alert('يرجى إدخال عنوان البريد الإلكتروني');
         return;
       }
-      alert(`سيتم إرسال المستند بصيغة PDF إلى: ${docEmailAddress}`);
+      alert(`سيتم إرسال المستند إلى: ${docEmailAddress}\nنوع المستند: ${docTypeVal}\nرقم المستند: ${docId}`);
     };
 
     return (
@@ -464,7 +504,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
             </div>
           )}
 
-          {/* Step 3: Actions */}
+          {/* Step 3: Documents List & Actions */}
           {docSelectedClient && docType && (
             <div className="animate-in fade-in duration-300 space-y-4">
               <div className="p-4 bg-gray-50 dark:bg-white/5 rounded-2xl border border-gold/10">
@@ -472,75 +512,91 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                 <p className="text-xs text-muted">المستند: <span className="font-bold text-brand dark:text-white">
                   {docType === 'receipt' ? 'إفادة باستلام الطلب' : docType === 'contract' ? 'عقد العميل' : docType === 'authorization' ? 'إقرار وتفويض العميل' : 'فاتورة العميل'}
                 </span></p>
+                <p className="text-xs text-muted mt-1">عدد المستندات: <span className="font-bold text-brand dark:text-white">{docs.length}</span></p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <button
-                  onClick={handleDownloadDoc}
-                  className="flex items-center justify-center gap-2 p-3 rounded-xl bg-brand text-gold font-bold text-xs hover:bg-brand/90 transition-all shadow-md"
-                >
-                  <Download size={16} />
-                  تحميل المستند
-                </button>
-                <button
-                  onClick={handlePrintDoc}
-                  className="flex items-center justify-center gap-2 p-3 rounded-xl bg-white dark:bg-[#12031a] text-brand dark:text-white font-bold text-xs border border-gold/30 hover:bg-gold/5 transition-all"
-                >
-                  <Printer size={16} />
-                  طباعة المستند
-                </button>
-                <button
-                  onClick={() => setDocShowEmailField(!docShowEmailField)}
-                  className={`flex items-center justify-center gap-2 p-3 rounded-xl font-bold text-xs transition-all ${docShowEmailField ? 'bg-gold text-brand shadow-lg' : 'bg-white dark:bg-[#12031a] text-brand dark:text-white border border-gold/30 hover:bg-gold/5'}`}
-                >
-                  <Mail size={16} />
-                  إرسال عبر البريد
-                </button>
-              </div>
+              {docs.length === 0 ? (
+                <div className="text-center py-6 text-sm text-muted">
+                  <AlertCircle size={24} className="mx-auto mb-2 text-gold/50" />
+                  لا يوجد مستندات من هذا النوع لهذا العميل
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {docs.map((doc, idx) => (
+                    <div key={idx} className="p-3 bg-white dark:bg-[#12031a] rounded-xl border border-gold/20 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] text-muted">{new Date(doc.date).toLocaleDateString('ar-SA')}</span>
+                        <span className="text-[12px] font-bold text-brand dark:text-white">{doc.label}</span>
+                      </div>
+                      <div className="grid grid-cols-3 gap-2">
+                        <button
+                          onClick={() => handleDownloadDoc(doc.id, doc.type)}
+                          className="flex items-center justify-center gap-1 p-2 rounded-lg bg-brand text-gold font-bold text-[10px] hover:bg-brand/90 transition-all"
+                        >
+                          <Download size={13} />
+                          تحميل
+                        </button>
+                        <button
+                          onClick={() => handlePrintDoc(doc.id, doc.type)}
+                          className="flex items-center justify-center gap-1 p-2 rounded-lg bg-white dark:bg-[#06010a] text-brand dark:text-white font-bold text-[10px] border border-gold/30 hover:bg-gold/5 transition-all"
+                        >
+                          <Printer size={13} />
+                          طباعة
+                        </button>
+                        <button
+                          onClick={() => { setDocShowEmailField(!docShowEmailField); }}
+                          className={`flex items-center justify-center gap-1 p-2 rounded-lg font-bold text-[10px] transition-all ${docShowEmailField ? 'bg-gold text-brand' : 'bg-white dark:bg-[#06010a] text-brand dark:text-white border border-gold/30 hover:bg-gold/5'}`}
+                        >
+                          <Mail size={13} />
+                          إرسال
+                        </button>
+                      </div>
 
-              {/* Email Options */}
-              {docShowEmailField && (
-                <div className="animate-in fade-in duration-300 space-y-4 p-4 bg-gold/5 rounded-2xl border border-gold/20">
-                  <div>
-                    <label className="block text-[12px] font-bold text-brand dark:text-white mb-2">إرسال إلى</label>
-                    <div className="flex gap-3">
-                      <button
-                        type="button"
-                        onClick={() => { setDocEmailTarget('admin'); setDocEmailAddress(''); }}
-                        className={`flex-1 p-2.5 rounded-xl text-xs font-bold border transition-all ${docEmailTarget === 'admin' ? 'bg-brand text-gold border-brand shadow-md' : 'bg-white dark:bg-[#12031a] text-brand dark:text-white border-gold/30 hover:bg-gold/5'}`}
-                      >
-                        بريد الإدارة
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => { setDocEmailTarget('client'); setDocEmailAddress(selectedClient?.email || ''); }}
-                        className={`flex-1 p-2.5 rounded-xl text-xs font-bold border transition-all ${docEmailTarget === 'client' ? 'bg-brand text-gold border-brand shadow-md' : 'bg-white dark:bg-[#12031a] text-brand dark:text-white border-gold/30 hover:bg-gold/5'}`}
-                      >
-                        بريد العميل
-                      </button>
+                      {/* Email Options */}
+                      {docShowEmailField && (
+                        <div className="animate-in fade-in duration-300 space-y-3 p-3 bg-gold/5 rounded-xl border border-gold/20">
+                          <div>
+                            <label className="block text-[11px] font-bold text-brand dark:text-white mb-1.5">إرسال إلى</label>
+                            <div className="flex gap-2">
+                              <button
+                                type="button"
+                                onClick={() => { setDocEmailTarget('admin'); setDocEmailAddress(''); }}
+                                className={`flex-1 p-2 rounded-lg text-[10px] font-bold border transition-all ${docEmailTarget === 'admin' ? 'bg-brand text-gold border-brand' : 'bg-white dark:bg-[#06010a] text-brand dark:text-white border-gold/30'}`}
+                              >
+                                بريد الإدارة
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => { setDocEmailTarget('client'); setDocEmailAddress(selectedClient?.email || ''); }}
+                                className={`flex-1 p-2 rounded-lg text-[10px] font-bold border transition-all ${docEmailTarget === 'client' ? 'bg-brand text-gold border-brand' : 'bg-white dark:bg-[#06010a] text-brand dark:text-white border-gold/30'}`}
+                              >
+                                بريد العميل
+                              </button>
+                            </div>
+                          </div>
+                          {docEmailTarget && (
+                            <div className="animate-in fade-in duration-200">
+                              <input
+                                type="email"
+                                value={docEmailAddress}
+                                onChange={(e) => setDocEmailAddress(e.target.value)}
+                                placeholder="example@email.com"
+                                className="w-full p-2 rounded-lg border border-gold/30 text-[12px] focus:border-gold outline-none bg-white dark:bg-[#06010a] dark:text-white text-left"
+                                dir="ltr"
+                              />
+                              <button
+                                onClick={() => handleSendEmail(doc.id, doc.type)}
+                                className="mt-2 w-full flex items-center justify-center gap-1.5 p-2 rounded-lg bg-gold text-brand font-bold text-[11px] hover:bg-gold/90 transition-all"
+                              >
+                                <Mail size={14} />
+                                إرسال المستند
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
-                  </div>
-
-                  {docEmailTarget && (
-                    <div className="animate-in fade-in duration-200">
-                      <label className="block text-[12px] font-bold text-brand dark:text-white mb-2">عنوان البريد الإلكتروني</label>
-                      <input
-                        type="email"
-                        value={docEmailAddress}
-                        onChange={(e) => setDocEmailAddress(e.target.value)}
-                        placeholder="example@email.com"
-                        className="w-full p-2.5 rounded-[12px] border border-gold/30 text-[13px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none bg-white dark:bg-[#06010a] dark:text-white text-left"
-                        dir="ltr"
-                      />
-                      <button
-                        onClick={handleSendEmail}
-                        className="mt-3 w-full flex items-center justify-center gap-2 p-3 rounded-xl bg-gold text-brand font-bold text-xs shadow-lg hover:bg-gold/90 transition-all"
-                      >
-                        <Mail size={16} />
-                        إرسال المستند بصيغة PDF
-                      </button>
-                    </div>
-                  )}
+                  ))}
                 </div>
               )}
             </div>
