@@ -67,9 +67,6 @@ const ClientReviews: React.FC = () => {
 
     return () => {
       cancelAnimationFrame(animationRef.current);
-      el.removeEventListener('pointerdown', pause);
-      el.removeEventListener('pointerup', resume);
-      el.removeEventListener('pointerleave', resume);
     };
   }, [reviews]);
 
