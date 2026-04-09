@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Menu, User, Sun, Moon } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Menu, User, Sun, Moon, Bell, X } from 'lucide-react';
 import SideMenu from './SideMenu';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { useAuth } from '../../contexts/AuthContext';
 import Logo from './Logo';
-import { getMyNotifications } from '../../lib/api';
+import { getMyNotifications, markAllNotificationsRead } from '../../lib/api';
 
 const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -13,6 +13,9 @@ const Header: React.FC = () => {
   const { t, toggleLanguage, language } = useLanguage();
   const [isDark, setIsDark] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [notifications, setNotifications] = useState<any[]>([]);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const notifRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
@@ -25,8 +28,8 @@ const Header: React.FC = () => {
     }
 
     if (user && token) {
-      fetchUnreadCount();
-      const interval = setInterval(fetchUnreadCount, 120000);
+      fetchNotifications();
+      const interval = setInterval(fetchNotifications, 120000);
       return () => {
         window.removeEventListener('scroll', handleScroll);
         clearInterval(interval);
@@ -36,13 +39,37 @@ const Header: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [user, token]);
 
-  const fetchUnreadCount = async () => {
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (notifRef.current && !notifRef.current.contains(e.target as Node)) {
+        setShowNotifications(false);
+      }
+    };
+    if (showNotifications) document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showNotifications]);
+
+  const fetchNotifications = async () => {
     try {
       const data = await getMyNotifications();
+      setNotifications(data);
       const unread = data.filter((n: any) => !n.is_read).length;
       setUnreadCount(unread);
     } catch (err) {
       console.error(err);
+    }
+  };
+
+  const handleToggleNotifications = async () => {
+    if (!showNotifications) {
+      await fetchNotifications();
+    }
+    setShowNotifications(!showNotifications);
+    if (!showNotifications && unreadCount > 0) {
+      await markAllNotificationsRead();
+      setUnreadCount(0);
+      setNotifications(prev => prev.map(n => ({ ...n, is_read: true })));
     }
   };
 
@@ -63,6 +90,17 @@ const Header: React.FC = () => {
     setIsDark(nextTheme);
     document.documentElement.classList.toggle('dark');
     localStorage.setItem('theme', nextTheme ? 'dark' : 'light');
+  };
+
+  const getTimeAgo = (dateStr: string) => {
+    const diff = Date.now() - new Date(dateStr).getTime();
+    const mins = Math.floor(diff / 60000);
+    if (mins < 1) return 'الآن';
+    if (mins < 60) return `منذ ${mins} دقيقة`;
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) return `منذ ${hours} ساعة`;
+    const days = Math.floor(hours / 24);
+    return `منذ ${days} يوم`;
   };
 
   return (
@@ -89,10 +127,58 @@ const Header: React.FC = () => {
                 >
                   <span className="hidden md:block text-[10px] font-bold">{user.fullName || user.name || 'حسابي'}</span>
                   <User size={16} className="group-hover:rotate-12 transition-transform" />
-                  {unreadCount > 0 && (
-                    <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white dark:border-brand animate-pulse"></span>
-                  )}
                 </button>
+                {/* Notification Bell */}
+                <div className="relative" ref={notifRef}>
+                  <button 
+                    onClick={handleToggleNotifications}
+                    className={`w-9 h-9 rounded-full flex items-center justify-center transition-all relative
+                      ${isScrolled ? 'bg-brand/10 text-brand dark:text-gold hover:bg-brand/20' : 'bg-white/10 text-white hover:bg-white/20'}`}
+                  >
+                    <Bell size={18} />
+                    {unreadCount > 0 && (
+                      <span className="absolute -top-1 -right-1 min-w-[16px] h-[16px] rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center px-0.5 animate-pulse">
+                        {unreadCount > 99 ? '99+' : unreadCount}
+                      </span>
+                    )}
+                  </button>
+
+                  {/* Notifications Dropdown */}
+                  {showNotifications && (
+                    <div className="absolute top-12 left-0 md:left-auto md:right-0 w-[320px] max-h-[400px] bg-white dark:bg-[#12031a] rounded-2xl shadow-2xl border border-gold/20 z-[100] animate-in fade-in slide-in-from-top-2 duration-200 overflow-hidden">
+                      <div className="flex items-center justify-between p-3 border-b border-gold/10">
+                        <h3 className="text-[13px] font-bold text-brand dark:text-gold">التنبيهات</h3>
+                        <button onClick={() => setShowNotifications(false)} className="w-6 h-6 rounded-full bg-gray-100 dark:bg-white/10 flex items-center justify-center">
+                          <X size={12} />
+                        </button>
+                      </div>
+                      <div className="overflow-y-auto max-h-[340px] custom-scrollbar">
+                        {notifications.length > 0 ? (
+                          notifications.slice(0, 20).map((n) => (
+                            <div 
+                              key={n.id} 
+                              className={`p-3 border-b border-gray-50 dark:border-white/5 text-right transition-colors hover:bg-gray-50 dark:hover:bg-white/5 ${!n.is_read ? 'bg-gold/5' : ''}`}
+                            >
+                              <div className="flex items-start gap-2">
+                                <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${!n.is_read ? 'bg-gold' : 'bg-gray-300 dark:bg-white/20'}`}></div>
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-[12px] font-bold text-brand dark:text-white truncate">{n.title}</p>
+                                  <p className="text-[11px] text-muted leading-relaxed mt-0.5 line-clamp-2">{n.message}</p>
+                                  <p className="text-[9px] text-muted/60 mt-1">{getTimeAgo(n.created_at)}</p>
+                                </div>
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="p-6 text-center text-muted">
+                            <Bell size={24} className="mx-auto mb-2 opacity-20" />
+                            <p className="text-[11px]">لا توجد تنبيهات</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             ) : (
               <button 
