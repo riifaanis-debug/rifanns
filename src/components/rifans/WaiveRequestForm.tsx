@@ -537,8 +537,8 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
         <div className="w-10"></div> {/* Spacer to keep title centered */}
       </div>
 
-      <div className="max-w-[980px] mx-auto px-4 py-6 pb-12">
-        <form onSubmit={handleSubmit} noValidate className="bg-white rounded-[16px] border border-gold/45 shadow-[0_18px_45px_rgba(0,0,0,0.06)] p-5 sm:p-8">
+      <div className="max-w-[980px] mx-auto px-1.5 py-3 pb-8">
+        <form onSubmit={handleSubmit} noValidate className="bg-white rounded-[12px] border border-gold/45 shadow-[0_18px_45px_rgba(0,0,0,0.06)] p-3 sm:p-6">
           
           <div className="mb-6 border-b border-gray-100 pb-4">
              <div className="flex justify-between items-center mb-2">
