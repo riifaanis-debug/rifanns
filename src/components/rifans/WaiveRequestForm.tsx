@@ -1014,27 +1014,46 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                  </button>
                </div>
              ) : (
-              <div className="flex gap-3">
-                <button 
-                  type="button" 
-                  onClick={onClose} 
-                  className="flex-1 px-4 py-3 rounded-full border border-gold/30 text-brand font-bold text-[13px] hover:bg-gray-50 transition-colors"
-                >
-                  إلغاء
-                </button>
-                <button 
-                  type="button" 
-                  onClick={() => {
-                    console.log("Submit button clicked");
-                    setStatusMessage('تم استلام الضغطة، جاري التحقق...');
-                    handleSubmit();
-                  }} 
-                  disabled={isSubmitting} 
-                  className="flex-[2] bg-gold-gradient text-brand font-bold py-3 rounded-full shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed text-[14px] transition-all active:scale-95 pointer-events-auto cursor-pointer"
-                >
-                  {isSubmitting ? 'جاري الإرسال...' : 'إرسال الطلب'}
-                </button>
-              </div>
+               <div className="flex gap-2 flex-wrap">
+                 <button 
+                   type="button" 
+                   onClick={onClose} 
+                   className="flex-1 min-w-[80px] px-3 py-3 rounded-full border border-gold/30 text-brand font-bold text-[12px] hover:bg-gray-50 transition-colors"
+                 >
+                   إلغاء
+                 </button>
+                 <button 
+                   type="button" 
+                   onClick={() => {
+                     // Save draft to localStorage
+                     const draft = {
+                       formData,
+                       region,
+                       products,
+                       documents: documents.map(d => ({ ...d, file: null })),
+                       requestId,
+                     };
+                     localStorage.setItem(`draft_request_${user?.id}`, JSON.stringify(draft));
+                     setStatusMessage('تم حفظ الطلب بنجاح. يمكنك استكماله لاحقاً.');
+                     setTimeout(() => onClose(), 1500);
+                   }}
+                   className="flex-1 min-w-[120px] px-3 py-3 rounded-full border-2 border-gold text-gold font-bold text-[12px] hover:bg-gold/10 transition-colors"
+                 >
+                   الحفظ والاستكمال لاحقاً
+                 </button>
+                 <button 
+                   type="button" 
+                   onClick={() => {
+                     console.log("Submit button clicked");
+                     setStatusMessage('تم استلام الضغطة، جاري التحقق...');
+                     handleSubmit();
+                   }} 
+                   disabled={isSubmitting} 
+                   className="flex-[2] min-w-[140px] bg-gold-gradient text-brand font-bold py-3 rounded-full shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed text-[13px] transition-all active:scale-95 pointer-events-auto cursor-pointer"
+                 >
+                   {isSubmitting ? 'جاري الإرسال...' : 'إرسال الطلب'}
+                 </button>
+               </div>
              )}
           </div>
 
