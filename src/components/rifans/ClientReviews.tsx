@@ -105,7 +105,7 @@ const ClientReviews: React.FC = () => {
       lastFrameTime.current = timestamp;
 
       if (!prefersReducedMotion && !isDragging.current && !isHovered.current && cycleWidthRef.current > 0) {
-        offsetRef.current -= (AUTO_SCROLL_SPEED * delta) / 1000;
+        offsetRef.current += (AUTO_SCROLL_SPEED * delta) / 1000;
         normalizeOffset();
         applyTransform();
       }
