@@ -1275,6 +1275,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   {activeTab === 'invoices' && renderInvoices()}
                   {activeTab === 'notifications' && renderNotifications()}
                   {activeTab === 'document_request' && renderDocumentRequest()}
+                  {activeTab === 'reviews' && <AdminReviewSection />}
                 </div>
               </motion.div>
             </div>
