@@ -1238,8 +1238,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                 exit={{ opacity: 0, scale: 0.95 }}
                 className="relative w-full sm:w-[95%] max-w-7xl max-h-screen sm:max-h-[92vh] bg-[#F5F4FA] dark:bg-[#06010a] rounded-none sm:rounded-[32px] shadow-2xl overflow-hidden flex flex-col"
               >
-                {/* Modal Header */}
-                <div className="p-3 sm:p-5 border-b border-gold/10 flex items-center justify-between bg-brand text-white">
+                {/* Modal Header - Fixed/Sticky */}
+                <div className="sticky top-0 z-10 p-3 sm:p-5 border-b border-gold/10 flex items-center justify-between bg-brand text-white shrink-0">
                   <div className="flex items-center gap-2 sm:gap-4">
                     <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-lg bg-white/10 flex items-center justify-center text-gold border border-white/10">
                       {getTabIcon(activeTab)}
@@ -1250,7 +1250,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                     <button onClick={() => setActiveTab('home')} className="flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg bg-white/10 text-white text-[10px] sm:text-xs font-bold hover:bg-white/20 transition-all border border-white/10">
                       <X size={14} />
                       <span className="hidden sm:inline">العودة للوحة التحكم</span>
-                      <span className="sm:hidden">خروج</span>
+                      <span className="sm:hidden">رجوع</span>
                     </button>
                   </div>
                 </div>
