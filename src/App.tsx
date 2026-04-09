@@ -333,19 +333,14 @@ const AppContent: React.FC = () => {
       {/* Login Warning Modal */}
       {showLoginWarning && (
         <div className="fixed inset-0 z-[300] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-md" />
-          <div className="relative w-full max-w-sm overflow-hidden rounded-2xl shadow-2xl" dir="rtl">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowLoginWarning(false)} />
+          <div className="relative w-full max-w-[340px] overflow-hidden rounded-xl shadow-2xl" dir="rtl">
             {/* Red header */}
-            <div className="bg-red-600 px-5 py-4 flex items-center justify-end gap-3">
-              <h3 className="text-base font-black text-white">إخلاء مسؤولية</h3>
-              <div className="flex gap-1">
-                <span className="w-2.5 h-2.5 rounded-full bg-white/90" />
-                <span className="w-2.5 h-2.5 rounded-full bg-white/90" />
-                <span className="w-2.5 h-2.5 rounded-full bg-white/90" />
-              </div>
+            <div className="bg-red-600 px-4 py-2 flex items-center justify-end gap-2">
+              <h3 className="text-[13px] font-black text-white">إخلاء مسؤولية</h3>
             </div>
             {/* Content */}
-            <div className="bg-white dark:bg-[#12031a] p-5 text-right space-y-4 text-[13px] leading-7 text-gray-800 dark:text-gray-200 max-h-[55vh] overflow-y-auto">
+            <div className="bg-white dark:bg-[#12031a] px-4 py-3 text-right space-y-2 text-[10px] leading-[18px] text-gray-700 dark:text-gray-300 max-h-[40vh] overflow-y-auto">
               <p>
                 يُعدّ القيام بتقديم بيانات غير صحيحة أو مستندات غير نظامية أو مضلّلة ، مخالفة صريحة للأنظمة والتعليمات المعمول بها، ويعرّضك للمساءلة أمام الجهات المعنية والجهات القضائية المختصة ، كما قد يترتب على ذلك اتخاذ كافة الإجراءات القانونية اللازمة بحقك دون إشعار مسبق .
               </p>
@@ -357,10 +352,10 @@ const AppContent: React.FC = () => {
               </p>
             </div>
             {/* Footer */}
-            <div className="bg-white dark:bg-[#12031a] px-5 pb-5">
+            <div className="bg-white dark:bg-[#12031a] px-4 pb-3">
               <button
                 onClick={() => setShowLoginWarning(false)}
-                className="w-full py-3 rounded-xl bg-brand text-gold font-bold text-sm hover:bg-brand/90 transition-all"
+                className="w-full py-2 rounded-lg bg-brand text-gold font-bold text-[11px] hover:bg-brand/90 transition-all"
               >
                 موافق
               </button>
