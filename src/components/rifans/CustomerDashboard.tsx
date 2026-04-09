@@ -1059,83 +1059,51 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                  </div>
                )}
               </div>
-            )}
+             )}
 
-           {activeTab === 'notifications' && (
+           {/* Invoices Tab */}
+           {activeTab === 'invoices' && (
              <div className="space-y-3">
-               <div className="flex justify-between items-center mb-2 px-1">
-                 <h3 className="text-[13px] font-bold text-brand dark:text-white">التنبيهات</h3>
-                 {unreadCount > 0 && (
-                   <button onClick={markAllAsRead} className="text-[10px] text-gold hover:underline">
-                     تحديد الكل كمقروء
-                   </button>
-                 )}
-               </div>
-               
-               {notifications.length > 0 ? (
-                 notifications.map((notif) => (
-                   <div 
-                     key={notif.id} 
-                     onClick={() => !notif.is_read && markAsRead(notif.id)}
-                     className={`p-4 rounded-[16px] border transition-all text-right cursor-pointer relative
-                       ${notif.is_read 
-                         ? 'bg-white dark:bg-[#12031a] border-gray-100 dark:border-white/5 opacity-80' 
-                         : 'bg-white dark:bg-[#12031a] border-gold/30 shadow-sm ring-1 ring-gold/10'}`}
-                   >
-                     {!notif.is_read && (
-                       <span className="absolute top-4 left-4 w-2 h-2 bg-gold rounded-full"></span>
-                     )}
-                     <div className="flex items-center gap-2 mb-1">
-                       <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0
-                         ${notif.type === 'payment_reminder' ? 'bg-red-50 text-red-500' : 
-                           notif.type === 'contract_signature' ? 'bg-gold text-white' : 'bg-gold/10 text-gold'}`}>
-                         {notif.type === 'payment_reminder' ? <Wallet size={14} /> : 
-                          notif.type === 'contract_signature' ? <PenTool size={14} /> : <Bell size={14} />}
+               {isLoading ? (
+                 <div className="flex justify-center py-10">
+                   <Loader2 className="animate-spin text-gold" size={32} />
+                 </div>
+               ) : invoices.length > 0 ? (
+                 invoices.map((inv) => (
+                   <div key={inv.id} className="bg-white dark:bg-[#12031a] p-4 rounded-[16px] border border-gold/20 shadow-sm group hover:border-gold/50 transition-all text-right">
+                     <div className="flex justify-between items-start mb-2">
+                       <div className="flex items-center gap-2">
+                         <Receipt className="text-gold" size={16} />
+                         <h3 className="text-[13px] font-bold text-brand dark:text-white">
+                           فاتورة رقم {inv.id}
+                         </h3>
                        </div>
-                       <h4 className="text-[12px] font-bold text-brand dark:text-white">{notif.title}</h4>
+                       <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${inv.status === 'paid' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>
+                         {inv.status === 'paid' ? 'مسددة' : 'في انتظار السداد'}
+                       </span>
                      </div>
-                     <p className="text-[11px] text-gray-600 dark:text-gray-300 leading-relaxed mb-2">
-                       {notif.message}
+                     <p className="text-[11px] text-muted mb-2">
+                       {inv.type === 'waive_request' ? 'طلب إعفاء من الالتزامات' : 
+                        inv.type === 'rescheduling_request' ? 'إعادة جدولة المنتجات التمويلية' : 
+                        inv.type === 'seized_amounts_request' ? 'إتاحة النسبة النظامية والمبالغ المستثناه' : 'طلب استشارة مالية'}
                      </p>
-
-                      {notif.type === 'contract_signature' && !notif.is_read && (
-                        <button 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            window.location.hash = `#/contract/${notif.submission_id}`;
-                            markAsRead(notif.id);
-                          }}
-                          className="w-full mt-2 py-2 bg-gold text-brand font-bold text-[11px] rounded-lg shadow-sm hover:bg-gold/90 transition-all flex items-center justify-center gap-2"
-                        >
-                          <PenTool size={12} />
-                          توقيع العقد الآن
-                        </button>
-                      )}
-
-                      {notif.type === 'invoice' && !notif.is_read && (
-                        <button 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            window.location.hash = `#/invoice/${notif.submission_id}`;
-                            markAsRead(notif.id);
-                          }}
-                          className="w-full mt-2 py-2 bg-gold text-brand font-bold text-[11px] rounded-lg shadow-sm hover:bg-gold/90 transition-all flex items-center justify-center gap-2"
-                        >
-                          <Receipt size={12} />
-                          عرض الفاتورة
-                        </button>
-                      )}
-
-                     <div className="text-[9px] text-muted flex items-center gap-1 justify-end mt-2">
-                       <Clock size={10} />
-                       {new Date(notif.created_at).toLocaleString('ar-SA')}
+                     <div className="flex justify-between items-center mb-3">
+                       <span className="text-[11px] text-muted">{new Date(inv.created_at).toLocaleDateString('ar-SA')}</span>
+                       <span className="text-sm font-black text-gold">{formatAmount(inv.amount)} ر.س</span>
                      </div>
+                     <button 
+                       onClick={() => window.location.hash = `#/invoice/${inv.submission_id}`}
+                       className="w-full py-2.5 bg-white text-brand font-bold text-[12px] rounded-xl shadow-sm hover:bg-gray-50 transition-all flex items-center justify-center gap-2 border border-gold/30"
+                     >
+                       <FileText size={14} />
+                       عرض الفاتورة
+                     </button>
                    </div>
                  ))
                ) : (
                  <div className="text-right py-10 text-muted flex flex-col items-start gap-3">
-                    <Bell size={40} className="opacity-20" />
-                    <p className="text-[12px]">لا توجد تنبيهات حالياً</p>
+                    <Receipt size={40} className="opacity-20" />
+                    <p className="text-[12px]">لا توجد فواتير حالياً</p>
                  </div>
                )}
              </div>
