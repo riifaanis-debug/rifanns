@@ -323,6 +323,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
       case 'invoices': return 'فواتير العملاء';
       case 'notifications': return 'التنبيهات';
       case 'document_request': return 'طلب مستند';
+      case 'reviews': return 'إرسال تقييم';
       default: return '';
     }
   };
