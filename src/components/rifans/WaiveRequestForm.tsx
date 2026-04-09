@@ -83,7 +83,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
         const data = safeParse(savedProfile, null as any);
         if (data) {
           setRegion(data.region || '');
-          if (data.products?.length > 0) setProducts(data.products);
+          // Do NOT load products from profile - always start with empty products
           setFormData({
             firstName: data.firstName || data.fullName?.split(' ')[0] || '',
             middleName: data.middleName || data.fullName?.split(' ')[1] || '',
@@ -554,7 +554,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-             {/* Name */}
+             {/* Row 1: Names */}
              <div className="md:col-span-2">
                <label className="block text-[12px] font-bold text-brand mb-1.5">الاسم الثلاثي <span className="text-red-500">*</span></label>
                <div className="flex gap-2">
@@ -587,21 +587,8 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                  />
                </div>
              </div>
-                          {/* Age & ID */}
-             <div>
-                <label className="block text-[12px] font-bold text-brand mb-1.5">العمر <span className="text-red-500">*</span></label>
-                <input 
-                  type="text" 
-                  name="age" 
-                  inputMode="numeric"
-                  onKeyDown={onlyNumbers}
-                  required 
-                  value={formData.age}
-                  onChange={(e) => setFormData({...formData, age: e.target.value})}
-                  className="w-full p-2.5 rounded-[12px] border border-gold/30 text-[13px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none" 
-                  placeholder="بالسنوات" 
-                />
-             </div>
+
+             {/* Row 2: National ID & Mobile */}
              <div>
                 <label className="block text-[12px] font-bold text-brand mb-1.5">رقم الهوية <span className="text-red-500">*</span></label>
                 <input 
@@ -617,8 +604,6 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                   placeholder="10 أرقام" 
                 />
              </div>
-
-             {/* Mobile & Job */}
              <div>
                 <label className="block text-[12px] font-bold text-brand mb-1.5">رقم الجوال <span className="text-red-500">*</span></label>
                 <input 
@@ -638,24 +623,8 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                 />
                 <p className="text-[9px] text-muted mt-1 pr-1">يجب أن يبدأ بـ 05 ويتكون من 10 أرقام</p>
              </div>
-             <div>
-                <label className="block text-[12px] font-bold text-brand mb-1.5">الحالة الوظيفية <span className="text-red-500">*</span></label>
-                <select 
-                  name="jobStatus" 
-                  required 
-                  value={formData.jobStatus}
-                  onChange={(e) => setFormData({...formData, jobStatus: e.target.value})}
-                  className="w-full p-2.5 rounded-[12px] border border-gold/30 text-[13px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none bg-white"
-                >
-                  <option value="">اختر الحالة</option>
-                  <option value="موظف حكومي">موظف حكومي</option>
-                  <option value="موظف قطاع خاص">موظف قطاع خاص</option>
-                  <option value="متقاعد">متقاعد</option>
-                  <option value="لا يوجد عمل">لا يوجد عمل</option>
-                </select>
-             </div>
 
-             {/* Region & City */}
+             {/* Row 3: Region & City */}
              <div>
                 <label className="block text-[12px] font-bold text-brand mb-1.5">المنطقة <span className="text-red-500">*</span></label>
                 <select 
@@ -681,6 +650,38 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                 >
                   <option value="">اختر المدينة</option>
                   {region && REGION_CITIES[region]?.map(c => <option key={c} value={c}>{c}</option>)}
+                </select>
+             </div>
+
+             {/* Row 4: Age & Job Status */}
+             <div>
+                <label className="block text-[12px] font-bold text-brand mb-1.5">العمر <span className="text-red-500">*</span></label>
+                <input 
+                  type="text" 
+                  name="age" 
+                  inputMode="numeric"
+                  onKeyDown={onlyNumbers}
+                  required 
+                  value={formData.age}
+                  onChange={(e) => setFormData({...formData, age: e.target.value})}
+                  className="w-full p-2.5 rounded-[12px] border border-gold/30 text-[13px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none" 
+                  placeholder="بالسنوات" 
+                />
+             </div>
+             <div>
+                <label className="block text-[12px] font-bold text-brand mb-1.5">الحالة الوظيفية <span className="text-red-500">*</span></label>
+                <select 
+                  name="jobStatus" 
+                  required 
+                  value={formData.jobStatus}
+                  onChange={(e) => setFormData({...formData, jobStatus: e.target.value})}
+                  className="w-full p-2.5 rounded-[12px] border border-gold/30 text-[13px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none bg-white"
+                >
+                  <option value="">اختر الحالة</option>
+                  <option value="موظف حكومي">موظف حكومي</option>
+                  <option value="موظف قطاع خاص">موظف قطاع خاص</option>
+                  <option value="متقاعد">متقاعد</option>
+                  <option value="لا يوجد عمل">لا يوجد عمل</option>
                 </select>
              </div>
 
@@ -1013,27 +1014,46 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                  </button>
                </div>
              ) : (
-              <div className="flex gap-3">
-                <button 
-                  type="button" 
-                  onClick={onClose} 
-                  className="flex-1 px-4 py-3 rounded-full border border-gold/30 text-brand font-bold text-[13px] hover:bg-gray-50 transition-colors"
-                >
-                  إلغاء
-                </button>
-                <button 
-                  type="button" 
-                  onClick={() => {
-                    console.log("Submit button clicked");
-                    setStatusMessage('تم استلام الضغطة، جاري التحقق...');
-                    handleSubmit();
-                  }} 
-                  disabled={isSubmitting} 
-                  className="flex-[2] bg-gold-gradient text-brand font-bold py-3 rounded-full shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed text-[14px] transition-all active:scale-95 pointer-events-auto cursor-pointer"
-                >
-                  {isSubmitting ? 'جاري الإرسال...' : 'إرسال الطلب'}
-                </button>
-              </div>
+               <div className="flex gap-2 flex-wrap">
+                 <button 
+                   type="button" 
+                   onClick={onClose} 
+                   className="flex-1 min-w-[80px] px-3 py-3 rounded-full border border-gold/30 text-brand font-bold text-[12px] hover:bg-gray-50 transition-colors"
+                 >
+                   إلغاء
+                 </button>
+                 <button 
+                   type="button" 
+                   onClick={() => {
+                     // Save draft to localStorage
+                     const draft = {
+                       formData,
+                       region,
+                       products,
+                       documents: documents.map(d => ({ ...d, file: null })),
+                       requestId,
+                     };
+                     localStorage.setItem(`draft_request_${user?.id}`, JSON.stringify(draft));
+                     setStatusMessage('تم حفظ الطلب بنجاح. يمكنك استكماله لاحقاً.');
+                     setTimeout(() => onClose(), 1500);
+                   }}
+                   className="flex-1 min-w-[120px] px-3 py-3 rounded-full border-2 border-gold text-gold font-bold text-[12px] hover:bg-gold/10 transition-colors"
+                 >
+                   الحفظ والاستكمال لاحقاً
+                 </button>
+                 <button 
+                   type="button" 
+                   onClick={() => {
+                     console.log("Submit button clicked");
+                     setStatusMessage('تم استلام الضغطة، جاري التحقق...');
+                     handleSubmit();
+                   }} 
+                   disabled={isSubmitting} 
+                   className="flex-[2] min-w-[140px] bg-gold-gradient text-brand font-bold py-3 rounded-full shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed text-[13px] transition-all active:scale-95 pointer-events-auto cursor-pointer"
+                 >
+                   {isSubmitting ? 'جاري الإرسال...' : 'إرسال الطلب'}
+                 </button>
+               </div>
              )}
           </div>
 
