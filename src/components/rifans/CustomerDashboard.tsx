@@ -52,11 +52,11 @@ const DOCUMENT_TYPES = [
 
 const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, onLogout }) => {
   const { user: authUser } = useAuth();
-  const [activeTab, setActiveTab] = useState<'profile' | 'requests' | 'contracts' | 'notifications'>(() => {
+  const [activeTab, setActiveTab] = useState<'profile' | 'requests' | 'contracts' | 'invoices'>(() => {
     const hash = window.location.hash;
     if (hash.includes('tab=contracts')) return 'contracts';
     if (hash.includes('tab=requests')) return 'requests';
-    if (hash.includes('tab=notifications')) return 'notifications';
+    if (hash.includes('tab=invoices')) return 'invoices';
     return 'profile';
   });
   const [userData, setUserData] = useState<UserProfile>(user);
