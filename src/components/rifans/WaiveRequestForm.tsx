@@ -83,7 +83,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
         const data = safeParse(savedProfile, null as any);
         if (data) {
           setRegion(data.region || '');
-          if (data.products?.length > 0) setProducts(data.products);
+          // Do NOT load products from profile - always start with empty products
           setFormData({
             firstName: data.firstName || data.fullName?.split(' ')[0] || '',
             middleName: data.middleName || data.fullName?.split(' ')[1] || '',
