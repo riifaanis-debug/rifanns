@@ -880,24 +880,31 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                             </>
                           )}
                       </select>
-                      <div className="flex-1 relative">
-                        <input 
-                          type="file" 
-                          id={`docFile_${doc.id}`}
-                          name={`docFile_${doc.id}`} 
-                          onChange={(e) => updateDocumentFile(doc.id, e.target.files?.[0] || null)}
-                          className="absolute inset-0 opacity-0 cursor-pointer z-10" 
-                        />
-                        <div className="w-full p-2 rounded-[10px] border border-gold/20 text-[11px] bg-gray-50 flex items-center justify-between">
-                          <span className="truncate max-w-[150px]">{doc.fileName || 'اختر ملفاً...'}</span>
-                          <Hash size={12} className="text-gold/50" />
-                        </div>
-                      </div>
-                      {documents.length > 1 && (
-                        <button type="button" onClick={() => removeDocument(doc.id)} className="text-red-400 p-1 hover:bg-red-50 rounded-full transition-colors">
-                          <Trash2 size={14} />
-                        </button>
-                      )}
+                       {!isViewOnly && (
+                       <div className="flex-1 relative">
+                         <input 
+                           type="file" 
+                           id={`docFile_${doc.id}`}
+                           name={`docFile_${doc.id}`} 
+                           onChange={(e) => updateDocumentFile(doc.id, e.target.files?.[0] || null)}
+                           className="absolute inset-0 opacity-0 cursor-pointer z-10" 
+                         />
+                         <div className="w-full p-2 rounded-[10px] border border-gold/20 text-[11px] bg-gray-50 flex items-center justify-between">
+                           <span className="truncate max-w-[150px]">{doc.fileName || 'اختر ملفاً...'}</span>
+                           <Hash size={12} className="text-gold/50" />
+                         </div>
+                       </div>
+                       )}
+                       {isViewOnly && (
+                         <div className="flex-1 p-2 rounded-[10px] border border-gold/20 text-[11px] bg-gray-50">
+                           <span className="truncate">{doc.fileName || 'لا يوجد مرفق'}</span>
+                         </div>
+                       )}
+                       {documents.length > 1 && !isViewOnly && (
+                         <button type="button" onClick={() => removeDocument(doc.id)} className="text-red-400 p-1 hover:bg-red-50 rounded-full transition-colors">
+                           <Trash2 size={14} />
+                         </button>
+                       )}
                      </div>
                      {idx === documents.length - 1 && doc.type && doc.fileName && (
                        <div className="flex justify-center pt-1">
