@@ -591,7 +591,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
              {/* Row 2: National ID & Mobile */}
              <div>
                 <label className="block text-[11px] font-bold text-brand mb-1">رقم الهوية <span className="text-red-500">*</span></label>
-                <input type="text" name="nationalId" inputMode="numeric" onKeyDown={onlyNumbers} maxLength={10} required value={formData.nationalId} onChange={(e) => setFormData({...formData, nationalId: e.target.value})} className="w-full p-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none" placeholder="10 أرقام" />
+                <input type="text" name="nationalId" inputMode="numeric" onKeyDown={onlyNumbers} maxLength={10} required value={formData.nationalId} onChange={(e) => setFormData({...formData, nationalId: e.target.value})} disabled={isViewOnly} className="w-full p-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none disabled:bg-gray-50 disabled:cursor-not-allowed" placeholder="10 أرقام" />
              </div>
              <div>
                 <label className="block text-[11px] font-bold text-brand mb-1">رقم الجوال <span className="text-red-500">*</span></label>
