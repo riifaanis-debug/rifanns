@@ -15,7 +15,7 @@ import { Button, Card } from './Shared';
 import { motion, AnimatePresence } from 'motion/react';
 import { SubmissionHistory, Notification, Contract, UserProfile } from '../../types';
 import { safeStringify, safeParse } from '../../utils/safeJson';
-import { getAdminSubmissions, getAdminUsers, getAdminNotifications, getAdminContracts, updateSubmissionStatus, sendContract as apiSendContract, sendInvoice as apiSendInvoice, getSubmissionHistory as apiGetSubmissionHistory, getAdminInvoices } from '../../lib/api';
+import { getAdminSubmissions, getAdminUsers, getAdminNotifications, getAdminContracts, updateSubmissionStatus, sendContract as apiSendContract, sendInvoice as apiSendInvoice, getSubmissionHistory as apiGetSubmissionHistory, getAdminInvoices, uploadDocument } from '../../lib/api';
 import { formatAmount } from '../../lib/formatNumber';
 import { toPng } from 'html-to-image';
 
@@ -24,6 +24,70 @@ interface AdminDashboardProps {
 }
 
 type DashboardTab = 'home' | 'stats' | 'clients' | 'waive_requests' | 'rescheduling_requests' | 'service_requests' | 'contracts' | 'invoices' | 'notifications' | 'document_request' | 'reviews';
+
+type AdminDocumentKind = 'contract' | 'invoice' | 'receipt' | 'authorization';
+
+type AdminDocumentItem = {
+  id: string;
+  submissionId: string;
+  label: string;
+  date: string;
+  signed: boolean;
+  type: AdminDocumentKind;
+};
+
+type GeneratedDocumentPayload = {
+  fileName: string;
+  emailSubject: string;
+  emailBody: string;
+  html: string;
+};
+
+const escapeHtml = (value: unknown) =>
+  String(value ?? '---')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+
+const getRequestTypeLabel = (type?: string) => {
+  switch (type) {
+    case 'waive_request':
+      return 'طلب إعفاء';
+    case 'rescheduling_request':
+    case 'scheduling_request':
+      return 'طلب جدولة';
+    case 'service_request':
+      return 'طلب خدمة';
+    case 'seized_amounts_request':
+      return 'إتاحة النسبة النظامية';
+    default:
+      return 'طلب خدمة';
+  }
+};
+
+const getDocumentTypeLabel = (type: AdminDocumentKind) => {
+  switch (type) {
+    case 'contract':
+      return 'عقد العميل';
+    case 'invoice':
+      return 'فاتورة العميل';
+    case 'receipt':
+      return 'إفادة استلام الطلب';
+    case 'authorization':
+      return 'إقرار وتفويض العميل';
+    default:
+      return 'مستند';
+  }
+};
+
+const getSubmissionProducts = (submission: any): any[] => {
+  const rawProducts = submission?.data?.products;
+  if (Array.isArray(rawProducts)) return rawProducts;
+  if (typeof rawProducts === 'string') return safeParse(rawProducts, []);
+  return [];
+};
 
 const AdminReviewSection: React.FC = () => {
   const [clientName, setClientName] = React.useState('');
@@ -112,10 +176,11 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
   
   // Document request state
   const [docSelectedClient, setDocSelectedClient] = useState('');
-  const [docType, setDocType] = useState('');
+  const [docType, setDocType] = useState<AdminDocumentKind | ''>('');
   const [docEmailTarget, setDocEmailTarget] = useState('');
   const [docEmailAddress, setDocEmailAddress] = useState('');
-  const [docShowEmailField, setDocShowEmailField] = useState(false);
+  const [docEmailDocId, setDocEmailDocId] = useState<string | null>(null);
+  const [activeDocAction, setActiveDocAction] = useState<string | null>(null);
 
   // Fetch unread chat messages for admin
   useEffect(() => {
@@ -426,6 +491,291 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
     return users.filter(u => userIds.has(u.id));
   }, [users, submissions, contracts, adminInvoices]);
 
+  const buildGeneratedDocument = useCallback((doc: AdminDocumentItem, selectedClient?: any | null): GeneratedDocumentPayload => {
+    const submission = submissions.find(s => s.id === doc.submissionId);
+    if (!submission) {
+      throw new Error('تعذر العثور على بيانات المستند');
+    }
+
+    const client = selectedClient || users.find(u => u.id === (submission.userId || submission.user_id)) || null;
+    const contract = doc.type === 'contract'
+      ? contracts.find(c => c.id === doc.id) || contracts.find(c => c.submission_id === doc.submissionId)
+      : null;
+    const invoice = doc.type === 'invoice'
+      ? adminInvoices.find(inv => inv.id === doc.id) || adminInvoices.find(inv => inv.submission_id === doc.submissionId)
+      : null;
+
+    const products = getSubmissionProducts(submission);
+    const totalDebt = products.reduce((acc: number, product: any) => acc + (Number(product.amount) || 0), 0);
+    const clientName = client?.name
+      || client?.full_name
+      || submission.user_name
+      || submission.data?.fullName
+      || [submission.data?.firstName, submission.data?.middleName, submission.data?.lastName].filter(Boolean).join(' ')
+      || 'عميل';
+    const clientNationalId = client?.national_id || client?.nationalId || submission.data?.nationalId || submission.data?.national_id || '---';
+    const clientPhone = client?.phone || client?.mobile || submission.data?.mobile || submission.data?.phone || '---';
+    const clientEmail = client?.email || submission.user_email || '---';
+    const issueDate = new Date(doc.date || submission.created_at || Date.now()).toLocaleDateString('ar-SA');
+    const requestTypeLabel = getRequestTypeLabel(submission.type);
+    const documentTypeLabel = getDocumentTypeLabel(doc.type);
+    const fileName = `${documentTypeLabel}-${doc.submissionId}.pdf`;
+
+    const productRows = products.length > 0
+      ? products.map((product: any, index: number) => `
+          <tr>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;">${index + 1}</td>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(product.type || 'منتج تمويلي')}</td>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(product.accountNumber || product.account_number || '---')}</td>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(formatAmount(Number(product.amount) || 0))} ر.س</td>
+          </tr>
+        `).join('')
+      : `
+          <tr>
+            <td colspan="4" style="padding:12px;border:1px solid #eadfc9;text-align:center;color:#7a6a84;">لا توجد منتجات مرفقة مع هذا الطلب</td>
+          </tr>
+        `;
+
+    let summaryTitle = '';
+    let summaryText = '';
+    let statusBadge = '';
+    let extraRows = '';
+
+    switch (doc.type) {
+      case 'contract':
+        summaryTitle = 'بيان العقد';
+        summaryText = 'هذه نسخة إدارية من عقد العميل الصادر ضمن الطلب ويمكن اعتمادها للطباعة أو المشاركة.';
+        statusBadge = contract?.signed_at ? 'موقّع' : 'غير موقّع';
+        extraRows = `
+          <tr>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">رقم العقد</td>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(contract?.id || doc.id)}</td>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">حالة التوقيع</td>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(statusBadge)}</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">تاريخ التوقيع</td>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(contract?.signed_at ? new Date(contract.signed_at).toLocaleDateString('ar-SA') : '---')}</td>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">الجهة التمويلية</td>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(submission.data?.bank || '---')}</td>
+          </tr>
+        `;
+        break;
+      case 'invoice':
+        summaryTitle = 'بيان الفاتورة';
+        summaryText = 'هذه نسخة إدارية من الفاتورة الصادرة للعميل ويمكن استخدامها للطباعة أو الإرسال.';
+        statusBadge = invoice?.status === 'paid' ? 'مسددة' : 'بانتظار السداد';
+        extraRows = `
+          <tr>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">رقم الفاتورة</td>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(invoice?.id || doc.id)}</td>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">الحالة</td>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(statusBadge)}</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">المبلغ المستحق</td>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(formatAmount(Number(invoice?.amount) || 0))} ر.س</td>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">إجمالي المديونية</td>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(formatAmount(Number(invoice?.total_debt) || totalDebt || 0))} ر.س</td>
+          </tr>
+        `;
+        break;
+      case 'authorization':
+        summaryTitle = 'إقرار وتفويض';
+        summaryText = 'يقر العميل بصحة البيانات المقدمة ويفوض شركة ريفانس المالية بمتابعة الطلب وما يلزم من إجراءات لدى الجهات ذات العلاقة.';
+        statusBadge = 'ساري';
+        extraRows = `
+          <tr>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">رقم الطلب</td>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(submission.id)}</td>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">نوع الطلب</td>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(requestTypeLabel)}</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">الجهة التمويلية</td>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(submission.data?.bank || '---')}</td>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">الحالة الحالية</td>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(getStatusLabel(submission.status))}</td>
+          </tr>
+        `;
+        break;
+      case 'receipt':
+      default:
+        summaryTitle = 'إفادة استلام الطلب';
+        summaryText = 'تشهد شركة ريفانس المالية بأنه تم استلام الطلب وإدخاله في النظام لمتابعة الإجراءات النظامية ذات العلاقة.';
+        statusBadge = getStatusLabel(submission.status);
+        extraRows = `
+          <tr>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">رقم الطلب</td>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(submission.id)}</td>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">نوع الطلب</td>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(requestTypeLabel)}</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">تاريخ الاستلام</td>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(new Date(submission.created_at).toLocaleDateString('ar-SA'))}</td>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">الحالة الحالية</td>
+            <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(statusBadge)}</td>
+          </tr>
+        `;
+        break;
+    }
+
+    const html = `
+      <div dir="rtl" style="width:794px;min-height:1123px;background:#ffffff;padding:48px 44px;font-family:Tajawal,Arial,sans-serif;color:#22042C;box-sizing:border-box;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:24px;border-bottom:4px solid #22042C;padding-bottom:18px;margin-bottom:24px;">
+          <div style="flex:1;text-align:right;">
+            <p style="margin:0 0 6px;font-size:15px;font-weight:700;color:#C5A059;">شركة ريفانس المالية</p>
+            <h1 style="margin:0;font-size:30px;font-weight:900;line-height:1.35;">${escapeHtml(documentTypeLabel)}</h1>
+            <p style="margin:8px 0 0;font-size:13px;line-height:1.9;color:#6b5b76;">${escapeHtml(summaryText)}</p>
+          </div>
+          <img src="${rifansLogo}" alt="شعار ريفانس" style="width:128px;height:82px;object-fit:contain;" />
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;background:#fcf8f0;border:1px solid #eadfc9;border-radius:18px;padding:16px 18px;margin-bottom:18px;">
+          <div style="text-align:right;">
+            <div style="font-size:18px;font-weight:900;">${escapeHtml(summaryTitle)}</div>
+            <div style="font-size:12px;color:#7a6a84;margin-top:4px;">رقم المرجع: ${escapeHtml(doc.submissionId)} • تاريخ الإصدار: ${escapeHtml(issueDate)}</div>
+          </div>
+          <div style="background:#22042C;color:#C5A059;border-radius:999px;padding:8px 16px;font-size:12px;font-weight:800;white-space:nowrap;">${escapeHtml(statusBadge)}</div>
+        </div>
+
+        <table style="width:100%;border-collapse:collapse;margin-bottom:18px;font-size:13px;">
+          <tbody>
+            <tr>
+              <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">اسم العميل</td>
+              <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(clientName)}</td>
+              <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">رقم الهوية</td>
+              <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(clientNationalId)}</td>
+            </tr>
+            <tr>
+              <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">رقم الجوال</td>
+              <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(clientPhone)}</td>
+              <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">البريد الإلكتروني</td>
+              <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(clientEmail)}</td>
+            </tr>
+            ${extraRows}
+          </tbody>
+        </table>
+
+        <div style="margin-bottom:18px;">
+          <h2 style="margin:0 0 10px;font-size:16px;font-weight:900;color:#22042C;">بيانات المنتجات التمويلية</h2>
+          <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <thead>
+              <tr style="background:#22042C;color:#ffffff;">
+                <th style="padding:10px 12px;border:1px solid #22042C;">#</th>
+                <th style="padding:10px 12px;border:1px solid #22042C;">المنتج</th>
+                <th style="padding:10px 12px;border:1px solid #22042C;">رقم الحساب</th>
+                <th style="padding:10px 12px;border:1px solid #22042C;">المبلغ</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${productRows}
+            </tbody>
+          </table>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:end;gap:20px;margin-top:28px;">
+          <div style="font-size:12px;color:#7a6a84;line-height:1.9;">
+            <div>نوع الخدمة: ${escapeHtml(requestTypeLabel)}</div>
+            <div>الجهة التمويلية: ${escapeHtml(submission.data?.bank || '---')}</div>
+            <div>تم إنشاء هذه النسخة من لوحة تحكم الإدارة.</div>
+          </div>
+          <img src="${rifansStampImg}" alt="ختم ريفانس" style="width:96px;height:96px;object-fit:contain;opacity:0.8;" />
+        </div>
+      </div>
+    `;
+
+    return {
+      fileName,
+      emailSubject: `${documentTypeLabel} - ${clientName}`,
+      emailBody: `تم تجهيز ${documentTypeLabel} الخاص بالعميل ${clientName} ورابط المستند مرفق أدناه.`,
+      html,
+    };
+  }, [adminInvoices, contracts, submissions, users, getStatusLabel]);
+
+  const withTemporaryDocumentElement = useCallback(async (
+    doc: AdminDocumentItem,
+    selectedClient: any | null,
+    callback: (element: HTMLElement, payload: GeneratedDocumentPayload) => Promise<void>
+  ) => {
+    const payload = buildGeneratedDocument(doc, selectedClient);
+    const mount = document.createElement('div');
+    mount.style.position = 'fixed';
+    mount.style.left = '-10000px';
+    mount.style.top = '0';
+    mount.style.opacity = '0';
+    mount.style.pointerEvents = 'none';
+    mount.innerHTML = payload.html;
+    document.body.appendChild(mount);
+
+    const element = mount.firstElementChild as HTMLElement | null;
+    if (!element) {
+      document.body.removeChild(mount);
+      throw new Error('تعذر تجهيز المستند');
+    }
+
+    try {
+      await callback(element, payload);
+    } finally {
+      document.body.removeChild(mount);
+    }
+  }, [buildGeneratedDocument]);
+
+  const handleDocumentAction = useCallback(async (
+    doc: AdminDocumentItem,
+    action: 'download' | 'print' | 'send',
+    selectedClient: any | null
+  ) => {
+    if (action === 'send' && !docEmailAddress.trim()) {
+      alert('يرجى إدخال عنوان البريد الإلكتروني');
+      return;
+    }
+
+    const actionKey = `${action}-${doc.id}`;
+    setActiveDocAction(actionKey);
+
+    try {
+      await withTemporaryDocumentElement(doc, selectedClient, async (element, payload) => {
+        if (action === 'download') {
+          const { downloadContractPdf } = await import('../../lib/generateContractPdf');
+          await downloadContractPdf(element, payload.fileName);
+          return;
+        }
+
+        if (action === 'print') {
+          const { printContractPdf } = await import('../../lib/generateContractPdf');
+          await printContractPdf(element);
+          return;
+        }
+
+        const { generateContractPdf } = await import('../../lib/generateContractPdf');
+        const { blob } = await generateContractPdf(element, payload.fileName);
+        const file = new File([blob], payload.fileName, { type: 'application/pdf' });
+        const uploaded = await uploadDocument(file);
+
+        window.location.href = `mailto:${docEmailAddress.trim()}?subject=${encodeURIComponent(payload.emailSubject)}&body=${encodeURIComponent(`${payload.emailBody}\n\nرابط المستند:\n${uploaded.filePath}`)}`;
+      });
+
+      if (action === 'send') {
+        setDocEmailDocId(null);
+        setDocEmailTarget('');
+        setDocEmailAddress('');
+      }
+    } catch (err) {
+      console.error('Document action failed:', err);
+      alert(
+        action === 'send'
+          ? 'تعذر تجهيز المستند للإرسال، حاول مرة أخرى'
+          : action === 'print'
+            ? 'تعذر تجهيز المستند للطباعة، حاول مرة أخرى'
+            : 'تعذر تحميل المستند، حاول مرة أخرى'
+      );
+    } finally {
+      setActiveDocAction(null);
+    }
+  }, [docEmailAddress, withTemporaryDocumentElement]);
+
   const renderDocumentRequest = () => {
     const selectedClient = clientsWithActivity.find(c => c.id === docSelectedClient);
     
@@ -434,53 +784,60 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
     const clientInvoices = adminInvoices.filter(inv => inv.user_id === docSelectedClient);
     const clientSubmissions = submissions.filter(s => (s.userId || s.user_id) === docSelectedClient);
 
-    const getDocuments = () => {
+    const getDocuments = (): AdminDocumentItem[] => {
       switch (docType) {
-        case 'contract': return clientContracts.map(c => ({ id: c.submission_id, label: `عقد - ${c.signed_at ? 'موقّع' : 'غير موقّع'}`, date: c.created_at, signed: !!c.signed_at, type: 'contract' as const }));
-        case 'invoice': return clientInvoices.map(inv => ({ id: inv.submission_id, label: `فاتورة - ${inv.status === 'paid' ? 'مدفوعة' : 'معلقة'}`, date: inv.created_at, signed: false, type: 'invoice' as const }));
-        case 'receipt': return clientSubmissions.map(s => ({ id: s.id, label: `إفادة استلام - ${s.type === 'waive_request' ? 'إعفاء' : s.type === 'rescheduling_request' ? 'جدولة' : 'خدمة'}`, date: s.created_at, signed: false, type: 'receipt' as const }));
-        case 'authorization': return clientSubmissions.map(s => ({ id: s.id, label: `إقرار وتفويض - ${s.type === 'waive_request' ? 'إعفاء' : s.type === 'rescheduling_request' ? 'جدولة' : 'خدمة'}`, date: s.created_at, signed: false, type: 'authorization' as const }));
+        case 'contract':
+          return clientContracts.map(c => ({
+            id: c.id,
+            submissionId: c.submission_id,
+            label: `عقد - ${c.signed_at ? 'موقّع' : 'غير موقّع'}`,
+            date: c.created_at,
+            signed: !!c.signed_at,
+            type: 'contract' as const,
+          }));
+        case 'invoice':
+          return clientInvoices.map(inv => ({
+            id: inv.id,
+            submissionId: inv.submission_id,
+            label: `فاتورة - ${inv.status === 'paid' ? 'مدفوعة' : 'معلقة'}`,
+            date: inv.created_at,
+            signed: false,
+            type: 'invoice' as const,
+          }));
+        case 'receipt':
+          return clientSubmissions.map(s => ({
+            id: `receipt-${s.id}`,
+            submissionId: s.id,
+            label: `إفادة استلام - ${s.type === 'waive_request' ? 'إعفاء' : s.type === 'rescheduling_request' ? 'جدولة' : 'خدمة'}`,
+            date: s.created_at,
+            signed: false,
+            type: 'receipt' as const,
+          }));
+        case 'authorization':
+          return clientSubmissions.map(s => ({
+            id: `authorization-${s.id}`,
+            submissionId: s.id,
+            label: `إقرار وتفويض - ${s.type === 'waive_request' ? 'إعفاء' : s.type === 'rescheduling_request' ? 'جدولة' : 'خدمة'}`,
+            date: s.created_at,
+            signed: false,
+            type: 'authorization' as const,
+          }));
         default: return [];
       }
     };
 
     const docs = docType ? getDocuments() : [];
 
-    const handleOpenDoc = (docId: string, docTypeVal: string) => {
-      if (docTypeVal === 'contract') {
-        window.open(`#/contract/${docId}`, '_blank');
-      } else if (docTypeVal === 'invoice') {
-        window.open(`#/invoice/${docId}`, '_blank');
-      } else {
-        // For receipt/authorization, open the submission
-        alert('سيتم فتح المستند');
-      }
+    const handleDownloadDoc = (doc: AdminDocumentItem) => {
+      handleDocumentAction(doc, 'download', selectedClient);
     };
 
-    const handleDownloadDoc = (docId: string, docTypeVal: string) => {
-      if (docTypeVal === 'contract') {
-        window.open(`#/contract/${docId}`, '_blank');
-      } else if (docTypeVal === 'invoice') {
-        window.open(`#/invoice/${docId}`, '_blank');
-      }
+    const handlePrintDoc = (doc: AdminDocumentItem) => {
+      handleDocumentAction(doc, 'print', selectedClient);
     };
 
-    const handlePrintDoc = (docId: string, docTypeVal: string) => {
-      if (docTypeVal === 'contract') {
-        const w = window.open(`#/contract/${docId}`, '_blank');
-        if (w) setTimeout(() => w.print(), 2000);
-      } else if (docTypeVal === 'invoice') {
-        const w = window.open(`#/invoice/${docId}`, '_blank');
-        if (w) setTimeout(() => w.print(), 2000);
-      }
-    };
-
-    const handleSendEmail = async (docId: string, docTypeVal: string) => {
-      if (!docEmailAddress) {
-        alert('يرجى إدخال عنوان البريد الإلكتروني');
-        return;
-      }
-      alert(`سيتم إرسال المستند إلى: ${docEmailAddress}\nنوع المستند: ${docTypeVal}\nرقم المستند: ${docId}`);
+    const handleSendEmail = async (doc: AdminDocumentItem) => {
+      await handleDocumentAction(doc, 'send', selectedClient);
     };
 
     return (
@@ -496,7 +853,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
             <label className="block text-[12px] font-bold text-brand dark:text-white mb-2">الرجاء اختيار العميل</label>
             <select
               value={docSelectedClient}
-              onChange={(e) => { setDocSelectedClient(e.target.value); setDocType(''); setDocShowEmailField(false); }}
+              onChange={(e) => {
+                setDocSelectedClient(e.target.value);
+                setDocType('');
+                setDocEmailDocId(null);
+                setDocEmailTarget('');
+                setDocEmailAddress('');
+              }}
               className="w-full p-2.5 rounded-[12px] border border-gold/30 text-[13px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none bg-white dark:bg-[#06010a] dark:text-white"
             >
               <option value="">-- اختر العميل --</option>
@@ -512,7 +875,12 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
               <label className="block text-[12px] font-bold text-brand dark:text-white mb-2">نوع المستند</label>
               <select
                 value={docType}
-                onChange={(e) => { setDocType(e.target.value); setDocShowEmailField(false); }}
+                onChange={(e) => {
+                  setDocType(e.target.value as AdminDocumentKind | '');
+                  setDocEmailDocId(null);
+                  setDocEmailTarget('');
+                  setDocEmailAddress('');
+                }}
                 className="w-full p-2.5 rounded-[12px] border border-gold/30 text-[13px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none bg-white dark:bg-[#06010a] dark:text-white"
               >
                 <option value="">-- اختر نوع المستند --</option>
@@ -542,45 +910,61 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                 </div>
               ) : (
                 <div className="space-y-3">
-                  {docs.map((doc, idx) => (
-                    <div key={idx} className="p-3 bg-white dark:bg-[#12031a] rounded-xl border border-gold/20 space-y-3">
+                  {docs.map((doc) => {
+                    const isDownloadLoading = activeDocAction === `download-${doc.id}`;
+                    const isPrintLoading = activeDocAction === `print-${doc.id}`;
+                    const isSendLoading = activeDocAction === `send-${doc.id}`;
+                    const isEmailOpen = docEmailDocId === doc.id;
+
+                    return (
+                    <div key={doc.id} className="p-3 bg-white dark:bg-[#12031a] rounded-xl border border-gold/20 space-y-3">
                       <div className="flex items-center justify-between">
                         <span className="text-[11px] text-muted">{new Date(doc.date).toLocaleDateString('ar-SA')}</span>
                         <span className="text-[12px] font-bold text-brand dark:text-white">{doc.label}</span>
                       </div>
                       <div className="grid grid-cols-3 gap-2">
                         <button
-                          onClick={() => handleDownloadDoc(doc.id, doc.type)}
-                          className="flex items-center justify-center gap-1 p-2 rounded-lg bg-brand text-gold font-bold text-[10px] hover:bg-brand/90 transition-all"
+                          type="button"
+                          onClick={() => handleDownloadDoc(doc)}
+                          disabled={!!activeDocAction}
+                          className="flex items-center justify-center gap-1 p-2 rounded-lg bg-brand text-gold font-bold text-[10px] hover:bg-brand/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           <Download size={13} />
-                          تحميل
+                          {isDownloadLoading ? 'جاري...' : 'تحميل'}
                         </button>
                         <button
-                          onClick={() => handlePrintDoc(doc.id, doc.type)}
-                          className="flex items-center justify-center gap-1 p-2 rounded-lg bg-white dark:bg-[#06010a] text-brand dark:text-white font-bold text-[10px] border border-gold/30 hover:bg-gold/5 transition-all"
+                          type="button"
+                          onClick={() => handlePrintDoc(doc)}
+                          disabled={!!activeDocAction}
+                          className="flex items-center justify-center gap-1 p-2 rounded-lg bg-white dark:bg-[#06010a] text-brand dark:text-white font-bold text-[10px] border border-gold/30 hover:bg-gold/5 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           <Printer size={13} />
-                          طباعة
+                          {isPrintLoading ? 'جاري...' : 'طباعة'}
                         </button>
                         <button
-                          onClick={() => { setDocShowEmailField(!docShowEmailField); }}
-                          className={`flex items-center justify-center gap-1 p-2 rounded-lg font-bold text-[10px] transition-all ${docShowEmailField ? 'bg-gold text-brand' : 'bg-white dark:bg-[#06010a] text-brand dark:text-white border border-gold/30 hover:bg-gold/5'}`}
+                          type="button"
+                          onClick={() => {
+                            setDocEmailDocId(isEmailOpen ? null : doc.id);
+                            setDocEmailTarget('');
+                            setDocEmailAddress('');
+                          }}
+                          disabled={!!activeDocAction}
+                          className={`flex items-center justify-center gap-1 p-2 rounded-lg font-bold text-[10px] transition-all disabled:opacity-50 disabled:cursor-not-allowed ${isEmailOpen ? 'bg-gold text-brand' : 'bg-white dark:bg-[#06010a] text-brand dark:text-white border border-gold/30 hover:bg-gold/5'}`}
                         >
                           <Mail size={13} />
-                          إرسال
+                          {isSendLoading ? 'جاري...' : 'إرسال'}
                         </button>
                       </div>
 
                       {/* Email Options */}
-                      {docShowEmailField && (
+                      {isEmailOpen && (
                         <div className="animate-in fade-in duration-300 space-y-3 p-3 bg-gold/5 rounded-xl border border-gold/20">
                           <div>
                             <label className="block text-[11px] font-bold text-brand dark:text-white mb-1.5">إرسال إلى</label>
                             <div className="flex gap-2">
                               <button
                                 type="button"
-                                onClick={() => { setDocEmailTarget('admin'); setDocEmailAddress(''); }}
+                                onClick={() => { setDocEmailTarget('admin'); setDocEmailAddress(authUser?.email || ''); }}
                                 className={`flex-1 p-2 rounded-lg text-[10px] font-bold border transition-all ${docEmailTarget === 'admin' ? 'bg-brand text-gold border-brand' : 'bg-white dark:bg-[#06010a] text-brand dark:text-white border-gold/30'}`}
                               >
                                 بريد الإدارة
@@ -605,18 +989,20 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                                 dir="ltr"
                               />
                               <button
-                                onClick={() => handleSendEmail(doc.id, doc.type)}
-                                className="mt-2 w-full flex items-center justify-center gap-1.5 p-2 rounded-lg bg-gold text-brand font-bold text-[11px] hover:bg-gold/90 transition-all"
+                                type="button"
+                                onClick={() => handleSendEmail(doc)}
+                                disabled={!!activeDocAction}
+                                className="mt-2 w-full flex items-center justify-center gap-1.5 p-2 rounded-lg bg-gold text-brand font-bold text-[11px] hover:bg-gold/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                               >
                                 <Mail size={14} />
-                                إرسال المستند
+                                {isSendLoading ? 'جاري تجهيز الرابط...' : 'إرسال المستند'}
                               </button>
                             </div>
                           )}
                         </div>
                       )}
                     </div>
-                  ))}
+                  )})}
                 </div>
               )}
             </div>
