@@ -1343,7 +1343,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
         {/* Section Modal */}
         <AnimatePresence>
           {activeTab !== 'home' && (
-            <div className="fixed inset-0 z-[105] flex items-center justify-center p-0 sm:p-4">
+            <div className="fixed inset-0 z-[105] flex items-start sm:items-center justify-center p-0 sm:p-4">
               <motion.div 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
