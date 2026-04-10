@@ -10,7 +10,8 @@ interface Review {
   comment: string;
 }
 
-const AUTO_SCROLL_SPEED = 28;
+const AUTO_SCROLL_SPEED = 34;
+const MIN_REPEAT_GROUPS = 2;
 
 const StarRating: React.FC<{ rating: number; size?: number }> = ({ rating, size = 10 }) => (
   <div className="flex gap-0.5">
@@ -37,16 +38,14 @@ const getGapValue = (element: HTMLDivElement) => {
 
 const ClientReviews: React.FC = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [repeatGroups, setRepeatGroups] = useState(MIN_REPEAT_GROUPS);
+  const viewportRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const firstGroupRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number>(0);
   const lastFrameTime = useRef<number | null>(null);
   const cycleWidthRef = useRef(0);
   const offsetRef = useRef(0);
-  const isDragging = useRef(false);
-  const isHovered = useRef(false);
-  const startX = useRef(0);
-  const dragStartOffset = useRef(0);
 
   const applyTransform = useCallback(() => {
     if (trackRef.current) {
@@ -68,8 +67,19 @@ const ClientReviews: React.FC = () => {
   }, []);
 
   const measureCycleWidth = useCallback(() => {
-    if (!trackRef.current || !firstGroupRef.current) return;
+    if (!trackRef.current || !firstGroupRef.current || !viewportRef.current) return;
+
     cycleWidthRef.current = firstGroupRef.current.getBoundingClientRect().width + getGapValue(trackRef.current);
+
+    if (cycleWidthRef.current > 0) {
+      const viewportWidth = viewportRef.current.getBoundingClientRect().width;
+      const nextRepeatGroups = Math.max(MIN_REPEAT_GROUPS, Math.ceil(viewportWidth / cycleWidthRef.current) + 2);
+
+      setRepeatGroups((currentRepeatGroups) =>
+        currentRepeatGroups === nextRepeatGroups ? currentRepeatGroups : nextRepeatGroups,
+      );
+    }
+
     normalizeOffset();
     applyTransform();
   }, [applyTransform, normalizeOffset]);
@@ -91,7 +101,7 @@ const ClientReviews: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (reviews.length === 0 || !trackRef.current || !firstGroupRef.current) return;
+    if (reviews.length === 0 || !trackRef.current || !firstGroupRef.current || !viewportRef.current) return;
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     measureCycleWidth();
@@ -104,8 +114,8 @@ const ClientReviews: React.FC = () => {
       const delta = timestamp - lastFrameTime.current;
       lastFrameTime.current = timestamp;
 
-      if (!prefersReducedMotion && !isDragging.current && !isHovered.current && cycleWidthRef.current > 0) {
-        offsetRef.current += (AUTO_SCROLL_SPEED * delta) / 1000;
+      if (!prefersReducedMotion && cycleWidthRef.current > 0) {
+        offsetRef.current -= (AUTO_SCROLL_SPEED * delta) / 1000;
         normalizeOffset();
         applyTransform();
       }
@@ -120,7 +130,7 @@ const ClientReviews: React.FC = () => {
       : null;
 
     if (resizeObserver) {
-      resizeObserver.observe(trackRef.current);
+      resizeObserver.observe(viewportRef.current);
       resizeObserver.observe(firstGroupRef.current);
     } else {
       window.addEventListener('resize', measureCycleWidth);
@@ -136,31 +146,7 @@ const ClientReviews: React.FC = () => {
         window.removeEventListener('resize', measureCycleWidth);
       }
     };
-  }, [reviews, applyTransform, measureCycleWidth, normalizeOffset]);
-
-  const onPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-    isDragging.current = true;
-    startX.current = e.clientX;
-    dragStartOffset.current = offsetRef.current;
-    e.currentTarget.setPointerCapture(e.pointerId);
-  }, []);
-
-  const onPointerMove = useCallback(
-    (e: React.PointerEvent<HTMLDivElement>) => {
-      if (!isDragging.current) return;
-      offsetRef.current = dragStartOffset.current + (e.clientX - startX.current);
-      normalizeOffset();
-      applyTransform();
-    },
-    [applyTransform, normalizeOffset],
-  );
-
-  const onPointerUp = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-    isDragging.current = false;
-    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
-      e.currentTarget.releasePointerCapture(e.pointerId);
-    }
-  }, []);
+  }, [reviews, repeatGroups, applyTransform, measureCycleWidth, normalizeOffset]);
 
   if (reviews.length === 0) return null;
 
@@ -170,32 +156,20 @@ const ClientReviews: React.FC = () => {
         <SectionHeader eyebrow="آراء العملاء" title="تقييمات عملائنا" subtitle="تجارب حقيقية من عملاء استفادوا من خدماتنا" />
 
         <div className="mt-2 [mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)]">
-          <div
-            className="cursor-grab select-none overflow-hidden active:cursor-grabbing"
-            style={{ touchAction: 'pan-y' }}
-            onPointerDown={onPointerDown}
-            onPointerMove={onPointerMove}
-            onPointerUp={onPointerUp}
-            onPointerCancel={onPointerUp}
-            onMouseEnter={() => {
-              isHovered.current = true;
-            }}
-            onMouseLeave={() => {
-              isHovered.current = false;
-            }}
-          >
-            <div ref={trackRef} className="flex w-max gap-2" style={{ willChange: 'transform' }}>
-              <div ref={firstGroupRef} className="flex shrink-0 gap-2">
-                {reviews.map((review) => (
-                  <ReviewCard key={review.id} review={review} />
-                ))}
-              </div>
-
-              <div className="flex shrink-0 gap-2" aria-hidden="true">
-                {reviews.map((review) => (
-                  <ReviewCard key={`${review.id}-duplicate`} review={review} />
-                ))}
-              </div>
+          <div ref={viewportRef} className="overflow-hidden">
+            <div ref={trackRef} className="flex w-max gap-0.5" style={{ willChange: 'transform' }}>
+              {Array.from({ length: repeatGroups }).map((_, groupIndex) => (
+                <div
+                  key={`reviews-group-${groupIndex}`}
+                  ref={groupIndex === 0 ? firstGroupRef : undefined}
+                  className="flex shrink-0 gap-0.5"
+                  aria-hidden={groupIndex > 0 ? 'true' : undefined}
+                >
+                  {reviews.map((review) => (
+                    <ReviewCard key={`${groupIndex}-${review.id}`} review={review} />
+                  ))}
+                </div>
+              ))}
             </div>
           </div>
         </div>
