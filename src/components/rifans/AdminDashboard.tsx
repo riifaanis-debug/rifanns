@@ -116,11 +116,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
     if (!el || !selectedContract) return;
     setIsDownloading(true);
     try {
-      const dataUrl = await toPng(el, { quality: 0.95, backgroundColor: '#ffffff', pixelRatio: 2 });
-      const link = document.createElement('a');
-      link.download = `contract-${selectedContract.file_number || selectedContract.id}.png`;
-      link.href = dataUrl;
-      link.click();
+      const { downloadContractPdf } = await import('../../lib/generateContractPdf');
+      await downloadContractPdf(el, `عقد-${selectedContract.file_number || selectedContract.id}.pdf`);
     } catch (err) {
       console.error('Download failed:', err);
       alert('فشل تحميل العقد، يرجى المحاولة مرة أخرى');
