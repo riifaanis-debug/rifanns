@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import rifansStampImg from '@/assets/rifans-stamp.png';
+import rifansLogo from '@/assets/rifans-logo.png';
 import { X, CheckCircle, Download, Printer, ShieldCheck, PenTool, ArrowRight, Loader2, AlertTriangle } from 'lucide-react';
 import { Button } from './Shared';
 import { useAuth } from '../../contexts/AuthContext';
