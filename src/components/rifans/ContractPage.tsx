@@ -464,12 +464,31 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
                  }
               </p>
               
-              <div className="bg-brand/5 p-2 rounded-lg border border-brand/10 space-y-0.5 text-[10px]">
-                <p><strong>• رقم ملف العميل:</strong> {submissionId}</p>
-                <p><strong>• رقم السند:</strong> {submissionId}</p>
-                 <p><strong>• قيمة السند:</strong> {isRescheduling ? '2,000 ريال سعودي' : isSeizedAmounts ? 'تمثل نسبة (1%) من إجمالي المبالغ المستردة فعلياً' : 'تمثل نسبة (4%) من إجمالي مبالغ المنتجات التمويلية المعفاة فعليًا'}</p>
-                 <p><strong>• تاريخ الاستحقاق:</strong> {isRescheduling ? 'فور صدور الموافقة على طلب إعادة الجدولة' : isSeizedAmounts ? 'فور صدور قرار إتاحة النسبة النظامية واسترداد المبالغ' : 'فور قبول طلب الإعفاء واستلام خطاب المخالصة المالية الصادر من الجهة المختصة'}</p>
-                <p><strong>• مكان الوفاء:</strong> مدينة جدة – المملكة العربية السعودية</p>
+              <div className="border border-[#22042C]/20 rounded overflow-hidden" style={{ pageBreakInside: 'avoid' }}>
+                <table className="w-full text-[10px] border-collapse">
+                  <tbody>
+                    <tr className="border-b border-[#22042C]/10">
+                      <td className="py-1 px-3 font-bold bg-[#22042C]/5 w-[140px]">رقم ملف العميل</td>
+                      <td className="py-1 px-3">{submissionId}</td>
+                    </tr>
+                    <tr className="border-b border-[#22042C]/10">
+                      <td className="py-1 px-3 font-bold bg-[#22042C]/5">رقم السند</td>
+                      <td className="py-1 px-3">{submissionId}</td>
+                    </tr>
+                    <tr className="border-b border-[#22042C]/10">
+                      <td className="py-1 px-3 font-bold bg-[#22042C]/5">قيمة السند</td>
+                      <td className="py-1 px-3">{isRescheduling ? '2,000 ريال سعودي' : isSeizedAmounts ? 'تمثل نسبة (1%) من إجمالي المبالغ المستردة فعلياً' : 'تمثل نسبة (4%) من إجمالي مبالغ المنتجات التمويلية المعفاة فعليًا'}</td>
+                    </tr>
+                    <tr className="border-b border-[#22042C]/10">
+                      <td className="py-1 px-3 font-bold bg-[#22042C]/5">تاريخ الاستحقاق</td>
+                      <td className="py-1 px-3">{isRescheduling ? 'فور صدور الموافقة على طلب إعادة الجدولة' : isSeizedAmounts ? 'فور صدور قرار إتاحة النسبة النظامية واسترداد المبالغ' : 'فور قبول طلب الإعفاء واستلام خطاب المخالصة المالية'}</td>
+                    </tr>
+                    <tr>
+                      <td className="py-1 px-3 font-bold bg-[#22042C]/5">مكان الوفاء</td>
+                      <td className="py-1 px-3">مدينة جدة – المملكة العربية السعودية</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
               <p className="mt-1.5 text-[9px] text-muted">ويُعد هذا السند مستوفيًا لكافة البيانات والشروط النظامية المقررة، ويُعد دينًا ثابتًا في ذمة الطرف الثاني، ويحق للطرف الأول التقدم به مباشرة إلى محكمة التنفيذ المختصة لتنفيذه وفقًا للأنظمة المعمول بها في المملكة العربية السعودية.</p>
             </section>
