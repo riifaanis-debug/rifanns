@@ -485,7 +485,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
 
     return (
       <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-        <Card className="p-6">
+        <Card className="p-3 sm:p-4 md:p-6">
           <h3 className="text-sm font-bold text-brand dark:text-gold mb-6 flex items-center gap-2">
             <FileCheck size={18} className="text-purple-600" />
             طلب مستند
@@ -627,13 +627,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
   };
 
   const renderHome = () => (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="space-y-4 sm:space-y-6 md:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div>
         <h3 className="text-base sm:text-lg font-bold text-brand mb-4 sm:mb-6 flex items-center gap-2">
           <TrendingUp size={20} className="text-gold" />
           ملخص سريع
         </h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
           <StatCard icon={<Clock className="text-blue-500" />} label="طلبات جديدة" value={stats.newRequests} color="blue" onClick={() => setStatPopup({ label: 'طلبات جديدة', items: getStatItems('pending') })} />
           <StatCard icon={<RefreshCw className="text-indigo-500" />} label="تحت الإجراء" value={stats.processing} color="indigo" onClick={() => setStatPopup({ label: 'تحت الإجراء', items: getStatItems('processing') })} />
           <StatCard icon={<FileClock className="text-amber-600" />} label="بانتظار التوقيع" value={stats.pendingSignature} color="amber" onClick={() => setStatPopup({ label: 'بانتظار التوقيع', items: getStatItems('pendingSignature') })} />
@@ -641,7 +641,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 md:gap-5">
         <MenuCard 
           icon={<LayoutDashboard size={20} className="text-indigo-600" />} 
           label="الإحصائيات السريعة" 
@@ -718,8 +718,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
   );
 
   const renderStats = () => (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+    <div className="space-y-4 sm:space-y-6 md:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-2 sm:gap-3 md:gap-4">
         <StatCard icon={<Users className="text-indigo-600" />} label="إجمالي العملاء" value={stats.totalUsers} color="indigo" />
         <StatCard icon={<FileText className="text-brand" />} label="إجمالي الطلبات" value={stats.totalRequests} color="brand" />
         <StatCard icon={<Clock className="text-blue-500" />} label="طلبات جديدة" value={stats.newRequests} color="blue" />
@@ -733,7 +733,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="p-6">
+        <Card className="p-3 sm:p-4 md:p-6">
           <div className="flex items-center justify-between mb-6">
             <h3 className="font-bold text-brand flex items-center gap-2">
               <Bell size={18} className="text-gold" />
@@ -763,7 +763,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
           </div>
         </Card>
 
-        <Card className="p-6">
+        <Card className="p-3 sm:p-4 md:p-6">
           <div className="flex items-center justify-between mb-6">
             <h3 className="font-bold text-brand flex items-center gap-2">
               <TrendingUp size={18} className="text-gold" />
@@ -805,7 +805,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
             placeholder="بحث باسم العميل، رقم الملف، أو الهوية..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pr-10 pl-4 py-2.5 bg-white dark:bg-[#06010a] border border-gold/20 rounded-xl text-sm focus:border-gold outline-none shadow-sm"
+            className="w-full pr-9 pl-3 py-2 bg-white dark:bg-[#06010a] border border-gold/20 rounded-xl text-xs sm:text-sm focus:border-gold outline-none shadow-sm"
           />
         </div>
         <div className="flex items-center gap-2">
@@ -899,14 +899,14 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
               placeholder="بحث بالاسم أو رقم الطلب..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pr-10 pl-4 py-2.5 bg-white dark:bg-[#06010a] border border-gold/20 rounded-xl text-sm focus:border-gold outline-none shadow-sm"
+              className="w-full pr-9 pl-3 py-2 bg-white dark:bg-[#06010a] border border-gold/20 rounded-xl text-xs sm:text-sm focus:border-gold outline-none shadow-sm"
             />
           </div>
           <div className="flex items-center gap-3">
             <select 
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="bg-white dark:bg-[#06010a] border border-gold/20 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-gold shadow-sm"
+              className="bg-white dark:bg-[#06010a] border border-gold/20 rounded-xl px-3 py-2 text-xs sm:text-sm outline-none focus:border-gold shadow-sm"
             >
               <option value="all">كل الحالات</option>
               <option value="pending">جديد</option>
@@ -1023,7 +1023,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
             placeholder="بحث باسم العميل أو رقم الفاتورة..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pr-10 pl-4 py-2.5 bg-white dark:bg-[#06010a] border border-gold/20 rounded-xl text-sm focus:border-gold outline-none shadow-sm"
+            className="w-full pr-9 pl-3 py-2 bg-white dark:bg-[#06010a] border border-gold/20 rounded-xl text-xs sm:text-sm focus:border-gold outline-none shadow-sm"
           />
         </div>
       </div>
@@ -1102,7 +1102,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
             placeholder="بحث باسم العميل أو رقم الملف..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pr-10 pl-4 py-2.5 bg-white dark:bg-[#06010a] border border-gold/20 rounded-xl text-sm focus:border-gold outline-none shadow-sm"
+            className="w-full pr-9 pl-3 py-2 bg-white dark:bg-[#06010a] border border-gold/20 rounded-xl text-xs sm:text-sm focus:border-gold outline-none shadow-sm"
           />
         </div>
       </div>
@@ -1208,7 +1208,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
       </div>
       <div className="space-y-3 sm:space-y-4">
         {notifications.map(n => (
-          <div key={n.id} className="flex items-start gap-2 sm:gap-4 p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 hover:border-gold/30 transition-all group">
+          <div key={n.id} className="flex items-start gap-2 sm:gap-4 p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl md:rounded-2xl bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 hover:border-gold/30 transition-all group">
             <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl flex items-center justify-center shrink-0 shadow-sm ${
               n.type === 'status_update' ? 'bg-blue-100 text-blue-600' : 
               n.type === 'contract_signature' ? 'bg-rose-100 text-rose-600 border border-rose-200' : 'bg-gold/10 text-gold'
@@ -1250,19 +1250,19 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
         targetUserName={chatTargetUser?.name} 
       />
       {/* Header */}
-      <header className="bg-brand text-white p-3 md:p-6 flex items-center justify-between sticky top-0 z-[102] shadow-xl print-hidden">
-        <div className="flex items-center gap-3 md:gap-4">
+      <header className="bg-brand text-white p-2 sm:p-3 md:p-5 flex items-center justify-between sticky top-0 z-[102] shadow-xl print-hidden">
+        <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
           <button 
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="md:hidden w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-gold border border-white/10"
+            className="md:hidden w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-gold border border-white/10"
           >
-            {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
+            {isSidebarOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
-          <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-gold shadow-2xl">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg sm:rounded-xl md:rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-gold shadow-2xl">
             <LayoutDashboard size={20} className="md:w-6 md:h-6" />
           </div>
           <div>
-            <h1 className="text-base md:text-2xl font-black tracking-tight">لوحة تحكم الإدارة</h1>
+            <h1 className="text-sm sm:text-base md:text-xl font-black tracking-tight">لوحة تحكم الإدارة</h1>
             <p className="hidden md:block text-[10px] md:text-xs text-gold/80 font-medium">إدارة العملاء والطلبات والعقود والتنبيهات</p>
           </div>
         </div>
@@ -1327,7 +1327,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
         </aside>
 
         {/* Main Content Area */}
-        <main className="flex-1 overflow-y-auto p-3 md:p-6 custom-scrollbar bg-[#F5F4FA] dark:bg-[#06010a] print:p-0">
+        <main className="flex-1 overflow-y-auto p-2 sm:p-3 md:p-6 custom-scrollbar bg-[#F5F4FA] dark:bg-[#06010a] print:p-0">
           <div className="w-full space-y-6 sm:space-y-8">
             {isLoading ? (
               <div className="flex flex-col items-center justify-center h-96 gap-4">
@@ -1358,15 +1358,15 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                 className="relative w-full sm:w-[95%] max-w-7xl h-screen sm:h-auto sm:max-h-[92vh] bg-[#F5F4FA] dark:bg-[#06010a] rounded-none sm:rounded-[32px] shadow-2xl overflow-hidden flex flex-col"
               >
                 {/* Modal Header - Fixed/Sticky */}
-                <div className="sticky top-0 z-10 p-3 sm:p-5 border-b border-gold/10 flex items-center justify-between bg-brand text-white shrink-0">
+                <div className="sticky top-0 z-10 p-2 sm:p-3 md:p-5 border-b border-gold/10 flex items-center justify-between bg-brand text-white shrink-0">
                   <div className="flex items-center gap-2 sm:gap-4">
                     <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-lg bg-white/10 flex items-center justify-center text-gold border border-white/10">
                       {getTabIcon(activeTab)}
                     </div>
-                    <h2 className="text-sm sm:text-lg font-bold">{getTabTitle(activeTab)}</h2>
+                    <h2 className="text-xs sm:text-sm md:text-lg font-bold">{getTabTitle(activeTab)}</h2>
                   </div>
                   <div className="flex items-center gap-2">
-                    <button onClick={() => setActiveTab('home')} className="flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg bg-white/10 text-white text-[10px] sm:text-xs font-bold hover:bg-white/20 transition-all border border-white/10">
+                    <button onClick={() => setActiveTab('home')} className="flex items-center gap-1 px-2 py-1 sm:px-3 sm:py-1.5 rounded-md sm:rounded-lg bg-white/10 text-white text-[9px] sm:text-[10px] md:text-xs font-bold hover:bg-white/20 transition-all border border-white/10">
                       <X size={14} />
                       <span className="hidden sm:inline">العودة للوحة التحكم</span>
                       <span className="sm:hidden">رجوع</span>
@@ -2233,22 +2233,22 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
 const MenuCard = ({ icon, label, description, onClick, color, badge }: { icon: React.ReactNode, label: string, description: string, onClick: () => void, color: string, badge?: number }) => (
   <button 
     onClick={onClick}
-    className="relative p-2.5 sm:p-3.5 bg-white dark:bg-[#12031a] rounded-[12px] sm:rounded-[20px] border border-gold/10 hover:border-gold/40 hover:shadow-2xl transition-all group text-right flex flex-col items-start gap-1.5 overflow-hidden"
+    className="relative p-2 sm:p-2.5 md:p-3.5 bg-white dark:bg-[#12031a] rounded-[10px] sm:rounded-[14px] md:rounded-[20px] border border-gold/10 hover:border-gold/40 hover:shadow-2xl transition-all group text-right flex flex-col items-start gap-1.5 overflow-hidden"
   >
     <div className={`absolute top-0 right-0 w-1 h-full bg-${color}-500 opacity-0 group-hover:opacity-100 transition-all`}></div>
-    <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-gray-50 dark:bg-white/5 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform`}>
+    <div className={`w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-md sm:rounded-lg bg-gray-50 dark:bg-white/5 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform`}>
       {icon}
     </div>
     <div>
-      <h3 className="text-xs sm:text-sm font-bold text-brand dark:text-white group-hover:text-gold transition-colors flex items-center gap-1.5">
+      <h3 className="text-[10px] sm:text-xs md:text-sm font-bold text-brand dark:text-white group-hover:text-gold transition-colors flex items-center gap-1">
         {label}
         {badge ? (
           <span className="bg-rose-500 text-white text-[8px] sm:text-[9px] font-bold px-1.5 py-0.5 rounded-full">{badge}</span>
         ) : null}
       </h3>
-      <p className="text-[8px] sm:text-[10px] text-muted mt-0.5 leading-relaxed">{description}</p>
+      <p className="text-[7px] sm:text-[8px] md:text-[10px] text-muted mt-0.5 leading-relaxed">{description}</p>
     </div>
-    <div className="mt-1 sm:mt-1.5 flex items-center gap-1.5 text-gold font-bold text-[8px] sm:text-[9px] opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
+    <div className="mt-0.5 sm:mt-1 md:mt-1.5 flex items-center gap-1 text-gold font-bold text-[7px] sm:text-[8px] md:text-[9px] opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
       فتح القسم
       <ChevronLeft size={8} />
     </div>
@@ -2256,22 +2256,22 @@ const MenuCard = ({ icon, label, description, onClick, color, badge }: { icon: R
 );
 
 const StatCard = ({ icon, label, value, color, onClick }: { icon: React.ReactNode, label: string, value: number, color: string, onClick?: () => void }) => (
-  <div className={`p-3 sm:p-4 rounded-2xl border border-gold/10 bg-white dark:bg-[#06010a] hover:border-gold/30 hover:shadow-lg transition-all group overflow-hidden relative ${onClick ? 'cursor-pointer active:scale-[0.97]' : ''}`} onClick={onClick}>
+  <div className={`p-2 sm:p-3 md:p-4 rounded-xl sm:rounded-2xl border border-gold/10 bg-white dark:bg-[#06010a] hover:border-gold/30 hover:shadow-lg transition-all group overflow-hidden relative ${onClick ? 'cursor-pointer active:scale-[0.97]' : ''}`} onClick={onClick}>
     <div className={`absolute top-0 right-0 w-1 h-full bg-${color}-500 opacity-0 group-hover:opacity-100 transition-all`}></div>
-    <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
-      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-gray-50 dark:bg-white/5 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+    <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3 mb-1.5 sm:mb-2 md:mb-3">
+      <div className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-md sm:rounded-lg md:rounded-xl bg-gray-50 dark:bg-white/5 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
         {icon}
       </div>
-      <span className="text-[10px] font-bold text-muted uppercase tracking-tight">{label}</span>
+      <span className="text-[8px] sm:text-[10px] font-bold text-muted uppercase tracking-tight">{label}</span>
     </div>
-    <div className="text-xl sm:text-2xl font-black text-brand dark:text-white tracking-tight">{typeof value === 'number' ? formatAmount(value) : value}</div>
+    <div className="text-base sm:text-xl md:text-2xl font-black text-brand dark:text-white tracking-tight">{typeof value === 'number' ? formatAmount(value) : value}</div>
   </div>
 );
 
 const NavButton = ({ active, onClick, icon, label, badge }: { active: boolean, onClick: () => void, icon: React.ReactNode, label: string, badge?: number }) => (
   <button 
     onClick={onClick}
-    className={`flex items-center justify-between w-full p-3 rounded-xl transition-all group ${
+    className={`flex items-center justify-between w-full p-2.5 rounded-xl transition-all group ${
       active 
         ? 'bg-brand text-gold shadow-lg translate-x-[-4px]' 
         : 'text-muted hover:bg-gold/5 hover:text-brand dark:hover:text-gold'
@@ -2281,7 +2281,7 @@ const NavButton = ({ active, onClick, icon, label, badge }: { active: boolean, o
       <div className={`transition-transform group-hover:scale-110 ${active ? 'text-gold' : 'text-muted group-hover:text-gold'}`}>
         {icon}
       </div>
-      <span className="text-sm font-bold">{label}</span>
+      <span className="text-xs sm:text-sm font-bold">{label}</span>
     </div>
     {badge ? (
       <span className="bg-rose-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">{badge}</span>
@@ -2292,10 +2292,10 @@ const NavButton = ({ active, onClick, icon, label, badge }: { active: boolean, o
 );
 
 const InfoItem = ({ icon, label, value, isLtr, isBold }: { icon: React.ReactNode, label: string, value: any, isLtr?: boolean, isBold?: boolean }) => (
-  <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 text-right">
-    <div className="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2 text-muted justify-start">
+  <div className="p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl md:rounded-2xl bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 text-right">
+    <div className="flex items-center gap-1 sm:gap-1.5 md:gap-2 mb-1 sm:mb-1.5 md:mb-2 text-muted justify-start">
       {icon}
-      <span className="text-[8px] sm:text-[10px] font-bold uppercase tracking-wider">{label}</span>
+      <span className="text-[7px] sm:text-[9px] md:text-[10px] font-bold uppercase tracking-wider">{label}</span>
     </div>
     <div className={`text-[10px] sm:text-xs text-right ${isBold ? 'font-bold text-brand dark:text-gold sm:text-sm' : 'text-brand dark:text-white'} ${isLtr ? 'font-mono' : ''}`} dir={isLtr ? 'ltr' : 'rtl'}>
       {value || '---'}
