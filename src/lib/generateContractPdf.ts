@@ -129,6 +129,32 @@ function applyCleanStyles(el: HTMLElement) {
   }
 }
 
+async function waitForPdfAssets(root: HTMLElement) {
+  const images = Array.from(root.querySelectorAll('img'));
+
+  await Promise.all(
+    images.map(
+      (image) =>
+        new Promise<void>((resolve) => {
+          if (image.complete) {
+            resolve();
+            return;
+          }
+
+          const finish = () => resolve();
+          image.addEventListener('load', finish, { once: true });
+          image.addEventListener('error', finish, { once: true });
+        })
+    )
+  );
+
+  try {
+    await document.fonts.ready;
+  } catch {
+    // Ignore font readiness failures and continue the export.
+  }
+}
+
 export const generateContractPdf = async (
   element: HTMLElement,
   fileName: string = 'contract.pdf'
@@ -161,6 +187,7 @@ export const generateContractPdf = async (
 
   // Aggressively clean for professional PDF output
   cleanForPdf(clone);
+  await waitForPdfAssets(clone);
 
   try {
     const canvas = await html2canvas(clone, {

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import rifansLogo from '@/assets/rifans-logo.png';
 import rifansStampImg from '@/assets/rifans-stamp.png';
 import { useAuth } from '../../contexts/AuthContext';
 import { 
@@ -57,6 +58,28 @@ const AdminReviewSection: React.FC = () => {
     </div>
   );
 };
+
+const PdfBulletList: React.FC<{ items: string[]; className?: string }> = ({ items, className }) => (
+  <div className={className} dir="rtl">
+    {items.map((item, index) => (
+      <div key={`${item}-${index}`} className="flex items-start gap-2 text-right">
+        <p className="flex-1">{item}</p>
+        <span className="pt-[1px] font-black leading-none text-gold">•</span>
+      </div>
+    ))}
+  </div>
+);
+
+const PdfNumberedList: React.FC<{ items: string[]; className?: string }> = ({ items, className }) => (
+  <div className={className} dir="rtl">
+    {items.map((item, index) => (
+      <div key={`${item}-${index}`} className="flex items-start gap-2 text-right">
+        <p className="flex-1">{item}</p>
+        <span className="min-w-[18px] font-black leading-none text-brand">{index + 1}.</span>
+      </div>
+    ))}
+  </div>
+);
 
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
   const { user: authUser } = useAuth();
@@ -1800,6 +1823,23 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                     ? sub.data.products 
                     : (typeof sub.data?.products === 'string' ? safeParse(sub.data.products, []) : []);
                   const totalDebt = products.reduce((acc: number, p: any) => acc + (Number(p.amount) || 0), 0) || 0;
+                  const scopeItems = isRescheduling
+                    ? [
+                        'الاطلاع على المستندات والبيانات المالية',
+                        'التواصل مع البنوك والجهات التمويلية',
+                        'رفع الطلبات ومتابعتها، وإعداد المذكرات النظامية والحضور النظامي عند الحاجة.',
+                      ]
+                    : [
+                        'الاطلاع على التقارير الطبية والمستندات الرسمية',
+                        'التواصل مع البنوك والجهات التمويلية',
+                        'رفع الطلبات ومتابعتها، وإعداد المذكرات القانونية والحضور النظامي عند الحاجة.',
+                      ];
+                  const acknowledgmentItems = [
+                    'صحة جميع البيانات والمستندات المقدمة منه.',
+                    'صحة احتساب الأتعاب وفق النسبة المتفق عليها.',
+                    'التنازل عن أي دفوع أو منازعات تتعلق بسند الأمر متى ما تم إصداره عبر منصة نافذ وفق أحكام هذا العقد.',
+                    'عدم الطعن أو الاعتراض على التنفيذ أمام محكمة التنفيذ إلا في الحدود التي يجيزها النظام.',
+                  ];
 
                   return (
                     <div ref={contractContentRef} className="bg-white dark:bg-white/5 rounded-xl border border-gold/10 p-4 sm:p-12 shadow-inner relative font-['Tajawal'] min-h-[800px]">
@@ -1831,10 +1871,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                             </div>
                           </div>
                         </div>
-                        <div className="hidden sm:block">
-                          <div className="w-24 h-24 border-2 border-[#22042C]/10 rounded-2xl flex items-center justify-center bg-gray-50">
-                            <Hash size={32} className="text-[#22042C]/20" />
-                          </div>
+                        <div className="shrink-0">
+                          <img src={rifansLogo} alt="شعار ريفانس" className="h-16 sm:h-20 w-auto object-contain" />
                         </div>
                       </div>
 
@@ -1905,11 +1943,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                             <h3 className="font-black text-gold mb-0.5 text-[10.5px]">المادة (3): نطاق التفويض</h3>
                             <div className="pr-2">
                               <p className="mb-0.5">يشمل التفويض الممنوح للطرف الأول الصلاحيات التالية :</p>
-                              <ul className="list-disc pr-4 space-y-0.5">
-                                <li>الاطلاع على التقارير الطبية والمستندات الرسمية</li>
-                                <li>التواصل مع البنوك والجهات التمويلية</li>
-                                <li>رفع الطلبات ومتابعتها، وإعداد المذكرات القانونية والحضور النظامي عند الحاجة.</li>
-                              </ul>
+                              <PdfBulletList items={scopeItems} className="space-y-0.5 pr-2" />
                             </div>
                           </section>
 
@@ -1959,12 +1993,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                           <section>
                             <h3 className="font-black text-gold mb-0.5 text-[10.5px]">المادة (10): الإقرار والتنازل عن الدفوع</h3>
                             <p className="pr-2">يُقر الطرف الثاني إقراراً صريحاً ونهائياً بما يلي:</p>
-                            <ul className="list-decimal list-inside pr-4 space-y-0.5">
-                              <li>صحة جميع البيانات والمستندات المقدمة منه.</li>
-                              <li>صحة احتساب الأتعاب وفق النسبة المتفق عليها.</li>
-                              <li>التنازل عن أي دفوع أو منازعات تتعلق بسند الأمر متى ما تم إصداره عبر منصة نافذ وفق أحكام هذا العقد.</li>
-                              <li>عدم الطعن أو الاعتراض على التنفيذ أمام محكمة التنفيذ إلا في الحدود التي يجيزها النظام.</li>
-                            </ul>
+                            <PdfNumberedList items={acknowledgmentItems} className="space-y-0.5 pr-2" />
                           </section>
 
                           <section>
@@ -2016,7 +2045,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                           <p className="text-[8px] text-muted font-bold">هذه الوثيقة صادرة عن النظام الإلكتروني لشركة ريفانس المالية وهي ملزمة قانوناً بمجرد التوقيع عليها.</p>
                           <div className="flex justify-between items-center text-[7px] text-gray-400 mt-1.5">
                             <span>رقم المرجع: {sub.id}</span>
-                            <span className="font-bold">صفحة 1 من 1</span>
+                            <span className="font-bold">رقم العقد: {selectedContract.file_number}</span>
                           </div>
                         </div>
                       </div>
