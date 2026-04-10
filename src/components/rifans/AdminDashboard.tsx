@@ -485,7 +485,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
 
     return (
       <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-        <Card className="p-6">
+        <Card className="p-3 sm:p-4 md:p-6">
           <h3 className="text-sm font-bold text-brand dark:text-gold mb-6 flex items-center gap-2">
             <FileCheck size={18} className="text-purple-600" />
             طلب مستند
@@ -733,7 +733,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="p-6">
+        <Card className="p-3 sm:p-4 md:p-6">
           <div className="flex items-center justify-between mb-6">
             <h3 className="font-bold text-brand flex items-center gap-2">
               <Bell size={18} className="text-gold" />
@@ -763,7 +763,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
           </div>
         </Card>
 
-        <Card className="p-6">
+        <Card className="p-3 sm:p-4 md:p-6">
           <div className="flex items-center justify-between mb-6">
             <h3 className="font-bold text-brand flex items-center gap-2">
               <TrendingUp size={18} className="text-gold" />
@@ -805,7 +805,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
             placeholder="بحث باسم العميل، رقم الملف، أو الهوية..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pr-10 pl-4 py-2.5 bg-white dark:bg-[#06010a] border border-gold/20 rounded-xl text-sm focus:border-gold outline-none shadow-sm"
+            className="w-full pr-9 pl-3 py-2 bg-white dark:bg-[#06010a] border border-gold/20 rounded-xl text-xs sm:text-sm focus:border-gold outline-none shadow-sm"
           />
         </div>
         <div className="flex items-center gap-2">
@@ -899,14 +899,14 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
               placeholder="بحث بالاسم أو رقم الطلب..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pr-10 pl-4 py-2.5 bg-white dark:bg-[#06010a] border border-gold/20 rounded-xl text-sm focus:border-gold outline-none shadow-sm"
+              className="w-full pr-9 pl-3 py-2 bg-white dark:bg-[#06010a] border border-gold/20 rounded-xl text-xs sm:text-sm focus:border-gold outline-none shadow-sm"
             />
           </div>
           <div className="flex items-center gap-3">
             <select 
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="bg-white dark:bg-[#06010a] border border-gold/20 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-gold shadow-sm"
+              className="bg-white dark:bg-[#06010a] border border-gold/20 rounded-xl px-3 py-2 text-xs sm:text-sm outline-none focus:border-gold shadow-sm"
             >
               <option value="all">كل الحالات</option>
               <option value="pending">جديد</option>
@@ -1023,7 +1023,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
             placeholder="بحث باسم العميل أو رقم الفاتورة..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pr-10 pl-4 py-2.5 bg-white dark:bg-[#06010a] border border-gold/20 rounded-xl text-sm focus:border-gold outline-none shadow-sm"
+            className="w-full pr-9 pl-3 py-2 bg-white dark:bg-[#06010a] border border-gold/20 rounded-xl text-xs sm:text-sm focus:border-gold outline-none shadow-sm"
           />
         </div>
       </div>
@@ -1102,7 +1102,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
             placeholder="بحث باسم العميل أو رقم الملف..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pr-10 pl-4 py-2.5 bg-white dark:bg-[#06010a] border border-gold/20 rounded-xl text-sm focus:border-gold outline-none shadow-sm"
+            className="w-full pr-9 pl-3 py-2 bg-white dark:bg-[#06010a] border border-gold/20 rounded-xl text-xs sm:text-sm focus:border-gold outline-none shadow-sm"
           />
         </div>
       </div>
@@ -2271,7 +2271,7 @@ const StatCard = ({ icon, label, value, color, onClick }: { icon: React.ReactNod
 const NavButton = ({ active, onClick, icon, label, badge }: { active: boolean, onClick: () => void, icon: React.ReactNode, label: string, badge?: number }) => (
   <button 
     onClick={onClick}
-    className={`flex items-center justify-between w-full p-3 rounded-xl transition-all group ${
+    className={`flex items-center justify-between w-full p-2.5 rounded-xl transition-all group ${
       active 
         ? 'bg-brand text-gold shadow-lg translate-x-[-4px]' 
         : 'text-muted hover:bg-gold/5 hover:text-brand dark:hover:text-gold'
@@ -2281,7 +2281,7 @@ const NavButton = ({ active, onClick, icon, label, badge }: { active: boolean, o
       <div className={`transition-transform group-hover:scale-110 ${active ? 'text-gold' : 'text-muted group-hover:text-gold'}`}>
         {icon}
       </div>
-      <span className="text-sm font-bold">{label}</span>
+      <span className="text-xs sm:text-sm font-bold">{label}</span>
     </div>
     {badge ? (
       <span className="bg-rose-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">{badge}</span>
