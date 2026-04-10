@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import rifansStampImg from '@/assets/rifans-stamp.png';
+import rifansLogo from '@/assets/rifans-logo.png';
 import { X, CheckCircle, Download, Printer, ShieldCheck, PenTool, ArrowRight, Loader2, AlertTriangle } from 'lucide-react';
 import { Button } from './Shared';
 import { useAuth } from '../../contexts/AuthContext';
@@ -290,7 +291,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
             </div>
             {/* Left side: Logo */}
             <div className="flex-shrink-0 mr-4">
-              <img src="https://h.top4top.io/p_37364r3kd1.png" alt="Rifans Logo" className="h-16 w-auto object-contain" referrerPolicy="no-referrer" />
+              <img src={rifansLogo} alt="Rifans Logo" className="h-16 w-auto object-contain" />
             </div>
           </div>
 
@@ -298,17 +299,17 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
           <div className="space-y-3 text-right relative text-[10.5px] leading-[1.7] text-[#22042C]" style={{ direction: 'rtl' }}>
             
             {/* Parties Section - Clean table layout */}
-            <div className="border border-[#22042C]/20 rounded overflow-hidden" style={{ pageBreakInside: 'avoid' }}>
+            <div className="border border-[#d4c8d9] rounded overflow-hidden" style={{ pageBreakInside: 'avoid' }}>
               <table className="w-full text-[10px] border-collapse">
                 <thead>
                   <tr>
-                    <th className="bg-[#22042C]/5 text-[#C5A059] font-black text-[11px] py-1.5 px-3 text-right border-b border-[#22042C]/20 w-1/2">• الطرف الأول</th>
-                    <th className="bg-[#22042C]/5 text-[#C5A059] font-black text-[11px] py-1.5 px-3 text-right border-b border-[#22042C]/20 border-r border-[#22042C]/20 w-1/2">• الطرف الثاني</th>
+                    <th className="bg-[#f3eff5] text-[#C5A059] font-black text-[11px] py-1.5 px-3 text-right border-b border-[#d4c8d9] w-1/2">• الطرف الأول</th>
+                    <th className="bg-[#f3eff5] text-[#C5A059] font-black text-[11px] py-1.5 px-3 text-right border-b border-[#d4c8d9] border-r border-[#d4c8d9] w-1/2">• الطرف الثاني</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td className="py-1 px-3 align-top border-b border-[#22042C]/10">
+                    <td className="py-1 px-3 align-top border-b border-[#e5dce9]">
                       <div className="space-y-0.5">
                         <p><strong>الاسم:</strong> شركة ريفانس المالية</p>
                         <p><strong>الرقم الوطني الموحد:</strong> 7038821125</p>
@@ -316,7 +317,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
                         <p><strong>وبموجب تفويض رقم:</strong> DLG398908</p>
                       </div>
                     </td>
-                    <td className="py-1 px-3 align-top border-b border-[#22042C]/10 border-r border-[#22042C]/20">
+                    <td className="py-1 px-3 align-top border-b border-[#e5dce9] border-r border-[#d4c8d9]">
                       <div className="space-y-0.5">
                         <p><strong>اسم العميل:</strong> {submission.data.firstName} {submission.data.middleName} {submission.data.lastName}</p>
                         <p><strong>رقم الهوية الوطنية:</strong> {submission.data.nationalId || submission.data.userNationalId || '---'}</p>
@@ -366,30 +367,30 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
                 }
               </p>
               
-              <div className="border border-[#22042C]/20 rounded overflow-hidden" style={{ pageBreakInside: 'avoid' }}>
+              <div className="border border-[#d4c8d9] rounded overflow-hidden" style={{ pageBreakInside: 'avoid' }}>
                 <table className="w-full text-[10px] border-collapse">
                   <tbody>
-                    <tr className="border-b border-[#22042C]/10">
-                      <td className="py-1 px-3 font-bold bg-[#22042C]/5 w-[140px]">اسم الجهة التمويلية</td>
+                    <tr className="border-b border-[#e5dce9]">
+                      <td className="py-1 px-3 font-bold bg-[#f3eff5] w-[140px]">اسم الجهة التمويلية</td>
                       <td className="py-1 px-3">{submission.data.bank || 'الجهة المالية'}</td>
                     </tr>
                     {products.map((product: any, idx: number) => (
                       <React.Fragment key={idx}>
-                        <tr className="border-b border-[#22042C]/10 bg-[#22042C]/[0.02]">
+                        <tr className="border-b border-[#e5dce9] bg-[#f9f7fa]">
                           <td className="py-1 px-3 font-bold">نوع المنتج</td>
                           <td className="py-1 px-3">{product.type}</td>
                         </tr>
-                        <tr className="border-b border-[#22042C]/10">
+                        <tr className="border-b border-[#e5dce9]">
                           <td className="py-1 px-3 font-bold">رقم الحساب</td>
                           <td className="py-1 px-3 font-mono text-[9px]">{product.accountNumber || product.account_number}</td>
                         </tr>
-                        <tr className="border-b border-[#22042C]/10">
+                        <tr className="border-b border-[#e5dce9]">
                           <td className="py-1 px-3 font-bold text-[#dc2626]">المبلغ</td>
                           <td className="py-1 px-3 font-bold text-[#dc2626]">{formatAmount(product.amount)} ريال سعودي</td>
                         </tr>
                       </React.Fragment>
                     ))}
-                    <tr className="bg-[#22042C]/5">
+                    <tr className="bg-[#f3eff5]">
                       <td className="py-1.5 px-3 font-black text-[11px]">إجمالي المديونية</td>
                       <td className="py-1.5 px-3 font-black text-[11px]">{formatAmount(totalDebt)} ريال سعودي</td>
                     </tr>
@@ -464,27 +465,27 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
                  }
               </p>
               
-              <div className="border border-[#22042C]/20 rounded overflow-hidden" style={{ pageBreakInside: 'avoid' }}>
+              <div className="border border-[#d4c8d9] rounded overflow-hidden" style={{ pageBreakInside: 'avoid' }}>
                 <table className="w-full text-[10px] border-collapse">
                   <tbody>
-                    <tr className="border-b border-[#22042C]/10">
-                      <td className="py-1 px-3 font-bold bg-[#22042C]/5 w-[140px]">رقم ملف العميل</td>
+                    <tr className="border-b border-[#e5dce9]">
+                      <td className="py-1 px-3 font-bold bg-[#f3eff5] w-[140px]">رقم ملف العميل</td>
                       <td className="py-1 px-3">{submissionId}</td>
                     </tr>
-                    <tr className="border-b border-[#22042C]/10">
-                      <td className="py-1 px-3 font-bold bg-[#22042C]/5">رقم السند</td>
+                    <tr className="border-b border-[#e5dce9]">
+                      <td className="py-1 px-3 font-bold bg-[#f3eff5]">رقم السند</td>
                       <td className="py-1 px-3">{submissionId}</td>
                     </tr>
-                    <tr className="border-b border-[#22042C]/10">
-                      <td className="py-1 px-3 font-bold bg-[#22042C]/5">قيمة السند</td>
+                    <tr className="border-b border-[#e5dce9]">
+                      <td className="py-1 px-3 font-bold bg-[#f3eff5]">قيمة السند</td>
                       <td className="py-1 px-3">{isRescheduling ? '2,000 ريال سعودي' : isSeizedAmounts ? 'تمثل نسبة (1%) من إجمالي المبالغ المستردة فعلياً' : 'تمثل نسبة (4%) من إجمالي مبالغ المنتجات التمويلية المعفاة فعليًا'}</td>
                     </tr>
-                    <tr className="border-b border-[#22042C]/10">
-                      <td className="py-1 px-3 font-bold bg-[#22042C]/5">تاريخ الاستحقاق</td>
+                    <tr className="border-b border-[#e5dce9]">
+                      <td className="py-1 px-3 font-bold bg-[#f3eff5]">تاريخ الاستحقاق</td>
                       <td className="py-1 px-3">{isRescheduling ? 'فور صدور الموافقة على طلب إعادة الجدولة' : isSeizedAmounts ? 'فور صدور قرار إتاحة النسبة النظامية واسترداد المبالغ' : 'فور قبول طلب الإعفاء واستلام خطاب المخالصة المالية'}</td>
                     </tr>
                     <tr>
-                      <td className="py-1 px-3 font-bold bg-[#22042C]/5">مكان الوفاء</td>
+                      <td className="py-1 px-3 font-bold bg-[#f3eff5]">مكان الوفاء</td>
                       <td className="py-1 px-3">مدينة جدة – المملكة العربية السعودية</td>
                     </tr>
                   </tbody>
