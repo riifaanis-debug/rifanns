@@ -854,6 +854,65 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
     setActiveDocAction(actionKey);
 
     try {
+      // For contract type, use the actual contract view from "عقودي" section
+      if (doc.type === 'contract') {
+        const contractObj = contracts.find(c => c.id === doc.id) || contracts.find(c => c.submission_id === doc.submissionId);
+        if (!contractObj) {
+          alert('لم يتم العثور على العقد');
+          return;
+        }
+
+        // Set the selected contract to render it
+        setSelectedContract(contractObj);
+
+        // Wait for the contract to render in the DOM
+        await new Promise<void>(resolve => {
+          const checkRef = () => {
+            if (contractContentRef.current) {
+              resolve();
+            } else {
+              requestAnimationFrame(checkRef);
+            }
+          };
+          requestAnimationFrame(checkRef);
+        });
+        // Extra delay for images/fonts to load
+        await new Promise(r => setTimeout(r, 500));
+
+        const el = contractContentRef.current;
+        if (!el) {
+          alert('تعذر تجهيز العقد');
+          return;
+        }
+
+        const fileName = `عقد-${contractObj.file_number || contractObj.id}.pdf`;
+
+        if (action === 'download') {
+          const { downloadContractPdf } = await import('../../lib/generateContractPdf');
+          await downloadContractPdf(el, fileName);
+        } else if (action === 'print') {
+          const { printContractPdf } = await import('../../lib/generateContractPdf');
+          await printContractPdf(el);
+        } else {
+          const { generateContractPdf } = await import('../../lib/generateContractPdf');
+          const { blob } = await generateContractPdf(el, fileName);
+          const file = new File([blob], fileName, { type: 'application/pdf' });
+          const uploaded = await uploadDocument(file);
+          const sub = submissions.find(s => s.id === contractObj.submission_id);
+          const clientName = selectedClient?.name || selectedClient?.full_name || 'العميل';
+          const emailSubject = `عقد العميل - ${clientName}`;
+          const emailBody = `مرفق لكم عقد العميل ${clientName}`;
+          window.location.href = `mailto:${docEmailAddress.trim()}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(`${emailBody}\n\nرابط المستند:\n${uploaded.filePath}`)}`;
+          setDocEmailDocId(null);
+          setDocEmailTarget('');
+          setDocEmailAddress('');
+        }
+
+        // Keep the contract view open so user can see it
+        return;
+      }
+
+      // For non-contract types, use the generated document template
       await withTemporaryDocumentElement(doc, selectedClient, async (element, payload) => {
         if (action === 'download') {
           const { downloadContractPdf } = await import('../../lib/generateContractPdf');
@@ -892,7 +951,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
     } finally {
       setActiveDocAction(null);
     }
-  }, [docEmailAddress, withTemporaryDocumentElement]);
+  }, [docEmailAddress, withTemporaryDocumentElement, contracts, submissions]);
 
   const renderDocumentRequest = () => {
     const selectedClient = clientsWithActivity.find(c => c.id === docSelectedClient);
