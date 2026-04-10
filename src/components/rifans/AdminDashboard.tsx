@@ -1250,19 +1250,19 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
         targetUserName={chatTargetUser?.name} 
       />
       {/* Header */}
-      <header className="bg-brand text-white p-3 md:p-6 flex items-center justify-between sticky top-0 z-[102] shadow-xl print-hidden">
-        <div className="flex items-center gap-3 md:gap-4">
+      <header className="bg-brand text-white p-2 sm:p-3 md:p-5 flex items-center justify-between sticky top-0 z-[102] shadow-xl print-hidden">
+        <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
           <button 
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="md:hidden w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-gold border border-white/10"
+            className="md:hidden w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-gold border border-white/10"
           >
-            {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
+            {isSidebarOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
-          <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-gold shadow-2xl">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg sm:rounded-xl md:rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-gold shadow-2xl">
             <LayoutDashboard size={20} className="md:w-6 md:h-6" />
           </div>
           <div>
-            <h1 className="text-base md:text-2xl font-black tracking-tight">لوحة تحكم الإدارة</h1>
+            <h1 className="text-sm sm:text-base md:text-xl font-black tracking-tight">لوحة تحكم الإدارة</h1>
             <p className="hidden md:block text-[10px] md:text-xs text-gold/80 font-medium">إدارة العملاء والطلبات والعقود والتنبيهات</p>
           </div>
         </div>
@@ -1327,7 +1327,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
         </aside>
 
         {/* Main Content Area */}
-        <main className="flex-1 overflow-y-auto p-3 md:p-6 custom-scrollbar bg-[#F5F4FA] dark:bg-[#06010a] print:p-0">
+        <main className="flex-1 overflow-y-auto p-2 sm:p-3 md:p-6 custom-scrollbar bg-[#F5F4FA] dark:bg-[#06010a] print:p-0">
           <div className="w-full space-y-6 sm:space-y-8">
             {isLoading ? (
               <div className="flex flex-col items-center justify-center h-96 gap-4">
