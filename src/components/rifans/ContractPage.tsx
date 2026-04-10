@@ -291,7 +291,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
             </div>
             {/* Left side: Logo */}
             <div className="flex-shrink-0 mr-4">
-              <img src="https://h.top4top.io/p_37364r3kd1.png" alt="Rifans Logo" className="h-16 w-auto object-contain" referrerPolicy="no-referrer" />
+              <img src={rifansLogo} alt="Rifans Logo" className="h-16 w-auto object-contain" />
             </div>
           </div>
 
