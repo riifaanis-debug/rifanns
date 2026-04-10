@@ -366,16 +366,35 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
                 }
               </p>
               
-              <div className="bg-white border border-gray-100 p-3 rounded-lg space-y-2 text-[11px]">
-                <p><strong>اسم الجهة التمويلية:</strong> {submission.data.bank || 'الجهة المالية'}</p>
-                {products.map((product: any, idx: number) => (
-                  <div key={idx} className="space-y-1 border-t border-gray-50 pt-1 first:border-0 first:pt-0">
-                    <p><strong>نوع المنتج:</strong> {product.type}</p>
-                    <p><strong>رقم حساب المنتج:</strong> {product.accountNumber || product.account_number}</p>
-                    <p><strong>المبلغ:</strong> {formatAmount(product.amount)} ريال سعودي</p>
-                  </div>
-                ))}
-                <p className="font-black text-brand pt-1 text-[12px] border-t-2 border-brand/10">إجمالي المديونية: {formatAmount(totalDebt)} ريال سعودي</p>
+              <div className="border border-[#22042C]/20 rounded overflow-hidden" style={{ pageBreakInside: 'avoid' }}>
+                <table className="w-full text-[10px] border-collapse">
+                  <tbody>
+                    <tr className="border-b border-[#22042C]/10">
+                      <td className="py-1 px-3 font-bold bg-[#22042C]/5 w-[140px]">اسم الجهة التمويلية</td>
+                      <td className="py-1 px-3">{submission.data.bank || 'الجهة المالية'}</td>
+                    </tr>
+                    {products.map((product: any, idx: number) => (
+                      <React.Fragment key={idx}>
+                        <tr className="border-b border-[#22042C]/10 bg-[#22042C]/[0.02]">
+                          <td className="py-1 px-3 font-bold">نوع المنتج</td>
+                          <td className="py-1 px-3">{product.type}</td>
+                        </tr>
+                        <tr className="border-b border-[#22042C]/10">
+                          <td className="py-1 px-3 font-bold">رقم الحساب</td>
+                          <td className="py-1 px-3 font-mono text-[9px]">{product.accountNumber || product.account_number}</td>
+                        </tr>
+                        <tr className="border-b border-[#22042C]/10">
+                          <td className="py-1 px-3 font-bold text-[#dc2626]">المبلغ</td>
+                          <td className="py-1 px-3 font-bold text-[#dc2626]">{formatAmount(product.amount)} ريال سعودي</td>
+                        </tr>
+                      </React.Fragment>
+                    ))}
+                    <tr className="bg-[#22042C]/5">
+                      <td className="py-1.5 px-3 font-black text-[11px]">إجمالي المديونية</td>
+                      <td className="py-1.5 px-3 font-black text-[11px]">{formatAmount(totalDebt)} ريال سعودي</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </section>
 
