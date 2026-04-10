@@ -534,7 +534,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
             </section>
 
             {/* Signatures Section */}
-            <div className="mt-8 pt-4 border-t-2 border-[#22042C] grid grid-cols-2 gap-6 relative">
+            <div className="mt-8 pt-4 border-t-2 border-[#22042C] grid grid-cols-2 gap-6 relative" style={{ pageBreakInside: 'avoid' }}>
               <div className="text-center space-y-2">
                 <p className="font-black text-[11px] text-[#22042C] underline underline-offset-2">ختم وتوقيع الطرف الأول</p>
                 <div className="h-24 flex items-center justify-center relative overflow-hidden">
