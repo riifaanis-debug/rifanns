@@ -15,7 +15,8 @@ import { Check, Scale, MessageCircle, Lock, Monitor, FileText, Bell, ChevronRigh
 import { motion } from 'motion/react';
 import { useLanguage, LanguageProvider } from './contexts/LanguageContext';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
-import samaCmaLogos from './assets/sama-cma-logos.jpeg';
+import samaLogo from './assets/sama-logo.png';
+import cmaLogo from './assets/cma-logo.png';
 import FloatingWhatsApp from './components/rifans/FloatingWhatsApp';
 import CompanyIntro from './components/rifans/CompanyIntro';
 import ClientReviews from './components/rifans/ClientReviews';
@@ -192,8 +193,9 @@ const LoginPrompt: React.FC = () => {
       </p>
 
       {/* SAMA & CMA Logos */}
-      <div className="flex justify-center mb-4">
-        <img src={samaCmaLogos} alt="البنك المركزي السعودي وهيئة السوق المالية" className="h-20 w-auto object-contain" />
+      <div className="flex justify-center items-center gap-4 mb-4">
+        <img src={samaLogo} alt="البنك المركزي السعودي" className="h-20 w-auto object-contain" />
+        <img src={cmaLogo} alt="هيئة السوق المالية" className="h-20 w-auto object-contain" />
       </div>
 
       <div className="text-center mb-6 space-y-1">
