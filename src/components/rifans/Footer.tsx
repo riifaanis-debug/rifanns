@@ -68,9 +68,9 @@ const Footer: React.FC = () => {
                 </p>
               </div>
               <div className="flex flex-col items-center gap-3">
-                <div className="flex items-center gap-4">
-                  <img src={samaLogo} alt="البنك المركزي السعودي" className="h-14 w-auto object-contain" />
-                  <img src={cmaLogo} alt="هيئة السوق المالية" className="h-14 w-auto object-contain" />
+                <div className="flex items-center gap-3">
+                  <img src={samaLogo} alt="البنك المركزي السعودي" className="h-8 w-auto object-contain" />
+                  <img src={cmaLogo} alt="هيئة السوق المالية" className="h-8 w-auto object-contain" />
                 </div>
                 <span className="text-[10px] font-bold text-muted dark:text-gray-400 uppercase tracking-widest">آمن وموثوق</span>
               </div>
