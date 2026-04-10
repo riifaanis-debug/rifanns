@@ -267,51 +267,65 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
 
       {/* Main Content Area */}
       <div className="flex-1 p-1.5 sm:p-6 scrollbar-hide print:p-0 bg-[#F0F2F5] print:bg-white overflow-y-auto">
-        <div ref={contractRef} className="max-w-[210mm] min-h-[297mm] mx-auto bg-white shadow-[0_10px_30px_rgba(0,0,0,0.05)] border border-gray-200 p-3 sm:p-10 relative overflow-hidden font-['Tajawal'] print:shadow-none print:border-none print:p-0 print:w-full" data-pdf-root="true">
+        <div ref={contractRef} className="max-w-[210mm] min-h-[297mm] mx-auto bg-white shadow-[0_10px_30px_rgba(0,0,0,0.05)] border border-gray-200 p-4 sm:p-10 relative overflow-hidden font-['Tajawal'] print:shadow-none print:border-none print:p-0 print:w-full" data-pdf-root="true">
           
           {/* Official Watermark */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.015] select-none rotate-[-35deg]">
             <span className="text-[70px] font-black text-[#22042C]">RIFANS FINANCIAL</span>
           </div>
 
-          {/* Document Header */}
-          <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-6 relative border-b-2 border-[#22042C] pb-3">
-            <div className="text-right">
-              <img src="https://h.top4top.io/p_37364r3kd1.png" alt="Rifans Logo" className="h-20 mb-2" referrerPolicy="no-referrer" />
-              <div className="space-y-1">
-                <p className="text-[18px] font-black text-[#22042C]">شركة ريفانس المالية</p>
-                <div className="mt-3 space-y-1">
-                  <p className="text-[16px] font-black text-[#22042C]">
-                     {isRescheduling ? 'عقد تفويض ومتابعة طلب جدولة منتجات تمويلية' : isSeizedAmounts ? 'عقد تفويض ومتابعة طلب إتاحة النسبة النظامية' : 'عقد تفويض ومتابعة طلب إعفاء تمويلي'}
-                   </p>
-                  <p className="text-[11px] font-bold text-[#22042C]">رقم ملف العميل: <span className="font-mono">{submissionId}</span></p>
-                  <p className="text-[11px] font-bold text-[#22042C]">رقم العقد: <span className="font-mono">{submissionId}</span></p>
-                  <p className="text-[11px] font-bold text-[#22042C]">التاريخ: {new Date(submission.timestamp).toLocaleDateString('ar-SA')}</p>
-                </div>
+          {/* Document Header - Logo left, Info right */}
+          <div className="flex items-start justify-between mb-4 pb-3 border-b-[3px] border-[#22042C]" style={{ direction: 'rtl' }}>
+            {/* Right side: Company name + contract title */}
+            <div className="text-right flex-1">
+              <p className="text-[18px] font-black text-[#22042C] mb-0.5">شركة ريفانس المالية</p>
+              <p className="text-[13px] font-black text-[#22042C] mb-2">
+                {isRescheduling ? 'عقد تفويض ومتابعة طلب جدولة منتجات تمويلية' : isSeizedAmounts ? 'عقد تفويض ومتابعة طلب إتاحة النسبة النظامية' : 'عقد تفويض ومتابعة طلب إعفاء تمويلي'}
+              </p>
+              <div className="flex flex-wrap gap-x-6 gap-y-0.5 text-[10px] text-[#22042C]">
+                <span>رقم ملف العميل: <strong className="font-mono">{submissionId}</strong></span>
+                <span>رقم العقد الموحد: <strong className="font-mono">{submissionId}</strong></span>
               </div>
+              <p className="text-[10px] text-[#22042C]">تاريخ الإصدار: <strong>{new Date(submission.timestamp).toLocaleDateString('ar-SA')}</strong></p>
             </div>
-            <div className="text-right w-full sm:w-auto flex flex-col items-end">
+            {/* Left side: Logo */}
+            <div className="flex-shrink-0 mr-4">
+              <img src="https://h.top4top.io/p_37364r3kd1.png" alt="Rifans Logo" className="h-16 w-auto object-contain" referrerPolicy="no-referrer" />
             </div>
           </div>
 
           {/* Contract Body */}
-          <div className="space-y-4 text-right dir-rtl relative text-[10.5px] leading-[1.6] text-[#22042C]" style={{ direction: 'rtl' }}>
+          <div className="space-y-3 text-right relative text-[10.5px] leading-[1.7] text-[#22042C]" style={{ direction: 'rtl' }}>
             
-            {/* Parties Section */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 border border-gray-200 rounded-lg p-3 bg-gray-50/30">
-              <div className="space-y-0.5">
-                <h3 className="font-black text-gold border-b border-gold/30 pb-0.5 mb-1.5 text-[11px]">• الطرف الأول</h3>
-                <p><strong>الاسم:</strong> شركة ريفانس المالية</p>
-                <p><strong>الرقم الوطني الموحد:</strong> 7038821125</p>
-                <p><strong>ويمثلها في هذا العقد:</strong> AZZAH ALOBIDI بصفة المدير العام</p>
-                <p><strong>وبموجب تفويض رقم:</strong> DLG398908</p>
-              </div>
-              <div className="space-y-0.5">
-                <h3 className="font-black text-gold border-b border-gold/30 pb-0.5 mb-1.5 text-[11px]">• الطرف الثاني</h3>
-                <p><strong>اسم العميل:</strong> {submission.data.firstName} {submission.data.middleName} {submission.data.lastName}</p>
-                <p><strong>رقم الهوية الوطنية:</strong> {submission.data.nationalId || submission.data.userNationalId || '---'}</p>
-                <p><strong>رقم الجوال:</strong> {submission.data.mobile}</p>
-              </div>
+            {/* Parties Section - Clean table layout */}
+            <div className="border border-[#22042C]/20 rounded overflow-hidden" style={{ pageBreakInside: 'avoid' }}>
+              <table className="w-full text-[10px] border-collapse">
+                <thead>
+                  <tr>
+                    <th className="bg-[#22042C]/5 text-[#C5A059] font-black text-[11px] py-1.5 px-3 text-right border-b border-[#22042C]/20 w-1/2">• الطرف الأول</th>
+                    <th className="bg-[#22042C]/5 text-[#C5A059] font-black text-[11px] py-1.5 px-3 text-right border-b border-[#22042C]/20 border-r border-[#22042C]/20 w-1/2">• الطرف الثاني</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="py-1 px-3 align-top border-b border-[#22042C]/10">
+                      <div className="space-y-0.5">
+                        <p><strong>الاسم:</strong> شركة ريفانس المالية</p>
+                        <p><strong>الرقم الوطني الموحد:</strong> 7038821125</p>
+                        <p><strong>ويمثلها:</strong> AZZAH ALOBIDI بصفة المدير العام</p>
+                        <p><strong>وبموجب تفويض رقم:</strong> DLG398908</p>
+                      </div>
+                    </td>
+                    <td className="py-1 px-3 align-top border-b border-[#22042C]/10 border-r border-[#22042C]/20">
+                      <div className="space-y-0.5">
+                        <p><strong>اسم العميل:</strong> {submission.data.firstName} {submission.data.middleName} {submission.data.lastName}</p>
+                        <p><strong>رقم الهوية الوطنية:</strong> {submission.data.nationalId || submission.data.userNationalId || '---'}</p>
+                        <p><strong>رقم الجوال:</strong> {submission.data.mobile}</p>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
             <section>
