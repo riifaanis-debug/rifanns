@@ -627,13 +627,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
   };
 
   const renderHome = () => (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="space-y-4 sm:space-y-6 md:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div>
         <h3 className="text-base sm:text-lg font-bold text-brand mb-4 sm:mb-6 flex items-center gap-2">
           <TrendingUp size={20} className="text-gold" />
           ملخص سريع
         </h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
           <StatCard icon={<Clock className="text-blue-500" />} label="طلبات جديدة" value={stats.newRequests} color="blue" onClick={() => setStatPopup({ label: 'طلبات جديدة', items: getStatItems('pending') })} />
           <StatCard icon={<RefreshCw className="text-indigo-500" />} label="تحت الإجراء" value={stats.processing} color="indigo" onClick={() => setStatPopup({ label: 'تحت الإجراء', items: getStatItems('processing') })} />
           <StatCard icon={<FileClock className="text-amber-600" />} label="بانتظار التوقيع" value={stats.pendingSignature} color="amber" onClick={() => setStatPopup({ label: 'بانتظار التوقيع', items: getStatItems('pendingSignature') })} />
@@ -641,7 +641,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 md:gap-5">
         <MenuCard 
           icon={<LayoutDashboard size={20} className="text-indigo-600" />} 
           label="الإحصائيات السريعة" 
@@ -718,8 +718,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
   );
 
   const renderStats = () => (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+    <div className="space-y-4 sm:space-y-6 md:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-2 sm:gap-3 md:gap-4">
         <StatCard icon={<Users className="text-indigo-600" />} label="إجمالي العملاء" value={stats.totalUsers} color="indigo" />
         <StatCard icon={<FileText className="text-brand" />} label="إجمالي الطلبات" value={stats.totalRequests} color="brand" />
         <StatCard icon={<Clock className="text-blue-500" />} label="طلبات جديدة" value={stats.newRequests} color="blue" />
@@ -1358,15 +1358,15 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                 className="relative w-full sm:w-[95%] max-w-7xl h-screen sm:h-auto sm:max-h-[92vh] bg-[#F5F4FA] dark:bg-[#06010a] rounded-none sm:rounded-[32px] shadow-2xl overflow-hidden flex flex-col"
               >
                 {/* Modal Header - Fixed/Sticky */}
-                <div className="sticky top-0 z-10 p-3 sm:p-5 border-b border-gold/10 flex items-center justify-between bg-brand text-white shrink-0">
+                <div className="sticky top-0 z-10 p-2 sm:p-3 md:p-5 border-b border-gold/10 flex items-center justify-between bg-brand text-white shrink-0">
                   <div className="flex items-center gap-2 sm:gap-4">
                     <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-lg bg-white/10 flex items-center justify-center text-gold border border-white/10">
                       {getTabIcon(activeTab)}
                     </div>
-                    <h2 className="text-sm sm:text-lg font-bold">{getTabTitle(activeTab)}</h2>
+                    <h2 className="text-xs sm:text-sm md:text-lg font-bold">{getTabTitle(activeTab)}</h2>
                   </div>
                   <div className="flex items-center gap-2">
-                    <button onClick={() => setActiveTab('home')} className="flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg bg-white/10 text-white text-[10px] sm:text-xs font-bold hover:bg-white/20 transition-all border border-white/10">
+                    <button onClick={() => setActiveTab('home')} className="flex items-center gap-1 px-2 py-1 sm:px-3 sm:py-1.5 rounded-md sm:rounded-lg bg-white/10 text-white text-[9px] sm:text-[10px] md:text-xs font-bold hover:bg-white/20 transition-all border border-white/10">
                       <X size={14} />
                       <span className="hidden sm:inline">العودة للوحة التحكم</span>
                       <span className="sm:hidden">رجوع</span>
