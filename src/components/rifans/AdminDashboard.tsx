@@ -1396,7 +1396,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
       {/* Request Details Modal */}
       <AnimatePresence>
         {selectedSubmission && (
-          <div className="fixed inset-0 z-[110] flex items-center justify-center p-0 sm:p-4">
+          <div className="fixed inset-0 z-[110] flex items-start sm:items-center justify-center p-0 sm:p-4">
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
