@@ -1208,7 +1208,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
       </div>
       <div className="space-y-3 sm:space-y-4">
         {notifications.map(n => (
-          <div key={n.id} className="flex items-start gap-2 sm:gap-4 p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 hover:border-gold/30 transition-all group">
+          <div key={n.id} className="flex items-start gap-2 sm:gap-4 p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl md:rounded-2xl bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 hover:border-gold/30 transition-all group">
             <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl flex items-center justify-center shrink-0 shadow-sm ${
               n.type === 'status_update' ? 'bg-blue-100 text-blue-600' : 
               n.type === 'contract_signature' ? 'bg-rose-100 text-rose-600 border border-rose-200' : 'bg-gold/10 text-gold'
@@ -2233,22 +2233,22 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
 const MenuCard = ({ icon, label, description, onClick, color, badge }: { icon: React.ReactNode, label: string, description: string, onClick: () => void, color: string, badge?: number }) => (
   <button 
     onClick={onClick}
-    className="relative p-2.5 sm:p-3.5 bg-white dark:bg-[#12031a] rounded-[12px] sm:rounded-[20px] border border-gold/10 hover:border-gold/40 hover:shadow-2xl transition-all group text-right flex flex-col items-start gap-1.5 overflow-hidden"
+    className="relative p-2 sm:p-2.5 md:p-3.5 bg-white dark:bg-[#12031a] rounded-[10px] sm:rounded-[14px] md:rounded-[20px] border border-gold/10 hover:border-gold/40 hover:shadow-2xl transition-all group text-right flex flex-col items-start gap-1.5 overflow-hidden"
   >
     <div className={`absolute top-0 right-0 w-1 h-full bg-${color}-500 opacity-0 group-hover:opacity-100 transition-all`}></div>
-    <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-gray-50 dark:bg-white/5 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform`}>
+    <div className={`w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-md sm:rounded-lg bg-gray-50 dark:bg-white/5 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform`}>
       {icon}
     </div>
     <div>
-      <h3 className="text-xs sm:text-sm font-bold text-brand dark:text-white group-hover:text-gold transition-colors flex items-center gap-1.5">
+      <h3 className="text-[10px] sm:text-xs md:text-sm font-bold text-brand dark:text-white group-hover:text-gold transition-colors flex items-center gap-1">
         {label}
         {badge ? (
           <span className="bg-rose-500 text-white text-[8px] sm:text-[9px] font-bold px-1.5 py-0.5 rounded-full">{badge}</span>
         ) : null}
       </h3>
-      <p className="text-[8px] sm:text-[10px] text-muted mt-0.5 leading-relaxed">{description}</p>
+      <p className="text-[7px] sm:text-[8px] md:text-[10px] text-muted mt-0.5 leading-relaxed">{description}</p>
     </div>
-    <div className="mt-1 sm:mt-1.5 flex items-center gap-1.5 text-gold font-bold text-[8px] sm:text-[9px] opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
+    <div className="mt-0.5 sm:mt-1 md:mt-1.5 flex items-center gap-1 text-gold font-bold text-[7px] sm:text-[8px] md:text-[9px] opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
       فتح القسم
       <ChevronLeft size={8} />
     </div>
@@ -2256,15 +2256,15 @@ const MenuCard = ({ icon, label, description, onClick, color, badge }: { icon: R
 );
 
 const StatCard = ({ icon, label, value, color, onClick }: { icon: React.ReactNode, label: string, value: number, color: string, onClick?: () => void }) => (
-  <div className={`p-3 sm:p-4 rounded-2xl border border-gold/10 bg-white dark:bg-[#06010a] hover:border-gold/30 hover:shadow-lg transition-all group overflow-hidden relative ${onClick ? 'cursor-pointer active:scale-[0.97]' : ''}`} onClick={onClick}>
+  <div className={`p-2 sm:p-3 md:p-4 rounded-xl sm:rounded-2xl border border-gold/10 bg-white dark:bg-[#06010a] hover:border-gold/30 hover:shadow-lg transition-all group overflow-hidden relative ${onClick ? 'cursor-pointer active:scale-[0.97]' : ''}`} onClick={onClick}>
     <div className={`absolute top-0 right-0 w-1 h-full bg-${color}-500 opacity-0 group-hover:opacity-100 transition-all`}></div>
-    <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
-      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-gray-50 dark:bg-white/5 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+    <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3 mb-1.5 sm:mb-2 md:mb-3">
+      <div className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-md sm:rounded-lg md:rounded-xl bg-gray-50 dark:bg-white/5 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
         {icon}
       </div>
-      <span className="text-[10px] font-bold text-muted uppercase tracking-tight">{label}</span>
+      <span className="text-[8px] sm:text-[10px] font-bold text-muted uppercase tracking-tight">{label}</span>
     </div>
-    <div className="text-xl sm:text-2xl font-black text-brand dark:text-white tracking-tight">{typeof value === 'number' ? formatAmount(value) : value}</div>
+    <div className="text-base sm:text-xl md:text-2xl font-black text-brand dark:text-white tracking-tight">{typeof value === 'number' ? formatAmount(value) : value}</div>
   </div>
 );
 
@@ -2292,10 +2292,10 @@ const NavButton = ({ active, onClick, icon, label, badge }: { active: boolean, o
 );
 
 const InfoItem = ({ icon, label, value, isLtr, isBold }: { icon: React.ReactNode, label: string, value: any, isLtr?: boolean, isBold?: boolean }) => (
-  <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 text-right">
-    <div className="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2 text-muted justify-start">
+  <div className="p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl md:rounded-2xl bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 text-right">
+    <div className="flex items-center gap-1 sm:gap-1.5 md:gap-2 mb-1 sm:mb-1.5 md:mb-2 text-muted justify-start">
       {icon}
-      <span className="text-[8px] sm:text-[10px] font-bold uppercase tracking-wider">{label}</span>
+      <span className="text-[7px] sm:text-[9px] md:text-[10px] font-bold uppercase tracking-wider">{label}</span>
     </div>
     <div className={`text-[10px] sm:text-xs text-right ${isBold ? 'font-bold text-brand dark:text-gold sm:text-sm' : 'text-brand dark:text-white'} ${isLtr ? 'font-mono' : ''}`} dir={isLtr ? 'ltr' : 'rtl'}>
       {value || '---'}
