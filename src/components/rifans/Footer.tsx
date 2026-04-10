@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
-import samaCmaLogos from '../../assets/sama-cma-logos.jpeg';
+import samaLogo from '../../assets/sama-logo.png';
+import cmaLogo from '../../assets/cma-logo.png';
 
 const Footer: React.FC = () => {
   const { t, direction } = useLanguage();
@@ -67,11 +68,10 @@ const Footer: React.FC = () => {
                 </p>
               </div>
               <div className="flex flex-col items-center gap-3">
-                <img 
-                  src={samaCmaLogos}
-                  alt="البنك المركزي السعودي وهيئة السوق المالية" 
-                  className="h-12 w-auto object-contain rounded-md" 
-                />
+                <div className="flex items-center gap-4">
+                  <img src={samaLogo} alt="البنك المركزي السعودي" className="h-14 w-auto object-contain" />
+                  <img src={cmaLogo} alt="هيئة السوق المالية" className="h-14 w-auto object-contain" />
+                </div>
                 <span className="text-[10px] font-bold text-muted dark:text-gray-400 uppercase tracking-widest">آمن وموثوق</span>
               </div>
             </div>
