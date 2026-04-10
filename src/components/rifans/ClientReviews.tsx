@@ -10,24 +10,32 @@ interface Review {
   comment: string;
 }
 
-const AUTO_SCROLL_SPEED = 34;
-const MIN_REPEAT_GROUPS = 2;
+const AUTO_SCROLL_SPEED = 96;
+const MIN_REPEAT_GROUPS = 3;
 
-const StarRating: React.FC<{ rating: number; size?: number }> = ({ rating, size = 10 }) => (
-  <div className="flex gap-0.5">
+const StarRating = React.forwardRef<HTMLDivElement, { rating: number; size?: number }>(({ rating, size = 10 }, ref) => (
+  <div ref={ref} className="flex gap-0.5">
     {[1, 2, 3, 4, 5].map((i) => (
       <Star key={i} size={size} className={i <= rating ? 'text-yellow-500 fill-yellow-500' : 'text-gray-300'} />
     ))}
   </div>
-);
+));
 
-const ReviewCard: React.FC<{ review: Review }> = ({ review }) => (
-  <div className="min-w-[180px] max-w-[180px] bg-white dark:bg-[#12031a] rounded-xl border border-gold/30 dark:border-white/10 p-2.5 shadow-sm flex shrink-0 flex-col gap-1">
+StarRating.displayName = 'StarRating';
+
+const ReviewCard = React.forwardRef<HTMLDivElement, { review: Review }>(({ review }, ref) => (
+  <div
+    ref={ref}
+    dir="rtl"
+    className="min-w-[180px] max-w-[180px] bg-white dark:bg-[#12031a] rounded-xl border border-gold/30 dark:border-white/10 p-2.5 shadow-sm flex shrink-0 flex-col gap-1"
+  >
     <span className="text-[11px] font-extrabold text-brand dark:text-gray-100">{review.client_name}</span>
     <StarRating rating={review.rating} />
     <p className="text-[9px] leading-[1.6] text-muted dark:text-gray-400 line-clamp-3">{review.comment}</p>
   </div>
-);
+));
+
+ReviewCard.displayName = 'ReviewCard';
 
 const getGapValue = (element: HTMLDivElement) => {
   const styles = window.getComputedStyle(element);
@@ -156,13 +164,13 @@ const ClientReviews: React.FC = () => {
         <SectionHeader eyebrow="آراء العملاء" title="تقييمات عملائنا" subtitle="تجارب حقيقية من عملاء استفادوا من خدماتنا" />
 
         <div className="mt-2 [mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)]">
-          <div ref={viewportRef} className="overflow-hidden">
-            <div ref={trackRef} className="flex w-max gap-0.5" style={{ willChange: 'transform' }}>
+          <div ref={viewportRef} dir="ltr" className="overflow-hidden">
+            <div ref={trackRef} className="flex w-max gap-0" style={{ willChange: 'transform' }}>
               {Array.from({ length: repeatGroups }).map((_, groupIndex) => (
                 <div
                   key={`reviews-group-${groupIndex}`}
                   ref={groupIndex === 0 ? firstGroupRef : undefined}
-                  className="flex shrink-0 gap-0.5"
+                  className="flex shrink-0 gap-0"
                   aria-hidden={groupIndex > 0 ? 'true' : undefined}
                 >
                   {reviews.map((review) => (
