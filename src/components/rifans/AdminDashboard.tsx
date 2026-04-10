@@ -540,6 +540,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
     let summaryText = '';
     let statusBadge = '';
     let extraRows = '';
+    let customBody = ''; // For receipt and authorization custom layouts
 
     switch (doc.type) {
       case 'contract':
@@ -582,7 +583,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
         break;
       case 'authorization':
         summaryTitle = 'إقرار وتفويض';
-        summaryText = 'يقر العميل بصحة البيانات المقدمة ويفوض شركة ريفانس المالية بمتابعة الطلب وما يلزم من إجراءات لدى الجهات ذات العلاقة.';
+        summaryText = '';
         statusBadge = 'ساري';
         extraRows = `
           <tr>
@@ -598,11 +599,73 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
             <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(getStatusLabel(submission.status))}</td>
           </tr>
         `;
+        // Full authorization legal text
+        customBody = `
+          <div style="margin-top:20px;font-size:13px;line-height:2.1;color:#22042C;">
+            <h1 style="text-align:center;font-size:24px;font-weight:900;margin:0 0 16px;">إقرار وتفويض</h1>
+            <p style="margin:0 0 14px;">أنا الموقع أدناه، أقرّ وأفوض بمحض إرادتي الكاملة، وبكامل أهليتي المعتبرة شرعًا ونظامًا، لشركة ريفانس المالية، للقيام بكافة الإجراءات اللازمة لدراسة ومعالجة حالتي الائتمانية والمالية، وذلك لغرض تقديم ومتابعة الطلب المقدم مني والمتعلق بخدمات (الإعفاء / تسوية المديونيات / إعادة الجدولة / أي خدمات مالية ذات صلة).</p>
+            <hr style="border:none;border-top:1px solid #eadfc9;margin:14px 0;">
+
+            <h3 style="font-size:15px;font-weight:900;margin:14px 0 8px;">أولًا: الإقرارات</h3>
+            <p style="margin:0 0 6px;">أقرّ وأتعهد بما يلي:</p>
+            <ol style="margin:0 0 14px;padding-right:20px;">
+              <li style="margin-bottom:4px;">أن جميع البيانات والمعلومات والمستندات التي قمت بتقديمها صحيحة ودقيقة ومحدثة، وأتحمل كامل المسؤولية القانونية والنظامية في حال ثبوت خلاف ذلك.</li>
+              <li style="margin-bottom:4px;">أنني قمت بتقديم الطلب برغبتي الحرة دون أي ضغط أو إكراه، وعلى علم تام بكافة تبعاته.</li>
+              <li style="margin-bottom:4px;">أن تقديم الطلب لا يُعد ضمانًا للموافقة عليه، وأن القرار النهائي يخضع لسياسات وإجراءات الجهات التمويلية أو المختصة.</li>
+              <li style="margin-bottom:4px;">التزامي بتزويد الشركة بأي معلومات أو مستندات إضافية تُطلب مني خلال فترة دراسة الطلب.</li>
+              <li style="margin-bottom:4px;">موافقتي على استخدام بياناتي لأغراض تحليل ودراسة الحالة المالية والائتمانية واتخاذ القرار المناسب.</li>
+              <li style="margin-bottom:4px;">علمي بأن أي تأخير في تزويد المعلومات قد يؤثر على مدة معالجة الطلب.</li>
+              <li style="margin-bottom:4px;">إقراري بعدم تقديم معلومات مضللة أو إخفاء أي بيانات جوهرية قد تؤثر على نتيجة الطلب.</li>
+            </ol>
+            <hr style="border:none;border-top:1px solid #eadfc9;margin:14px 0;">
+
+            <h3 style="font-size:15px;font-weight:900;margin:14px 0 8px;">ثانيًا: نطاق التفويض</h3>
+            <p style="margin:0 0 6px;">أفوض شركة ريفانس المالية تفويضًا صريحًا وواضحًا بما يلي:</p>
+            <ol style="margin:0 0 14px;padding-right:20px;">
+              <li style="margin-bottom:4px;">الاطلاع على سجلاتي الائتمانية لدى الجهات المرخصة (مثل سمة أو أي جهات ذات علاقة).</li>
+              <li style="margin-bottom:4px;">الاستعلام عن بياناتي لدى الجهات الحكومية والخاصة، بما في ذلك الجهات ذات العلاقة بالخدمات المالية.</li>
+              <li style="margin-bottom:4px;">التواصل نيابةً مع البنوك، شركات التمويل، الجهات الدائنة، وشركات التحصيل.</li>
+              <li style="margin-bottom:4px;">التفاوض نيابةً عني بشأن تسوية المديونيات أو إعادة جدولة الالتزامات المالية.</li>
+              <li style="margin-bottom:4px;">تقديم ومتابعة طلبات الإعفاء أو التسوية أو أي خدمات مرتبطة بحالتي المالية.</li>
+              <li style="margin-bottom:4px;">استلام وإرسال المراسلات المتعلقة بالطلب عبر الوسائل الرسمية (رسائل نصية، بريد إلكتروني، اتصال هاتفي).</li>
+              <li style="margin-bottom:4px;">تمثيلي أمام الجهات ذات العلاقة في حدود ما يخدم معالجة الطلب دون الإخلال بالأنظمة.</li>
+            </ol>
+            <hr style="border:none;border-top:1px solid #eadfc9;margin:14px 0;">
+
+            <h3 style="font-size:15px;font-weight:900;margin:14px 0 8px;">ثالثًا: مدة التفويض وسريانه</h3>
+            <ul style="margin:0 0 14px;padding-right:20px;list-style:disc;">
+              <li style="margin-bottom:4px;">يبدأ سريان هذا التفويض من تاريخ الموافقة عليه، ويستمر حتى الانتهاء من معالجة الطلب أو إلغائه بناءً على طلب خطي مني.</li>
+              <li style="margin-bottom:4px;">يحق للشركة تعليق أو إنهاء الإجراءات في حال عدم التزامي بتزويد المعلومات أو مخالفة الشروط.</li>
+              <li style="margin-bottom:4px;">يظل التفويض ساريًا خلال فترة متابعة الطلب وحتى إغلاقه رسميًا.</li>
+            </ul>
+            <hr style="border:none;border-top:1px solid #eadfc9;margin:14px 0;">
+
+            <h3 style="font-size:15px;font-weight:900;margin:14px 0 8px;">رابعًا: حماية البيانات والخصوصية</h3>
+            <ol style="margin:0 0 14px;padding-right:20px;">
+              <li style="margin-bottom:4px;">أوافق على جمع ومعالجة واستخدام بياناتي الشخصية والمالية لأغراض دراسة الطلب وتنفيذه.</li>
+              <li style="margin-bottom:4px;">تلتزم شركة ريفانس المالية بالحفاظ على سرية البيانات وعدم الإفصاح عنها إلا للجهات ذات العلاقة وبما يخدم الطلب.</li>
+              <li style="margin-bottom:4px;">يتم التعامل مع البيانات وفق الأنظمة واللوائح المعمول بها في المملكة العربية السعودية.</li>
+              <li style="margin-bottom:4px;">أوافق على أرشفة البيانات واستخدامها لأغراض تحسين الخدمة والتحليل الداخلي.</li>
+            </ol>
+            <hr style="border:none;border-top:1px solid #eadfc9;margin:14px 0;">
+
+            <h3 style="font-size:15px;font-weight:900;margin:14px 0 8px;">خامسًا: المسؤولية القانونية</h3>
+            <ol style="margin:0 0 14px;padding-right:20px;">
+              <li style="margin-bottom:4px;">يقر المفوِّض بأنه اطلع على كامل شروط وأحكام هذا التفويض وفهمها.</li>
+              <li style="margin-bottom:4px;">يتحمل المفوِّض كامل المسؤولية عن صحة المعلومات المقدمة.</li>
+              <li style="margin-bottom:4px;">لا تتحمل شركة ريفانس المالية أي مسؤولية عن أي قرارات تتخذها الجهات التمويلية أو المختصة بشأن الطلب.</li>
+              <li style="margin-bottom:4px;">يخضع هذا الإقرار والتفويض للأنظمة واللوائح المعمول بها في المملكة العربية السعودية.</li>
+            </ol>
+            <hr style="border:none;border-top:1px solid #eadfc9;margin:14px 0;">
+
+            <h3 style="font-size:15px;font-weight:900;margin:14px 0 8px;">سادسًا: بيانات المفوِّض</h3>
+          </div>
+        `;
         break;
       case 'receipt':
       default:
         summaryTitle = 'إفادة استلام الطلب';
-        summaryText = 'تشهد شركة ريفانس المالية بأنه تم استلام الطلب وإدخاله في النظام لمتابعة الإجراءات النظامية ذات العلاقة.';
+        summaryText = '';
         statusBadge = getStatusLabel(submission.status);
         extraRows = `
           <tr>
@@ -618,20 +681,42 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
             <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(statusBadge)}</td>
           </tr>
         `;
+        // Custom receipt body with formal letter
+        customBody = `
+          <div style="margin-top:16px;font-size:13px;line-height:2.1;color:#22042C;">
+            <p style="margin:0 0 12px;">جاري العمل على مراجعة الطلب من قبل الفريق المختص وفق الإجراءات المعتمدة.</p>
+            <p style="margin:0 0 12px;">سيتم دراسة الطلب والتأكد من اكتمال البيانات والمرفقات، وفي حال الحاجة إلى أي معلومات إضافية سيتم التواصل معكم مباشرة.</p>
+            <p style="margin:0 0 12px;">نأمل التكرم بالانتظار لحين الانتهاء من إجراءات المراجعة، وسيتم إشعاركم بحالة الطلب فور التحديث.</p>
+            <p style="margin:0 0 4px;">شاكرين ثقتكم بنا،</p>
+            <p style="margin:0 0 20px;font-weight:700;">وتفضلوا بقبول فائق الاحترام والتقدير</p>
+          </div>
+        `;
         break;
     }
 
+    // Build the HTML - receipt and authorization use customBody for different layout
+    const isReceipt = doc.type === 'receipt' || (!['contract','invoice','authorization'].includes(doc.type));
+    const isAuthorization = doc.type === 'authorization';
+
     const html = `
       <div dir="rtl" style="width:794px;min-height:1123px;background:#ffffff;padding:48px 44px;font-family:Tajawal,Arial,sans-serif;color:#22042C;box-sizing:border-box;">
+        <!-- Header with bigger logo -->
         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:24px;border-bottom:4px solid #22042C;padding-bottom:18px;margin-bottom:24px;">
           <div style="flex:1;text-align:right;">
             <p style="margin:0 0 6px;font-size:15px;font-weight:700;color:#C5A059;">شركة ريفانس المالية</p>
             <h1 style="margin:0;font-size:30px;font-weight:900;line-height:1.35;">${escapeHtml(documentTypeLabel)}</h1>
-            <p style="margin:8px 0 0;font-size:13px;line-height:1.9;color:#6b5b76;">${escapeHtml(summaryText)}</p>
+            ${(!isReceipt && !isAuthorization) ? `<p style="margin:8px 0 0;font-size:13px;line-height:1.9;color:#6b5b76;">${escapeHtml(summaryText)}</p>` : ''}
           </div>
-          <img src="${rifansLogo}" alt="شعار ريفانس" style="width:128px;height:82px;object-fit:contain;" />
+          <img src="${rifansLogo}" alt="شعار ريفانس" style="width:180px;height:116px;object-fit:contain;" />
         </div>
 
+        ${isReceipt ? `
+          <!-- Receipt greeting -->
+          <p style="font-size:14px;margin:0 0 8px;line-height:1.8;">عزيزي العميل / <strong>${escapeHtml(clientName)}</strong></p>
+          <p style="font-size:13px;margin:0 0 16px;line-height:1.8;">نود إشعاركم بأنه تم استلام طلبكم بنجاح،</p>
+        ` : ''}
+
+        <!-- Reference bar -->
         <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;background:#fcf8f0;border:1px solid #eadfc9;border-radius:18px;padding:16px 18px;margin-bottom:18px;">
           <div style="text-align:right;">
             <div style="font-size:18px;font-weight:900;">${escapeHtml(summaryTitle)}</div>
@@ -640,6 +725,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
           <div style="background:#22042C;color:#C5A059;border-radius:999px;padding:8px 16px;font-size:12px;font-weight:800;white-space:nowrap;">${escapeHtml(statusBadge)}</div>
         </div>
 
+        <!-- Client data table -->
         <table style="width:100%;border-collapse:collapse;margin-bottom:18px;font-size:13px;">
           <tbody>
             <tr>
@@ -658,6 +744,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
           </tbody>
         </table>
 
+        <!-- Products table -->
         <div style="margin-bottom:18px;">
           <h2 style="margin:0 0 10px;font-size:16px;font-weight:900;color:#22042C;">بيانات المنتجات التمويلية</h2>
           <table style="width:100%;border-collapse:collapse;font-size:12px;">
@@ -675,13 +762,44 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
           </table>
         </div>
 
+        ${customBody}
+
+        ${isAuthorization ? `
+          <!-- Authorization client data at bottom -->
+          <table style="width:100%;border-collapse:collapse;margin-bottom:18px;font-size:13px;">
+            <tbody>
+              <tr>
+                <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">الاسم الكامل</td>
+                <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(clientName)}</td>
+              </tr>
+              <tr>
+                <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">رقم الهوية</td>
+                <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(clientNationalId)}</td>
+              </tr>
+              <tr>
+                <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">رقم الجوال</td>
+                <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(clientPhone)}</td>
+              </tr>
+              <tr>
+                <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">تاريخ الإقرار</td>
+                <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(issueDate)}</td>
+              </tr>
+              <tr>
+                <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">التوقيع</td>
+                <td style="padding:10px 12px;border:1px solid #eadfc9;">${contract?.signature_data ? `<img src="${contract.signature_data}" style="height:50px;" />` : '___________________'}</td>
+              </tr>
+            </tbody>
+          </table>
+        ` : ''}
+
+        <!-- Footer with bigger stamp -->
         <div style="display:flex;justify-content:space-between;align-items:end;gap:20px;margin-top:28px;">
           <div style="font-size:12px;color:#7a6a84;line-height:1.9;">
             <div>نوع الخدمة: ${escapeHtml(requestTypeLabel)}</div>
             <div>الجهة التمويلية: ${escapeHtml(submission.data?.bank || '---')}</div>
             <div>تم إنشاء هذه النسخة من لوحة تحكم الإدارة.</div>
           </div>
-          <img src="${rifansStampImg}" alt="ختم ريفانس" style="width:96px;height:96px;object-fit:contain;opacity:0.8;" />
+          <img src="${rifansStampImg}" alt="ختم ريفانس" style="width:150px;height:150px;object-fit:contain;opacity:0.85;" />
         </div>
       </div>
     `;
