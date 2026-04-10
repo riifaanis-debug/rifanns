@@ -3,60 +3,130 @@ import jsPDF from 'jspdf';
 
 const A4_WIDTH_MM = 210;
 const A4_HEIGHT_MM = 297;
-const MARGIN_MM = 10;
+const MARGIN_MM = 12;
 const CONTENT_WIDTH_MM = A4_WIDTH_MM - MARGIN_MM * 2;
-const CONTENT_HEIGHT_MM = A4_HEIGHT_MM - MARGIN_MM * 2;
+const CONTENT_HEIGHT_MM = A4_HEIGHT_MM - MARGIN_MM * 2 - 8; // Reserve space for footer
 
 /**
- * Recursively clean an element tree for PDF export:
- * - Force white backgrounds
- * - Remove shadows, rounded corners
+ * Aggressively clean all elements for PDF export:
+ * - Force ALL backgrounds to white/transparent
+ * - Remove ALL shadows, borders, rounded corners
+ * - Ensure all text is dark and readable
  * - Remove print-hidden elements
- * - Ensure text is dark and readable
+ * - Remove watermarks
  */
 function cleanForPdf(el: HTMLElement) {
-  // Remove print-hidden / print:hidden elements
-  const printHidden = el.querySelectorAll('.print-hidden, .print\\:hidden, [class*="print:hidden"]');
-  printHidden.forEach(node => (node as HTMLElement).remove());
+  // Remove print-hidden elements
+  const hiddenSelectors = [
+    '.print-hidden', 
+    '.print\\:hidden', 
+    '[class*="print:hidden"]',
+    '[class*="print\\:hidden"]',
+  ];
+  hiddenSelectors.forEach(sel => {
+    try {
+      el.querySelectorAll(sel).forEach(node => (node as HTMLElement).remove());
+    } catch(e) { /* ignore invalid selectors */ }
+  });
 
-  // Clean the root container
-  el.style.background = '#ffffff';
-  el.style.boxShadow = 'none';
-  el.style.border = 'none';
-  el.style.borderRadius = '0';
-  el.style.maxWidth = 'none';
-  el.style.minHeight = 'auto';
+  // Remove watermark elements (the rotated background text)
+  el.querySelectorAll('[class*="rotate-"]').forEach(node => {
+    const el = node as HTMLElement;
+    if (el.style.transform?.includes('rotate') || el.className?.includes('rotate-')) {
+      const text = el.textContent?.trim() || '';
+      if (text.includes('RIFANS') || text.includes('ريفانس') || text.length > 20) {
+        el.remove();
+      }
+    }
+  });
 
-  // Walk all descendants and clean them
+  // Also remove pointer-events-none overlays (watermarks)
+  el.querySelectorAll('.pointer-events-none').forEach(node => {
+    const htmlEl = node as HTMLElement;
+    if (htmlEl.classList.contains('opacity-[0.015]') || htmlEl.style.opacity === '0.015') {
+      htmlEl.remove();
+    }
+  });
+
+  // Clean root
+  applyCleanStyles(el);
+
+  // Walk ALL descendants
   const allElements = el.querySelectorAll('*') as NodeListOf<HTMLElement>;
   allElements.forEach(child => {
-    const computed = window.getComputedStyle(child);
-    
-    // Force white/transparent backgrounds (except brand-colored elements and specific styled blocks)
-    const bgColor = computed.backgroundColor;
-    if (bgColor && bgColor !== 'rgba(0, 0, 0, 0)' && bgColor !== 'transparent') {
-      // Keep very light backgrounds (like bg-gray-50/30, bg-brand/5) but make them lighter
-      const match = bgColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
-      if (match) {
-        const [, r, g, b] = match.map(Number);
-        const brightness = (r + g + b) / 3;
-        // If it's a dark background (header area, nav), force white
-        if (brightness < 200) {
-          // Only keep genuinely light tinted backgrounds
-          child.style.backgroundColor = 'transparent';
+    applyCleanStyles(child);
+  });
+}
+
+function applyCleanStyles(el: HTMLElement) {
+  const computed = window.getComputedStyle(el);
+  
+  // Force white/transparent background on everything
+  const bgColor = computed.backgroundColor;
+  if (bgColor && bgColor !== 'rgba(0, 0, 0, 0)' && bgColor !== 'transparent') {
+    const match = bgColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+      const [, r, g, b] = match.map(Number);
+      const brightness = (r + g + b) / 3;
+      if (brightness > 240) {
+        // Very light bg - make white
+        el.style.backgroundColor = '#ffffff';
+      } else if (brightness > 200) {
+        // Light tinted bg (like gray-50) - make very light
+        el.style.backgroundColor = '#fafafa';
+      } else {
+        // Dark bg - only keep if it's the brand header border or specific accent
+        // Check if it's a thin element (like a border/line)
+        const height = el.offsetHeight;
+        if (height > 5) {
+          el.style.backgroundColor = '#ffffff';
         }
       }
     }
+  }
 
-    // Remove shadows
-    child.style.boxShadow = 'none';
-    
-    // Remove excessive border radius for print
-    const radius = parseFloat(computed.borderRadius);
-    if (radius > 8) {
-      child.style.borderRadius = '4px';
+  // Remove background images/gradients
+  if (computed.backgroundImage && computed.backgroundImage !== 'none') {
+    el.style.backgroundImage = 'none';
+  }
+
+  // Remove ALL shadows
+  el.style.boxShadow = 'none';
+  el.style.textShadow = 'none';
+  
+  // Reduce border radius
+  const radius = parseFloat(computed.borderRadius);
+  if (radius > 6) {
+    el.style.borderRadius = '3px';
+  }
+
+  // Make light/invisible borders slightly visible for structure
+  const borderColor = computed.borderColor;
+  if (borderColor) {
+    const match = borderColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+      const [, r, g, b] = match.map(Number);
+      const brightness = (r + g + b) / 3;
+      // If border is too light, remove it; if moderate, keep for structure
+      if (brightness > 240) {
+        el.style.borderColor = '#e5e5e5';
+      }
     }
-  });
+  }
+
+  // Ensure text is dark enough to read
+  const color = computed.color;
+  if (color) {
+    const match = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+      const [, r, g, b] = match.map(Number);
+      const brightness = (r + g + b) / 3;
+      if (brightness > 200) {
+        // Very light text - darken it
+        el.style.color = '#666666';
+      }
+    }
+  }
 }
 
 export const generateContractPdf = async (
@@ -65,9 +135,15 @@ export const generateContractPdf = async (
 ): Promise<{ pdf: jsPDF; blob: Blob }> => {
   // Clone element to avoid visual disruption
   const clone = element.cloneNode(true) as HTMLElement;
+  
+  // Set up clone for A4 rendering
   clone.style.width = '794px'; // A4 at 96dpi
-  clone.style.padding = '32px 40px';
+  clone.style.maxWidth = '794px';
+  clone.style.minWidth = '794px';
+  clone.style.padding = '40px 48px';
+  clone.style.margin = '0';
   clone.style.background = '#ffffff';
+  clone.style.backgroundColor = '#ffffff';
   clone.style.position = 'absolute';
   clone.style.left = '-9999px';
   clone.style.top = '0';
@@ -77,9 +153,13 @@ export const generateContractPdf = async (
   clone.style.borderRadius = '0';
   clone.style.overflow = 'visible';
   clone.style.fontFamily = 'Tajawal, Arial, sans-serif';
+  clone.style.fontSize = '11px';
+  clone.style.lineHeight = '1.7';
+  clone.style.color = '#1a1a1a';
+  
   document.body.appendChild(clone);
 
-  // Clean for professional PDF output
+  // Aggressively clean for professional PDF output
   cleanForPdf(clone);
 
   try {
@@ -90,6 +170,15 @@ export const generateContractPdf = async (
       backgroundColor: '#ffffff',
       logging: false,
       windowWidth: 794,
+      imageTimeout: 15000,
+      onclone: (doc) => {
+        // Additional cleanup on the cloned document
+        const root = doc.body.lastElementChild as HTMLElement;
+        if (root) {
+          root.style.background = '#ffffff';
+          root.style.backgroundColor = '#ffffff';
+        }
+      }
     });
 
     const imgWidthPx = canvas.width;
@@ -113,25 +202,25 @@ export const generateContractPdf = async (
       pageCanvas.height = Math.round(srcH);
       const ctx = pageCanvas.getContext('2d')!;
       
-      // Fill white background first
+      // Fill white background
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
       
-      ctx.drawImage(canvas, 0, -Math.round(srcY));
+      // Draw the slice
+      ctx.drawImage(canvas, 0, Math.round(srcY), imgWidthPx, Math.round(srcH), 0, 0, imgWidthPx, Math.round(srcH));
 
-      const pageImgData = pageCanvas.toDataURL('image/jpeg', 0.92);
+      const pageImgData = pageCanvas.toDataURL('image/jpeg', 0.95);
       pdf.addImage(pageImgData, 'JPEG', MARGIN_MM, MARGIN_MM, CONTENT_WIDTH_MM, destH);
 
-      // Thin line separator at bottom
+      // Footer separator line
       pdf.setDrawColor(200, 200, 200);
-      pdf.setLineWidth(0.3);
-      pdf.line(MARGIN_MM, A4_HEIGHT_MM - 10, A4_WIDTH_MM - MARGIN_MM, A4_HEIGHT_MM - 10);
+      pdf.setLineWidth(0.2);
+      pdf.line(MARGIN_MM, A4_HEIGHT_MM - 12, A4_WIDTH_MM - MARGIN_MM, A4_HEIGHT_MM - 12);
 
-      // Page footer
+      // Page number
       pdf.setFontSize(7);
       pdf.setTextColor(150, 150, 150);
-      const pageText = `${page + 1} / ${totalPages}`;
-      pdf.text(pageText, A4_WIDTH_MM / 2, A4_HEIGHT_MM - 6, { align: 'center' });
+      pdf.text(`${page + 1} / ${totalPages}`, A4_WIDTH_MM / 2, A4_HEIGHT_MM - 8, { align: 'center' });
     }
 
     const blob = pdf.output('blob');
