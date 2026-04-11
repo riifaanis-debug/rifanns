@@ -2435,7 +2435,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                           </div>
                         </div>
                         <div className="shrink-0">
-                          <img src={rifansLogo} alt="شعار ريفانس" className="h-16 sm:h-20 w-auto object-contain" />
+                          <img src={rifansLogo} alt="شعار ريفانس" className="h-24 sm:h-28 w-auto object-contain" />
                         </div>
                       </div>
 
@@ -2578,18 +2578,24 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                         <div className="mt-8 pt-4 border-t-2 border-[#22042C] grid grid-cols-2 gap-6 relative">
                           <div className="text-right space-y-2">
                             <p className="font-black text-[10px] text-[#22042C] dark:text-white underline underline-offset-2">ختم وتوقيع الطرف الأول</p>
-                            <div className="h-20 flex items-center justify-center relative overflow-hidden">
+                            <div className="h-36 flex items-center justify-center relative overflow-hidden">
                               <img src={rifansStampImg} alt="First Party Stamp" className="h-full w-auto object-contain mix-blend-multiply" />
                             </div>
                           </div>
                           <div className="text-right space-y-2">
                             <p className="font-black text-[10px] text-[#22042C] dark:text-white underline underline-offset-2">توقيع الطرف الثاني (العميل)</p>
-                            <div className="h-20 bg-gray-50/50 dark:bg-white/5 rounded-lg border border-gray-100 dark:border-white/10 flex items-center justify-center relative overflow-hidden">
+                            <div className="h-28 bg-gray-50/50 dark:bg-white/5 rounded-lg border border-gray-100 dark:border-white/10 flex items-center justify-center relative overflow-hidden">
                               {selectedContract.signed_at ? (
-                                <div className="flex flex-col items-center">
-                                  <CheckCircle className="text-green-500 mb-0.5" size={16} />
-                                  <div className="bg-green-500 text-white px-1.5 py-0.5 rounded-full text-[7px] font-bold">موثق إلكترونياً</div>
-                                  <span className="text-[6px] text-muted font-bold">
+                                <div className="flex flex-col items-center gap-1">
+                                  {selectedContract.signature_data ? (
+                                    <img src={selectedContract.signature_data} alt="توقيع العميل" className="h-16 object-contain" />
+                                  ) : (
+                                    <CheckCircle className="text-green-500" size={20} />
+                                  )}
+                                  <span className="text-[7px] text-muted font-bold">
+                                    {sub.data?.firstName} {sub.data?.middleName} {sub.data?.lastName}
+                                  </span>
+                                  <span className="text-[6px] text-muted">
                                     {new Date(selectedContract.signed_at).toLocaleString('ar-SA')}
                                   </span>
                                 </div>
