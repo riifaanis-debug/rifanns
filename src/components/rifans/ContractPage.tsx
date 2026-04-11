@@ -404,13 +404,13 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
               <div>
                 <p className="mb-0.5">يشمل التفويض الممنوح للطرف الأول الصلاحيات التالية :</p>
                 {isRescheduling ? (
-                  <ul className="list-disc pr-4 space-y-0.5">
+                  <ul className="list-disc space-y-0.5" style={{ paddingRight: '20px', textAlign: 'right' }}>
                     <li>الاطلاع على المستندات والبيانات المالية</li>
                     <li>التواصل مع البنوك والجهات التمويلية</li>
                     <li>رفع الطلبات ومتابعتها، وإعداد المذكرات النظامية والحضور النظامي عند الحاجة.</li>
                   </ul>
                 ) : (
-                  <ul className="list-disc pr-4 space-y-0.5">
+                  <ul className="list-disc space-y-0.5" style={{ paddingRight: '20px', textAlign: 'right' }}>
                     <li>الاطلاع على التقارير الطبية والمستندات الرسمية</li>
                     <li>التواصل مع البنوك والجهات التمويلية</li>
                     <li>رفع الطلبات ومتابعتها، وإعداد المذكرات القانونية والحضور النظامي عند الحاجة.</li>
