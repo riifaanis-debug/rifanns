@@ -291,7 +291,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
             </div>
             {/* Left side: Logo */}
             <div className="flex-shrink-0 mr-4">
-              <img src={rifansLogo} alt="Rifans Logo" className="h-16 w-auto object-contain" />
+              <img src={rifansLogo} alt="Rifans Logo" className="h-28 w-auto object-contain" />
             </div>
           </div>
 
@@ -404,13 +404,13 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
               <div>
                 <p className="mb-0.5">يشمل التفويض الممنوح للطرف الأول الصلاحيات التالية :</p>
                 {isRescheduling ? (
-                  <ul className="list-disc pr-4 space-y-0.5">
+                  <ul className="list-disc space-y-0.5" style={{ paddingRight: '20px', textAlign: 'right' }}>
                     <li>الاطلاع على المستندات والبيانات المالية</li>
                     <li>التواصل مع البنوك والجهات التمويلية</li>
                     <li>رفع الطلبات ومتابعتها، وإعداد المذكرات النظامية والحضور النظامي عند الحاجة.</li>
                   </ul>
                 ) : (
-                  <ul className="list-disc pr-4 space-y-0.5">
+                  <ul className="list-disc space-y-0.5" style={{ paddingRight: '20px', textAlign: 'right' }}>
                     <li>الاطلاع على التقارير الطبية والمستندات الرسمية</li>
                     <li>التواصل مع البنوك والجهات التمويلية</li>
                     <li>رفع الطلبات ومتابعتها، وإعداد المذكرات القانونية والحضور النظامي عند الحاجة.</li>
@@ -502,7 +502,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
             <section style={{ pageBreakInside: "avoid" }}>
               <h3 className="font-black text-gold mb-0.5 text-[11px]">المادة (10): الإقرار والتنازل عن الدفوع</h3>
               <p className="mb-1">يُقر الطرف الثاني إقراراً صريحاً ونهائياً بما يلي:</p>
-              <ol className="list-decimal pr-5 space-y-0.5">
+              <ol className="list-decimal space-y-0.5" style={{ paddingRight: '20px', marginRight: '0', textAlign: 'right' }}>
                 <li>صحة جميع البيانات والمستندات المقدمة منه.</li>
                 <li>صحة احتساب الأتعاب وفق ما ورد في هذا العقد.</li>
                 <li>التنازل عن أي دفوع أو منازعات تتعلق بسند الأمر متى ما تم إصداره عبر منصة نافذ وفق أحكام هذا العقد.</li>
@@ -538,7 +538,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
             <div className="mt-8 pt-4 border-t-2 border-[#22042C] grid grid-cols-2 gap-6 relative" style={{ pageBreakInside: 'avoid' }}>
               <div className="text-center space-y-2">
                 <p className="font-black text-[11px] text-[#22042C] underline underline-offset-2">ختم وتوقيع الطرف الأول</p>
-                <div className="h-24 flex items-center justify-center relative overflow-hidden">
+                <div className="h-36 flex items-center justify-center relative overflow-hidden">
                   <img 
                     src={rifansStampImg} 
                     alt="First Party Stamp" 
@@ -548,16 +548,18 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
               </div>
               <div className="text-center space-y-2">
                 <p className="font-black text-[11px] text-[#22042C] underline underline-offset-2">توقيع الطرف الثاني (العميل)</p>
-                <div className="h-20 bg-gray-50/50 rounded-lg border border-gray-100 flex items-center justify-center relative overflow-hidden">
+                <div className="h-28 bg-gray-50/50 rounded-lg border border-gray-100 flex items-center justify-center relative overflow-hidden">
                   {isSuccess || isAlreadySigned ? (
-                    <div className="flex flex-col items-center">
-                      {isAlreadySigned && submission.signature_data ? (
-                        <img src={submission.signature_data} alt="Signature" className="h-10 object-contain" />
+                    <div className="flex flex-col items-center gap-1">
+                      {(isAlreadySigned && submission.signature_data) ? (
+                        <img src={submission.signature_data} alt="توقيع العميل" className="h-16 object-contain" />
                       ) : (
-                        <CheckCircle className="text-green-500 mb-0.5" size={16} />
+                        <img src={canvasRef.current?.toDataURL() || ''} alt="توقيع العميل" className="h-16 object-contain" />
                       )}
-                      <div className="bg-green-500 text-white px-1.5 py-0.5 rounded-full text-[7px] font-bold">موثق إلكترونياً</div>
-                      <span className="text-[6px] text-muted font-bold">
+                      <span className="text-[7px] text-muted font-bold">
+                        {submission.data.firstName} {submission.data.middleName} {submission.data.lastName}
+                      </span>
+                      <span className="text-[6px] text-muted">
                         {new Date(submission.signed_at || submission.timestamp).toLocaleString('ar-SA')}
                       </span>
                     </div>
