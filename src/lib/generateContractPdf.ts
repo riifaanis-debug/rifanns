@@ -213,38 +213,80 @@ export const generateContractPdf = async (
 
     const pdf = new jsPDF('p', 'mm', 'a4');
     const ratio = CONTENT_WIDTH_MM / imgWidthPx;
-    const scaledHeight = imgHeightPx * ratio;
-    const totalPages = Math.ceil(scaledHeight / CONTENT_HEIGHT_MM);
+    const maxSliceHeightPx = Math.floor(CONTENT_HEIGHT_MM / ratio);
+
+    // Find the best row to break at (scan for whitest row near target)
+    const findBreakRow = (targetY: number): number => {
+      const scanRange = Math.floor(maxSliceHeightPx * 0.15); // scan 15% around target
+      const startScan = Math.max(0, targetY - scanRange);
+      const endScan = Math.min(imgHeightPx, targetY + scanRange);
+      
+      const scanCanvas = document.createElement('canvas');
+      scanCanvas.width = imgWidthPx;
+      scanCanvas.height = endScan - startScan;
+      const scanCtx = scanCanvas.getContext('2d')!;
+      scanCtx.drawImage(canvas, 0, startScan, imgWidthPx, scanCanvas.height, 0, 0, imgWidthPx, scanCanvas.height);
+      const imageData = scanCtx.getImageData(0, 0, imgWidthPx, scanCanvas.height);
+      const data = imageData.data;
+      
+      let bestRow = targetY;
+      let bestScore = -1;
+      
+      for (let row = 0; row < scanCanvas.height; row++) {
+        let whitePixels = 0;
+        const sampleStep = 4; // sample every 4th pixel for speed
+        let samples = 0;
+        for (let x = 0; x < imgWidthPx; x += sampleStep) {
+          const idx = (row * imgWidthPx + x) * 4;
+          const r = data[idx], g = data[idx + 1], b = data[idx + 2];
+          if (r > 240 && g > 240 && b > 240) whitePixels++;
+          samples++;
+        }
+        const score = whitePixels / samples;
+        if (score > bestScore) {
+          bestScore = score;
+          bestRow = startScan + row;
+        }
+      }
+      return bestRow;
+    };
+
+    // Calculate all break points
+    const breakPoints: number[] = [0];
+    let currentY = 0;
+    while (currentY + maxSliceHeightPx < imgHeightPx) {
+      const targetBreak = currentY + maxSliceHeightPx;
+      const bestBreak = findBreakRow(targetBreak);
+      breakPoints.push(bestBreak);
+      currentY = bestBreak;
+    }
+    breakPoints.push(imgHeightPx);
+
+    const totalPages = breakPoints.length - 1;
 
     for (let page = 0; page < totalPages; page++) {
       if (page > 0) pdf.addPage();
 
-      const srcY = (page * CONTENT_HEIGHT_MM) / ratio;
-      const srcH = Math.min(CONTENT_HEIGHT_MM / ratio, imgHeightPx - srcY);
+      const srcY = breakPoints[page];
+      const srcH = breakPoints[page + 1] - srcY;
       const destH = srcH * ratio;
 
-      // Create a temp canvas for this page slice
       const pageCanvas = document.createElement('canvas');
       pageCanvas.width = imgWidthPx;
       pageCanvas.height = Math.round(srcH);
       const ctx = pageCanvas.getContext('2d')!;
       
-      // Fill white background
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
-      
-      // Draw the slice
       ctx.drawImage(canvas, 0, Math.round(srcY), imgWidthPx, Math.round(srcH), 0, 0, imgWidthPx, Math.round(srcH));
 
       const pageImgData = pageCanvas.toDataURL('image/jpeg', 0.95);
       pdf.addImage(pageImgData, 'JPEG', MARGIN_MM, MARGIN_MM, CONTENT_WIDTH_MM, destH);
 
-      // Footer separator line
       pdf.setDrawColor(200, 200, 200);
       pdf.setLineWidth(0.2);
       pdf.line(MARGIN_MM, A4_HEIGHT_MM - 12, A4_WIDTH_MM - MARGIN_MM, A4_HEIGHT_MM - 12);
 
-      // Page number
       pdf.setFontSize(7);
       pdf.setTextColor(150, 150, 150);
       pdf.text(`${page + 1} / ${totalPages}`, A4_WIDTH_MM / 2, A4_HEIGHT_MM - 8, { align: 'center' });
