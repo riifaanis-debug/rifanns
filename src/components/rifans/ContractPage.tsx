@@ -404,13 +404,13 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
               <div>
                 <p className="mb-0.5">يشمل التفويض الممنوح للطرف الأول الصلاحيات التالية :</p>
                 {isRescheduling ? (
-                  <ul className="list-disc space-y-0.5" style={{ paddingRight: '20px', textAlign: 'right' }}>
+                  <ul className="space-y-0.5" style={{ direction: 'rtl', textAlign: 'right', paddingRight: '16px', listStyleType: 'disc', listStylePosition: 'outside' }}>
                     <li>الاطلاع على المستندات والبيانات المالية</li>
                     <li>التواصل مع البنوك والجهات التمويلية</li>
                     <li>رفع الطلبات ومتابعتها، وإعداد المذكرات النظامية والحضور النظامي عند الحاجة.</li>
                   </ul>
                 ) : (
-                  <ul className="list-disc space-y-0.5" style={{ paddingRight: '20px', textAlign: 'right' }}>
+                  <ul className="space-y-0.5" style={{ direction: 'rtl', textAlign: 'right', paddingRight: '16px', listStyleType: 'disc', listStylePosition: 'outside' }}>
                     <li>الاطلاع على التقارير الطبية والمستندات الرسمية</li>
                     <li>التواصل مع البنوك والجهات التمويلية</li>
                     <li>رفع الطلبات ومتابعتها، وإعداد المذكرات القانونية والحضور النظامي عند الحاجة.</li>
@@ -502,7 +502,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
             <section style={{ pageBreakInside: "avoid" }}>
               <h3 className="font-black text-gold mb-0.5 text-[13px]">المادة (10): الإقرار والتنازل عن الدفوع</h3>
               <p className="mb-1">يُقر الطرف الثاني إقراراً صريحاً ونهائياً بما يلي:</p>
-              <ol className="list-decimal space-y-0.5" style={{ paddingRight: '20px', marginRight: '0', textAlign: 'right' }}>
+              <ol className="space-y-0.5" style={{ direction: 'rtl', textAlign: 'right', paddingRight: '16px', listStyleType: 'decimal', listStylePosition: 'outside' }}>
                 <li>صحة جميع البيانات والمستندات المقدمة منه.</li>
                 <li>صحة احتساب الأتعاب وفق ما ورد في هذا العقد.</li>
                 <li>التنازل عن أي دفوع أو منازعات تتعلق بسند الأمر متى ما تم إصداره عبر منصة نافذ وفق أحكام هذا العقد.</li>
