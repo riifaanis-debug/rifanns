@@ -155,6 +155,28 @@ async function waitForPdfAssets(root: HTMLElement) {
   }
 }
 
+/**
+ * Capture the header element from a contract clone for repeating on each page.
+ */
+async function captureHeader(clone: HTMLElement): Promise<HTMLCanvasElement | null> {
+  const header = clone.querySelector('.contract-header') as HTMLElement | null;
+  if (!header) return null;
+  
+  try {
+    const headerCanvas = await html2canvas(header, {
+      scale: 2.5,
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: '#ffffff',
+      logging: false,
+      windowWidth: 794,
+    });
+    return headerCanvas;
+  } catch {
+    return null;
+  }
+}
+
 export const generateContractPdf = async (
   element: HTMLElement,
   fileName: string = 'contract.pdf'
@@ -189,6 +211,9 @@ export const generateContractPdf = async (
   cleanForPdf(clone);
   await waitForPdfAssets(clone);
 
+  // Capture header for repeating on subsequent pages
+  const headerCanvas = await captureHeader(clone);
+
   try {
     const canvas = await html2canvas(clone, {
       scale: 2.5,
@@ -212,6 +237,16 @@ export const generateContractPdf = async (
     const imgHeightPx = canvas.height;
 
     const pdf = new jsPDF('p', 'mm', 'a4');
+    
+    // Calculate header dimensions for repeating
+    let headerHeightMm = 0;
+    let headerImgData: string | null = null;
+    if (headerCanvas) {
+      const headerRatio = CONTENT_WIDTH_MM / headerCanvas.width;
+      headerHeightMm = headerCanvas.height * headerRatio;
+      headerImgData = headerCanvas.toDataURL('image/jpeg', 0.95);
+    }
+    
     const ratio = CONTENT_WIDTH_MM / imgWidthPx;
     const maxSliceHeightPx = Math.floor(CONTENT_HEIGHT_MM / ratio);
 
@@ -267,6 +302,18 @@ export const generateContractPdf = async (
     for (let page = 0; page < totalPages; page++) {
       if (page > 0) pdf.addPage();
 
+      let contentStartMm = MARGIN_MM;
+
+      // Add repeating header on pages after the first
+      if (page > 0 && headerImgData && headerHeightMm > 0) {
+        pdf.addImage(headerImgData, 'JPEG', MARGIN_MM, MARGIN_MM, CONTENT_WIDTH_MM, headerHeightMm);
+        // Draw a thin line under the header
+        pdf.setDrawColor(34, 4, 44); // #22042C
+        pdf.setLineWidth(0.5);
+        pdf.line(MARGIN_MM, MARGIN_MM + headerHeightMm + 1, A4_WIDTH_MM - MARGIN_MM, MARGIN_MM + headerHeightMm + 1);
+        contentStartMm = MARGIN_MM + headerHeightMm + 3;
+      }
+
       const srcY = breakPoints[page];
       const srcH = breakPoints[page + 1] - srcY;
       const destH = srcH * ratio;
@@ -281,7 +328,7 @@ export const generateContractPdf = async (
       ctx.drawImage(canvas, 0, Math.round(srcY), imgWidthPx, Math.round(srcH), 0, 0, imgWidthPx, Math.round(srcH));
 
       const pageImgData = pageCanvas.toDataURL('image/jpeg', 0.95);
-      pdf.addImage(pageImgData, 'JPEG', MARGIN_MM, MARGIN_MM, CONTENT_WIDTH_MM, destH);
+      pdf.addImage(pageImgData, 'JPEG', MARGIN_MM, contentStartMm, CONTENT_WIDTH_MM, destH);
 
       pdf.setDrawColor(200, 200, 200);
       pdf.setLineWidth(0.2);
