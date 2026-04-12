@@ -276,35 +276,35 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
           </div>
 
           {/* Document Header - Logo left, Info right */}
-          <div className="flex items-start justify-between mb-4 pb-3 border-b-[3px] border-[#22042C]" style={{ direction: 'rtl' }}>
+          <div className="contract-header flex items-start justify-between mb-4 pb-3 border-b-[3px] border-[#22042C]" style={{ direction: 'rtl' }}>
             {/* Right side: Company name + contract title */}
             <div className="text-right flex-1">
-              <p className="text-[18px] font-black text-[#22042C] mb-0.5">شركة ريفانس المالية</p>
-              <p className="text-[13px] font-black text-[#22042C] mb-2">
+              <p className="text-[22px] font-black text-[#22042C] mb-0.5">شركة ريفانس المالية</p>
+              <p className="text-[15px] font-black text-[#22042C] mb-2">
                 {isRescheduling ? 'عقد تفويض ومتابعة طلب جدولة منتجات تمويلية' : isSeizedAmounts ? 'عقد تفويض ومتابعة طلب إتاحة النسبة النظامية' : 'عقد تفويض ومتابعة طلب إعفاء تمويلي'}
               </p>
-              <div className="flex flex-wrap gap-x-6 gap-y-0.5 text-[10px] text-[#22042C]">
+              <div className="flex flex-wrap gap-x-6 gap-y-0.5 text-[11px] text-[#22042C]">
                 <span>رقم ملف العميل: <strong className="font-mono">{submissionId}</strong></span>
                 <span>رقم العقد الموحد: <strong className="font-mono">{submissionId}</strong></span>
               </div>
-              <p className="text-[10px] text-[#22042C]">تاريخ الإصدار: <strong>{new Date(submission.timestamp).toLocaleDateString('ar-SA')}</strong></p>
+              <p className="text-[11px] text-[#22042C]">تاريخ الإصدار: <strong>{new Date(submission.timestamp).toLocaleDateString('ar-SA')}</strong></p>
             </div>
             {/* Left side: Logo */}
             <div className="flex-shrink-0 mr-4">
-              <img src={rifansLogo} alt="Rifans Logo" className="h-28 w-auto object-contain" />
+              <img src={rifansLogo} alt="Rifans Logo" className="h-36 w-auto object-contain" />
             </div>
           </div>
 
           {/* Contract Body */}
-          <div className="space-y-3 text-right relative text-[10.5px] leading-[1.7] text-[#22042C]" style={{ direction: 'rtl' }}>
+          <div className="space-y-3 text-right relative text-[12px] leading-[1.8] text-[#22042C]" style={{ direction: 'rtl' }}>
             
             {/* Parties Section - Clean table layout */}
             <div className="border border-[#d4c8d9] rounded overflow-hidden" style={{ pageBreakInside: 'avoid' }}>
-              <table className="w-full text-[10px] border-collapse">
+              <table className="w-full text-[11px] border-collapse">
                 <thead>
                   <tr>
-                    <th className="bg-[#f3eff5] text-[#C5A059] font-black text-[11px] py-1.5 px-3 text-right border-b border-[#d4c8d9] w-1/2">• الطرف الأول</th>
-                    <th className="bg-[#f3eff5] text-[#C5A059] font-black text-[11px] py-1.5 px-3 text-right border-b border-[#d4c8d9] border-r border-[#d4c8d9] w-1/2">• الطرف الثاني</th>
+                    <th className="bg-[#f3eff5] text-[#C5A059] font-black text-[13px] py-1.5 px-3 text-right border-b border-[#d4c8d9] w-1/2">• الطرف الأول</th>
+                    <th className="bg-[#f3eff5] text-[#C5A059] font-black text-[13px] py-1.5 px-3 text-right border-b border-[#d4c8d9] border-r border-[#d4c8d9] w-1/2">• الطرف الثاني</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -330,7 +330,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
             </div>
 
             <section style={{ pageBreakInside: "avoid" }}>
-              <h3 className="font-black mb-0.5 text-gold text-[11px]">التمهيد:</h3>
+              <h3 className="font-black mb-0.5 text-gold text-[13px]">التمهيد:</h3>
               <p className="text-justify">
                  {isRescheduling ? (
                    <>
@@ -352,12 +352,12 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
             </section>
 
             <section style={{ pageBreakInside: "avoid" }}>
-              <h3 className="font-black text-gold mb-0.5 text-[11px]">المادة (1): حجية التعامل الإلكتروني</h3>
+              <h3 className="font-black text-gold mb-0.5 text-[13px]">المادة (1): حجية التعامل الإلكتروني</h3>
               <p>يقر الطرفان بموافقتهما على إبرام هذا العقد واستخدام الوسائل الإلكترونية (البريد الإلكتروني والرسائل النصية) لتوثيقه، وتعد هذه الوسائل حجة ملزمة وقائمة بذاتها وفقاً لنظام التعاملات الإلكترونية السعودي، ولها ذات الحجية القانونية للتوقيع اليدوي أمام كافة الجهات الرسمية والقضائية.</p>
             </section>
 
             <section style={{ pageBreakInside: "avoid" }}>
-              <h3 className="font-black text-gold mb-0.5 text-[11px]">المادة (2): موضوع العقد والتفويض</h3>
+              <h3 className="font-black text-gold mb-0.5 text-[13px]">المادة (2): موضوع العقد والتفويض</h3>
               <p className="mb-1.5">
                  {isRescheduling 
                    ? `يفوض الطرف الثاني بموجب هذا العقد تفويضاً صريحاً ومباشراً وقابلاً للتنفيذ للطرف الأول في استلام وتقديم ومتابعة طلب إعادة جدولة المنتجات التمويلية الخاصة به لدى ${submission.data.bank || 'الجهات التمويلية والبنوك'}، وذلك فيما يتعلق بمنتجات التمويل الموضحة أدناه:`
@@ -368,7 +368,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
               </p>
               
               <div className="border border-[#d4c8d9] rounded overflow-hidden" style={{ pageBreakInside: 'avoid' }}>
-                <table className="w-full text-[10px] border-collapse">
+                <table className="w-full text-[11px] border-collapse">
                   <tbody>
                     <tr className="border-b border-[#e5dce9]">
                       <td className="py-1 px-3 font-bold bg-[#f3eff5] w-[140px]">اسم الجهة التمويلية</td>
@@ -391,8 +391,8 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
                       </React.Fragment>
                     ))}
                     <tr className="bg-[#f3eff5]">
-                      <td className="py-1.5 px-3 font-black text-[11px]">إجمالي المديونية</td>
-                      <td className="py-1.5 px-3 font-black text-[11px]">{formatAmount(totalDebt)} ريال سعودي</td>
+                      <td className="py-1.5 px-3 font-black text-[12px]">إجمالي المديونية</td>
+                      <td className="py-1.5 px-3 font-black text-[12px]">{formatAmount(totalDebt)} ريال سعودي</td>
                     </tr>
                   </tbody>
                 </table>
@@ -400,7 +400,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
             </section>
 
             <section style={{ pageBreakInside: "avoid" }}>
-              <h3 className="font-black text-gold mb-0.5 text-[11px]">المادة (3): نطاق التفويض</h3>
+              <h3 className="font-black text-gold mb-0.5 text-[13px]">المادة (3): نطاق التفويض</h3>
               <div>
                 <p className="mb-0.5">يشمل التفويض الممنوح للطرف الأول الصلاحيات التالية :</p>
                 {isRescheduling ? (
@@ -420,17 +420,17 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
             </section>
 
             <section style={{ pageBreakInside: "avoid" }}>
-              <h3 className="font-black text-gold mb-0.5 text-[11px]">المادة (4): التزامات الطرف الأول</h3>
+              <h3 className="font-black text-gold mb-0.5 text-[13px]">المادة (4): التزامات الطرف الأول</h3>
               <p>يلتزم الطرف الأول بالمحافظة على سرية بيانات الطرف الثاني، وبذل أقصى درجات العناية المهنية ، ورفع الطلبات بصيغة رسمية تعزز فرص القبول ، وإبلاغ الطرف الثاني بالمستجدات دورياً.</p>
             </section>
 
             <section style={{ pageBreakInside: "avoid" }}>
-              <h3 className="font-black text-gold mb-0.5 text-[11px]">المادة (5): التزامات الطرف الثاني</h3>
+              <h3 className="font-black text-gold mb-0.5 text-[13px]">المادة (5): التزامات الطرف الثاني</h3>
               <p>يلتزم الطرف الثاني بتقديم كافة المستندات والبيانات الصحيحة ، التعاون مع الطرف الأول لاستكمال النواقص ، والالتزام بسداد الأتعاب المستحقة وفقاً لأحكام العقد.</p>
             </section>
 
             <section style={{ pageBreakInside: "avoid" }}>
-              <h3 className="font-black text-gold mb-0.5 text-[11px]">المادة (6): المستحقات المالية والأتعاب</h3>
+              <h3 className="font-black text-gold mb-0.5 text-[13px]">المادة (6): المستحقات المالية والأتعاب</h3>
               <p>
                  {isRescheduling
                    ? 'لا تستحق أتعاب الطرف الأول إلا بعد صدور قرار الموافقة على إعادة جدولة المنتجات التمويلية وإتمام الإجراءات ذات العلاقة. وفي حال صدور القرار يستحق الطرف الأول أتعاباً مقطوعة قدرها: 2,000 ريال سعودي فقط.'
@@ -443,7 +443,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
             </section>
 
             <section style={{ pageBreakInside: "avoid" }}>
-              <h3 className="font-black text-gold mb-0.5 text-[11px]">المادة (7): مدة العقد</h3>
+              <h3 className="font-black text-gold mb-0.5 text-[13px]">المادة (7): مدة العقد</h3>
               <p>
                  {isRescheduling
                    ? 'يبدأ العمل بهذا العقد من تاريخ توقيعه، ويستمر سارياً حتى صدور قرار الجهة التمويلية بشأن طلب إعادة الجدولة، ما لم يتم إنهاؤه باتفاق مكتوب بين الطرفين أو وفقاً للأنظمة.'
@@ -455,7 +455,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
             </section>
 
             <section style={{ pageBreakInside: "avoid" }}>
-              <h3 className="font-black text-gold mb-0.5 text-[11px]">المادة (8): سند لأمر وإقرار دين واجب النفاذ</h3>
+              <h3 className="font-black text-gold mb-0.5 text-[13px]">المادة (8): سند لأمر وإقرار دين واجب النفاذ</h3>
               <p className="mb-1.5">
                  {isRescheduling
                    ? 'اتفق الطرفان على أن يعد هذا العقد بمثابة سند لأمر واجب النفاذ وفقاً لأحكام نظام الأوراق التجارية ونظام التنفيذ السعودي. ويقر الطرف الثاني إقراراً صريحاً ونهائياً بالتزامه بسداد أتعاب الطرف الأول وقدرها 2,000 ريال سعودي عند صدور قرار الموافقة على طلب إعادة الجدولة.'
@@ -466,7 +466,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
               </p>
               
               <div className="border border-[#d4c8d9] rounded overflow-hidden" style={{ pageBreakInside: 'avoid' }}>
-                <table className="w-full text-[10px] border-collapse">
+                <table className="w-full text-[11px] border-collapse">
                   <tbody>
                     <tr className="border-b border-[#e5dce9]">
                       <td className="py-1 px-3 font-bold bg-[#f3eff5] w-[140px]">رقم ملف العميل</td>
@@ -495,12 +495,12 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
             </section>
 
             <section style={{ pageBreakInside: "avoid" }}>
-              <h3 className="font-black text-gold mb-0.5 text-[11px]">المادة (9): أحكام عامة</h3>
+              <h3 className="font-black text-gold mb-0.5 text-[13px]">المادة (9): أحكام عامة</h3>
               <p>يخضع العقد لأنظمة المملكة العربية السعودية. لا يُعد أي تعديل نافذاً إلا إذا كان مكتوباً وموقعاً من الطرفين.</p>
             </section>
 
             <section style={{ pageBreakInside: "avoid" }}>
-              <h3 className="font-black text-gold mb-0.5 text-[11px]">المادة (10): الإقرار والتنازل عن الدفوع</h3>
+              <h3 className="font-black text-gold mb-0.5 text-[13px]">المادة (10): الإقرار والتنازل عن الدفوع</h3>
               <p className="mb-1">يُقر الطرف الثاني إقراراً صريحاً ونهائياً بما يلي:</p>
               <ol className="list-decimal space-y-0.5" style={{ paddingRight: '20px', marginRight: '0', textAlign: 'right' }}>
                 <li>صحة جميع البيانات والمستندات المقدمة منه.</li>
@@ -511,12 +511,12 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
             </section>
 
             <section style={{ pageBreakInside: "avoid" }}>
-              <h3 className="font-black text-gold mb-0.5 text-[11px]">المادة (11): الإقرار والقبول النهائي</h3>
+              <h3 className="font-black text-gold mb-0.5 text-[13px]">المادة (11): الإقرار والقبول النهائي</h3>
               <p>يُقر الطرف الثاني بما يلي: اطلاعه الكامل على العقد وفهمه لآثاره، صحة التفويض الممنوح، صحة احتساب الأتعاب، وأن هذا الإقرار حجة قاطعة وملزمة أمام جميع الجهات القضائية والتنفيذية.</p>
             </section>
 
             <section style={{ pageBreakInside: "avoid" }}>
-              <h3 className="font-black text-gold mb-0.5 text-[11px]">المادة (12): التفويض</h3>
+              <h3 className="font-black text-gold mb-0.5 text-[13px]">المادة (12): التفويض</h3>
               <p className="text-justify">
                 {isRescheduling ? (
                   <>
@@ -537,7 +537,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
             {/* Signatures Section */}
             <div className="mt-8 pt-4 border-t-2 border-[#22042C] grid grid-cols-2 gap-6 relative" style={{ pageBreakInside: 'avoid' }}>
               <div className="text-center space-y-2">
-                <p className="font-black text-[11px] text-[#22042C] underline underline-offset-2">ختم وتوقيع الطرف الأول</p>
+                <p className="font-black text-[13px] text-[#22042C] underline underline-offset-2">ختم وتوقيع الطرف الأول</p>
                 <div className="h-36 flex items-center justify-center relative overflow-hidden">
                   <img 
                     src={rifansStampImg} 
@@ -547,7 +547,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
                 </div>
               </div>
               <div className="text-center space-y-2">
-                <p className="font-black text-[11px] text-[#22042C] underline underline-offset-2">توقيع الطرف الثاني (العميل)</p>
+                <p className="font-black text-[13px] text-[#22042C] underline underline-offset-2">توقيع الطرف الثاني (العميل)</p>
                 <div className="h-28 bg-gray-50/50 rounded-lg border border-gray-100 flex items-center justify-center relative overflow-hidden">
                   {isSuccess || isAlreadySigned ? (
                     <div className="flex flex-col items-center gap-1">
