@@ -276,35 +276,35 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
           </div>
 
           {/* Document Header - Logo left, Info right */}
-          <div className="flex items-start justify-between mb-4 pb-3 border-b-[3px] border-[#22042C]" style={{ direction: 'rtl' }}>
+          <div className="contract-header flex items-start justify-between mb-4 pb-3 border-b-[3px] border-[#22042C]" style={{ direction: 'rtl' }}>
             {/* Right side: Company name + contract title */}
             <div className="text-right flex-1">
-              <p className="text-[18px] font-black text-[#22042C] mb-0.5">شركة ريفانس المالية</p>
-              <p className="text-[13px] font-black text-[#22042C] mb-2">
+              <p className="text-[22px] font-black text-[#22042C] mb-0.5">شركة ريفانس المالية</p>
+              <p className="text-[15px] font-black text-[#22042C] mb-2">
                 {isRescheduling ? 'عقد تفويض ومتابعة طلب جدولة منتجات تمويلية' : isSeizedAmounts ? 'عقد تفويض ومتابعة طلب إتاحة النسبة النظامية' : 'عقد تفويض ومتابعة طلب إعفاء تمويلي'}
               </p>
-              <div className="flex flex-wrap gap-x-6 gap-y-0.5 text-[10px] text-[#22042C]">
+              <div className="flex flex-wrap gap-x-6 gap-y-0.5 text-[11px] text-[#22042C]">
                 <span>رقم ملف العميل: <strong className="font-mono">{submissionId}</strong></span>
                 <span>رقم العقد الموحد: <strong className="font-mono">{submissionId}</strong></span>
               </div>
-              <p className="text-[10px] text-[#22042C]">تاريخ الإصدار: <strong>{new Date(submission.timestamp).toLocaleDateString('ar-SA')}</strong></p>
+              <p className="text-[11px] text-[#22042C]">تاريخ الإصدار: <strong>{new Date(submission.timestamp).toLocaleDateString('ar-SA')}</strong></p>
             </div>
             {/* Left side: Logo */}
             <div className="flex-shrink-0 mr-4">
-              <img src={rifansLogo} alt="Rifans Logo" className="h-28 w-auto object-contain" />
+              <img src={rifansLogo} alt="Rifans Logo" className="h-36 w-auto object-contain" />
             </div>
           </div>
 
           {/* Contract Body */}
-          <div className="space-y-3 text-right relative text-[10.5px] leading-[1.7] text-[#22042C]" style={{ direction: 'rtl' }}>
+          <div className="space-y-3 text-right relative text-[12px] leading-[1.8] text-[#22042C]" style={{ direction: 'rtl' }}>
             
             {/* Parties Section - Clean table layout */}
             <div className="border border-[#d4c8d9] rounded overflow-hidden" style={{ pageBreakInside: 'avoid' }}>
-              <table className="w-full text-[10px] border-collapse">
+              <table className="w-full text-[11px] border-collapse">
                 <thead>
                   <tr>
-                    <th className="bg-[#f3eff5] text-[#C5A059] font-black text-[11px] py-1.5 px-3 text-right border-b border-[#d4c8d9] w-1/2">• الطرف الأول</th>
-                    <th className="bg-[#f3eff5] text-[#C5A059] font-black text-[11px] py-1.5 px-3 text-right border-b border-[#d4c8d9] border-r border-[#d4c8d9] w-1/2">• الطرف الثاني</th>
+                    <th className="bg-[#f3eff5] text-[#C5A059] font-black text-[13px] py-1.5 px-3 text-right border-b border-[#d4c8d9] w-1/2">• الطرف الأول</th>
+                    <th className="bg-[#f3eff5] text-[#C5A059] font-black text-[13px] py-1.5 px-3 text-right border-b border-[#d4c8d9] border-r border-[#d4c8d9] w-1/2">• الطرف الثاني</th>
                   </tr>
                 </thead>
                 <tbody>
