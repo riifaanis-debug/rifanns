@@ -330,7 +330,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
             </div>
 
             <section style={{ pageBreakInside: "avoid" }}>
-              <h3 className="font-black mb-0.5 text-gold text-[11px]">التمهيد:</h3>
+              <h3 className="font-black mb-0.5 text-gold text-[13px]">التمهيد:</h3>
               <p className="text-justify">
                  {isRescheduling ? (
                    <>
@@ -352,12 +352,12 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
             </section>
 
             <section style={{ pageBreakInside: "avoid" }}>
-              <h3 className="font-black text-gold mb-0.5 text-[11px]">المادة (1): حجية التعامل الإلكتروني</h3>
+              <h3 className="font-black text-gold mb-0.5 text-[13px]">المادة (1): حجية التعامل الإلكتروني</h3>
               <p>يقر الطرفان بموافقتهما على إبرام هذا العقد واستخدام الوسائل الإلكترونية (البريد الإلكتروني والرسائل النصية) لتوثيقه، وتعد هذه الوسائل حجة ملزمة وقائمة بذاتها وفقاً لنظام التعاملات الإلكترونية السعودي، ولها ذات الحجية القانونية للتوقيع اليدوي أمام كافة الجهات الرسمية والقضائية.</p>
             </section>
 
             <section style={{ pageBreakInside: "avoid" }}>
-              <h3 className="font-black text-gold mb-0.5 text-[11px]">المادة (2): موضوع العقد والتفويض</h3>
+              <h3 className="font-black text-gold mb-0.5 text-[13px]">المادة (2): موضوع العقد والتفويض</h3>
               <p className="mb-1.5">
                  {isRescheduling 
                    ? `يفوض الطرف الثاني بموجب هذا العقد تفويضاً صريحاً ومباشراً وقابلاً للتنفيذ للطرف الأول في استلام وتقديم ومتابعة طلب إعادة جدولة المنتجات التمويلية الخاصة به لدى ${submission.data.bank || 'الجهات التمويلية والبنوك'}، وذلك فيما يتعلق بمنتجات التمويل الموضحة أدناه:`
@@ -400,7 +400,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
             </section>
 
             <section style={{ pageBreakInside: "avoid" }}>
-              <h3 className="font-black text-gold mb-0.5 text-[11px]">المادة (3): نطاق التفويض</h3>
+              <h3 className="font-black text-gold mb-0.5 text-[13px]">المادة (3): نطاق التفويض</h3>
               <div>
                 <p className="mb-0.5">يشمل التفويض الممنوح للطرف الأول الصلاحيات التالية :</p>
                 {isRescheduling ? (
@@ -420,17 +420,17 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
             </section>
 
             <section style={{ pageBreakInside: "avoid" }}>
-              <h3 className="font-black text-gold mb-0.5 text-[11px]">المادة (4): التزامات الطرف الأول</h3>
+              <h3 className="font-black text-gold mb-0.5 text-[13px]">المادة (4): التزامات الطرف الأول</h3>
               <p>يلتزم الطرف الأول بالمحافظة على سرية بيانات الطرف الثاني، وبذل أقصى درجات العناية المهنية ، ورفع الطلبات بصيغة رسمية تعزز فرص القبول ، وإبلاغ الطرف الثاني بالمستجدات دورياً.</p>
             </section>
 
             <section style={{ pageBreakInside: "avoid" }}>
-              <h3 className="font-black text-gold mb-0.5 text-[11px]">المادة (5): التزامات الطرف الثاني</h3>
+              <h3 className="font-black text-gold mb-0.5 text-[13px]">المادة (5): التزامات الطرف الثاني</h3>
               <p>يلتزم الطرف الثاني بتقديم كافة المستندات والبيانات الصحيحة ، التعاون مع الطرف الأول لاستكمال النواقص ، والالتزام بسداد الأتعاب المستحقة وفقاً لأحكام العقد.</p>
             </section>
 
             <section style={{ pageBreakInside: "avoid" }}>
-              <h3 className="font-black text-gold mb-0.5 text-[11px]">المادة (6): المستحقات المالية والأتعاب</h3>
+              <h3 className="font-black text-gold mb-0.5 text-[13px]">المادة (6): المستحقات المالية والأتعاب</h3>
               <p>
                  {isRescheduling
                    ? 'لا تستحق أتعاب الطرف الأول إلا بعد صدور قرار الموافقة على إعادة جدولة المنتجات التمويلية وإتمام الإجراءات ذات العلاقة. وفي حال صدور القرار يستحق الطرف الأول أتعاباً مقطوعة قدرها: 2,000 ريال سعودي فقط.'
@@ -443,7 +443,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
             </section>
 
             <section style={{ pageBreakInside: "avoid" }}>
-              <h3 className="font-black text-gold mb-0.5 text-[11px]">المادة (7): مدة العقد</h3>
+              <h3 className="font-black text-gold mb-0.5 text-[13px]">المادة (7): مدة العقد</h3>
               <p>
                  {isRescheduling
                    ? 'يبدأ العمل بهذا العقد من تاريخ توقيعه، ويستمر سارياً حتى صدور قرار الجهة التمويلية بشأن طلب إعادة الجدولة، ما لم يتم إنهاؤه باتفاق مكتوب بين الطرفين أو وفقاً للأنظمة.'
@@ -455,7 +455,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
             </section>
 
             <section style={{ pageBreakInside: "avoid" }}>
-              <h3 className="font-black text-gold mb-0.5 text-[11px]">المادة (8): سند لأمر وإقرار دين واجب النفاذ</h3>
+              <h3 className="font-black text-gold mb-0.5 text-[13px]">المادة (8): سند لأمر وإقرار دين واجب النفاذ</h3>
               <p className="mb-1.5">
                  {isRescheduling
                    ? 'اتفق الطرفان على أن يعد هذا العقد بمثابة سند لأمر واجب النفاذ وفقاً لأحكام نظام الأوراق التجارية ونظام التنفيذ السعودي. ويقر الطرف الثاني إقراراً صريحاً ونهائياً بالتزامه بسداد أتعاب الطرف الأول وقدرها 2,000 ريال سعودي عند صدور قرار الموافقة على طلب إعادة الجدولة.'
@@ -495,12 +495,12 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
             </section>
 
             <section style={{ pageBreakInside: "avoid" }}>
-              <h3 className="font-black text-gold mb-0.5 text-[11px]">المادة (9): أحكام عامة</h3>
+              <h3 className="font-black text-gold mb-0.5 text-[13px]">المادة (9): أحكام عامة</h3>
               <p>يخضع العقد لأنظمة المملكة العربية السعودية. لا يُعد أي تعديل نافذاً إلا إذا كان مكتوباً وموقعاً من الطرفين.</p>
             </section>
 
             <section style={{ pageBreakInside: "avoid" }}>
-              <h3 className="font-black text-gold mb-0.5 text-[11px]">المادة (10): الإقرار والتنازل عن الدفوع</h3>
+              <h3 className="font-black text-gold mb-0.5 text-[13px]">المادة (10): الإقرار والتنازل عن الدفوع</h3>
               <p className="mb-1">يُقر الطرف الثاني إقراراً صريحاً ونهائياً بما يلي:</p>
               <ol className="list-decimal space-y-0.5" style={{ paddingRight: '20px', marginRight: '0', textAlign: 'right' }}>
                 <li>صحة جميع البيانات والمستندات المقدمة منه.</li>
@@ -511,12 +511,12 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
             </section>
 
             <section style={{ pageBreakInside: "avoid" }}>
-              <h3 className="font-black text-gold mb-0.5 text-[11px]">المادة (11): الإقرار والقبول النهائي</h3>
+              <h3 className="font-black text-gold mb-0.5 text-[13px]">المادة (11): الإقرار والقبول النهائي</h3>
               <p>يُقر الطرف الثاني بما يلي: اطلاعه الكامل على العقد وفهمه لآثاره، صحة التفويض الممنوح، صحة احتساب الأتعاب، وأن هذا الإقرار حجة قاطعة وملزمة أمام جميع الجهات القضائية والتنفيذية.</p>
             </section>
 
             <section style={{ pageBreakInside: "avoid" }}>
-              <h3 className="font-black text-gold mb-0.5 text-[11px]">المادة (12): التفويض</h3>
+              <h3 className="font-black text-gold mb-0.5 text-[13px]">المادة (12): التفويض</h3>
               <p className="text-justify">
                 {isRescheduling ? (
                   <>
