@@ -368,7 +368,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
               </p>
               
               <div className="border border-[#d4c8d9] rounded overflow-hidden" style={{ pageBreakInside: 'avoid' }}>
-                <table className="w-full text-[10px] border-collapse">
+                <table className="w-full text-[11px] border-collapse">
                   <tbody>
                     <tr className="border-b border-[#e5dce9]">
                       <td className="py-1 px-3 font-bold bg-[#f3eff5] w-[140px]">اسم الجهة التمويلية</td>
@@ -391,8 +391,8 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
                       </React.Fragment>
                     ))}
                     <tr className="bg-[#f3eff5]">
-                      <td className="py-1.5 px-3 font-black text-[11px]">إجمالي المديونية</td>
-                      <td className="py-1.5 px-3 font-black text-[11px]">{formatAmount(totalDebt)} ريال سعودي</td>
+                      <td className="py-1.5 px-3 font-black text-[12px]">إجمالي المديونية</td>
+                      <td className="py-1.5 px-3 font-black text-[12px]">{formatAmount(totalDebt)} ريال سعودي</td>
                     </tr>
                   </tbody>
                 </table>
@@ -466,7 +466,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
               </p>
               
               <div className="border border-[#d4c8d9] rounded overflow-hidden" style={{ pageBreakInside: 'avoid' }}>
-                <table className="w-full text-[10px] border-collapse">
+                <table className="w-full text-[11px] border-collapse">
                   <tbody>
                     <tr className="border-b border-[#e5dce9]">
                       <td className="py-1 px-3 font-bold bg-[#f3eff5] w-[140px]">رقم ملف العميل</td>
@@ -537,7 +537,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
             {/* Signatures Section */}
             <div className="mt-8 pt-4 border-t-2 border-[#22042C] grid grid-cols-2 gap-6 relative" style={{ pageBreakInside: 'avoid' }}>
               <div className="text-center space-y-2">
-                <p className="font-black text-[11px] text-[#22042C] underline underline-offset-2">ختم وتوقيع الطرف الأول</p>
+                <p className="font-black text-[13px] text-[#22042C] underline underline-offset-2">ختم وتوقيع الطرف الأول</p>
                 <div className="h-36 flex items-center justify-center relative overflow-hidden">
                   <img 
                     src={rifansStampImg} 
@@ -547,7 +547,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
                 </div>
               </div>
               <div className="text-center space-y-2">
-                <p className="font-black text-[11px] text-[#22042C] underline underline-offset-2">توقيع الطرف الثاني (العميل)</p>
+                <p className="font-black text-[13px] text-[#22042C] underline underline-offset-2">توقيع الطرف الثاني (العميل)</p>
                 <div className="h-28 bg-gray-50/50 rounded-lg border border-gray-100 flex items-center justify-center relative overflow-hidden">
                   {isSuccess || isAlreadySigned ? (
                     <div className="flex flex-col items-center gap-1">
