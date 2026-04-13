@@ -18,7 +18,7 @@ interface ContractPageProps {
 /* ── Shared inline style objects ── */
 const sectionStyle: React.CSSProperties = { pageBreakInside: 'avoid', marginBottom: '18px' };
 const headingStyle: React.CSSProperties = {
-  fontSize: '15px',
+  fontSize: '17px',
   fontWeight: 900,
   color: '#C5A059',
   marginBottom: '6px',
@@ -26,8 +26,8 @@ const headingStyle: React.CSSProperties = {
   lineHeight: 1.4,
 };
 const paragraphStyle: React.CSSProperties = {
-  fontSize: '13px',
-  lineHeight: 1.85,
+  fontSize: '14px',
+  lineHeight: 1.8,
   color: '#22042C',
   textAlign: 'justify',
   direction: 'rtl',
@@ -37,14 +37,14 @@ const listStyle: React.CSSProperties = {
   textAlign: 'right',
   paddingRight: '22px',
   listStylePosition: 'outside',
-  fontSize: '13px',
-  lineHeight: 1.85,
+  fontSize: '14px',
+  lineHeight: 1.8,
   color: '#22042C',
 };
 const tableHeaderCellStyle: React.CSSProperties = {
-  padding: '8px 14px',
+  padding: '10px 14px',
   fontWeight: 900,
-  fontSize: '12px',
+  fontSize: '14px',
   color: '#22042C',
   backgroundColor: '#f3eff5',
   textAlign: 'right',
@@ -52,12 +52,13 @@ const tableHeaderCellStyle: React.CSSProperties = {
   fontFamily: 'Cairo, Tajawal, sans-serif',
 };
 const tableCellStyle: React.CSSProperties = {
-  padding: '8px 14px',
-  fontSize: '12px',
+  padding: '10px 14px',
+  fontSize: '13.5px',
   textAlign: 'right',
   borderBottom: '1px solid #e8e0ed',
   color: '#22042C',
-  lineHeight: 1.6,
+  lineHeight: 1.7,
+  minHeight: '34px',
 };
 const tableLabelCellStyle: React.CSSProperties = {
   ...tableCellStyle,
