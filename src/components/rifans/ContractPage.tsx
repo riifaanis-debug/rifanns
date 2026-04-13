@@ -18,7 +18,7 @@ interface ContractPageProps {
 /* ── Shared inline style objects ── */
 const sectionStyle: React.CSSProperties = { pageBreakInside: 'avoid', marginBottom: '18px' };
 const headingStyle: React.CSSProperties = {
-  fontSize: '15px',
+  fontSize: '17px',
   fontWeight: 900,
   color: '#C5A059',
   marginBottom: '6px',
@@ -26,8 +26,8 @@ const headingStyle: React.CSSProperties = {
   lineHeight: 1.4,
 };
 const paragraphStyle: React.CSSProperties = {
-  fontSize: '13px',
-  lineHeight: 1.85,
+  fontSize: '14px',
+  lineHeight: 1.8,
   color: '#22042C',
   textAlign: 'justify',
   direction: 'rtl',
@@ -37,14 +37,14 @@ const listStyle: React.CSSProperties = {
   textAlign: 'right',
   paddingRight: '22px',
   listStylePosition: 'outside',
-  fontSize: '13px',
-  lineHeight: 1.85,
+  fontSize: '14px',
+  lineHeight: 1.8,
   color: '#22042C',
 };
 const tableHeaderCellStyle: React.CSSProperties = {
-  padding: '8px 14px',
+  padding: '10px 14px',
   fontWeight: 900,
-  fontSize: '12px',
+  fontSize: '14px',
   color: '#22042C',
   backgroundColor: '#f3eff5',
   textAlign: 'right',
@@ -52,12 +52,13 @@ const tableHeaderCellStyle: React.CSSProperties = {
   fontFamily: 'Cairo, Tajawal, sans-serif',
 };
 const tableCellStyle: React.CSSProperties = {
-  padding: '8px 14px',
-  fontSize: '12px',
+  padding: '10px 14px',
+  fontSize: '13.5px',
   textAlign: 'right',
   borderBottom: '1px solid #e8e0ed',
   color: '#22042C',
-  lineHeight: 1.6,
+  lineHeight: 1.7,
+  minHeight: '34px',
 };
 const tableLabelCellStyle: React.CSSProperties = {
   ...tableCellStyle,
@@ -263,8 +264,8 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
             direction: 'rtl',
             padding: '40px 48px',
             color: '#22042C',
-            fontSize: '13px',
-            lineHeight: 1.85,
+            fontSize: '14px',
+            lineHeight: 1.8,
           }}
         >
           {/* ══════════ HEADER (captured for PDF repeat) ══════════ */}
@@ -273,10 +274,10 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
               {/* Right: Company info */}
               <div style={{ flex: 1 }}>
-                <h1 style={{ fontSize: '24px', fontWeight: 900, color: '#22042C', margin: 0, fontFamily: 'Cairo, Tajawal, sans-serif', lineHeight: 1.3 }}>
+                <h1 style={{ fontSize: '25px', fontWeight: 900, color: '#22042C', margin: 0, fontFamily: 'Cairo, Tajawal, sans-serif', lineHeight: 1.3 }}>
                   شركة ريفانس المالية
                 </h1>
-                <p style={{ fontSize: '14px', fontWeight: 700, color: '#22042C', margin: '4px 0 0 0' }}>
+                <p style={{ fontSize: '19px', fontWeight: 700, color: '#22042C', margin: '4px 0 0 0' }}>
                   {contractTitle}
                 </p>
               </div>
@@ -286,7 +287,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
               </div>
             </div>
             {/* Row 2: Contract meta grid */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 32px', fontSize: '11.5px', color: '#22042C', marginTop: '6px' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 32px', fontSize: '13.5px', color: '#22042C', marginTop: '6px' }}>
               <span>رقم ملف العميل: <strong style={{ fontFamily: 'monospace' }}>{submissionId}</strong></span>
               <span>رقم العقد: <strong style={{ fontFamily: 'monospace' }}>{submissionId}</strong></span>
               <span>تاريخ العقد: <strong>{new Date(submission.timestamp).toLocaleDateString('ar-SA')}</strong></span>
@@ -380,16 +381,16 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
                       <tr key={idx} style={{ backgroundColor: idx % 2 === 1 ? '#faf8fc' : '#ffffff' }}>
                         <td style={{ ...tableCellStyle, borderLeft: '1px solid #e8e0ed' }}>{idx === 0 ? (submission.data.bank || 'الجهة المالية') : ''}</td>
                         <td style={{ ...tableCellStyle, borderLeft: '1px solid #e8e0ed' }}>{product.type}</td>
-                        <td style={{ ...tableCellStyle, borderLeft: '1px solid #e8e0ed', fontFamily: 'monospace', fontSize: '11px' }}>{product.accountNumber || product.account_number || '---'}</td>
-                        <td style={{ ...tableCellStyle, fontWeight: 700, color: '#b91c1c' }}>{formatAmount(product.amount)}</td>
+                        <td style={{ ...tableCellStyle, borderLeft: '1px solid #e8e0ed', fontFamily: 'monospace', fontSize: '14px' }}>{product.accountNumber || product.account_number || '---'}</td>
+                        <td style={{ ...tableCellStyle, fontWeight: 700, color: '#b91c1c', fontSize: '14px' }}>{formatAmount(product.amount)}</td>
                       </tr>
                     ))}
                     {/* Total row */}
                     <tr style={{ backgroundColor: '#f3eff5' }}>
-                      <td colSpan={3} style={{ ...tableCellStyle, fontWeight: 900, fontSize: '13px', borderTop: '2px solid #d4c8d9', borderLeft: '1px solid #d4c8d9', borderBottom: 'none' }}>
+                      <td colSpan={3} style={{ ...tableCellStyle, fontWeight: 900, fontSize: '15px', borderTop: '2px solid #d4c8d9', borderLeft: '1px solid #d4c8d9', borderBottom: 'none' }}>
                         إجمالي المديونية
                       </td>
-                      <td style={{ ...tableCellStyle, fontWeight: 900, fontSize: '13px', color: '#22042C', borderTop: '2px solid #d4c8d9', borderBottom: 'none' }}>
+                      <td style={{ ...tableCellStyle, fontWeight: 900, fontSize: '15px', color: '#22042C', borderTop: '2px solid #d4c8d9', borderBottom: 'none' }}>
                         {formatAmount(totalDebt)} ريال سعودي
                       </td>
                     </tr>
@@ -440,7 +441,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
                   : 'لا تستحق أتعاب الطرف الأول إلا بعد صدور قبول طلب الإعفاء وإصدار خطاب المخالصة المالية، وفي حال قبول طلب الإعفاء، يستحق الطرف الأول أتعاباً مقطوعة قدرها (4%) من إجمالي المبالغ المعفاة فعلياً.'
                 }
               </p>
-              <p style={{ marginTop: '6px', fontWeight: 900, color: '#b91c1c', fontSize: '11px' }}>
+              <p style={{ marginTop: '6px', fontWeight: 900, color: '#b91c1c', fontSize: '12.5px' }}>
                 "وفي حال عدم قبول الطلب، لا يحق للطرف الأول المطالبة بأي أتعاب"
               </p>
             </section>
