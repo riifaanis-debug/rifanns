@@ -264,8 +264,8 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
             direction: 'rtl',
             padding: '40px 48px',
             color: '#22042C',
-            fontSize: '13px',
-            lineHeight: 1.85,
+            fontSize: '14px',
+            lineHeight: 1.8,
           }}
         >
           {/* ══════════ HEADER (captured for PDF repeat) ══════════ */}
