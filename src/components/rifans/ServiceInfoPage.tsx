@@ -31,14 +31,14 @@ const ServiceInfoPage: React.FC<ServiceInfoPageProps> = ({
         </div>
       </div>
 
-      <div className="max-w-[520px] mx-auto px-4 py-6 space-y-4">
+      <div className="max-w-[520px] mx-auto px-2 py-4 space-y-3">
         {sections.map((section, i) => (
-          <div key={i} className="bg-white dark:bg-[#12031a] rounded-2xl border border-gold/20 p-5 shadow-sm">
-            <div className="flex items-center gap-2 mb-3">
+          <div key={i} className="bg-white dark:bg-[#12031a] rounded-xl border border-gold/20 p-4 shadow-sm">
+            <div className="flex items-center gap-2 mb-2">
               {section.icon}
-              <h2 className="text-base font-black text-brand dark:text-white">{section.title}</h2>
+              <h2 className="text-[15px] font-black text-brand dark:text-white">{section.title}</h2>
             </div>
-            <div className="text-sm text-muted dark:text-gray-400 leading-relaxed">{section.content}</div>
+            <div className="text-[13px] text-muted dark:text-gray-400 leading-relaxed">{section.content}</div>
           </div>
         ))}
 
