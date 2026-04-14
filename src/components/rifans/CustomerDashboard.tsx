@@ -862,22 +862,22 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                      ) : (
                        <div className="w-full space-y-2 animate-in slide-in-from-bottom-2">
                            <p className="text-[11px] font-bold text-brand dark:text-gold mb-2">اختر نوع الطلب <span className="text-[10px] text-muted font-normal">(الخدمات الأكثر طلباً)</span></p>
-                          <button onClick={() => handleOpenRequestForm('waive_request')} className="w-full p-3 bg-white dark:bg-white/5 border border-gold/30 dark:border-white/10 rounded-xl text-[12px] font-bold text-brand dark:text-white hover:bg-gold/5 flex items-center justify-between group">
-                            <span>طلب إعفاء من الإلتزامات المالية</span>
-                            <ArrowRight size={14} className="rotate-180 group-hover:-translate-x-1 transition-transform" />
-                          </button>
-                          <button onClick={() => handleOpenRequestForm('rescheduling_request')} className="w-full p-3 bg-white dark:bg-white/5 border border-gold/30 dark:border-white/10 rounded-xl text-[12px] font-bold text-brand dark:text-white hover:bg-gold/5 flex items-center justify-between group">
-                            <span>طلب اعادة جدولة المنتجات التمويلية</span>
-                            <ArrowRight size={14} className="rotate-180 group-hover:-translate-x-1 transition-transform" />
-                          </button>
-                          <button onClick={() => handleOpenRequestForm('consultation_request')} className="w-full p-3 bg-white dark:bg-white/5 border border-gold/30 dark:border-white/10 rounded-xl text-[12px] font-bold text-brand dark:text-white hover:bg-gold/5 flex items-center justify-between group">
-                            <span>طلب استشارة مالية</span>
-                            <ArrowRight size={14} className="rotate-180 group-hover:-translate-x-1 transition-transform" />
-                          </button>
-                          <button onClick={() => handleOpenRequestForm('seized_amounts_request')} className="w-full p-3 bg-white dark:bg-white/5 border border-gold/30 dark:border-white/10 rounded-xl text-[12px] font-bold text-brand dark:text-white hover:bg-gold/5 flex items-center justify-between group">
-                            <span>طلب اتاحة النسبة النظامية والمبالغ المستثناه من الحجز</span>
-                            <ArrowRight size={14} className="rotate-180 group-hover:-translate-x-1 transition-transform" />
-                          </button>
+                           <button onClick={() => { window.location.hash = '#/waive-info'; onClose(); }} className="w-full p-3 bg-white dark:bg-white/5 border border-gold/30 dark:border-white/10 rounded-xl text-[12px] font-bold text-brand dark:text-white hover:bg-gold/5 flex items-center justify-between group">
+                             <span>طلب إعفاء من الإلتزامات المالية</span>
+                             <ArrowRight size={14} className="rotate-180 group-hover:-translate-x-1 transition-transform" />
+                           </button>
+                           <button onClick={() => { window.location.hash = '#/scheduling-info'; onClose(); }} className="w-full p-3 bg-white dark:bg-white/5 border border-gold/30 dark:border-white/10 rounded-xl text-[12px] font-bold text-brand dark:text-white hover:bg-gold/5 flex items-center justify-between group">
+                             <span>طلب اعادة جدولة المنتجات التمويلية</span>
+                             <ArrowRight size={14} className="rotate-180 group-hover:-translate-x-1 transition-transform" />
+                           </button>
+                           <button onClick={() => handleOpenRequestForm('consultation_request')} className="w-full p-3 bg-white dark:bg-white/5 border border-gold/30 dark:border-white/10 rounded-xl text-[12px] font-bold text-brand dark:text-white hover:bg-gold/5 flex items-center justify-between group">
+                             <span>طلب استشارة مالية</span>
+                             <ArrowRight size={14} className="rotate-180 group-hover:-translate-x-1 transition-transform" />
+                           </button>
+                           <button onClick={() => { window.location.hash = '#/seized-amounts-info'; onClose(); }} className="w-full p-3 bg-white dark:bg-white/5 border border-gold/30 dark:border-white/10 rounded-xl text-[12px] font-bold text-brand dark:text-white hover:bg-gold/5 flex items-center justify-between group">
+                             <span>طلب اتاحة النسبة النظامية والمبالغ المستثناه من الحجز</span>
+                             <ArrowRight size={14} className="rotate-180 group-hover:-translate-x-1 transition-transform" />
+                           </button>
 
                           {/* Browse by service type */}
                           <div className="pt-2">
