@@ -155,7 +155,7 @@ const WaiveServices: React.FC = () => {
                         >
                           <span>تقدّم بطلب إعفاء</span>
                         </Button>
-                        <button onClick={() => handleOpenForm(item)} className="w-full md:w-auto text-center py-2 px-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-bold hover:bg-white/20 transition-all">
+                        <button onClick={() => { window.location.hash = '#/waive-info'; }} className="w-full md:w-auto text-center py-2 px-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-bold hover:bg-white/20 transition-all">
                           تعرف على الخدمة
                         </button>
                       </div>
@@ -272,9 +272,9 @@ const WaiveServices: React.FC = () => {
                   >
                      <span>تقدّم بطلب الجدولة</span>
                   </Button>
-                   <button onClick={() => handleOpenForm(schedulingItem)} className="w-full md:w-auto text-center py-2 px-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-bold hover:bg-white/20 transition-all">
+                    <button onClick={() => { window.location.hash = '#/scheduling-info'; }} className="w-full md:w-auto text-center py-2 px-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-bold hover:bg-white/20 transition-all">
                     تعرف على الخدمة
-                   </button>
+                    </button>
                 </div>
              </div>
           </div>
@@ -379,12 +379,7 @@ const WaiveServices: React.FC = () => {
                 >
                   <span>تقدّم بطلب إتاحة</span>
                 </Button>
-                <button onClick={() => handleOpenForm({
-                    id: 'seized_amounts',
-                    title: 'إتاحة النسبة النظامية والمبالغ المستثناه من الحجز',
-                    body: 'طلب إتاحة المبالغ المستثناه من الحجز',
-                    requestType: 'seized_amounts_request'
-                  })} className="w-full md:w-auto text-center py-2 px-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-bold hover:bg-white/20 transition-all">
+                <button onClick={() => { window.location.hash = '#/seized-amounts-info'; }} className="w-full md:w-auto text-center py-2 px-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-bold hover:bg-white/20 transition-all">
                   تعرف على الخدمة
                 </button>
               </div>
