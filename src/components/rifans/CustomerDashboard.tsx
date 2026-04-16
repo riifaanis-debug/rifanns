@@ -1458,7 +1458,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
         open={showBiometric}
         onClose={() => setShowBiometric(false)}
         userId={String(user.id || authUser?.id || '')}
-        userName={user.fullName || user.name || 'عميل'}
+        userName={user.fullName || (user as any).name || 'عميل'}
       />
     </div>
   );
