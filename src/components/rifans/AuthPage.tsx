@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { Button } from './Shared';
-import { User, Phone, CreditCard, ArrowRight, Loader2, AlertCircle, Lock, UserPlus, LogIn } from 'lucide-react';
+import { User, Phone, CreditCard, ArrowRight, Loader2, AlertCircle, Lock, UserPlus, LogIn, Fingerprint } from 'lucide-react';
 import Logo from './Logo';
 import OtpVerification from './OtpVerification';
+import { isBiometricSupported, loginWithBiometric, hasBiometricEnabledLocally } from '@/lib/webauthn';
 
 interface AuthPageProps {
   onClose: () => void;
@@ -21,8 +22,39 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
   const [error, setError] = useState('');
   const [showOtp, setShowOtp] = useState(false);
   const [pendingUser, setPendingUser] = useState<{ id: string; phone: string; role: string } | null>(null);
+  const [biometricAvailable, setBiometricAvailable] = useState(false);
   
   const { loginOrRegisterUser, lookupOrCreateUser, loginWithEmail, loginWithGoogle, loginWithApple, login } = useAuth();
+
+  useEffect(() => {
+    isBiometricSupported().then((supported) => {
+      setBiometricAvailable(supported && hasBiometricEnabledLocally());
+    });
+  }, []);
+
+  const handleBiometricLogin = async () => {
+    setIsLoading(true);
+    setError('');
+    try {
+      const result = await loginWithBiometric();
+      if (!result.success || !result.user) {
+        // Fallback automatically: just show error and let user use the form
+        setError(result.error || 'فشل تسجيل الدخول بالبصمة، يرجى استخدام الطريقة العادية');
+        return;
+      }
+      login({ user: result.user, token: `session-${result.user.id}` });
+      if (result.user.role === 'admin') {
+        window.location.hash = '#/admin';
+      } else {
+        window.location.hash = '#/dashboard';
+      }
+      onClose();
+    } catch (err: any) {
+      setError(err.message || 'فشل تسجيل الدخول بالبصمة');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleGoogleLogin = async () => {
     setIsLoading(true);
