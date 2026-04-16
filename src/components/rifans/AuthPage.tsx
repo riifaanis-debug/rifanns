@@ -340,6 +340,18 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
               تسجيل دخول بواسطة Apple
             </button>
 
+            {biometricAvailable && (
+              <button
+                type="button"
+                onClick={handleBiometricLogin}
+                disabled={isLoading}
+                className="w-full flex items-center justify-center gap-2 py-1.5 bg-gradient-to-r from-gold/20 to-gold/10 border border-gold/30 rounded-lg text-[10px] font-bold text-brand dark:text-gold hover:from-gold/30 hover:to-gold/20 transition-all"
+              >
+                <Fingerprint size={14} />
+                تسجيل الدخول بالبصمة
+              </button>
+            )}
+
             <button
               type="button"
               onClick={onClose}
