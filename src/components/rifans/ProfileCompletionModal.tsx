@@ -4,7 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { X } from 'lucide-react';
 
 const ProfileCompletionModal: React.FC = () => {
-  const { user, login, token } = useAuth();
+  const { user, login, token, logout } = useAuth();
   const [firstName, setFirstName] = useState('');
   const [middleName, setMiddleName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -233,6 +233,24 @@ const ProfileCompletionModal: React.FC = () => {
             className="w-full py-2.5 rounded-xl bg-gold text-brand font-bold text-sm hover:bg-gold/90 transition-all active:scale-[0.98] shadow-md disabled:opacity-50"
           >
             {loading ? 'جاري الحفظ...' : 'حفظ ومتابعة'}
+          </button>
+
+          <button
+            type="button"
+            disabled={loading}
+            onClick={async () => {
+              if (!confirm('هل أنت متأكد من إلغاء التسجيل والخروج؟ سيتم حذف حسابك.')) return;
+              try {
+                await supabase.from('app_users').delete().eq('id', user.id);
+              } catch (err) {
+                console.error('Failed to delete account:', err);
+              }
+              logout();
+              window.location.hash = '#/';
+            }}
+            className="w-full py-2.5 rounded-xl bg-transparent border border-red-300 text-red-600 font-bold text-sm hover:bg-red-50 transition-all active:scale-[0.98] disabled:opacity-50"
+          >
+            الخروج وإلغاء التسجيل
           </button>
         </form>
       </div>
