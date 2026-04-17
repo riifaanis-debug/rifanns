@@ -11,6 +11,7 @@ import {
   CreditCard, Briefcase, Hash, Menu, Printer, MessageCircle, Star, Fingerprint
 } from 'lucide-react';
 import BiometricSettings from './BiometricSettings';
+import { AdminPaymentRequests } from './PaymentRequests';
 import ChatPage from './ChatPage';
 import { Button, Card } from './Shared';
 import { motion, AnimatePresence } from 'motion/react';
@@ -24,7 +25,7 @@ interface AdminDashboardProps {
   onClose: () => void;
 }
 
-type DashboardTab = 'home' | 'stats' | 'clients' | 'waive_requests' | 'rescheduling_requests' | 'service_requests' | 'contracts' | 'invoices' | 'notifications' | 'document_request' | 'reviews';
+type DashboardTab = 'home' | 'stats' | 'clients' | 'waive_requests' | 'rescheduling_requests' | 'service_requests' | 'contracts' | 'invoices' | 'payments' | 'notifications' | 'document_request' | 'reviews';
 
 type AdminDocumentKind = 'contract' | 'invoice' | 'receipt' | 'authorization';
 
@@ -442,6 +443,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
       case 'service_requests': return 'طلبات الخدمات';
       case 'contracts': return 'عقود العملاء';
       case 'invoices': return 'فواتير العملاء';
+      case 'payments': return 'سداد المدفوعات';
       case 'notifications': return 'التنبيهات';
       case 'document_request': return 'طلب مستند';
       case 'reviews': return 'إرسال تقييم';
@@ -458,6 +460,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
       case 'service_requests': return <Briefcase size={20} />;
       case 'contracts': return <PenTool size={20} />;
       case 'invoices': return <CreditCard size={20} />;
+      case 'payments': return <CreditCard size={20} />;
       case 'notifications': return <Bell size={20} />;
       case 'document_request': return <FileCheck size={20} />;
       case 'reviews': return <Star size={20} />;
@@ -1901,6 +1904,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
           <div className="mt-4 mb-2 px-4 text-[10px] font-bold text-muted uppercase tracking-widest">المتابعة</div>
           <NavButton active={activeTab === 'contracts'} onClick={() => { setActiveTab('contracts'); setIsSidebarOpen(false); }} icon={<PenTool size={18} />} label="عقود العملاء" />
           <NavButton active={activeTab === 'invoices'} onClick={() => { setActiveTab('invoices'); setIsSidebarOpen(false); }} icon={<CreditCard size={18} />} label="فواتير العملاء" />
+          <NavButton active={activeTab === 'payments'} onClick={() => { setActiveTab('payments'); setIsSidebarOpen(false); }} icon={<CreditCard size={18} />} label="سداد المدفوعات" />
           <NavButton active={activeTab === 'notifications'} onClick={() => { setActiveTab('notifications'); setIsSidebarOpen(false); }} icon={<Bell size={18} />} label="التنبيهات" badge={notifications.filter(n => !n.is_read).length} />
         </aside>
 
@@ -1961,6 +1965,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   {activeTab === 'service_requests' && renderRequests('service_request')}
                   {activeTab === 'contracts' && renderContracts()}
                   {activeTab === 'invoices' && renderInvoices()}
+                  {activeTab === 'payments' && <AdminPaymentRequests />}
                   {activeTab === 'notifications' && renderNotifications()}
                   {activeTab === 'document_request' && renderDocumentRequest()}
                   {activeTab === 'reviews' && <AdminReviewSection />}
