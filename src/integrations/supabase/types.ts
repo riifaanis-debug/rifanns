@@ -434,6 +434,45 @@ export type Database = {
           },
         ]
       }
+      payment_requests: {
+        Row: {
+          amount_sar: number
+          amount_usd: number
+          client_name: string | null
+          created_at: string
+          description: string | null
+          exchange_rate: number
+          id: string
+          paid_at: string | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          amount_sar?: number
+          amount_usd?: number
+          client_name?: string | null
+          created_at?: string
+          description?: string | null
+          exchange_rate?: number
+          id: string
+          paid_at?: string | null
+          status?: string
+          user_id: string
+        }
+        Update: {
+          amount_sar?: number
+          amount_usd?: number
+          client_name?: string | null
+          created_at?: string
+          description?: string | null
+          exchange_rate?: number
+          id?: string
+          paid_at?: string | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       request_history: {
         Row: {
           changed_by: string | null
