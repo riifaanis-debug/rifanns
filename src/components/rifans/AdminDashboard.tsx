@@ -1089,6 +1089,21 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
             signed: false,
             type: 'authorization' as const,
           }));
+        case 'general_invoice': {
+          const amt = Number(generalInvAmount) || 0;
+          if (amt <= 0 || !generalInvReason.trim()) return [];
+          const invId = `GINV-${Date.now()}`;
+          return [{
+            id: invId,
+            submissionId: `general-${docSelectedClient}`,
+            label: `فاتورة عامة - ${formatAmount(amt)} ر.س`,
+            date: new Date().toISOString(),
+            signed: false,
+            type: 'general_invoice' as const,
+            amount: amt,
+            reason: generalInvReason.trim(),
+          }];
+        }
         default: return [];
       }
     };
