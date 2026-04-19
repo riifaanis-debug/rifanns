@@ -1213,7 +1213,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
               <div className="p-4 bg-gray-50 dark:bg-white/5 rounded-2xl border border-gold/10">
                 <p className="text-xs text-muted mb-1">العميل: <span className="font-bold text-brand dark:text-white">{selectedClient?.name || selectedClient?.full_name}</span></p>
                 <p className="text-xs text-muted">المستند: <span className="font-bold text-brand dark:text-white">
-                  {docType === 'receipt' ? 'إفادة باستلام الطلب' : docType === 'contract' ? 'عقد العميل' : docType === 'authorization' ? 'إقرار وتفويض العميل' : 'فاتورة العميل'}
+                  {docType === 'receipt' ? 'إفادة باستلام الطلب' : docType === 'contract' ? 'عقد العميل' : docType === 'authorization' ? 'إقرار وتفويض العميل' : docType === 'general_invoice' ? 'فاتورة عامة' : 'فاتورة العميل'}
                 </span></p>
                 <p className="text-xs text-muted mt-1">عدد المستندات: <span className="font-bold text-brand dark:text-white">{docs.length}</span></p>
               </div>
@@ -1221,7 +1221,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
               {docs.length === 0 ? (
                 <div className="text-center py-6 text-sm text-muted">
                   <AlertCircle size={24} className="mx-auto mb-2 text-gold/50" />
-                  لا يوجد مستندات من هذا النوع لهذا العميل
+                  {docType === 'general_invoice' ? 'الرجاء إدخال المبلغ والسبب أعلاه لتجهيز الفاتورة' : 'لا يوجد مستندات من هذا النوع لهذا العميل'}
                 </div>
               ) : (
                 <div className="space-y-3">
