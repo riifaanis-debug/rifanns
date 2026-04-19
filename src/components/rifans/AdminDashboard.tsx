@@ -35,6 +35,8 @@ type AdminDocumentItem = {
   date: string;
   signed: boolean;
   type: AdminDocumentKind;
+  amount?: number;
+  reason?: string;
 };
 
 type GeneratedDocumentPayload = {
