@@ -988,11 +988,14 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
           const { blob } = await generateContractPdf(el, fileName);
           const file = new File([blob], fileName, { type: 'application/pdf' });
           const uploaded = await uploadDocument(file);
-          const sub = submissions.find(s => s.id === contractObj.submission_id);
           const clientName = selectedClient?.name || selectedClient?.full_name || 'العميل';
           const emailSubject = `عقد العميل - ${clientName}`;
           const emailBody = `مرفق لكم عقد العميل ${clientName}`;
-          window.location.href = `mailto:${docEmailAddress.trim()}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(`${emailBody}\n\nرابط المستند:\n${uploaded.filePath}`)}`;
+          const mailtoUrl = `mailto:${docEmailAddress.trim()}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(`${emailBody}\n\nرابط المستند:\n${uploaded.filePath}`)}`;
+          try { await navigator.clipboard.writeText(uploaded.filePath); } catch {}
+          const opened = window.open(mailtoUrl, '_blank');
+          if (!opened) { window.location.href = mailtoUrl; }
+          alert(`تم تجهيز المستند بنجاح ✅\nتم نسخ الرابط إلى الحافظة.\n\nالرابط:\n${uploaded.filePath}`);
           setDocEmailDocId(null);
           setDocEmailTarget('');
           setDocEmailAddress('');
@@ -1021,7 +1024,11 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
         const file = new File([blob], payload.fileName, { type: 'application/pdf' });
         const uploaded = await uploadDocument(file);
 
-        window.location.href = `mailto:${docEmailAddress.trim()}?subject=${encodeURIComponent(payload.emailSubject)}&body=${encodeURIComponent(`${payload.emailBody}\n\nرابط المستند:\n${uploaded.filePath}`)}`;
+        const mailtoUrl = `mailto:${docEmailAddress.trim()}?subject=${encodeURIComponent(payload.emailSubject)}&body=${encodeURIComponent(`${payload.emailBody}\n\nرابط المستند:\n${uploaded.filePath}`)}`;
+        try { await navigator.clipboard.writeText(uploaded.filePath); } catch {}
+        const opened = window.open(mailtoUrl, '_blank');
+        if (!opened) { window.location.href = mailtoUrl; }
+        alert(`تم تجهيز المستند بنجاح ✅\nتم نسخ الرابط إلى الحافظة.\n\nالرابط:\n${uploaded.filePath}`);
       });
 
       if (action === 'send') {
