@@ -826,13 +826,10 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
           <p style="font-size:13px;margin:0 0 16px;line-height:1.8;">نود إشعاركم بأنه تم استلام طلبكم بنجاح،</p>
         ` : ''}
 
-        <!-- Reference bar -->
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;background:#fcf8f0;border:1px solid #eadfc9;border-radius:18px;padding:16px 18px;margin-bottom:18px;">
-          <div style="text-align:right;">
-            <div style="font-size:18px;font-weight:900;">${escapeHtml(summaryTitle)}</div>
-            <div style="font-size:12px;color:#7a6a84;margin-top:4px;">رقم المرجع: ${escapeHtml(doc.submissionId)} • تاريخ الإصدار: ${escapeHtml(issueDate)}</div>
-          </div>
-          <div style="background:#22042C;color:#C5A059;border-radius:999px;padding:8px 16px;font-size:12px;font-weight:800;white-space:nowrap;">${escapeHtml(statusBadge)}</div>
+        <!-- Status badge inline -->
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;">
+          <div style="font-size:15px;font-weight:800;color:#22042C;">${escapeHtml(summaryTitle)}</div>
+          <div style="background:#22042C;color:#C5A059;border-radius:999px;padding:6px 14px;font-size:11px;font-weight:800;white-space:nowrap;">${escapeHtml(statusBadge)}</div>
         </div>
 
         <!-- Client data table -->
@@ -902,14 +899,37 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
           </table>
         ` : ''}
 
-        <!-- Footer with bigger stamp -->
-        <div style="display:flex;justify-content:space-between;align-items:end;gap:20px;margin-top:28px;">
-          <div style="font-size:12px;color:#7a6a84;line-height:1.9;">
-            <div>نوع الخدمة: ${escapeHtml(requestTypeLabel)}</div>
-            <div>الجهة التمويلية: ${escapeHtml(submission.data?.bank || '---')}</div>
-            <div>تم إنشاء هذه النسخة من لوحة تحكم الإدارة.</div>
+        <!-- Stamp & Signature Block -->
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-top:24px;padding:16px 0;border-top:1px dashed #d4c4b0;">
+          <div style="font-size:11px;color:#7a6a84;line-height:1.8;">
+            <div><strong style="color:#22042C;">نوع الخدمة:</strong> ${escapeHtml(requestTypeLabel)}</div>
+            <div><strong style="color:#22042C;">الجهة التمويلية:</strong> ${escapeHtml(submission.data?.bank || '---')}</div>
+            <div style="margin-top:6px;font-size:10px;font-style:italic;">صادرة عن إدارة شركة ريفانس المالية</div>
           </div>
-          <img src="${rifansStampImg}" alt="ختم ريفانس" style="width:150px;height:150px;object-fit:contain;opacity:0.85;" />
+          <img src="${rifansStampImg}" alt="ختم ريفانس المالية" style="width:130px;height:130px;object-fit:contain;opacity:0.92;" />
+        </div>
+
+        <!-- Official Footer -->
+        <div style="margin-top:auto;padding-top:18px;">
+          <div style="border-top:3px solid #C5A059;padding-top:10px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;font-size:10px;color:#6b5b76;">
+              <div style="text-align:right;line-height:1.6;">
+                <div style="font-weight:800;color:#22042C;font-size:11px;">شركة ريفانس المالية</div>
+                <div>السجل التجاري: 7038821125</div>
+              </div>
+              <div style="text-align:center;line-height:1.6;direction:ltr;">
+                <div>📞 +966 56 200 0000 • ✉ info@rifans.net</div>
+                <div>🌐 www.rifanss.com</div>
+              </div>
+              <div style="text-align:left;line-height:1.6;">
+                <div>المملكة العربية السعودية</div>
+                <div style="color:#9a8aa4;font-size:9px;">© ${new Date().getFullYear()} جميع الحقوق محفوظة</div>
+              </div>
+            </div>
+            <div style="text-align:center;margin-top:8px;font-size:9px;color:#9a8aa4;font-style:italic;">
+              هذه وثيقة رسمية صادرة إلكترونياً من شركة ريفانس المالية ولا تتطلب توقيعاً يدوياً.
+            </div>
+          </div>
         </div>
       </div>
     `;
