@@ -501,6 +501,85 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
   }, [users, submissions, contracts, adminInvoices]);
 
   const buildGeneratedDocument = useCallback((doc: AdminDocumentItem, selectedClient?: any | null): GeneratedDocumentPayload => {
+    // Standalone general invoice: no submission required
+    if (doc.type === 'general_invoice') {
+      const client = selectedClient || users.find(u => u.id === doc.submissionId.replace('general-', '')) || null;
+      const clientName = client?.name || client?.full_name || 'عميل';
+      const clientNationalId = client?.national_id || client?.nationalId || '---';
+      const clientPhone = client?.phone || client?.mobile || '---';
+      const clientEmail = client?.email || '---';
+      const issueDate = new Date(doc.date || Date.now()).toLocaleDateString('ar-SA');
+      const amountNum = Number((doc as any).amount) || 0;
+      const reason = (doc as any).reason || '---';
+      const invoiceNumber = doc.id;
+      const fileName = `فاتورة-عامة-${invoiceNumber}.pdf`;
+      const documentTypeLabel = 'فاتورة عامة';
+
+      const html = `
+        <div dir="rtl" style="width:794px;min-height:1123px;background:#ffffff;padding:48px 44px;font-family:Tajawal,Arial,sans-serif;color:#22042C;box-sizing:border-box;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:24px;border-bottom:4px solid #22042C;padding-bottom:18px;margin-bottom:24px;">
+            <div style="flex:1;text-align:right;">
+              <p style="margin:0 0 6px;font-size:15px;font-weight:700;color:#C5A059;">شركة ريفانس المالية</p>
+              <h1 style="margin:0;font-size:30px;font-weight:900;line-height:1.35;">${escapeHtml(documentTypeLabel)}</h1>
+              <p style="margin:8px 0 0;font-size:13px;line-height:1.9;color:#6b5b76;">فاتورة صادرة من إدارة ريفانس المالية للعميل المذكور أدناه.</p>
+            </div>
+            <img src="${rifansLogo}" alt="شعار ريفانس" style="width:180px;height:116px;object-fit:contain;" />
+          </div>
+
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;background:#fcf8f0;border:1px solid #eadfc9;border-radius:18px;padding:16px 18px;margin-bottom:18px;">
+            <div style="text-align:right;">
+              <div style="font-size:18px;font-weight:900;">بيان الفاتورة</div>
+              <div style="font-size:12px;color:#7a6a84;margin-top:4px;">رقم الفاتورة: ${escapeHtml(invoiceNumber)} • تاريخ الإصدار: ${escapeHtml(issueDate)}</div>
+            </div>
+            <div style="background:#22042C;color:#C5A059;border-radius:999px;padding:8px 16px;font-size:12px;font-weight:800;white-space:nowrap;">بانتظار السداد</div>
+          </div>
+
+          <table style="width:100%;border-collapse:collapse;margin-bottom:18px;font-size:13px;">
+            <tbody>
+              <tr>
+                <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">اسم العميل</td>
+                <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(clientName)}</td>
+                <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">رقم الهوية</td>
+                <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(clientNationalId)}</td>
+              </tr>
+              <tr>
+                <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">رقم الجوال</td>
+                <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(clientPhone)}</td>
+                <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">البريد الإلكتروني</td>
+                <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(clientEmail)}</td>
+              </tr>
+              <tr>
+                <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">المبلغ المستحق</td>
+                <td style="padding:10px 12px;border:1px solid #eadfc9;font-weight:900;color:#22042C;">${escapeHtml(formatAmount(amountNum))} ر.س</td>
+                <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">العملة</td>
+                <td style="padding:10px 12px;border:1px solid #eadfc9;">ريال سعودي</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div style="margin-bottom:18px;">
+            <h2 style="margin:0 0 10px;font-size:16px;font-weight:900;color:#22042C;">وذلك مقابل</h2>
+            <div style="padding:14px 16px;border:1px solid #eadfc9;border-radius:14px;background:#fffdf7;font-size:13px;line-height:2;color:#22042C;white-space:pre-wrap;">${escapeHtml(reason)}</div>
+          </div>
+
+          <div style="display:flex;justify-content:space-between;align-items:end;gap:20px;margin-top:28px;">
+            <div style="font-size:12px;color:#7a6a84;line-height:1.9;">
+              <div>تم إنشاء هذه الفاتورة من لوحة تحكم الإدارة.</div>
+              <div>يرجى السداد عبر الوسائل المعتمدة.</div>
+            </div>
+            <img src="${rifansStampImg}" alt="ختم ريفانس" style="width:150px;height:150px;object-fit:contain;opacity:0.85;" />
+          </div>
+        </div>
+      `;
+
+      return {
+        fileName,
+        emailSubject: `${documentTypeLabel} - ${clientName}`,
+        emailBody: `تم تجهيز ${documentTypeLabel} الخاصة بالعميل ${clientName} بمبلغ ${formatAmount(amountNum)} ر.س.`,
+        html,
+      };
+    }
+
     const submission = submissions.find(s => s.id === doc.submissionId);
     if (!submission) {
       throw new Error('تعذر العثور على بيانات المستند');
