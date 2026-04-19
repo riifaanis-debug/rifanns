@@ -1147,6 +1147,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   setDocEmailDocId(null);
                   setDocEmailTarget('');
                   setDocEmailAddress('');
+                  setGeneralInvAmount('');
+                  setGeneralInvReason('');
                 }}
                 className="w-full p-2.5 rounded-[12px] border border-gold/30 text-[13px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none bg-white dark:bg-[#06010a] dark:text-white"
               >
@@ -1155,7 +1157,38 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                 <option value="contract">عقد العميل</option>
                 <option value="authorization">إقرار وتفويض العميل</option>
                 <option value="invoice">فاتورة العميل</option>
+                <option value="general_invoice">فاتورة عامة</option>
               </select>
+            </div>
+          )}
+
+          {/* General invoice inputs */}
+          {docSelectedClient && docType === 'general_invoice' && (
+            <div className="mb-5 animate-in fade-in duration-300 space-y-3 p-4 bg-gold/5 rounded-2xl border border-gold/20">
+              <div>
+                <label className="block text-[12px] font-bold text-brand dark:text-white mb-2">المبلغ (ر.س)</label>
+                <input
+                  type="number"
+                  inputMode="decimal"
+                  value={generalInvAmount}
+                  onChange={(e) => setGeneralInvAmount(e.target.value)}
+                  placeholder="0.00"
+                  className="w-full p-2.5 rounded-[12px] border border-gold/30 text-[13px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none bg-white dark:bg-[#06010a] dark:text-white"
+                />
+                {generalInvAmount && Number(generalInvAmount) > 0 && (
+                  <p className="text-[11px] text-muted mt-1">القيمة: <span className="font-bold text-brand dark:text-gold">{formatAmount(Number(generalInvAmount))} ر.س</span></p>
+                )}
+              </div>
+              <div>
+                <label className="block text-[12px] font-bold text-brand dark:text-white mb-2">وذلك مقابل</label>
+                <textarea
+                  value={generalInvReason}
+                  onChange={(e) => setGeneralInvReason(e.target.value)}
+                  placeholder="اكتب سبب الفاتورة هنا..."
+                  rows={3}
+                  className="w-full p-2.5 rounded-[12px] border border-gold/30 text-[13px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none bg-white dark:bg-[#06010a] dark:text-white resize-none"
+                />
+              </div>
             </div>
           )}
 
