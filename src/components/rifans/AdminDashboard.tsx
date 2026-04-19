@@ -185,6 +185,9 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
   const [docEmailAddress, setDocEmailAddress] = useState('');
   const [docEmailDocId, setDocEmailDocId] = useState<string | null>(null);
   const [activeDocAction, setActiveDocAction] = useState<string | null>(null);
+  // General invoice (standalone) inputs
+  const [generalInvAmount, setGeneralInvAmount] = useState('');
+  const [generalInvReason, setGeneralInvReason] = useState('');
 
   // Fetch unread chat messages for admin
   useEffect(() => {
