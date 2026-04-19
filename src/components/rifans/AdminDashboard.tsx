@@ -8,9 +8,8 @@ import {
   IdCard, ChevronRight, ChevronLeft, MoreVertical, Trash2, Eye, 
   FileCheck, FileClock, History, UserCheck, UserPlus, TrendingUp,
   ArrowUpRight, ArrowDownRight, Calendar, Mail, Phone, MapPin,
-  CreditCard, Briefcase, Hash, Menu, Printer, MessageCircle, Star, Fingerprint
+  CreditCard, Briefcase, Hash, Menu, Printer, MessageCircle, Star
 } from 'lucide-react';
-import BiometricSettings from './BiometricSettings';
 import { AdminPaymentRequests } from './PaymentRequests';
 import ChatPage from './ChatPage';
 import { Button, Card } from './Shared';
@@ -151,7 +150,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
   const { user: authUser } = useAuth();
   const [activeTab, setActiveTab] = useState<DashboardTab>('home');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [showBiometric, setShowBiometric] = useState(false);
+  
   const [submissions, setSubmissions] = useState<any[]>([]);
   const [users, setUsers] = useState<any[]>([]);
   const [notifications, setNotifications] = useState<any[]>([]);
@@ -1848,13 +1847,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
             )}
           </button>
           <button 
-            onClick={() => setShowBiometric(true)}
-            className="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all text-gold border border-white/10"
-            title="البصمة والتعرف على الوجه"
-          >
-            <Fingerprint size={20} />
-          </button>
-          <button 
             onClick={fetchAllData}
             className="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all text-gold border border-white/10"
             title="تحديث البيانات"
@@ -1866,12 +1858,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
           </button>
         </div>
       </header>
-      <BiometricSettings
-        open={showBiometric}
-        onClose={() => setShowBiometric(false)}
-        userId={String(authUser?.id || '')}
-        userName={authUser?.fullName || authUser?.email || 'مسؤول'}
-      />
 
       <div className="flex-1 flex flex-col md:flex-row overflow-hidden relative">
         {/* Sidebar Overlay */}
