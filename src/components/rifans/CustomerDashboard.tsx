@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { UserProfile, CustomerRequest, UserProduct, UserDocument } from '../../types';
-import { X, User, Phone, CreditCard, LogOut, FileText, Clock, Briefcase, Edit, CheckCircle2, AlertTriangle, MapPin, Building2, Wallet, Plus, Trash2, FolderOpen, Upload, Paperclip, QrCode, Loader2, ArrowRight, Bell, PenTool, UserPlus, ChevronDown, Scale, Home, Receipt, BarChart3, MessageSquare, Download, Shield, Copy, CheckCircle, MessageCircle, Eye, Fingerprint } from 'lucide-react';
-import BiometricSettings from './BiometricSettings';
+import { X, User, Phone, CreditCard, LogOut, FileText, Clock, Briefcase, Edit, CheckCircle2, AlertTriangle, MapPin, Building2, Wallet, Plus, Trash2, FolderOpen, Upload, Paperclip, QrCode, Loader2, ArrowRight, Bell, PenTool, UserPlus, ChevronDown, Scale, Home, Receipt, BarChart3, MessageSquare, Download, Shield, Copy, CheckCircle, MessageCircle, Eye } from 'lucide-react';
 import { CustomerPaymentRequests } from './PaymentRequests';
 import ChatPage from './ChatPage';
 import { QRCodeSVG } from 'qrcode.react';
@@ -74,7 +73,6 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
   const cardSaveRef = useRef<HTMLDivElement>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [unreadChatCount, setUnreadChatCount] = useState(0);
-  const [showBiometric, setShowBiometric] = useState(false);
 
   // Fetch unread chat messages count
   useEffect(() => {
@@ -1450,15 +1448,8 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
 
         </div>
 
-        {/* Biometric + Logout */}
-        <div className="p-4 border-t border-gray-100 dark:border-white/10 bg-white dark:bg-[#12031a] space-y-2">
-           <button 
-             onClick={() => setShowBiometric(true)}
-             className="w-full flex items-center justify-center gap-2 text-[12px] font-bold text-gold bg-gold/10 dark:bg-gold/10 py-2.5 rounded-[14px] hover:bg-gold/20 transition-colors border border-gold/20"
-           >
-             <Fingerprint size={16} />
-             البصمة والتعرف على الوجه
-           </button>
+        {/* Logout */}
+        <div className="p-4 border-t border-gray-100 dark:border-white/10 bg-white dark:bg-[#12031a]">
            <button 
              onClick={onLogout}
              className="w-full flex items-center justify-center gap-2 text-[12px] font-bold text-red-500 bg-red-50 dark:bg-red-900/20 py-3 rounded-[14px] hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors"
@@ -1469,12 +1460,6 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
         </div>
 
       </div>
-      <BiometricSettings
-        open={showBiometric}
-        onClose={() => setShowBiometric(false)}
-        userId={String(user.id || authUser?.id || '')}
-        userName={user.fullName || (user as any).name || 'عميل'}
-      />
     </div>
   );
 };
