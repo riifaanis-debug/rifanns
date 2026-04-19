@@ -26,7 +26,7 @@ interface AdminDashboardProps {
 
 type DashboardTab = 'home' | 'stats' | 'clients' | 'waive_requests' | 'rescheduling_requests' | 'service_requests' | 'contracts' | 'invoices' | 'payments' | 'notifications' | 'document_request' | 'reviews';
 
-type AdminDocumentKind = 'contract' | 'invoice' | 'receipt' | 'authorization';
+type AdminDocumentKind = 'contract' | 'invoice' | 'receipt' | 'authorization' | 'general_invoice';
 
 type AdminDocumentItem = {
   id: string;
@@ -78,6 +78,8 @@ const getDocumentTypeLabel = (type: AdminDocumentKind) => {
       return 'إفادة استلام الطلب';
     case 'authorization':
       return 'إقرار وتفويض العميل';
+    case 'general_invoice':
+      return 'فاتورة عامة';
     default:
       return 'مستند';
   }
