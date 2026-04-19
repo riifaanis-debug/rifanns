@@ -789,15 +789,35 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
     const isAuthorization = doc.type === 'authorization';
 
     const html = `
-      <div dir="rtl" style="width:794px;min-height:1123px;background:#ffffff;padding:48px 44px;font-family:Tajawal,Arial,sans-serif;color:#22042C;box-sizing:border-box;">
-        <!-- Header with bigger logo -->
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:24px;border-bottom:4px solid #22042C;padding-bottom:18px;margin-bottom:24px;">
-          <div style="flex:1;text-align:right;">
-            <p style="margin:0 0 6px;font-size:15px;font-weight:700;color:#C5A059;">شركة ريفانس المالية</p>
-            <h1 style="margin:0;font-size:30px;font-weight:900;line-height:1.35;">${escapeHtml(documentTypeLabel)}</h1>
-            ${(!isReceipt && !isAuthorization) ? `<p style="margin:8px 0 0;font-size:13px;line-height:1.9;color:#6b5b76;">${escapeHtml(summaryText)}</p>` : ''}
+      <div dir="rtl" style="width:794px;min-height:1123px;background:#ffffff;padding:30px 44px 44px;font-family:Tajawal,Arial,sans-serif;color:#22042C;box-sizing:border-box;position:relative;">
+        <!-- Official Letterhead -->
+        <div style="border-bottom:3px solid #22042C;padding-bottom:14px;margin-bottom:18px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:20px;">
+            <div style="flex:1;text-align:right;">
+              <h1 style="margin:0;font-size:22px;font-weight:900;color:#22042C;line-height:1.3;">شركة ريفانس المالية</h1>
+              <p style="margin:4px 0 0;font-size:11px;color:#6b5b76;font-weight:600;letter-spacing:0.3px;">RIFANS FINANCIAL COMPANY</p>
+              <p style="margin:6px 0 0;font-size:10.5px;color:#7a6a84;line-height:1.6;">شركة ذات مسؤولية محدودة • السجل التجاري: 7038821125</p>
+            </div>
+            <img src="${rifansLogo}" alt="شعار ريفانس" style="width:120px;height:78px;object-fit:contain;" />
+            <div style="flex:1;text-align:left;direction:ltr;font-size:10.5px;color:#7a6a84;line-height:1.7;">
+              <div>📞 +966 56 200 0000</div>
+              <div>✉ info@rifans.net</div>
+              <div>🌐 rifanss.com</div>
+              <div>📍 المملكة العربية السعودية</div>
+            </div>
           </div>
-          <img src="${rifansLogo}" alt="شعار ريفانس" style="width:180px;height:116px;object-fit:contain;" />
+        </div>
+
+        <!-- Document Title Bar -->
+        <div style="background:linear-gradient(135deg,#22042C 0%,#3a0a4a 100%);color:#ffffff;border-radius:12px;padding:14px 20px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <h2 style="margin:0;font-size:20px;font-weight:900;color:#C5A059;">${escapeHtml(documentTypeLabel)}</h2>
+            ${(!isReceipt && !isAuthorization) ? `<p style="margin:4px 0 0;font-size:11px;color:#e6dfee;line-height:1.6;">${escapeHtml(summaryText)}</p>` : ''}
+          </div>
+          <div style="text-align:left;font-size:10.5px;color:#e6dfee;line-height:1.7;direction:ltr;">
+            <div>Ref: ${escapeHtml(doc.submissionId)}</div>
+            <div>Date: ${escapeHtml(issueDate)}</div>
+          </div>
         </div>
 
         ${isReceipt ? `
