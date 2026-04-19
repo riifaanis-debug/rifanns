@@ -26,7 +26,7 @@ interface AdminDashboardProps {
 
 type DashboardTab = 'home' | 'stats' | 'clients' | 'waive_requests' | 'rescheduling_requests' | 'service_requests' | 'contracts' | 'invoices' | 'payments' | 'notifications' | 'document_request' | 'reviews';
 
-type AdminDocumentKind = 'contract' | 'invoice' | 'receipt' | 'authorization';
+type AdminDocumentKind = 'contract' | 'invoice' | 'receipt' | 'authorization' | 'general_invoice';
 
 type AdminDocumentItem = {
   id: string;
@@ -35,6 +35,8 @@ type AdminDocumentItem = {
   date: string;
   signed: boolean;
   type: AdminDocumentKind;
+  amount?: number;
+  reason?: string;
 };
 
 type GeneratedDocumentPayload = {
@@ -78,6 +80,8 @@ const getDocumentTypeLabel = (type: AdminDocumentKind) => {
       return 'إفادة استلام الطلب';
     case 'authorization':
       return 'إقرار وتفويض العميل';
+    case 'general_invoice':
+      return 'فاتورة عامة';
     default:
       return 'مستند';
   }
@@ -183,6 +187,9 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
   const [docEmailAddress, setDocEmailAddress] = useState('');
   const [docEmailDocId, setDocEmailDocId] = useState<string | null>(null);
   const [activeDocAction, setActiveDocAction] = useState<string | null>(null);
+  // General invoice (standalone) inputs
+  const [generalInvAmount, setGeneralInvAmount] = useState('');
+  const [generalInvReason, setGeneralInvReason] = useState('');
 
   // Fetch unread chat messages for admin
   useEffect(() => {
@@ -496,6 +503,85 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
   }, [users, submissions, contracts, adminInvoices]);
 
   const buildGeneratedDocument = useCallback((doc: AdminDocumentItem, selectedClient?: any | null): GeneratedDocumentPayload => {
+    // Standalone general invoice: no submission required
+    if (doc.type === 'general_invoice') {
+      const client = selectedClient || users.find(u => u.id === doc.submissionId.replace('general-', '')) || null;
+      const clientName = client?.name || client?.full_name || 'عميل';
+      const clientNationalId = client?.national_id || client?.nationalId || '---';
+      const clientPhone = client?.phone || client?.mobile || '---';
+      const clientEmail = client?.email || '---';
+      const issueDate = new Date(doc.date || Date.now()).toLocaleDateString('ar-SA');
+      const amountNum = Number((doc as any).amount) || 0;
+      const reason = (doc as any).reason || '---';
+      const invoiceNumber = doc.id;
+      const fileName = `فاتورة-عامة-${invoiceNumber}.pdf`;
+      const documentTypeLabel = 'فاتورة عامة';
+
+      const html = `
+        <div dir="rtl" style="width:794px;min-height:1123px;background:#ffffff;padding:48px 44px;font-family:Tajawal,Arial,sans-serif;color:#22042C;box-sizing:border-box;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:24px;border-bottom:4px solid #22042C;padding-bottom:18px;margin-bottom:24px;">
+            <div style="flex:1;text-align:right;">
+              <p style="margin:0 0 6px;font-size:15px;font-weight:700;color:#C5A059;">شركة ريفانس المالية</p>
+              <h1 style="margin:0;font-size:30px;font-weight:900;line-height:1.35;">${escapeHtml(documentTypeLabel)}</h1>
+              <p style="margin:8px 0 0;font-size:13px;line-height:1.9;color:#6b5b76;">فاتورة صادرة من إدارة ريفانس المالية للعميل المذكور أدناه.</p>
+            </div>
+            <img src="${rifansLogo}" alt="شعار ريفانس" style="width:180px;height:116px;object-fit:contain;" />
+          </div>
+
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;background:#fcf8f0;border:1px solid #eadfc9;border-radius:18px;padding:16px 18px;margin-bottom:18px;">
+            <div style="text-align:right;">
+              <div style="font-size:18px;font-weight:900;">بيان الفاتورة</div>
+              <div style="font-size:12px;color:#7a6a84;margin-top:4px;">رقم الفاتورة: ${escapeHtml(invoiceNumber)} • تاريخ الإصدار: ${escapeHtml(issueDate)}</div>
+            </div>
+            <div style="background:#22042C;color:#C5A059;border-radius:999px;padding:8px 16px;font-size:12px;font-weight:800;white-space:nowrap;">بانتظار السداد</div>
+          </div>
+
+          <table style="width:100%;border-collapse:collapse;margin-bottom:18px;font-size:13px;">
+            <tbody>
+              <tr>
+                <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">اسم العميل</td>
+                <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(clientName)}</td>
+                <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">رقم الهوية</td>
+                <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(clientNationalId)}</td>
+              </tr>
+              <tr>
+                <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">رقم الجوال</td>
+                <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(clientPhone)}</td>
+                <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">البريد الإلكتروني</td>
+                <td style="padding:10px 12px;border:1px solid #eadfc9;">${escapeHtml(clientEmail)}</td>
+              </tr>
+              <tr>
+                <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">المبلغ المستحق</td>
+                <td style="padding:10px 12px;border:1px solid #eadfc9;font-weight:900;color:#22042C;">${escapeHtml(formatAmount(amountNum))} ر.س</td>
+                <td style="padding:10px 12px;border:1px solid #eadfc9;background:#fcf8f0;font-weight:700;">العملة</td>
+                <td style="padding:10px 12px;border:1px solid #eadfc9;">ريال سعودي</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div style="margin-bottom:18px;">
+            <h2 style="margin:0 0 10px;font-size:16px;font-weight:900;color:#22042C;">وذلك مقابل</h2>
+            <div style="padding:14px 16px;border:1px solid #eadfc9;border-radius:14px;background:#fffdf7;font-size:13px;line-height:2;color:#22042C;white-space:pre-wrap;">${escapeHtml(reason)}</div>
+          </div>
+
+          <div style="display:flex;justify-content:space-between;align-items:end;gap:20px;margin-top:28px;">
+            <div style="font-size:12px;color:#7a6a84;line-height:1.9;">
+              <div>تم إنشاء هذه الفاتورة من لوحة تحكم الإدارة.</div>
+              <div>يرجى السداد عبر الوسائل المعتمدة.</div>
+            </div>
+            <img src="${rifansStampImg}" alt="ختم ريفانس" style="width:150px;height:150px;object-fit:contain;opacity:0.85;" />
+          </div>
+        </div>
+      `;
+
+      return {
+        fileName,
+        emailSubject: `${documentTypeLabel} - ${clientName}`,
+        emailBody: `تم تجهيز ${documentTypeLabel} الخاصة بالعميل ${clientName} بمبلغ ${formatAmount(amountNum)} ر.س.`,
+        html,
+      };
+    }
+
     const submission = submissions.find(s => s.id === doc.submissionId);
     if (!submission) {
       throw new Error('تعذر العثور على بيانات المستند');
@@ -1003,6 +1089,21 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
             signed: false,
             type: 'authorization' as const,
           }));
+        case 'general_invoice': {
+          const amt = Number(generalInvAmount) || 0;
+          if (amt <= 0 || !generalInvReason.trim()) return [];
+          const invId = `GINV-${Date.now()}`;
+          return [{
+            id: invId,
+            submissionId: `general-${docSelectedClient}`,
+            label: `فاتورة عامة - ${formatAmount(amt)} ر.س`,
+            date: new Date().toISOString(),
+            signed: false,
+            type: 'general_invoice' as const,
+            amount: amt,
+            reason: generalInvReason.trim(),
+          }];
+        }
         default: return [];
       }
     };
@@ -1061,6 +1162,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   setDocEmailDocId(null);
                   setDocEmailTarget('');
                   setDocEmailAddress('');
+                  setGeneralInvAmount('');
+                  setGeneralInvReason('');
                 }}
                 className="w-full p-2.5 rounded-[12px] border border-gold/30 text-[13px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none bg-white dark:bg-[#06010a] dark:text-white"
               >
@@ -1069,7 +1172,38 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                 <option value="contract">عقد العميل</option>
                 <option value="authorization">إقرار وتفويض العميل</option>
                 <option value="invoice">فاتورة العميل</option>
+                <option value="general_invoice">فاتورة عامة</option>
               </select>
+            </div>
+          )}
+
+          {/* General invoice inputs */}
+          {docSelectedClient && docType === 'general_invoice' && (
+            <div className="mb-5 animate-in fade-in duration-300 space-y-3 p-4 bg-gold/5 rounded-2xl border border-gold/20">
+              <div>
+                <label className="block text-[12px] font-bold text-brand dark:text-white mb-2">المبلغ (ر.س)</label>
+                <input
+                  type="number"
+                  inputMode="decimal"
+                  value={generalInvAmount}
+                  onChange={(e) => setGeneralInvAmount(e.target.value)}
+                  placeholder="0.00"
+                  className="w-full p-2.5 rounded-[12px] border border-gold/30 text-[13px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none bg-white dark:bg-[#06010a] dark:text-white"
+                />
+                {generalInvAmount && Number(generalInvAmount) > 0 && (
+                  <p className="text-[11px] text-muted mt-1">القيمة: <span className="font-bold text-brand dark:text-gold">{formatAmount(Number(generalInvAmount))} ر.س</span></p>
+                )}
+              </div>
+              <div>
+                <label className="block text-[12px] font-bold text-brand dark:text-white mb-2">وذلك مقابل</label>
+                <textarea
+                  value={generalInvReason}
+                  onChange={(e) => setGeneralInvReason(e.target.value)}
+                  placeholder="اكتب سبب الفاتورة هنا..."
+                  rows={3}
+                  className="w-full p-2.5 rounded-[12px] border border-gold/30 text-[13px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none bg-white dark:bg-[#06010a] dark:text-white resize-none"
+                />
+              </div>
             </div>
           )}
 
@@ -1079,7 +1213,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
               <div className="p-4 bg-gray-50 dark:bg-white/5 rounded-2xl border border-gold/10">
                 <p className="text-xs text-muted mb-1">العميل: <span className="font-bold text-brand dark:text-white">{selectedClient?.name || selectedClient?.full_name}</span></p>
                 <p className="text-xs text-muted">المستند: <span className="font-bold text-brand dark:text-white">
-                  {docType === 'receipt' ? 'إفادة باستلام الطلب' : docType === 'contract' ? 'عقد العميل' : docType === 'authorization' ? 'إقرار وتفويض العميل' : 'فاتورة العميل'}
+                  {docType === 'receipt' ? 'إفادة باستلام الطلب' : docType === 'contract' ? 'عقد العميل' : docType === 'authorization' ? 'إقرار وتفويض العميل' : docType === 'general_invoice' ? 'فاتورة عامة' : 'فاتورة العميل'}
                 </span></p>
                 <p className="text-xs text-muted mt-1">عدد المستندات: <span className="font-bold text-brand dark:text-white">{docs.length}</span></p>
               </div>
@@ -1087,7 +1221,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
               {docs.length === 0 ? (
                 <div className="text-center py-6 text-sm text-muted">
                   <AlertCircle size={24} className="mx-auto mb-2 text-gold/50" />
-                  لا يوجد مستندات من هذا النوع لهذا العميل
+                  {docType === 'general_invoice' ? 'الرجاء إدخال المبلغ والسبب أعلاه لتجهيز الفاتورة' : 'لا يوجد مستندات من هذا النوع لهذا العميل'}
                 </div>
               ) : (
                 <div className="space-y-3">
