@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { UserProfile, CustomerRequest, UserProduct, UserDocument } from '../../types';
-import { X, User, Phone, CreditCard, LogOut, FileText, Clock, Briefcase, Edit, CheckCircle2, AlertTriangle, MapPin, Building2, Wallet, Plus, Trash2, FolderOpen, Upload, Paperclip, QrCode, Loader2, ArrowRight, Bell, PenTool, UserPlus, ChevronDown, Scale, Home, Receipt, BarChart3, MessageSquare, Download, Shield, Copy, CheckCircle, MessageCircle, Eye } from 'lucide-react';
+import { X, User, Phone, CreditCard, LogOut, FileText, Clock, Briefcase, Edit, CheckCircle2, AlertTriangle, MapPin, Building2, Wallet, Plus, Trash2, FolderOpen, Upload, Paperclip, QrCode, Loader2, ArrowRight, Bell, PenTool, UserPlus, ChevronDown, Scale, Home, Receipt, BarChart3, MessageSquare, Download, Shield, Copy, CheckCircle, MessageCircle, Eye, Inbox } from 'lucide-react';
+import CustomerOpenRequests from './CustomerOpenRequests';
 import { CustomerPaymentRequests } from './PaymentRequests';
 import ChatPage from './ChatPage';
 import { QRCodeSVG } from 'qrcode.react';
@@ -53,12 +54,13 @@ const DOCUMENT_TYPES = [
 
 const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, onLogout }) => {
   const { user: authUser } = useAuth();
-  const [activeTab, setActiveTab] = useState<'profile' | 'requests' | 'contracts' | 'invoices' | 'payments'>(() => {
+  const [activeTab, setActiveTab] = useState<'profile' | 'requests' | 'contracts' | 'invoices' | 'payments' | 'open_requests'>(() => {
     const hash = window.location.hash;
     if (hash.includes('tab=contracts')) return 'contracts';
     if (hash.includes('tab=requests')) return 'requests';
     if (hash.includes('tab=invoices')) return 'invoices';
     if (hash.includes('tab=payments')) return 'payments';
+    if (hash.includes('tab=open_requests')) return 'open_requests';
     return 'profile';
   });
   const [userData, setUserData] = useState<UserProfile>(user);
@@ -752,6 +754,14 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
            >
              <Receipt size={14} />
              فواتيري
+           </button>
+           <button 
+             onClick={() => setActiveTab('open_requests')}
+             className={`flex-1 min-w-[80px] py-2.5 rounded-[12px] text-[11px] font-bold transition-all flex flex-col items-center justify-center gap-1
+               ${activeTab === 'open_requests' ? 'bg-brand text-gold shadow-md' : 'bg-white text-muted border border-gray-100 hover:bg-gray-50'}`}
+           >
+             <Inbox size={14} />
+             الطلبات المفتوحة
            </button>
            <button 
              onClick={() => setActiveTab('payments')}
