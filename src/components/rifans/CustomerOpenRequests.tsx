@@ -166,7 +166,7 @@ const CustomerOpenRequests: React.FC<{ userData: any }> = ({ userData }) => {
           }, {}),
           files: attachments,
         };
-        await supabase.functions.invoke('notify-admin', {
+        await supabase.functions.invoke('send-exemption-request', {
           body: { requestData: payload, userData },
         });
       } catch (e) {
