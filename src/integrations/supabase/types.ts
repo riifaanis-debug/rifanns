@@ -389,6 +389,51 @@ export type Database = {
           },
         ]
       }
+      open_requests: {
+        Row: {
+          answers: Json | null
+          attachments: Json | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          fields: Json
+          id: string
+          status: string
+          submitted_at: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          answers?: Json | null
+          attachments?: Json | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          fields?: Json
+          id: string
+          status?: string
+          submitted_at?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          answers?: Json | null
+          attachments?: Json | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          fields?: Json
+          id?: string
+          status?: string
+          submitted_at?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       otp_codes: {
         Row: {
           code: string

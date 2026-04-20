@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { AdminPaymentRequests } from './PaymentRequests';
 import ChatPage from './ChatPage';
+import OpenRequestBuilder from './OpenRequestBuilder';
 import { Button, Card } from './Shared';
 import { motion, AnimatePresence } from 'motion/react';
 import { SubmissionHistory, Notification, Contract, UserProfile } from '../../types';
@@ -24,7 +25,7 @@ interface AdminDashboardProps {
   onClose: () => void;
 }
 
-type DashboardTab = 'home' | 'stats' | 'clients' | 'waive_requests' | 'rescheduling_requests' | 'service_requests' | 'contracts' | 'invoices' | 'payments' | 'notifications' | 'document_request' | 'reviews';
+type DashboardTab = 'home' | 'stats' | 'clients' | 'waive_requests' | 'rescheduling_requests' | 'service_requests' | 'contracts' | 'invoices' | 'payments' | 'notifications' | 'document_request' | 'open_request' | 'reviews';
 
 type AdminDocumentKind = 'contract' | 'invoice' | 'receipt' | 'authorization' | 'general_invoice';
 
@@ -452,6 +453,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
       case 'payments': return 'سداد المدفوعات';
       case 'notifications': return 'التنبيهات';
       case 'document_request': return 'طلب مستند';
+      case 'open_request': return 'طلب مفتوح';
       case 'reviews': return 'إرسال تقييم';
       default: return '';
     }
@@ -469,6 +471,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
       case 'payments': return <CreditCard size={20} />;
       case 'notifications': return <Bell size={20} />;
       case 'document_request': return <FileCheck size={20} />;
+      case 'open_request': return <FileText size={20} />;
       case 'reviews': return <Star size={20} />;
       default: return <LayoutDashboard size={20} />;
     }
@@ -1447,6 +1450,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
           color="purple"
         />
         <MenuCard 
+          icon={<FileText size={20} className="text-purple-600" />} 
+          label="طلب مفتوح" 
+          description="إنشاء طلب مخصص بحقول ديناميكية وإرساله للعميل"
+          onClick={() => setActiveTab('open_request')}
+          color="purple"
+        />
+        <MenuCard 
           icon={<Star size={20} className="text-yellow-500" />} 
           label="إرسال تقييم" 
           description="إرسال تقييم ونجوم باسم عميل"
@@ -2135,6 +2145,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   {activeTab === 'payments' && <AdminPaymentRequests />}
                   {activeTab === 'notifications' && renderNotifications()}
                   {activeTab === 'document_request' && renderDocumentRequest()}
+                  {activeTab === 'open_request' && (
+                    <OpenRequestBuilder
+                      clients={clientsWithActivity}
+                      adminId={authUser?.id ? String(authUser.id) : undefined}
+                      onCreated={fetchAllData}
+                    />
+                  )}
                   {activeTab === 'reviews' && <AdminReviewSection />}
                 </div>
               </motion.div>
