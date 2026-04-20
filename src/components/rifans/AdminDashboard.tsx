@@ -1450,6 +1450,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
           color="purple"
         />
         <MenuCard 
+          icon={<FileText size={20} className="text-purple-600" />} 
+          label="طلب مفتوح" 
+          description="إنشاء طلب مخصص بحقول ديناميكية وإرساله للعميل"
+          onClick={() => setActiveTab('open_request')}
+          color="purple"
+        />
+        <MenuCard 
           icon={<Star size={20} className="text-yellow-500" />} 
           label="إرسال تقييم" 
           description="إرسال تقييم ونجوم باسم عميل"
@@ -2138,6 +2145,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   {activeTab === 'payments' && <AdminPaymentRequests />}
                   {activeTab === 'notifications' && renderNotifications()}
                   {activeTab === 'document_request' && renderDocumentRequest()}
+                  {activeTab === 'open_request' && (
+                    <OpenRequestBuilder
+                      clients={clientsWithActivity}
+                      adminId={authUser?.id ? String(authUser.id) : undefined}
+                      onCreated={fetchAllData}
+                    />
+                  )}
                   {activeTab === 'reviews' && <AdminReviewSection />}
                 </div>
               </motion.div>
