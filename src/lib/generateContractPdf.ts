@@ -132,31 +132,25 @@ function findBreakRow(canvas: HTMLCanvasElement, targetY: number, maxH: number, 
   return bestRow;
 }
 
-/* ── Header drawn on every page ── */
+/* ── Header drawn on every page (English-only to avoid jsPDF Arabic glyph issues) ── */
 function drawHeader(pdf: jsPDF, logoDataUrl: string | null) {
-  const top = 12; // 12mm from page top
-  // Logo (right side for RTL)
+  const top = 12;
   if (logoDataUrl) {
     try {
-      const logoH = 14;
-      const logoW = 14;
-      pdf.addImage(logoDataUrl, 'PNG', A4_W - M_RIGHT - logoW, top, logoW, logoH);
+      pdf.addImage(logoDataUrl, 'PNG', A4_W - M_RIGHT - 14, top, 14, 14);
     } catch {}
   }
 
-  // Company name (Arabic)
   pdf.setTextColor(...PURPLE);
-  pdf.setFontSize(14);
+  pdf.setFontSize(13);
   pdf.setFont('helvetica', 'bold');
-  pdf.text('شركة ريفانس المالية', M_LEFT, top + 6, { align: 'left' });
+  pdf.text('RIFANIS FINANCIAL COMPANY', M_LEFT, top + 6);
 
-  // English name
   pdf.setTextColor(...GRAY);
-  pdf.setFontSize(9);
+  pdf.setFontSize(8.5);
   pdf.setFont('helvetica', 'normal');
-  pdf.text('Rifanis Financial Company  •  LLC', M_LEFT, top + 11, { align: 'left' });
+  pdf.text('Limited Liability Company  |  Riyadh, KSA', M_LEFT, top + 11);
 
-  // Gold separator line
   pdf.setDrawColor(...GOLD);
   pdf.setLineWidth(0.5);
   pdf.line(M_LEFT, M_TOP - 4, A4_W - M_RIGHT, M_TOP - 4);
@@ -166,27 +160,23 @@ function drawHeader(pdf: jsPDF, logoDataUrl: string | null) {
 function drawFooter(pdf: jsPDF, pageNum: number, totalPages: number) {
   const footerY = A4_H - M_BOTTOM + 10;
 
-  // Top separator
   pdf.setDrawColor(...GRAY_LIGHT);
   pdf.setLineWidth(0.3);
   pdf.line(M_LEFT, footerY - 6, A4_W - M_RIGHT, footerY - 6);
 
-  // Site
   pdf.setFontSize(9);
   pdf.setTextColor(...PURPLE);
   pdf.setFont('helvetica', 'bold');
   pdf.text('rifanss.com', M_LEFT, footerY);
 
-  // Page X of Y (centered)
   pdf.setFont('helvetica', 'normal');
   pdf.setFontSize(8);
   pdf.setTextColor(...GRAY);
-  pdf.text(`صفحة ${pageNum} من ${totalPages}`, A4_W / 2, footerY, { align: 'center' });
+  pdf.text(`Page ${pageNum} of ${totalPages}`, A4_W / 2, footerY, { align: 'center' });
 
-  // Copyright (right)
   pdf.setFontSize(7);
   pdf.setTextColor(...GRAY_LIGHT);
-  pdf.text(`© ${new Date().getFullYear()} ريفانس المالية`, A4_W - M_RIGHT, footerY, { align: 'right' });
+  pdf.text(`© ${new Date().getFullYear()} Rifanis Financial`, A4_W - M_RIGHT, footerY, { align: 'right' });
 }
 
 /* ══════════ Main Export ══════════ */
