@@ -163,6 +163,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (insertError) throw new Error('خطأ في إنشاء الحساب');
       appUser = inserted;
+
+      // Sync new contact to HubSpot (fire-and-forget)
+      try {
+        supabase.functions.invoke('hubspot-sync', {
+          body: {
+            action: 'upsert_contact',
+            contact: {
+              phone: appUser.phone,
+              firstname: appUser.full_name,
+              national_id: appUser.national_id,
+            },
+          },
+        });
+      } catch (e) {
+        console.error('hubspot-sync (new contact) failed', e);
+      }
     } else {
       appUser = existingUsers[0];
       if (appUser.phone !== phone) {
