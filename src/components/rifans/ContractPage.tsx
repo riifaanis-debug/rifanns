@@ -554,13 +554,14 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
             {/* ══════════ SIGNATURES ══════════ */}
             <div style={{ marginTop: '36px', paddingTop: '16px', borderTop: '2px solid #22042C', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', pageBreakInside: 'avoid' }}>
               <div style={{ textAlign: 'center' }}>
-                <p style={{ fontWeight: 900, fontSize: '13px', color: '#22042C', textDecoration: 'underline', textUnderlineOffset: '3px', marginBottom: '8px' }}>ختم وتوقيع الطرف الأول</p>
+                <p style={{ fontWeight: 700, fontSize: '12pt', color: '#22042C', marginBottom: '8px' }}>توقيع الطرف الأول</p>
                 <div style={{ height: '150px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
                   <img src={rifansStampImg} alt="First Party Stamp" style={{ height: '100%', width: 'auto', objectFit: 'contain', mixBlendMode: 'multiply' }} />
                 </div>
+                <p style={{ fontSize: '11pt', color: '#666', marginTop: '4px', fontWeight: 500 }}>شركة ريفانس المالية</p>
               </div>
               <div style={{ textAlign: 'center' }}>
-                <p style={{ fontWeight: 900, fontSize: '13px', color: '#22042C', textDecoration: 'underline', textUnderlineOffset: '3px', marginBottom: '8px' }}>توقيع الطرف الثاني (العميل)</p>
+                <p style={{ fontWeight: 700, fontSize: '12pt', color: '#22042C', marginBottom: '8px' }}>توقيع الطرف الثاني (العميل)</p>
                 <div style={{ height: '120px', backgroundColor: '#faf8fc', borderRadius: '6px', border: '1px solid #e8e0ed', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
                   {isSuccess || isAlreadySigned ? (
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
@@ -569,17 +570,17 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
                       ) : (
                         <img src={canvasRef.current?.toDataURL() || ''} alt="توقيع العميل" style={{ height: '60px', objectFit: 'contain' }} />
                       )}
-                      <span style={{ fontSize: '9px', color: '#6b7280', fontWeight: 700 }}>
+                      <span style={{ fontSize: '11pt', color: '#22042C', fontWeight: 500 }}>
                         {submission.data.firstName} {submission.data.middleName} {submission.data.lastName}
                       </span>
-                      <span style={{ fontSize: '8px', color: '#9ca3af' }}>
-                        {new Date(submission.signed_at || submission.timestamp).toLocaleString('ar-SA')}
+                      <span style={{ fontSize: '11pt', color: '#666' }}>
+                        {new Date(submission.signed_at || submission.timestamp).toLocaleDateString('ar-SA')}
                       </span>
                     </div>
                   ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', color: '#d1d5db' }}>
                       <PenTool size={20} />
-                      <span style={{ fontSize: '10px', fontWeight: 700, fontStyle: 'italic' }}>بانتظار التوقيع...</span>
+                      <span style={{ fontSize: '11pt', fontWeight: 500, fontStyle: 'italic' }}>بانتظار التوقيع...</span>
                     </div>
                   )}
                 </div>
@@ -588,10 +589,10 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
 
             {/* ══════════ FOOTER (inside contract) ══════════ */}
             <div style={{ marginTop: '28px', borderTop: '1px solid #e5e7eb', paddingTop: '12px', textAlign: 'center' }}>
-              <p style={{ fontSize: '9px', color: '#6b7280', fontWeight: 700 }}>
+              <p style={{ fontSize: '10pt', color: '#666', fontWeight: 500 }}>
                 هذه الوثيقة صادرة عن النظام الإلكتروني لشركة ريفانس المالية وهي ملزمة قانوناً بمجرد التوقيع عليها.
               </p>
-              <p style={{ fontSize: '8px', color: '#9ca3af', marginTop: '4px' }}>
+              <p style={{ fontSize: '10pt', color: '#999', marginTop: '4px' }}>
                 جميع الحقوق محفوظة © ريفانس المالية {new Date().getFullYear()}
               </p>
             </div>
