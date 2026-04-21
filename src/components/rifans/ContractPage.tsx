@@ -454,7 +454,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
                   : 'لا تستحق أتعاب الطرف الأول إلا بعد صدور قبول طلب الإعفاء وإصدار خطاب المخالصة المالية، وفي حال قبول طلب الإعفاء، يستحق الطرف الأول أتعاباً مقطوعة قدرها (4%) من إجمالي المبالغ المعفاة فعلياً.'
                 }
               </p>
-              <p style={{ marginTop: '6px', fontWeight: 900, color: '#b91c1c', fontSize: '12.5px' }}>
+              <p style={{ marginTop: '8px', fontWeight: 700, color: '#b91c1c', fontSize: '13pt' }}>
                 "وفي حال عدم قبول الطلب، لا يحق للطرف الأول المطالبة بأي أتعاب"
               </p>
             </section>
