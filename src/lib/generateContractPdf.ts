@@ -142,12 +142,12 @@ function drawHeader(pdf: jsPDF, logoDataUrl: string | null) {
   }
 
   pdf.setTextColor(...PURPLE);
-  pdf.setFontSize(13);
+  pdf.setFontSize(12);
   pdf.setFont('helvetica', 'bold');
   pdf.text('RIFANIS FINANCIAL COMPANY', M_LEFT, top + 6);
 
   pdf.setTextColor(...GRAY);
-  pdf.setFontSize(8.5);
+  pdf.setFontSize(10);
   pdf.setFont('helvetica', 'normal');
   pdf.text('Limited Liability Company  |  Riyadh, KSA', M_LEFT, top + 11);
 
@@ -164,18 +164,18 @@ function drawFooter(pdf: jsPDF, pageNum: number, totalPages: number) {
   pdf.setLineWidth(0.3);
   pdf.line(M_LEFT, footerY - 6, A4_W - M_RIGHT, footerY - 6);
 
-  pdf.setFontSize(9);
+  pdf.setFontSize(10);
   pdf.setTextColor(...PURPLE);
   pdf.setFont('helvetica', 'bold');
   pdf.text('rifanss.com', M_LEFT, footerY);
 
   pdf.setFont('helvetica', 'normal');
-  pdf.setFontSize(8);
+  pdf.setFontSize(10);
   pdf.setTextColor(...GRAY);
   pdf.text(`Page ${pageNum} of ${totalPages}`, A4_W / 2, footerY, { align: 'center' });
 
-  pdf.setFontSize(7);
-  pdf.setTextColor(...GRAY_LIGHT);
+  pdf.setFontSize(10);
+  pdf.setTextColor(...GRAY);
   pdf.text(`© ${new Date().getFullYear()} Rifanis Financial`, A4_W - M_RIGHT, footerY, { align: 'right' });
 }
 
@@ -192,8 +192,8 @@ export const generateContractPdf = async (
     position: 'absolute', left: '-9999px', top: '0',
     direction: 'rtl', boxShadow: 'none', border: 'none', borderRadius: '0',
     overflow: 'visible',
-    fontFamily: 'Tajawal, Cairo, Arial, sans-serif',
-    fontSize: '13px', lineHeight: '1.7', color: '#222222',
+    fontFamily: 'Tajawal, sans-serif',
+    fontSize: '13pt', lineHeight: '1.7', color: '#222222',
   });
   document.body.appendChild(clone);
 
