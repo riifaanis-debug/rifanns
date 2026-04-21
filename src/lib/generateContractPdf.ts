@@ -1,25 +1,42 @@
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import rifansLogo from '@/assets/rifans-logo.png';
 
-/* ── Page dimensions (mm) ── */
+/* ══════════ Production-Ready PDF Settings ══════════
+ * Format: A4
+ * Margins: top 130px / bottom 110px / left 30px / right 30px
+ * Colors: Purple #3b2355 / Gold #c7a76c / Gray #666
+ * Font: Tajawal (RTL)
+ * Header + Footer repeat on every page
+ * ════════════════════════════════════════════════════ */
+
+/* ── A4 dimensions in mm ── */
 const A4_W = 210;
 const A4_H = 297;
-const M_TOP = 25;   // 2.5 cm
-const M_BOTTOM = 20; // 2 cm
-const M_LEFT = 20;
-const M_RIGHT = 20;
-const CONTENT_W = A4_W - M_LEFT - M_RIGHT; // 170mm
-const FOOTER_H = 14; // reserve for footer
-const CONTENT_H = A4_H - M_TOP - M_BOTTOM - FOOTER_H; // usable per page
 
-/* ── Clean DOM for PDF ── */
+/* ── Margins (px → mm @ 96dpi: 1px ≈ 0.2646mm) ── */
+const PX_TO_MM = 0.2646;
+const M_TOP = 130 * PX_TO_MM;     // ~34.4mm
+const M_BOTTOM = 110 * PX_TO_MM;  // ~29.1mm
+const M_LEFT = 30 * PX_TO_MM;     // ~7.94mm
+const M_RIGHT = 30 * PX_TO_MM;    // ~7.94mm
+
+const CONTENT_W = A4_W - M_LEFT - M_RIGHT;
+const CONTENT_H = A4_H - M_TOP - M_BOTTOM;
+
+/* ── Brand Colors ── */
+const PURPLE: [number, number, number] = [59, 35, 85];   // #3b2355
+const GOLD: [number, number, number]   = [199, 167, 108]; // #c7a76c
+const GRAY: [number, number, number]   = [102, 102, 102]; // #666
+const GRAY_LIGHT: [number, number, number] = [200, 200, 200];
+
+/* ── Clean DOM for PDF capture ── */
 function cleanForPdf(el: HTMLElement) {
-  // Remove print-hidden elements
   ['.print-hidden', '.print\\:hidden', '[class*="print:hidden"]', '[class*="print\\:hidden"]'].forEach(sel => {
     try { el.querySelectorAll(sel).forEach(n => (n as HTMLElement).remove()); } catch {}
   });
 
-  // Remove watermarks
+  // Remove rotated watermarks
   el.querySelectorAll('[class*="rotate-"]').forEach(node => {
     const h = node as HTMLElement;
     if (h.style.transform?.includes('rotate') || h.className?.includes('rotate-')) {
@@ -32,14 +49,15 @@ function cleanForPdf(el: HTMLElement) {
     if (h.classList.contains('opacity-[0.015]') || h.style.opacity === '0.015') h.remove();
   });
 
+  // Remove the in-document header (we redraw it per-page instead)
+  el.querySelectorAll('.contract-header').forEach(n => (n as HTMLElement).remove());
+
   applyClean(el);
   el.querySelectorAll('*').forEach(c => applyClean(c as HTMLElement));
 }
 
 function applyClean(el: HTMLElement) {
   const cs = window.getComputedStyle(el);
-
-  // Force white/transparent bg
   const bg = cs.backgroundColor;
   if (bg && bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent') {
     const m = bg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
@@ -50,28 +68,19 @@ function applyClean(el: HTMLElement) {
       else if (el.offsetHeight > 5) el.style.backgroundColor = '#ffffff';
     }
   }
-
   if (cs.backgroundImage && cs.backgroundImage !== 'none') el.style.backgroundImage = 'none';
   el.style.boxShadow = 'none';
   el.style.textShadow = 'none';
-
   const radius = parseFloat(cs.borderRadius);
   if (radius > 6) el.style.borderRadius = '3px';
-
   const bc = cs.borderColor;
   if (bc) {
     const m = bc.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
     if (m && (Number(m[1]) + Number(m[2]) + Number(m[3])) / 3 > 240) el.style.borderColor = '#e5e5e5';
   }
-
-  const color = cs.color;
-  if (color) {
-    const m = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
-    if (m && (Number(m[1]) + Number(m[2]) + Number(m[3])) / 3 > 200) el.style.color = '#666666';
-  }
 }
 
-/* ── Wait for images + fonts ── */
+/* ── Wait for assets ── */
 async function waitForAssets(root: HTMLElement) {
   const imgs = Array.from(root.querySelectorAll('img'));
   await Promise.all(imgs.map(img => new Promise<void>(r => {
@@ -83,16 +92,21 @@ async function waitForAssets(root: HTMLElement) {
   try { await document.fonts.ready; } catch {}
 }
 
-/* ── Capture header for repeating ── */
-async function captureHeader(clone: HTMLElement): Promise<HTMLCanvasElement | null> {
-  const header = clone.querySelector('.contract-header') as HTMLElement | null;
-  if (!header) return null;
+/* ── Load logo as data URL (for repeated header) ── */
+async function loadLogoDataUrl(): Promise<string | null> {
   try {
-    return await html2canvas(header, { scale: 3, useCORS: true, allowTaint: true, backgroundColor: '#ffffff', logging: false, windowWidth: 794 });
+    const res = await fetch(rifansLogo);
+    const blob = await res.blob();
+    return await new Promise((resolve) => {
+      const fr = new FileReader();
+      fr.onload = () => resolve(fr.result as string);
+      fr.onerror = () => resolve(null);
+      fr.readAsDataURL(blob);
+    });
   } catch { return null; }
 }
 
-/* ── Smart page-break finder ── */
+/* ── Smart page-break finder (white-row scan) ── */
 function findBreakRow(canvas: HTMLCanvasElement, targetY: number, maxH: number, imgW: number, imgH: number): number {
   const scanRange = Math.floor(maxH * 0.15);
   const start = Math.max(0, targetY - scanRange);
@@ -118,21 +132,61 @@ function findBreakRow(canvas: HTMLCanvasElement, targetY: number, maxH: number, 
   return bestRow;
 }
 
-/* ── Draw footer on a page ── */
+/* ── Header drawn on every page ── */
+function drawHeader(pdf: jsPDF, logoDataUrl: string | null) {
+  const top = 12; // 12mm from page top
+  // Logo (right side for RTL)
+  if (logoDataUrl) {
+    try {
+      const logoH = 14;
+      const logoW = 14;
+      pdf.addImage(logoDataUrl, 'PNG', A4_W - M_RIGHT - logoW, top, logoW, logoH);
+    } catch {}
+  }
+
+  // Company name (Arabic)
+  pdf.setTextColor(...PURPLE);
+  pdf.setFontSize(14);
+  pdf.setFont('helvetica', 'bold');
+  pdf.text('شركة ريفانس المالية', M_LEFT, top + 6, { align: 'left' });
+
+  // English name
+  pdf.setTextColor(...GRAY);
+  pdf.setFontSize(9);
+  pdf.setFont('helvetica', 'normal');
+  pdf.text('Rifanis Financial Company  •  LLC', M_LEFT, top + 11, { align: 'left' });
+
+  // Gold separator line
+  pdf.setDrawColor(...GOLD);
+  pdf.setLineWidth(0.5);
+  pdf.line(M_LEFT, M_TOP - 4, A4_W - M_RIGHT, M_TOP - 4);
+}
+
+/* ── Footer drawn on every page ── */
 function drawFooter(pdf: jsPDF, pageNum: number, totalPages: number) {
-  const footerY = A4_H - M_BOTTOM;
-  // Separator line
-  pdf.setDrawColor(200, 200, 200);
+  const footerY = A4_H - M_BOTTOM + 10;
+
+  // Top separator
+  pdf.setDrawColor(...GRAY_LIGHT);
   pdf.setLineWidth(0.3);
   pdf.line(M_LEFT, footerY - 6, A4_W - M_RIGHT, footerY - 6);
-  // Page number
+
+  // Site
+  pdf.setFontSize(9);
+  pdf.setTextColor(...PURPLE);
+  pdf.setFont('helvetica', 'bold');
+  pdf.text('rifanss.com', M_LEFT, footerY);
+
+  // Page X of Y (centered)
+  pdf.setFont('helvetica', 'normal');
   pdf.setFontSize(8);
-  pdf.setTextColor(150, 150, 150);
-  pdf.text(`Page ${pageNum} of ${totalPages}`, A4_W / 2, footerY - 1, { align: 'center' });
-  // Copyright
-  pdf.setFontSize(6.5);
-  pdf.setTextColor(180, 180, 180);
-  pdf.text(`جميع الحقوق محفوظة © ريفانس المالية ${new Date().getFullYear()}`, A4_W / 2, footerY + 3, { align: 'center' });
+  pdf.setTextColor(...GRAY);
+  pdf.text(`صفحة ${pageNum} من ${totalPages}`, A4_W / 2, footerY, { align: 'center' });
+
+  // Copyright (right)
+  pdf.setFontSize(7);
+  pdf.setTextColor(...GRAY_LIGHT);
+  pdf.text(`© ${new Date().getFullYear()} ريفانس المالية`, A4_W - M_RIGHT, footerY, { align: 'right' });
 }
 
 /* ══════════ Main Export ══════════ */
@@ -143,21 +197,19 @@ export const generateContractPdf = async (
   const clone = element.cloneNode(true) as HTMLElement;
   Object.assign(clone.style, {
     width: '794px', maxWidth: '794px', minWidth: '794px',
-    padding: '48px 56px', margin: '0',
+    padding: '20px 30px', margin: '0',
     background: '#ffffff', backgroundColor: '#ffffff',
     position: 'absolute', left: '-9999px', top: '0',
     direction: 'rtl', boxShadow: 'none', border: 'none', borderRadius: '0',
     overflow: 'visible',
     fontFamily: 'Tajawal, Cairo, Arial, sans-serif',
-    fontSize: '14px', lineHeight: '1.8', color: '#1a1a1a',
+    fontSize: '13px', lineHeight: '1.7', color: '#222222',
   });
   document.body.appendChild(clone);
 
   cleanForPdf(clone);
   await waitForAssets(clone);
-
-  // Capture header for repeating
-  const headerCanvas = await captureHeader(clone);
+  const logoDataUrl = await loadLogoDataUrl();
 
   try {
     const canvas = await html2canvas(clone, {
@@ -178,19 +230,10 @@ export const generateContractPdf = async (
     const imgH = canvas.height;
     const pdf = new jsPDF('p', 'mm', 'a4');
 
-    // Header dimensions for repeat
-    let headerHmm = 0;
-    let headerImg: string | null = null;
-    if (headerCanvas) {
-      const r = CONTENT_W / headerCanvas.width;
-      headerHmm = headerCanvas.height * r;
-      headerImg = headerCanvas.toDataURL('image/jpeg', 0.95);
-    }
-
     const ratio = CONTENT_W / imgW;
     const maxSlicePx = Math.floor(CONTENT_H / ratio);
 
-    // Calculate break points
+    // Compute page breaks
     const breaks: number[] = [0];
     let cy = 0;
     while (cy + maxSlicePx < imgH) {
@@ -205,23 +248,13 @@ export const generateContractPdf = async (
     for (let p = 0; p < totalPages; p++) {
       if (p > 0) pdf.addPage();
 
-      let contentY = M_TOP;
-
-      // Repeat header on pages 2+
-      if (p > 0 && headerImg && headerHmm > 0) {
-        pdf.addImage(headerImg, 'JPEG', M_LEFT, M_TOP, CONTENT_W, headerHmm);
-        // Purple line under header
-        pdf.setDrawColor(34, 4, 44);
-        pdf.setLineWidth(0.6);
-        pdf.line(M_LEFT, M_TOP + headerHmm + 1.5, A4_W - M_RIGHT, M_TOP + headerHmm + 1.5);
-        contentY = M_TOP + headerHmm + 4;
-      }
+      // Header on every page
+      drawHeader(pdf, logoDataUrl);
 
       const srcY = breaks[p];
       const srcH = breaks[p + 1] - srcY;
       const destH = srcH * ratio;
 
-      // Slice canvas
       const pageCanvas = document.createElement('canvas');
       pageCanvas.width = imgW;
       pageCanvas.height = Math.round(srcH);
@@ -231,9 +264,9 @@ export const generateContractPdf = async (
       ctx.drawImage(canvas, 0, Math.round(srcY), imgW, Math.round(srcH), 0, 0, imgW, Math.round(srcH));
 
       const pageImg = pageCanvas.toDataURL('image/jpeg', 0.95);
-      pdf.addImage(pageImg, 'JPEG', M_LEFT, contentY, CONTENT_W, destH);
+      pdf.addImage(pageImg, 'JPEG', M_LEFT, M_TOP, CONTENT_W, destH);
 
-      // Footer
+      // Footer on every page
       drawFooter(pdf, p + 1, totalPages);
     }
 
