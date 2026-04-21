@@ -15,56 +15,68 @@ interface ContractPageProps {
   onClose: () => void;
 }
 
-/* ── Shared inline style objects ── */
-const sectionStyle: React.CSSProperties = { pageBreakInside: 'avoid', marginBottom: '18px' };
+/* ══════════ Typography Standard (Final Spec) ══════════
+ * Font: Tajawal (single font family)
+ * Main title: 18pt Bold | Article headings: 14pt Bold
+ * Body: 13pt Regular | line-height 1.7
+ * Lists: 12.5pt | Party labels: 11pt | Party values: 12.5pt
+ * Important amounts: 14pt Bold | Signatures: 12pt
+ * ══════════════════════════════════════════════════════ */
+const sectionStyle: React.CSSProperties = { pageBreakInside: 'avoid', marginBottom: '16px', marginTop: '14px' };
 const headingStyle: React.CSSProperties = {
-  fontSize: '17px',
-  fontWeight: 900,
-  color: '#C5A059',
-  marginBottom: '6px',
-  fontFamily: 'Cairo, Tajawal, sans-serif',
-  lineHeight: 1.4,
+  fontSize: '14pt',
+  fontWeight: 700,
+  color: '#22042C',
+  marginBottom: '8px',
+  fontFamily: 'Tajawal, sans-serif',
+  lineHeight: 1.5,
 };
 const paragraphStyle: React.CSSProperties = {
-  fontSize: '14px',
-  lineHeight: 1.8,
-  color: '#22042C',
+  fontSize: '13pt',
+  lineHeight: 1.7,
+  color: '#222222',
   textAlign: 'justify',
   direction: 'rtl',
+  fontWeight: 400,
+  marginBottom: '10px',
 };
 const listStyle: React.CSSProperties = {
   direction: 'rtl',
   textAlign: 'right',
   paddingRight: '22px',
   listStylePosition: 'outside',
-  fontSize: '14px',
-  lineHeight: 1.8,
-  color: '#22042C',
+  fontSize: '12.5pt',
+  lineHeight: 1.7,
+  color: '#222222',
+  fontWeight: 400,
 };
 const tableHeaderCellStyle: React.CSSProperties = {
   padding: '10px 14px',
-  fontWeight: 900,
-  fontSize: '14px',
+  fontWeight: 700,
+  fontSize: '12.5pt',
   color: '#22042C',
   backgroundColor: '#f3eff5',
   textAlign: 'right',
   borderBottom: '2px solid #d4c8d9',
-  fontFamily: 'Cairo, Tajawal, sans-serif',
+  fontFamily: 'Tajawal, sans-serif',
 };
 const tableCellStyle: React.CSSProperties = {
-  padding: '10px 14px',
-  fontSize: '13.5px',
+  padding: '9px 14px',
+  fontSize: '12.5pt',
   textAlign: 'right',
   borderBottom: '1px solid #e8e0ed',
-  color: '#22042C',
-  lineHeight: 1.7,
-  minHeight: '34px',
+  color: '#222222',
+  lineHeight: 1.6,
+  minHeight: '32px',
+  fontWeight: 500,
 };
 const tableLabelCellStyle: React.CSSProperties = {
   ...tableCellStyle,
   fontWeight: 700,
   backgroundColor: '#faf8fc',
   width: '160px',
+  fontSize: '11pt',
+  color: '#666',
 };
 
 const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) => {
