@@ -272,12 +272,13 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
           data-pdf-root="true"
           className="max-w-[210mm] mx-auto bg-white shadow-[0_10px_30px_rgba(0,0,0,0.05)] border border-gray-200 relative overflow-hidden print:shadow-none print:border-none print:w-full"
           style={{
-            fontFamily: 'Tajawal, Cairo, Arial, sans-serif',
+            fontFamily: 'Tajawal, sans-serif',
             direction: 'rtl',
             padding: '40px 48px',
-            color: '#22042C',
-            fontSize: '14px',
-            lineHeight: 1.8,
+            color: '#222222',
+            fontSize: '13pt',
+            lineHeight: 1.7,
+            fontWeight: 400,
           }}
         >
           {/* ══════════ HEADER (captured for PDF repeat) ══════════ */}
@@ -286,23 +287,23 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
               {/* Right: Company info */}
               <div style={{ flex: 1 }}>
-                <h1 style={{ fontSize: '25px', fontWeight: 900, color: '#22042C', margin: 0, fontFamily: 'Cairo, Tajawal, sans-serif', lineHeight: 1.3 }}>
+                <h1 style={{ fontSize: '13pt', fontWeight: 700, color: '#22042C', margin: 0, fontFamily: 'Tajawal, sans-serif', lineHeight: 1.4 }}>
                   شركة ريفانس المالية
                 </h1>
-                <p style={{ fontSize: '19px', fontWeight: 700, color: '#22042C', margin: '4px 0 0 0' }}>
+                <p style={{ fontSize: '18pt', fontWeight: 700, color: '#22042C', margin: '6px 0 0 0', textAlign: 'center', lineHeight: 1.4 }}>
                   {contractTitle}
                 </p>
               </div>
               {/* Left: Logo */}
               <div style={{ flexShrink: 0, marginRight: '16px' }}>
-                <img src={rifansLogo} alt="Rifans Logo" style={{ height: '100px', width: 'auto', objectFit: 'contain' }} />
+                <img src={rifansLogo} alt="Rifans Logo" style={{ height: '90px', width: 'auto', objectFit: 'contain' }} />
               </div>
             </div>
             {/* Row 2: Contract meta grid */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 32px', fontSize: '13.5px', color: '#22042C', marginTop: '6px' }}>
-              <span>رقم ملف العميل: <strong style={{ fontFamily: 'monospace' }}>{submissionId}</strong></span>
-              <span>رقم العقد: <strong style={{ fontFamily: 'monospace' }}>{submissionId}</strong></span>
-              <span>تاريخ العقد: <strong>{new Date(submission.timestamp).toLocaleDateString('ar-SA')}</strong></span>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px 28px', fontSize: '11pt', color: '#666', marginTop: '8px', fontWeight: 500 }}>
+              <span>رقم ملف العميل: <strong style={{ fontFamily: 'monospace', color: '#22042C', fontSize: '12.5pt' }}>{submissionId}</strong></span>
+              <span>رقم العقد: <strong style={{ fontFamily: 'monospace', color: '#22042C', fontSize: '12.5pt' }}>{submissionId}</strong></span>
+              <span>تاريخ العقد: <strong style={{ color: '#22042C', fontSize: '12.5pt' }}>{new Date(submission.timestamp).toLocaleDateString('ar-SA')}</strong></span>
             </div>
           </div>
 
