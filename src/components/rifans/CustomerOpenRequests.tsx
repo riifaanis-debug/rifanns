@@ -173,6 +173,27 @@ const CustomerOpenRequests: React.FC<{ userData: any }> = ({ userData }) => {
         console.error('notify-admin failed', e);
       }
 
+      // Sync to HubSpot: upsert contact + create deal
+      try {
+        await supabase.functions.invoke('hubspot-sync', {
+          body: {
+            action: 'both',
+            contact: {
+              email: userData?.email,
+              phone: userData?.phone || userData?.mobile,
+              firstname: userData?.fullName || userData?.name,
+              national_id: userData?.national_id || userData?.nationalId,
+            },
+            deal: {
+              dealname: `${active.title} - ${userData?.fullName || userData?.name || 'عميل'}`,
+              description: active.description || active.title,
+            },
+          },
+        });
+      } catch (e) {
+        console.error('hubspot-sync (deal) failed', e);
+      }
+
       alert('تم إرسال الطلب بنجاح ✅');
       setActive(null);
       setAnswers({});
