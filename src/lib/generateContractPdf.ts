@@ -193,7 +193,7 @@ export const generateContractPdf = async (
     direction: 'rtl', boxShadow: 'none', border: 'none', borderRadius: '0',
     overflow: 'visible',
     fontFamily: 'Tajawal, sans-serif',
-    fontSize: '16pt', lineHeight: '1.9', color: '#222222',
+    fontSize: '18pt', lineHeight: '2.05', color: '#222222',
   });
   document.body.appendChild(clone);
 
