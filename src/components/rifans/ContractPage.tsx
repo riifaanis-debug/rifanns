@@ -22,38 +22,38 @@ interface ContractPageProps {
  * Lists: 12.5pt | Party labels: 11pt | Party values: 12.5pt
  * Important amounts: 14pt Bold | Signatures: 12pt
  * ══════════════════════════════════════════════════════ */
-const sectionStyle: React.CSSProperties = { pageBreakInside: 'avoid', marginBottom: '16px', marginTop: '14px' };
+const sectionStyle: React.CSSProperties = { pageBreakInside: 'avoid', marginBottom: '20px', marginTop: '18px' };
 const headingStyle: React.CSSProperties = {
-  fontSize: '14pt',
+  fontSize: '18pt',
   fontWeight: 700,
   color: '#22042C',
-  marginBottom: '8px',
+  marginBottom: '12px',
   fontFamily: 'Tajawal, sans-serif',
   lineHeight: 1.5,
 };
 const paragraphStyle: React.CSSProperties = {
-  fontSize: '13pt',
-  lineHeight: 1.7,
+  fontSize: '16pt',
+  lineHeight: 1.9,
   color: '#222222',
   textAlign: 'justify',
   direction: 'rtl',
   fontWeight: 400,
-  marginBottom: '10px',
+  marginBottom: '14px',
 };
 const listStyle: React.CSSProperties = {
   direction: 'rtl',
   textAlign: 'right',
-  paddingRight: '22px',
+  paddingRight: '26px',
   listStylePosition: 'outside',
-  fontSize: '12.5pt',
-  lineHeight: 1.7,
+  fontSize: '15.5pt',
+  lineHeight: 1.9,
   color: '#222222',
   fontWeight: 400,
 };
 const tableHeaderCellStyle: React.CSSProperties = {
-  padding: '10px 14px',
+  padding: '12px 16px',
   fontWeight: 700,
-  fontSize: '12.5pt',
+  fontSize: '15.5pt',
   color: '#22042C',
   backgroundColor: '#f3eff5',
   textAlign: 'right',
@@ -61,21 +61,21 @@ const tableHeaderCellStyle: React.CSSProperties = {
   fontFamily: 'Tajawal, sans-serif',
 };
 const tableCellStyle: React.CSSProperties = {
-  padding: '9px 14px',
-  fontSize: '12.5pt',
+  padding: '11px 16px',
+  fontSize: '15.5pt',
   textAlign: 'right',
   borderBottom: '1px solid #e8e0ed',
   color: '#222222',
-  lineHeight: 1.6,
-  minHeight: '32px',
+  lineHeight: 1.7,
+  minHeight: '36px',
   fontWeight: 500,
 };
 const tableLabelCellStyle: React.CSSProperties = {
   ...tableCellStyle,
   fontWeight: 700,
   backgroundColor: '#faf8fc',
-  width: '160px',
-  fontSize: '11pt',
+  width: '180px',
+  fontSize: '14pt',
   color: '#666',
 };
 
@@ -276,21 +276,21 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
             direction: 'rtl',
             padding: '40px 48px',
             color: '#222222',
-            fontSize: '13pt',
-            lineHeight: 1.7,
+            fontSize: '16pt',
+            lineHeight: 1.9,
             fontWeight: 400,
           }}
         >
           {/* ══════════ HEADER (captured for PDF repeat) ══════════ */}
-          <div className="contract-header" style={{ marginBottom: '20px', paddingBottom: '14px', borderBottom: '3px solid #22042C' }}>
+          <div className="contract-header" style={{ marginBottom: '24px', paddingBottom: '16px', borderBottom: '3px solid #22042C' }}>
             {/* Row 1: Logo + Company name */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
               {/* Right: Company info */}
               <div style={{ flex: 1 }}>
-                <h1 style={{ fontSize: '13pt', fontWeight: 700, color: '#22042C', margin: 0, fontFamily: 'Tajawal, sans-serif', lineHeight: 1.4 }}>
+                <h1 style={{ fontSize: '16pt', fontWeight: 700, color: '#22042C', margin: 0, fontFamily: 'Tajawal, sans-serif', lineHeight: 1.4 }}>
                   شركة ريفانس المالية
                 </h1>
-                <p style={{ fontSize: '18pt', fontWeight: 700, color: '#22042C', margin: '6px 0 0 0', textAlign: 'center', lineHeight: 1.4 }}>
+                <p style={{ fontSize: '22pt', fontWeight: 700, color: '#22042C', margin: '8px 0 0 0', textAlign: 'center', lineHeight: 1.4 }}>
                   {contractTitle}
                 </p>
               </div>
@@ -300,10 +300,10 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
               </div>
             </div>
             {/* Row 2: Contract meta grid */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px 28px', fontSize: '11pt', color: '#666', marginTop: '8px', fontWeight: 500 }}>
-              <span>رقم ملف العميل: <strong style={{ fontFamily: 'monospace', color: '#22042C', fontSize: '12.5pt' }}>{submissionId}</strong></span>
-              <span>رقم العقد: <strong style={{ fontFamily: 'monospace', color: '#22042C', fontSize: '12.5pt' }}>{submissionId}</strong></span>
-              <span>تاريخ العقد: <strong style={{ color: '#22042C', fontSize: '12.5pt' }}>{new Date(submission.timestamp).toLocaleDateString('ar-SA')}</strong></span>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 32px', fontSize: '14pt', color: '#666', marginTop: '10px', fontWeight: 500 }}>
+              <span>رقم ملف العميل: <strong style={{ fontFamily: 'monospace', color: '#22042C', fontSize: '15pt' }}>{submissionId}</strong></span>
+              <span>رقم العقد: <strong style={{ fontFamily: 'monospace', color: '#22042C', fontSize: '15pt' }}>{submissionId}</strong></span>
+              <span>تاريخ العقد: <strong style={{ color: '#22042C', fontSize: '15pt' }}>{new Date(submission.timestamp).toLocaleDateString('ar-SA')}</strong></span>
             </div>
           </div>
 
