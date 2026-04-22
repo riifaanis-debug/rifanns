@@ -394,16 +394,16 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
                       <tr key={idx} style={{ backgroundColor: idx % 2 === 1 ? '#faf8fc' : '#ffffff' }}>
                         <td style={{ ...tableCellStyle, borderLeft: '1px solid #e8e0ed' }}>{idx === 0 ? (submission.data.bank || 'الجهة المالية') : ''}</td>
                         <td style={{ ...tableCellStyle, borderLeft: '1px solid #e8e0ed' }}>{product.type}</td>
-                        <td style={{ ...tableCellStyle, borderLeft: '1px solid #e8e0ed', fontFamily: 'monospace', fontSize: '14px' }}>{product.accountNumber || product.account_number || '---'}</td>
-                        <td style={{ ...tableCellStyle, fontWeight: 700, color: '#b91c1c', fontSize: '13.5pt' }}>{formatAmount(product.amount)}</td>
+                        <td style={{ ...tableCellStyle, borderLeft: '1px solid #e8e0ed', fontFamily: 'monospace', fontSize: '16pt' }}>{product.accountNumber || product.account_number || '---'}</td>
+                        <td style={{ ...tableCellStyle, fontWeight: 700, color: '#b91c1c', fontSize: '17pt' }}>{formatAmount(product.amount)}</td>
                       </tr>
                     ))}
                     {/* Total row */}
                     <tr style={{ backgroundColor: '#f3eff5' }}>
-                      <td colSpan={3} style={{ ...tableCellStyle, fontWeight: 700, fontSize: '14pt', borderTop: '2px solid #d4c8d9', borderLeft: '1px solid #d4c8d9', borderBottom: 'none' }}>
+                      <td colSpan={3} style={{ ...tableCellStyle, fontWeight: 700, fontSize: '17pt', borderTop: '2px solid #d4c8d9', borderLeft: '1px solid #d4c8d9', borderBottom: 'none' }}>
                         إجمالي المديونية
                       </td>
-                      <td style={{ ...tableCellStyle, fontWeight: 700, fontSize: '14pt', color: '#22042C', borderTop: '2px solid #d4c8d9', borderBottom: 'none' }}>
+                      <td style={{ ...tableCellStyle, fontWeight: 700, fontSize: '17pt', color: '#22042C', borderTop: '2px solid #d4c8d9', borderBottom: 'none' }}>
                         {formatAmount(totalDebt)} ريال سعودي
                       </td>
                     </tr>
@@ -454,7 +454,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
                   : 'لا تستحق أتعاب الطرف الأول إلا بعد صدور قبول طلب الإعفاء وإصدار خطاب المخالصة المالية، وفي حال قبول طلب الإعفاء، يستحق الطرف الأول أتعاباً مقطوعة قدرها (4%) من إجمالي المبالغ المعفاة فعلياً.'
                 }
               </p>
-              <p style={{ marginTop: '8px', fontWeight: 700, color: '#b91c1c', fontSize: '13pt' }}>
+              <p style={{ marginTop: '10px', fontWeight: 700, color: '#b91c1c', fontSize: '16pt' }}>
                 "وفي حال عدم قبول الطلب، لا يحق للطرف الأول المطالبة بأي أتعاب"
               </p>
             </section>
@@ -502,7 +502,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
                   </tbody>
                 </table>
               </div>
-              <p style={{ marginTop: '8px', fontSize: '10px', color: '#6b7280' }}>
+              <p style={{ marginTop: '10px', fontSize: '14pt', color: '#6b7280', lineHeight: 1.8 }}>
                 ويُعد هذا السند مستوفيًا لكافة البيانات والشروط النظامية المقررة، ويُعد دينًا ثابتًا في ذمة الطرف الثاني، ويحق للطرف الأول التقدم به مباشرة إلى محكمة التنفيذ المختصة لتنفيذه وفقًا للأنظمة المعمول بها في المملكة العربية السعودية.
               </p>
             </section>
@@ -554,14 +554,14 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
             {/* ══════════ SIGNATURES ══════════ */}
             <div style={{ marginTop: '36px', paddingTop: '16px', borderTop: '2px solid #22042C', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', pageBreakInside: 'avoid' }}>
               <div style={{ textAlign: 'center' }}>
-                <p style={{ fontWeight: 700, fontSize: '12pt', color: '#22042C', marginBottom: '8px' }}>توقيع الطرف الأول</p>
+                <p style={{ fontWeight: 700, fontSize: '16pt', color: '#22042C', marginBottom: '10px' }}>توقيع الطرف الأول</p>
                 <div style={{ height: '150px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
                   <img src={rifansStampImg} alt="First Party Stamp" style={{ height: '100%', width: 'auto', objectFit: 'contain', mixBlendMode: 'multiply' }} />
                 </div>
-                <p style={{ fontSize: '11pt', color: '#666', marginTop: '4px', fontWeight: 500 }}>شركة ريفانس المالية</p>
+                <p style={{ fontSize: '14pt', color: '#666', marginTop: '6px', fontWeight: 500 }}>شركة ريفانس المالية</p>
               </div>
               <div style={{ textAlign: 'center' }}>
-                <p style={{ fontWeight: 700, fontSize: '12pt', color: '#22042C', marginBottom: '8px' }}>توقيع الطرف الثاني (العميل)</p>
+                <p style={{ fontWeight: 700, fontSize: '16pt', color: '#22042C', marginBottom: '10px' }}>توقيع الطرف الثاني (العميل)</p>
                 <div style={{ height: '120px', backgroundColor: '#faf8fc', borderRadius: '6px', border: '1px solid #e8e0ed', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
                   {isSuccess || isAlreadySigned ? (
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
@@ -570,17 +570,17 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
                       ) : (
                         <img src={canvasRef.current?.toDataURL() || ''} alt="توقيع العميل" style={{ height: '60px', objectFit: 'contain' }} />
                       )}
-                      <span style={{ fontSize: '11pt', color: '#22042C', fontWeight: 500 }}>
+                      <span style={{ fontSize: '14pt', color: '#22042C', fontWeight: 500 }}>
                         {submission.data.firstName} {submission.data.middleName} {submission.data.lastName}
                       </span>
-                      <span style={{ fontSize: '11pt', color: '#666' }}>
+                      <span style={{ fontSize: '14pt', color: '#666' }}>
                         {new Date(submission.signed_at || submission.timestamp).toLocaleDateString('ar-SA')}
                       </span>
                     </div>
                   ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', color: '#d1d5db' }}>
                       <PenTool size={20} />
-                      <span style={{ fontSize: '11pt', fontWeight: 500, fontStyle: 'italic' }}>بانتظار التوقيع...</span>
+                      <span style={{ fontSize: '14pt', fontWeight: 500, fontStyle: 'italic' }}>بانتظار التوقيع...</span>
                     </div>
                   )}
                 </div>
@@ -589,10 +589,10 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
 
             {/* ══════════ FOOTER (inside contract) ══════════ */}
             <div style={{ marginTop: '28px', borderTop: '1px solid #e5e7eb', paddingTop: '12px', textAlign: 'center' }}>
-              <p style={{ fontSize: '10pt', color: '#666', fontWeight: 500 }}>
+              <p style={{ fontSize: '14pt', color: '#666', fontWeight: 500, lineHeight: 1.8 }}>
                 هذه الوثيقة صادرة عن النظام الإلكتروني لشركة ريفانس المالية وهي ملزمة قانوناً بمجرد التوقيع عليها.
               </p>
-              <p style={{ fontSize: '10pt', color: '#999', marginTop: '4px' }}>
+              <p style={{ fontSize: '13pt', color: '#999', marginTop: '6px' }}>
                 جميع الحقوق محفوظة © ريفانس المالية {new Date().getFullYear()}
               </p>
             </div>
