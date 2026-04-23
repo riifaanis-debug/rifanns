@@ -195,25 +195,34 @@ export const generateContractPdf = async (
     fontFamily: 'Tajawal, sans-serif',
     fontSize: '22px', lineHeight: '2', color: '#222222',
   });
-
-  // Force readable font sizes on all text nodes (overrides any small inline styles)
-  const enforceMinFont = (el: HTMLElement) => {
-    const tag = el.tagName;
-    if (['SCRIPT','STYLE','SVG','PATH','IMG','CANVAS'].includes(tag)) return;
-    const cs = window.getComputedStyle(el);
-    const sizePx = parseFloat(cs.fontSize);
-    if (!isNaN(sizePx) && sizePx < 22) {
-      // scale up: anything below 22px becomes at least 22px; bigger ones get +30%
-      el.style.fontSize = `${Math.max(22, sizePx * 1.35)}px`;
-    } else if (!isNaN(sizePx)) {
-      el.style.fontSize = `${sizePx * 1.3}px`;
-    }
-  };
-  enforceMinFont(clone);
-  clone.querySelectorAll('*').forEach(c => enforceMinFont(c as HTMLElement));
   document.body.appendChild(clone);
 
+  const enforcePdfTypography = (el: HTMLElement) => {
+    const tag = el.tagName;
+    if (['SCRIPT', 'STYLE', 'SVG', 'PATH', 'IMG', 'CANVAS'].includes(tag)) return;
+
+    const computed = window.getComputedStyle(el);
+    const sizePx = parseFloat(computed.fontSize);
+    if (Number.isNaN(sizePx) || sizePx <= 0) return;
+
+    let nextSize = sizePx;
+    if (tag === 'H1') nextSize = Math.max(34, sizePx * 1.18);
+    else if (tag === 'H2' || tag === 'H3') nextSize = Math.max(28, sizePx * 1.16);
+    else if (tag === 'STRONG' || tag === 'B') nextSize = Math.max(23, sizePx * 1.1);
+    else nextSize = Math.max(22, sizePx * 1.12);
+
+    el.style.fontSize = `${Math.round(nextSize)}px`;
+
+    const lineHeightPx = parseFloat(computed.lineHeight);
+    if (!Number.isNaN(lineHeightPx) && lineHeightPx > 0) {
+      el.style.lineHeight = `${Math.max(nextSize * 1.75, lineHeightPx * 1.05)}px`;
+    }
+  };
+
+  await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
   cleanForPdf(clone);
+  enforcePdfTypography(clone);
+  clone.querySelectorAll('*').forEach(node => enforcePdfTypography(node as HTMLElement));
   await waitForAssets(clone);
   const logoDataUrl = await loadLogoDataUrl();
 
