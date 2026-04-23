@@ -193,12 +193,29 @@ export const generateContractPdf = async (
     direction: 'rtl', boxShadow: 'none', border: 'none', borderRadius: '0',
     overflow: 'visible',
     fontFamily: 'Tajawal, sans-serif',
-    fontSize: '14px', lineHeight: '1.7', color: '#222222',
+    fontSize: '18px', lineHeight: '1.9', color: '#222222',
   });
   document.body.appendChild(clone);
 
   await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
   cleanForPdf(clone);
+
+  // Bump font sizes for readable PDF output
+  const bumpFont = (el: HTMLElement) => {
+    const cs = window.getComputedStyle(el);
+    const sizePx = parseFloat(cs.fontSize);
+    if (isNaN(sizePx)) return;
+    const tag = el.tagName;
+    let next = sizePx;
+    if (tag === 'H1') next = Math.max(28, sizePx * 1.3);
+    else if (tag === 'H2') next = Math.max(24, sizePx * 1.25);
+    else if (tag === 'H3' || tag === 'H4') next = Math.max(20, sizePx * 1.2);
+    else next = Math.max(18, sizePx * 1.25);
+    el.style.fontSize = `${Math.round(next)}px`;
+  };
+  bumpFont(clone);
+  clone.querySelectorAll('*').forEach(c => bumpFont(c as HTMLElement));
+  await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
   await waitForAssets(clone);
   const logoDataUrl = await loadLogoDataUrl();
 
