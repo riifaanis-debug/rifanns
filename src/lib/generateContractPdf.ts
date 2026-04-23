@@ -193,36 +193,12 @@ export const generateContractPdf = async (
     direction: 'rtl', boxShadow: 'none', border: 'none', borderRadius: '0',
     overflow: 'visible',
     fontFamily: 'Tajawal, sans-serif',
-    fontSize: '22px', lineHeight: '2', color: '#222222',
+    fontSize: '14px', lineHeight: '1.7', color: '#222222',
   });
   document.body.appendChild(clone);
 
-  const enforcePdfTypography = (el: HTMLElement) => {
-    const tag = el.tagName;
-    if (['SCRIPT', 'STYLE', 'SVG', 'PATH', 'IMG', 'CANVAS'].includes(tag)) return;
-
-    const computed = window.getComputedStyle(el);
-    const sizePx = parseFloat(computed.fontSize);
-    if (Number.isNaN(sizePx) || sizePx <= 0) return;
-
-    let nextSize = sizePx;
-    if (tag === 'H1') nextSize = Math.max(34, sizePx * 1.18);
-    else if (tag === 'H2' || tag === 'H3') nextSize = Math.max(28, sizePx * 1.16);
-    else if (tag === 'STRONG' || tag === 'B') nextSize = Math.max(23, sizePx * 1.1);
-    else nextSize = Math.max(22, sizePx * 1.12);
-
-    el.style.fontSize = `${Math.round(nextSize)}px`;
-
-    const lineHeightPx = parseFloat(computed.lineHeight);
-    if (!Number.isNaN(lineHeightPx) && lineHeightPx > 0) {
-      el.style.lineHeight = `${Math.max(nextSize * 1.75, lineHeightPx * 1.05)}px`;
-    }
-  };
-
   await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
   cleanForPdf(clone);
-  enforcePdfTypography(clone);
-  clone.querySelectorAll('*').forEach(node => enforcePdfTypography(node as HTMLElement));
   await waitForAssets(clone);
   const logoDataUrl = await loadLogoDataUrl();
 
