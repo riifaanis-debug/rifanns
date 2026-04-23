@@ -193,8 +193,24 @@ export const generateContractPdf = async (
     direction: 'rtl', boxShadow: 'none', border: 'none', borderRadius: '0',
     overflow: 'visible',
     fontFamily: 'Tajawal, sans-serif',
-    fontSize: '18pt', lineHeight: '2.05', color: '#222222',
+    fontSize: '22px', lineHeight: '2', color: '#222222',
   });
+
+  // Force readable font sizes on all text nodes (overrides any small inline styles)
+  const enforceMinFont = (el: HTMLElement) => {
+    const tag = el.tagName;
+    if (['SCRIPT','STYLE','SVG','PATH','IMG','CANVAS'].includes(tag)) return;
+    const cs = window.getComputedStyle(el);
+    const sizePx = parseFloat(cs.fontSize);
+    if (!isNaN(sizePx) && sizePx < 22) {
+      // scale up: anything below 22px becomes at least 22px; bigger ones get +30%
+      el.style.fontSize = `${Math.max(22, sizePx * 1.35)}px`;
+    } else if (!isNaN(sizePx)) {
+      el.style.fontSize = `${sizePx * 1.3}px`;
+    }
+  };
+  enforceMinFont(clone);
+  clone.querySelectorAll('*').forEach(c => enforceMinFont(c as HTMLElement));
   document.body.appendChild(clone);
 
   cleanForPdf(clone);
