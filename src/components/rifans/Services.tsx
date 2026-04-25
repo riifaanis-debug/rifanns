@@ -129,15 +129,13 @@ const Services: React.FC = () => {
                     <p className="text-sm md:text-base text-gray-200 leading-relaxed opacity-90 max-w-[500px] mb-6">
                       {service.desc}
                     </p>
-                    <a href={service.link}>
-                      <Button className="gap-2 group/btn">
-                        <span>{t('know_more')}</span>
-                        {direction === 'rtl' ? <ArrowLeft size={16} className="group-hover/btn:-translate-x-1 transition-transform" /> : <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />}
-                      </Button>
-                    </a>
+                    <Button className="gap-2 group/btn pointer-events-none">
+                      <span>{t('know_more')}</span>
+                      {direction === 'rtl' ? <ArrowLeft size={16} className="group-hover/btn:-translate-x-1 transition-transform" /> : <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />}
+                    </Button>
                   </div>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
 
