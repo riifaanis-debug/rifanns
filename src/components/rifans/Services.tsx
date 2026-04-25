@@ -98,7 +98,12 @@ const Services: React.FC = () => {
             style={{ transform: `translateX(${direction === 'rtl' ? activeIndex * 100 : -activeIndex * 100}%)` }}
           >
             {services.map((service, i) => (
-              <div key={service.id} className="min-w-full h-full relative">
+              <a
+                key={service.id}
+                href={service.link}
+                className="min-w-full h-full relative block cursor-pointer"
+                aria-label={service.name}
+              >
                 {/* Background Image */}
                 <img 
                   src={service.image} 
@@ -124,15 +129,13 @@ const Services: React.FC = () => {
                     <p className="text-sm md:text-base text-gray-200 leading-relaxed opacity-90 max-w-[500px] mb-6">
                       {service.desc}
                     </p>
-                    <a href={service.link}>
-                      <Button className="gap-2 group/btn">
-                        <span>{t('know_more')}</span>
-                        {direction === 'rtl' ? <ArrowLeft size={16} className="group-hover/btn:-translate-x-1 transition-transform" /> : <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />}
-                      </Button>
-                    </a>
+                    <Button className="gap-2 group/btn pointer-events-none">
+                      <span>{t('know_more')}</span>
+                      {direction === 'rtl' ? <ArrowLeft size={16} className="group-hover/btn:-translate-x-1 transition-transform" /> : <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />}
+                    </Button>
                   </div>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
 
