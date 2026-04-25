@@ -98,7 +98,12 @@ const Services: React.FC = () => {
             style={{ transform: `translateX(${direction === 'rtl' ? activeIndex * 100 : -activeIndex * 100}%)` }}
           >
             {services.map((service, i) => (
-              <div key={service.id} className="min-w-full h-full relative">
+              <a
+                key={service.id}
+                href={service.link}
+                className="min-w-full h-full relative block cursor-pointer"
+                aria-label={service.name}
+              >
                 {/* Background Image */}
                 <img 
                   src={service.image} 
