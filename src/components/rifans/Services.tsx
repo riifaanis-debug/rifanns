@@ -13,11 +13,11 @@ const Services: React.FC = () => {
 
   const services = [
     { 
-      id: 'legal', 
+      id: 'judicial', 
       name: t('srv_legal'), 
       desc: t('srv_legal_desc'), 
       icon: <Scale className="text-gold" size={24} />,
-      link: '#/service/legal',
+      link: '#/section/judicial',
       image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&q=80&w=800"
     },
     { 
@@ -25,7 +25,7 @@ const Services: React.FC = () => {
       name: t('srv_banking'), 
       desc: t('srv_banking_desc'), 
       icon: <Building2 className="text-gold" size={24} />,
-      link: '#/service/banking',
+      link: '#/section/banking',
       image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800"
     },
     { 
@@ -33,15 +33,15 @@ const Services: React.FC = () => {
       name: t('srv_realestate'), 
       desc: t('srv_realestate_desc'), 
       icon: <Home className="text-gold" size={24} />,
-      link: '#/service/realestate',
+      link: '#/section/realestate',
       image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800"
     },
     { 
-      id: 'zakat', 
+      id: 'tax', 
       name: t('srv_zakat'), 
       desc: t('srv_zakat_desc'), 
       icon: <Receipt className="text-gold" size={24} />,
-      link: '#/service/zakat',
+      link: '#/section/tax',
       image: "https://images.unsplash.com/photo-1586486855514-8c633cc6fd38?auto=format&fit=crop&q=80&w=800"
     },
     { 
@@ -49,7 +49,7 @@ const Services: React.FC = () => {
       name: t('srv_credit'), 
       desc: t('srv_credit_desc'), 
       icon: <BarChart3 className="text-gold" size={24} />,
-      link: '#/service/credit',
+      link: '#/section/credit',
       image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=800"
     },
     { 
@@ -57,7 +57,7 @@ const Services: React.FC = () => {
       name: t('srv_consult'), 
       desc: t('srv_consult_desc'), 
       icon: <MessageSquare className="text-gold" size={24} />,
-      link: '#/service/consulting',
+      link: '#/section/consulting',
       image: "https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&q=80&w=800"
     },
   ];

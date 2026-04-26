@@ -22,6 +22,9 @@ import CompanyIntro from './components/rifans/CompanyIntro';
 import ClientReviews from './components/rifans/ClientReviews';
 import { Terms, Privacy, Complaints, Contact, AboutPage, GoalPage, VisionPage, MessagePage, MissionPage, ServicesPage, AcceptableUse, CookiePolicy, IntellectualProperty } from './components/rifans/StaticPages';
 import { ServiceDetailPage } from './components/rifans/ServiceDetailPage';
+import { SectionPage } from './components/rifans/SectionPage';
+import { ProductPage } from './components/rifans/ProductPage';
+import { ProductRequestForm } from './components/rifans/ProductRequestForm';
 import WaiveRequestForm from './components/rifans/WaiveRequestForm';
 import AuthPage from './components/rifans/AuthPage';
 import AdminDashboard from './components/rifans/AdminDashboard';
@@ -296,6 +299,18 @@ const AppContent: React.FC = () => {
   }, []);
 
   const getComponent = () => {
+    if (route.startsWith('#/section/')) {
+      const sectionId = route.replace('#/section/', '');
+      return user ? <SectionPage sectionId={sectionId} /> : <LandingPage />;
+    }
+    if (route.startsWith('#/product/') && route.endsWith('/apply')) {
+      const productId = route.replace('#/product/', '').replace('/apply', '');
+      return user ? <ProductRequestForm productId={productId} /> : <LandingPage />;
+    }
+    if (route.startsWith('#/product/')) {
+      const productId = route.replace('#/product/', '');
+      return user ? <ProductPage productId={productId} /> : <LandingPage />;
+    }
     if (route.startsWith('#/service/')) {
       const fullType = route.replace('#/service/', '');
       const [type, subType] = fullType.split('/');
