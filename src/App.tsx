@@ -299,6 +299,18 @@ const AppContent: React.FC = () => {
   }, []);
 
   const getComponent = () => {
+    if (route.startsWith('#/section/')) {
+      const sectionId = route.replace('#/section/', '');
+      return user ? <SectionPage sectionId={sectionId} /> : <LandingPage />;
+    }
+    if (route.startsWith('#/product/') && route.endsWith('/apply')) {
+      const productId = route.replace('#/product/', '').replace('/apply', '');
+      return user ? <ProductRequestForm productId={productId} /> : <LandingPage />;
+    }
+    if (route.startsWith('#/product/')) {
+      const productId = route.replace('#/product/', '');
+      return user ? <ProductPage productId={productId} /> : <LandingPage />;
+    }
     if (route.startsWith('#/service/')) {
       const fullType = route.replace('#/service/', '');
       const [type, subType] = fullType.split('/');
