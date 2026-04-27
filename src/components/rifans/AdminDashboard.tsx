@@ -1878,7 +1878,100 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
     </div>
   );
 
-  const renderContracts = () => (
+  const filteredPromissoryNotes = useMemo(() => {
+    const search = searchTerm.toLowerCase();
+    if (!search) return promissoryNotes;
+    return promissoryNotes.filter((n: any) =>
+      (n.user_name || '').toLowerCase().includes(search) ||
+      (n.id || '').toLowerCase().includes(search) ||
+      (n.submission_id || '').toLowerCase().includes(search)
+    );
+  }, [promissoryNotes, searchTerm]);
+
+  const renderPromissoryNotes = () => (
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <Card className="overflow-hidden">
+        <div className="p-4 border-b border-gold/10 flex flex-col md:flex-row gap-4 items-center justify-between bg-gray-50/50 dark:bg-white/5">
+          <div className="relative w-full md:w-96">
+            <Search className="absolute right-3 top-1/2 -translate-y-1/2 text-muted" size={18} />
+            <input type="text" placeholder="بحث باسم العميل أو رقم السند..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pr-9 pl-3 py-2 bg-white dark:bg-[#06010a] border border-gold/20 rounded-xl text-xs sm:text-sm focus:border-gold outline-none shadow-sm" />
+          </div>
+        </div>
+        <div className="hidden md:block overflow-x-auto custom-scrollbar">
+          <table className="w-full text-right border-collapse">
+            <thead>
+              <tr className="text-xs font-bold text-muted bg-gray-50 dark:bg-black/20 border-b border-gold/10">
+                <th className="p-4">العميل</th>
+                <th className="p-4">رقم السند</th>
+                <th className="p-4">رقم الطلب</th>
+                <th className="p-4">المبلغ</th>
+                <th className="p-4">تاريخ الإصدار</th>
+                <th className="p-4">حالة التوقيع</th>
+                <th className="p-4">إجراء</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gold/5">
+              {filteredPromissoryNotes.map((n: any) => (
+                <tr key={n.id} className="hover:bg-gold/5 transition-colors group">
+                  <td className="p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-brand text-gold flex items-center justify-center font-bold text-xs">{(n.user_name || '؟')[0]}</div>
+                      <div className="text-sm font-bold text-brand dark:text-white">{n.user_name || '---'}</div>
+                    </div>
+                  </td>
+                  <td className="p-4 text-xs font-mono text-muted">{n.id}</td>
+                  <td className="p-4 text-xs font-mono text-muted">{n.submission_id}</td>
+                  <td className="p-4 text-xs font-bold text-brand dark:text-white">{formatAmount(Number(n.amount) || 0)} ر.س</td>
+                  <td className="p-4 text-xs text-muted">{new Date(n.created_at).toLocaleDateString('ar-SA')}</td>
+                  <td className="p-4">
+                    <span className={`text-[10px] font-bold px-3 py-1 rounded-full border ${n.signed_at ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-amber-50 text-amber-600 border-amber-100'}`}>
+                      {n.signed_at ? 'موقع' : 'بانتظار التوقيع'}
+                    </span>
+                  </td>
+                  <td className="p-4">
+                    <button onClick={() => window.open(`#/promissory/${n.id}`, '_blank')} className="px-3 py-1.5 rounded-lg bg-brand text-gold text-[10px] font-bold hover:bg-brand/90">
+                      عرض السند
+                    </button>
+                  </td>
+                </tr>
+              ))}
+              {filteredPromissoryNotes.length === 0 && (
+                <tr><td colSpan={7} className="p-8 text-center text-xs text-muted">لا توجد سندات أمر حالياً</td></tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+        {/* Mobile cards */}
+        <div className="md:hidden divide-y divide-gold/5">
+          {filteredPromissoryNotes.map((n: any) => (
+            <div key={n.id} className="p-3 space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-full bg-brand text-gold flex items-center justify-center font-bold text-[10px]">{(n.user_name || '؟')[0]}</div>
+                  <div className="text-xs font-bold text-brand dark:text-white">{n.user_name || '---'}</div>
+                </div>
+                <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${n.signed_at ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-amber-50 text-amber-600 border-amber-100'}`}>
+                  {n.signed_at ? 'موقع' : 'بانتظار التوقيع'}
+                </span>
+              </div>
+              <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-[10px] pr-9">
+                <div><span className="text-muted">رقم السند:</span> <span className="font-mono text-muted">{n.id}</span></div>
+                <div><span className="text-muted">المبلغ:</span> <span className="font-bold text-brand dark:text-white">{formatAmount(Number(n.amount) || 0)} ر.س</span></div>
+              </div>
+              <button onClick={() => window.open(`#/promissory/${n.id}`, '_blank')} className="w-full mt-1 px-3 py-1.5 rounded-lg bg-brand text-gold text-[10px] font-bold">
+                عرض السند
+              </button>
+            </div>
+          ))}
+          {filteredPromissoryNotes.length === 0 && (
+            <div className="p-8 text-center text-xs text-muted">لا توجد سندات أمر حالياً</div>
+          )}
+        </div>
+      </Card>
+    </div>
+  );
+
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <Card className="overflow-hidden">
       <div className="p-4 border-b border-gold/10 flex flex-col md:flex-row gap-4 items-center justify-between bg-gray-50/50 dark:bg-white/5">
