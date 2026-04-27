@@ -3070,7 +3070,32 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
         )}
       </AnimatePresence>
 
-      {/* Stat Popup */}
+      {/* Confirmation Modal for Sending Promissory Note */}
+      <AnimatePresence>
+        {isConfirmingSendPromissory && (
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-brand/60 backdrop-blur-md" onClick={() => setIsConfirmingSendPromissory(false)} />
+            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-md bg-white dark:bg-[#12031a] rounded-[32px] shadow-2xl overflow-hidden p-8 text-right">
+              <div className="w-20 h-20 bg-brand/10 rounded-full flex items-center justify-center mx-auto mb-6 text-brand dark:text-gold">
+                <ScrollText size={40} />
+              </div>
+              <h3 className="text-xl font-bold text-brand dark:text-white mb-4">تأكيد إرسال سند لأمر</h3>
+              <p className="text-muted mb-8">سيتم إصدار سند لأمر إلكتروني للعميل بقيمة الأتعاب المحتسبة، وإرسال إشعار له للتوقيع.</p>
+              <div className="flex items-center gap-4">
+                <Button onClick={handleConfirmSendPromissory} className="flex-1 bg-brand text-gold py-4 rounded-2xl font-bold shadow-lg shadow-brand/20">
+                  إصدار السند
+                </Button>
+                <Button onClick={() => setIsConfirmingSendPromissory(false)} variant="outline" className="flex-1 py-4 rounded-2xl font-bold border-gray-200">
+                  إلغاء
+                </Button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
       <AnimatePresence>
         {statPopup && (
           <div className="fixed inset-0 z-[200] flex items-center justify-center p-4" onClick={() => setStatPopup(null)}>
