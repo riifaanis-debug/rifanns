@@ -31,6 +31,7 @@ import AdminDashboard from './components/rifans/AdminDashboard';
 import CustomerDashboard from './components/rifans/CustomerDashboard';
 import ContractPage from './components/rifans/ContractPage';
 import InvoicePage from './components/rifans/InvoicePage';
+import PromissoryNotePage from './components/rifans/PromissoryNotePage';
 import ClientCard from './components/rifans/ClientCard';
 import ProfileCompletionModal from './components/rifans/ProfileCompletionModal';
 import { WaiveInfoPage, SchedulingInfoPage, SeizedAmountsInfoPage } from './components/rifans/ServiceInfoPage';
@@ -323,6 +324,11 @@ const AppContent: React.FC = () => {
     if (route.startsWith('#/invoice/')) {
       const submissionId = route.replace('#/invoice/', '');
       return user ? <InvoicePage submissionId={submissionId} onClose={() => window.location.hash = '#/dashboard?tab=contracts'} /> : <LandingPage />;
+    }
+    if (route.startsWith('#/promissory/')) {
+      const noteId = route.replace('#/promissory/', '');
+      const back = user?.role === 'admin' ? '#/admin' : '#/dashboard';
+      return user ? <PromissoryNotePage noteId={noteId} onClose={() => window.location.hash = back} /> : <LandingPage />;
     }
     switch(route) {
       case '#/services': return <ServicesPage />;
