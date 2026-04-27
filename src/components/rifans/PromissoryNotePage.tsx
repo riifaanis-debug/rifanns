@@ -138,27 +138,28 @@ const PromissoryNotePage: React.FC<PromissoryNotePageProps> = ({ noteId, onClose
   const formattedAmount = `${formatAmount(Number(note.amount) || 0)} ر.س`;
 
   // Section header strip (purple bar with right-aligned title and icon block)
+  // In RTL, the title is on the right with icon, body extends to the left
   const SectionStrip: React.FC<{ title: string; icon: React.ReactNode }> = ({ title, icon }) => (
-    <div className="flex items-stretch w-full mb-5 mt-1">
-      <div className="flex-1 bg-[#22042C] rounded-l-[14px] flex items-center justify-end px-4 py-2.5">
-        <span className="text-white text-[15px] font-bold">{title}</span>
+    <div className="flex items-stretch w-full mb-3 mt-2" dir="rtl">
+      <div className="flex-1 bg-[#22042C] rounded-r-[10px] flex items-center justify-start px-4 py-2">
+        <span className="text-white text-[13px] font-bold">{title}</span>
       </div>
-      <div className="w-12 flex items-center justify-center bg-[#22042C] rounded-r-[14px] border-r-2 border-gold/30 text-gold">
+      <div className="w-10 flex items-center justify-center bg-white border-2 border-[#22042C] rounded-[10px] -mr-2 text-[#22042C] z-10">
         {icon}
       </div>
     </div>
   );
 
-  // Field row used inside section bodies
+  // Field row: label on the right, input box on the left (RTL)
   const FieldRow: React.FC<{ label: string; children: React.ReactNode }> = ({ label, children }) => (
-    <div className="flex items-center gap-3 mb-2.5">
-      <div className="flex-1">{children}</div>
-      <div className="w-[110px] text-right text-[12px] font-bold text-brand">{label}</div>
+    <div className="flex items-center gap-3 mb-1.5" dir="rtl">
+      <div className="w-[130px] text-right text-[11px] font-bold text-[#22042C]">{label}</div>
+      <div className="flex-1 max-w-[380px]">{children}</div>
     </div>
   );
 
   const Box: React.FC<{ children?: React.ReactNode; className?: string }> = ({ children, className = '' }) => (
-    <div className={`min-h-[34px] bg-white border border-gray-300 rounded-[8px] px-3 py-1.5 text-[12px] text-brand font-bold flex items-center justify-end ${className}`}>
+    <div className={`min-h-[28px] bg-white border border-gray-300 rounded-[6px] px-3 py-1 text-[11px] text-[#22042C] font-bold flex items-center justify-start ${className}`}>
       {children}
     </div>
   );
@@ -166,7 +167,7 @@ const PromissoryNotePage: React.FC<PromissoryNotePageProps> = ({ noteId, onClose
   return (
     <div className="min-h-screen bg-[#F0F2F5] flex flex-col overflow-x-hidden">
       {/* Top Bar */}
-      <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200 px-4 py-3 flex justify-between items-center">
+      <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200 px-4 py-3 flex justify-between items-center print:hidden">
         <div className="flex items-center gap-2">
           <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-xl transition-colors">
             <X size={20} />
@@ -183,139 +184,122 @@ const PromissoryNotePage: React.FC<PromissoryNotePageProps> = ({ noteId, onClose
         </div>
       </div>
 
-      {/* Note Sheet */}
-      <div className="flex-1 flex items-start justify-center p-4 sm:p-8">
-        <div ref={noteRef} className="w-full max-w-[820px] bg-white rounded-[10px] shadow-xl overflow-hidden p-6 sm:p-10" dir="rtl">
-          {/* Header: logo left, title right */}
-          <div className="flex items-start justify-between mb-6">
+      {/* Note Sheet — single A4 page, RTL, right-aligned */}
+      <div className="flex-1 flex items-start justify-center p-3 sm:p-6">
+        <div
+          ref={noteRef}
+          className="w-full max-w-[794px] bg-white shadow-xl px-8 py-6"
+          dir="rtl"
+          style={{ minHeight: '1123px', textAlign: 'right' }}
+        >
+          {/* Header: logo on RIGHT (start in RTL), title on LEFT (end in RTL) */}
+          <div className="flex items-center justify-between mb-4" dir="rtl">
             <div className="flex items-center gap-3">
-              <img src={rifansLogo} alt="ريفانس المالية" className="h-16 w-auto object-contain" />
-              <div className="leading-tight">
-                <div className="text-[18px] font-black text-brand">ريفانس المالية</div>
-                <div className="text-[11px] tracking-wider font-bold text-brand">RIFANIS FINANCE</div>
+              <img src={rifansLogo} alt="ريفانس المالية" className="h-14 w-auto object-contain" />
+              <div className="leading-tight text-right">
+                <div className="text-[16px] font-black text-[#22042C]">ريفانس المالية</div>
+                <div className="text-[10px] tracking-wider font-bold text-[#22042C]">RIFANIS FINANCE</div>
               </div>
             </div>
-            <div className="text-right">
-              <div className="text-[28px] font-black text-brand leading-none">سند لأمر</div>
-              <div className="mt-1 flex items-center justify-end gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-gold"></span>
-                <span className="h-[2px] w-12 bg-gold/60"></span>
-                <span className="w-1.5 h-1.5 rounded-full bg-gold"></span>
+            <div className="text-left">
+              <div className="text-[26px] font-black text-[#22042C] leading-none">سند لأمر</div>
+              <div className="mt-1 flex items-center justify-start gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#C7A969]"></span>
+                <span className="h-[2px] w-10 bg-[#C7A969]/60"></span>
+                <span className="w-1.5 h-1.5 rounded-full bg-[#C7A969]"></span>
               </div>
             </div>
           </div>
 
           {/* رقم السند */}
-          <div className="flex items-center gap-3 mb-5">
-            <Box className="flex-1 max-w-[420px] mr-auto">{note.id}</Box>
-            <div className="w-[110px] text-right text-[12px] font-bold text-brand">رقم السند</div>
+          <div className="flex items-center gap-3 mb-3" dir="rtl">
+            <div className="w-[130px] text-right text-[11px] font-bold text-[#22042C]">رقم السند</div>
+            <div className="flex-1 max-w-[260px]">
+              <Box>{note.id}</Box>
+            </div>
           </div>
 
           {/* تفاصيل السند */}
-          <SectionStrip title="تفاصيل السند" icon={<FileText size={18} />} />
+          <SectionStrip title="تفاصيل السند" icon={<FileText size={16} />} />
           <div className="px-1">
-            <FieldRow label="تاريخ الإنشاء">
-              <Box className="max-w-[420px] mr-auto">{issueDateLabel}</Box>
-            </FieldRow>
-            <FieldRow label="مدينة الإصدار">
-              <Box className="max-w-[420px] mr-auto">{note.issue_city}</Box>
-            </FieldRow>
-            <FieldRow label="مدينة الوفاء">
-              <Box className="max-w-[420px] mr-auto">{note.payment_city}</Box>
-            </FieldRow>
-            <FieldRow label="قيمة السند رقماً">
-              <Box className="max-w-[420px] mr-auto">{formattedAmount}</Box>
-            </FieldRow>
-            <FieldRow label="قيمة السند كتابة">
-              <Box className="max-w-[420px] mr-auto">{wordsAmount}</Box>
-            </FieldRow>
-            <FieldRow label="تاريخ الإستحقاق">
-              <Box className="max-w-[420px] mr-auto">{note.due_date}</Box>
-            </FieldRow>
+            <FieldRow label="تاريخ الإنشاء"><Box>{issueDateLabel}</Box></FieldRow>
+            <FieldRow label="مدينة الإصدار"><Box>{note.issue_city}</Box></FieldRow>
+            <FieldRow label="مدينة الوفاء"><Box>{note.payment_city}</Box></FieldRow>
+            <FieldRow label="قيمة السند رقماً"><Box>{formattedAmount}</Box></FieldRow>
+            <FieldRow label="قيمة السند كتابة"><Box>{wordsAmount}</Box></FieldRow>
+            <FieldRow label="تاريخ الإستحقاق"><Box>{note.due_date}</Box></FieldRow>
           </div>
 
           {/* تفاصيل المدين */}
-          <div className="mt-3" />
-          <SectionStrip title="تفاصيل المدين" icon={<User size={18} />} />
+          <SectionStrip title="تفاصيل المدين" icon={<User size={16} />} />
           <div className="px-1">
-            <FieldRow label="الإسم">
-              <Box className="max-w-[420px] mr-auto">{note.debtor_name}</Box>
-            </FieldRow>
-            <FieldRow label="رقم الهوية">
-              <Box className="max-w-[420px] mr-auto font-mono">{note.debtor_national_id}</Box>
-            </FieldRow>
+            <FieldRow label="الإسم"><Box>{note.debtor_name}</Box></FieldRow>
+            <FieldRow label="رقم الهوية"><Box className="font-mono">{note.debtor_national_id}</Box></FieldRow>
           </div>
 
           {/* تفاصيل الدائن */}
-          <SectionStrip title="تفاصيل الدائن" icon={<Users size={18} />} />
+          <SectionStrip title="تفاصيل الدائن" icon={<Users size={16} />} />
           <div className="px-1">
-            <FieldRow label="الإسم">
-              <Box className="max-w-[420px] mr-auto">شركة ريفانس المالية</Box>
-            </FieldRow>
-            <FieldRow label="الرقم الوطني الموحد">
-              <Box className="max-w-[420px] mr-auto font-mono">7038811125</Box>
-            </FieldRow>
-            <FieldRow label="يمثلها قانونياً">
-              <Box className="max-w-[420px] mr-auto">AZZAH Ali ALOBIDI</Box>
-            </FieldRow>
+            <FieldRow label="الإسم"><Box>شركة ريفانس المالية</Box></FieldRow>
+            <FieldRow label="الرقم الوطني الموحد"><Box className="font-mono">7038811125</Box></FieldRow>
+            <FieldRow label="يمثلها قانونياً"><Box>AZZAH Ali ALOBIDI</Box></FieldRow>
           </div>
 
-          {/* Pledge paragraph with inline amount */}
-          <div className="mt-5 border border-gray-300 rounded-[14px] p-4 sm:p-5 bg-gray-50/40">
-            <p className="text-[13px] leading-[28px] text-brand font-bold text-justify">
+          {/* Pledge paragraph */}
+          <div className="mt-4 border border-gray-300 rounded-[10px] p-3 bg-gray-50/40" dir="rtl">
+            <p className="text-[11px] leading-[22px] text-[#22042C] font-bold text-right">
               أتعهد بأن أدفع لامر شركة ريفانس المالية دون قيد أو شرط مبلغاً وقدره
-              <span className="inline-block align-middle mx-2 min-w-[140px] border border-gray-300 bg-white rounded-[6px] px-3 py-1 text-center font-black">
+              <span className="inline-block align-middle mx-1.5 min-w-[110px] border border-gray-300 bg-white rounded-[4px] px-2 py-0.5 text-center font-black">
                 {formattedAmount}
               </span>
               وفق البيانات المذكورة أعلاه. ولحامل هذا السند حقُّ الرجوع دون أي مصاريف أو احتجاج بعدم الوفاء.
             </p>
 
-            {/* Debtor name + signature row */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
-              <div className="flex items-center gap-3">
-                <div className="text-[12px] font-bold text-brand min-w-[70px]">إسم المدين :</div>
+            <div className="grid grid-cols-2 gap-3 mt-3" dir="rtl">
+              <div className="flex items-center gap-2">
+                <div className="text-[11px] font-bold text-[#22042C] min-w-[70px]">إسم المدين :</div>
                 <Box className="flex-1">{note.debtor_name}</Box>
               </div>
-              <div className="flex items-center gap-3">
-                <div className="text-[12px] font-bold text-brand min-w-[70px]">التوقيع :</div>
-                <div className="flex-1 min-h-[48px] bg-white border border-gray-300 rounded-[8px] flex items-center justify-center overflow-hidden">
+              <div className="flex items-center gap-2">
+                <div className="text-[11px] font-bold text-[#22042C] min-w-[60px]">التوقيع :</div>
+                <div className="flex-1 min-h-[36px] bg-white border border-gray-300 rounded-[6px] flex items-center justify-center overflow-hidden">
                   {isSigned && note.signature_data ? (
-                    <img src={note.signature_data} alt="توقيع المدين" className="max-h-[44px] object-contain" />
+                    <img src={note.signature_data} alt="توقيع المدين" className="max-h-[32px] object-contain" />
                   ) : (
-                    <span className="text-[10px] text-gray-400">بانتظار توقيع المدين</span>
+                    <span className="text-[9px] text-gray-400">بانتظار التوقيع</span>
                   )}
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Legal preamble + electronic contract no. */}
-          <div className="mt-6 text-[12px] leading-[26px] text-brand text-justify">
-            <p className="flex flex-wrap items-center gap-2">
-              <span>هذا السند لأمر صادر من خلال منصة ريفانس الإلكترونية وذلك بموجب العقد الإلكتروني رقم :</span>
-              <span className="inline-block min-w-[140px] border border-gray-300 bg-white rounded-[6px] px-3 py-1 text-center font-black">
+          {/* Legal preamble */}
+          <div className="mt-3 text-[10.5px] leading-[20px] text-[#22042C] text-right" dir="rtl">
+            <p>
+              هذا السند لأمر صادر من خلال منصة ريفانس الإلكترونية وذلك بموجب العقد الإلكتروني رقم :
+              <span className="inline-block mx-1.5 min-w-[110px] border border-gray-300 bg-white rounded-[4px] px-2 py-0.5 text-center font-black">
                 {note.contract_id || note.submission_id}
               </span>
+              وقد تم إنشاؤه والمصادقة عليه إلكترونياً.
             </p>
-            <p className="mt-2">وقد تم إنشاؤه والمصادقة عليه إلكترونياً.</p>
-            <p className="mt-3">
+            <p className="mt-1.5">
               ويُقر المدين باطلاعه الكامل على العقد وفهمه لآثاره، وصحة احتساب الأتعاب، والتنازل عن أي دفع أو منازعات تتعلق بسند الأمر
               وعدم الطعن أو الاعتراض على التنفيذ أمام محكمة التنفيذ إلا في الحدود التي يجيزها النظام، وأن هذا الإقرار حجة قاطعة وملزمة
               أمام جميع الجهات القضائية والتنفيذية.
             </p>
           </div>
 
-          {/* Stamp */}
-          <div className="mt-6 flex items-end gap-4">
-            <img src={rifansStampImg} alt="ختم وتوقيع شركة ريفانس المالية" className="h-32 w-auto object-contain" />
+          {/* Stamp - bottom-left in RTL = "start" side */}
+          <div className="mt-3 flex items-end justify-start" dir="rtl">
+            <img src={rifansStampImg} alt="ختم وتوقيع شركة ريفانس المالية" className="h-24 w-auto object-contain" />
           </div>
 
           {/* Footer */}
-          <div className="mt-8 pt-4 border-t border-gray-200 grid grid-cols-2 md:grid-cols-4 gap-3 text-[10px] text-brand">
-            <div className="flex items-center gap-1.5"><Phone size={12} className="text-gold" /> 9200 11 825</div>
-            <div className="flex items-center gap-1.5"><Mail size={12} className="text-gold" /> info@rifans.sa</div>
-            <div className="flex items-center gap-1.5"><Globe size={12} className="text-gold" /> www.rifans.sa</div>
-            <div className="flex items-center gap-1.5"><MapPin size={12} className="text-gold" /> جدة - المملكة العربية السعودية</div>
+          <div className="mt-4 pt-3 border-t border-gray-200 flex flex-row-reverse justify-between items-center gap-2 text-[9.5px] text-[#22042C]" dir="rtl">
+            <div className="flex items-center gap-1"><Phone size={11} className="text-[#C7A969]" /> 9200 11 825</div>
+            <div className="flex items-center gap-1"><Mail size={11} className="text-[#C7A969]" /> info@rifans.sa</div>
+            <div className="flex items-center gap-1"><Globe size={11} className="text-[#C7A969]" /> www.rifans.sa</div>
+            <div className="flex items-center gap-1"><MapPin size={11} className="text-[#C7A969]" /> جدة - المملكة العربية السعودية</div>
           </div>
         </div>
       </div>
