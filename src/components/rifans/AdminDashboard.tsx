@@ -174,6 +174,9 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
   const [isConfirmingSendInvoice, setIsConfirmingSendInvoice] = useState(false);
   const [pendingContractData, setPendingContractData] = useState<{ userId: string, submissionId: string } | null>(null);
   const [pendingInvoiceData, setPendingInvoiceData] = useState<{ userId: string, submissionId: string } | null>(null);
+  const [isConfirmingSendPromissory, setIsConfirmingSendPromissory] = useState(false);
+  const [pendingPromissoryData, setPendingPromissoryData] = useState<{ userId: string, submissionId: string } | null>(null);
+  const [promissoryNotes, setPromissoryNotes] = useState<any[]>([]);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const contractContentRef = useRef<HTMLDivElement>(null);
