@@ -8,7 +8,7 @@ import {
   IdCard, ChevronRight, ChevronLeft, MoreVertical, Trash2, Eye, 
   FileCheck, FileClock, History, UserCheck, UserPlus, TrendingUp,
   ArrowUpRight, ArrowDownRight, Calendar, Mail, Phone, MapPin,
-  CreditCard, Briefcase, Hash, Menu, Printer, MessageCircle, Star
+  CreditCard, Briefcase, Hash, Menu, Printer, MessageCircle, Star, ScrollText
 } from 'lucide-react';
 import { AdminPaymentRequests } from './PaymentRequests';
 import ChatPage from './ChatPage';
@@ -17,7 +17,7 @@ import { Button, Card } from './Shared';
 import { motion, AnimatePresence } from 'motion/react';
 import { SubmissionHistory, Notification, Contract, UserProfile } from '../../types';
 import { safeStringify, safeParse } from '../../utils/safeJson';
-import { getAdminSubmissions, getAdminUsers, getAdminNotifications, getAdminContracts, updateSubmissionStatus, sendContract as apiSendContract, sendInvoice as apiSendInvoice, getSubmissionHistory as apiGetSubmissionHistory, getAdminInvoices, uploadDocument } from '../../lib/api';
+import { getAdminSubmissions, getAdminUsers, getAdminNotifications, getAdminContracts, updateSubmissionStatus, sendContract as apiSendContract, sendInvoice as apiSendInvoice, getSubmissionHistory as apiGetSubmissionHistory, getAdminInvoices, uploadDocument, sendPromissoryNote as apiSendPromissoryNote, getAdminPromissoryNotes } from '../../lib/api';
 import { formatAmount } from '../../lib/formatNumber';
 import { toPng } from 'html-to-image';
 
@@ -25,7 +25,7 @@ interface AdminDashboardProps {
   onClose: () => void;
 }
 
-type DashboardTab = 'home' | 'stats' | 'clients' | 'waive_requests' | 'rescheduling_requests' | 'service_requests' | 'contracts' | 'invoices' | 'payments' | 'notifications' | 'document_request' | 'open_request' | 'reviews';
+type DashboardTab = 'home' | 'stats' | 'clients' | 'waive_requests' | 'rescheduling_requests' | 'service_requests' | 'contracts' | 'invoices' | 'promissory_notes' | 'payments' | 'notifications' | 'document_request' | 'open_request' | 'reviews';
 
 type AdminDocumentKind = 'contract' | 'invoice' | 'receipt' | 'authorization' | 'general_invoice';
 
