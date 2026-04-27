@@ -518,6 +518,60 @@ export type Database = {
         }
         Relationships: []
       }
+      promissory_notes: {
+        Row: {
+          amount: number
+          amount_in_words: string | null
+          contract_id: string | null
+          created_at: string
+          debtor_name: string | null
+          debtor_national_id: string | null
+          due_date: string
+          id: string
+          issue_city: string
+          payment_city: string
+          signature_data: string | null
+          signed_at: string | null
+          status: string
+          submission_id: string
+          user_id: string
+        }
+        Insert: {
+          amount?: number
+          amount_in_words?: string | null
+          contract_id?: string | null
+          created_at?: string
+          debtor_name?: string | null
+          debtor_national_id?: string | null
+          due_date?: string
+          id: string
+          issue_city?: string
+          payment_city?: string
+          signature_data?: string | null
+          signed_at?: string | null
+          status?: string
+          submission_id: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          amount_in_words?: string | null
+          contract_id?: string | null
+          created_at?: string
+          debtor_name?: string | null
+          debtor_national_id?: string | null
+          due_date?: string
+          id?: string
+          issue_city?: string
+          payment_city?: string
+          signature_data?: string | null
+          signed_at?: string | null
+          status?: string
+          submission_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       request_history: {
         Row: {
           changed_by: string | null

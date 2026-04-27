@@ -422,3 +422,79 @@ export const getInvoiceBySubmission = async (submissionId: string) => {
   const { data } = await supabase.from('invoices').select('*').eq('submission_id', submissionId).order('created_at', { ascending: false }).limit(1);
   return data && data.length > 0 ? data[0] : null;
 };
+
+// ---- PROMISSORY NOTES (سندات الأمر) ----
+import { numberToArabicWords } from './arabicNumberToWords';
+
+export const sendPromissoryNote = async (userId: string, submissionId: string) => {
+  const noteId = `PN-${Date.now()}`;
+
+  // Compute amount = 4% of waive products total (or invoice amount if exists)
+  const { data: req } = await supabase.from('requests').select('type, data').eq('id', submissionId).single();
+  const reqData = (req?.data as Record<string, any>) || {};
+  const products = Array.isArray(reqData?.products) ? reqData.products : [];
+  const totalDebt = products.reduce((acc: number, p: any) => acc + (Number(p.amount) || 0), 0);
+
+  let amount = Math.round(totalDebt * 4 / 100);
+  if (req?.type === 'rescheduling_request' || req?.type === 'scheduling_request') amount = 2000;
+  else if (req?.type === 'seized_amounts_request') amount = Math.round(totalDebt * 1 / 100);
+
+  // Try to attach related contract id (if any)
+  const { data: contractRow } = await supabase.from('contracts').select('id').eq('submission_id', submissionId).order('created_at', { ascending: false }).limit(1);
+  const contractId = contractRow && contractRow.length > 0 ? contractRow[0].id : null;
+
+  // Resolve debtor identity
+  const { data: appUser } = await supabase.from('app_users').select('full_name, first_name, last_name, national_id').eq('id', userId).single();
+  const debtorName = (reqData?.fullName as string) || appUser?.full_name || `${appUser?.first_name || ''} ${appUser?.last_name || ''}`.trim() || '---';
+  const debtorNationalId = (reqData?.nationalId as string) || appUser?.national_id || '---';
+
+  await supabase.from('promissory_notes').insert({
+    id: noteId,
+    submission_id: submissionId,
+    user_id: userId,
+    contract_id: contractId,
+    amount,
+    amount_in_words: numberToArabicWords(amount),
+    debtor_name: debtorName,
+    debtor_national_id: debtorNationalId,
+    status: 'pending',
+  });
+
+  await supabase.from('notifications').insert({
+    id: `NOT-${Date.now()}-pn`,
+    user_id: userId,
+    submission_id: submissionId,
+    title: 'سند لأمر جديد',
+    message: 'تم إصدار سند لأمر إلكتروني خاص بطلبك، يرجى المراجعة والتوقيع.',
+    type: 'promissory_note',
+  });
+
+  return noteId;
+};
+
+export const getAdminPromissoryNotes = async () => {
+  const { data: notes } = await supabase.from('promissory_notes').select('*').order('created_at', { ascending: false });
+  if (!notes) return [];
+  const userIds = [...new Set(notes.map(n => n.user_id))];
+  const { data: users } = await supabase.from('app_users').select('id, full_name').in('id', userIds);
+  const userMap = new Map((users || []).map(u => [u.id, u.full_name]));
+  return notes.map(n => ({ ...n, user_name: userMap.get(n.user_id) || 'غير معروف' }));
+};
+
+export const getPromissoryNoteById = async (id: string) => {
+  const { data } = await supabase.from('promissory_notes').select('*').eq('id', id).single();
+  return data;
+};
+
+export const getPromissoryNotesBySubmission = async (submissionId: string) => {
+  const { data } = await supabase.from('promissory_notes').select('*').eq('submission_id', submissionId).order('created_at', { ascending: false });
+  return data || [];
+};
+
+export const signPromissoryNote = async (id: string, signatureData: string) => {
+  await supabase.from('promissory_notes').update({
+    signature_data: signatureData,
+    signed_at: new Date().toISOString(),
+    status: 'signed',
+  }).eq('id', id);
+};

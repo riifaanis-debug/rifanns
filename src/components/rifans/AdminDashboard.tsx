@@ -8,7 +8,7 @@ import {
   IdCard, ChevronRight, ChevronLeft, MoreVertical, Trash2, Eye, 
   FileCheck, FileClock, History, UserCheck, UserPlus, TrendingUp,
   ArrowUpRight, ArrowDownRight, Calendar, Mail, Phone, MapPin,
-  CreditCard, Briefcase, Hash, Menu, Printer, MessageCircle, Star
+  CreditCard, Briefcase, Hash, Menu, Printer, MessageCircle, Star, ScrollText
 } from 'lucide-react';
 import { AdminPaymentRequests } from './PaymentRequests';
 import ChatPage from './ChatPage';
@@ -17,7 +17,7 @@ import { Button, Card } from './Shared';
 import { motion, AnimatePresence } from 'motion/react';
 import { SubmissionHistory, Notification, Contract, UserProfile } from '../../types';
 import { safeStringify, safeParse } from '../../utils/safeJson';
-import { getAdminSubmissions, getAdminUsers, getAdminNotifications, getAdminContracts, updateSubmissionStatus, sendContract as apiSendContract, sendInvoice as apiSendInvoice, getSubmissionHistory as apiGetSubmissionHistory, getAdminInvoices, uploadDocument } from '../../lib/api';
+import { getAdminSubmissions, getAdminUsers, getAdminNotifications, getAdminContracts, updateSubmissionStatus, sendContract as apiSendContract, sendInvoice as apiSendInvoice, getSubmissionHistory as apiGetSubmissionHistory, getAdminInvoices, uploadDocument, sendPromissoryNote as apiSendPromissoryNote, getAdminPromissoryNotes } from '../../lib/api';
 import { formatAmount } from '../../lib/formatNumber';
 import { toPng } from 'html-to-image';
 
@@ -25,7 +25,7 @@ interface AdminDashboardProps {
   onClose: () => void;
 }
 
-type DashboardTab = 'home' | 'stats' | 'clients' | 'waive_requests' | 'rescheduling_requests' | 'service_requests' | 'contracts' | 'invoices' | 'payments' | 'notifications' | 'document_request' | 'open_request' | 'reviews';
+type DashboardTab = 'home' | 'stats' | 'clients' | 'waive_requests' | 'rescheduling_requests' | 'service_requests' | 'contracts' | 'invoices' | 'promissory_notes' | 'payments' | 'notifications' | 'document_request' | 'open_request' | 'reviews';
 
 type AdminDocumentKind = 'contract' | 'invoice' | 'receipt' | 'authorization' | 'general_invoice';
 
@@ -174,6 +174,9 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
   const [isConfirmingSendInvoice, setIsConfirmingSendInvoice] = useState(false);
   const [pendingContractData, setPendingContractData] = useState<{ userId: string, submissionId: string } | null>(null);
   const [pendingInvoiceData, setPendingInvoiceData] = useState<{ userId: string, submissionId: string } | null>(null);
+  const [isConfirmingSendPromissory, setIsConfirmingSendPromissory] = useState(false);
+  const [pendingPromissoryData, setPendingPromissoryData] = useState<{ userId: string, submissionId: string } | null>(null);
+  const [promissoryNotes, setPromissoryNotes] = useState<any[]>([]);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const contractContentRef = useRef<HTMLDivElement>(null);
@@ -246,7 +249,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
         fetchUsers(),
         fetchNotifications(),
         fetchContracts(),
-        fetchInvoices()
+        fetchInvoices(),
+        getAdminPromissoryNotes().then(setPromissoryNotes).catch(console.error),
       ]);
     } catch (err) {
       console.error("Error fetching dashboard data:", err);
@@ -333,6 +337,29 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
   const sendInvoice = async (userId: string, submissionId: string) => {
     setPendingInvoiceData({ userId, submissionId });
     setIsConfirmingSendInvoice(true);
+  };
+
+  const sendPromissory = async (userId: string, submissionId: string) => {
+    setPendingPromissoryData({ userId, submissionId });
+    setIsConfirmingSendPromissory(true);
+  };
+
+  const handleConfirmSendPromissory = async () => {
+    if (!pendingPromissoryData) return;
+    const { userId, submissionId } = pendingPromissoryData;
+    try {
+      const noteId = await apiSendPromissoryNote(userId, submissionId);
+      setIsConfirmingSendPromissory(false);
+      setPendingPromissoryData(null);
+      setShowSuccessMessage(true);
+      setTimeout(() => setShowSuccessMessage(false), 3000);
+      const notes = await getAdminPromissoryNotes();
+      setPromissoryNotes(notes);
+      window.open(`#/promissory/${noteId}`, '_blank');
+    } catch (err) {
+      console.error(err);
+      alert('حدث خطأ في إرسال سند الأمر');
+    }
   };
 
   const handleConfirmSendContract = async () => {
@@ -450,6 +477,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
       case 'service_requests': return 'طلبات الخدمات';
       case 'contracts': return 'عقود العملاء';
       case 'invoices': return 'فواتير العملاء';
+      case 'promissory_notes': return 'سندات الأمر';
       case 'payments': return 'سداد المدفوعات';
       case 'notifications': return 'التنبيهات';
       case 'document_request': return 'طلب مستند';
@@ -468,6 +496,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
       case 'service_requests': return <Briefcase size={20} />;
       case 'contracts': return <PenTool size={20} />;
       case 'invoices': return <CreditCard size={20} />;
+      case 'promissory_notes': return <ScrollText size={20} />;
       case 'payments': return <CreditCard size={20} />;
       case 'notifications': return <Bell size={20} />;
       case 'document_request': return <FileCheck size={20} />;
@@ -1849,6 +1878,100 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
     </div>
   );
 
+  const filteredPromissoryNotes = useMemo(() => {
+    const search = searchTerm.toLowerCase();
+    if (!search) return promissoryNotes;
+    return promissoryNotes.filter((n: any) =>
+      (n.user_name || '').toLowerCase().includes(search) ||
+      (n.id || '').toLowerCase().includes(search) ||
+      (n.submission_id || '').toLowerCase().includes(search)
+    );
+  }, [promissoryNotes, searchTerm]);
+
+  const renderPromissoryNotes = () => (
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <Card className="overflow-hidden">
+        <div className="p-4 border-b border-gold/10 flex flex-col md:flex-row gap-4 items-center justify-between bg-gray-50/50 dark:bg-white/5">
+          <div className="relative w-full md:w-96">
+            <Search className="absolute right-3 top-1/2 -translate-y-1/2 text-muted" size={18} />
+            <input type="text" placeholder="بحث باسم العميل أو رقم السند..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pr-9 pl-3 py-2 bg-white dark:bg-[#06010a] border border-gold/20 rounded-xl text-xs sm:text-sm focus:border-gold outline-none shadow-sm" />
+          </div>
+        </div>
+        <div className="hidden md:block overflow-x-auto custom-scrollbar">
+          <table className="w-full text-right border-collapse">
+            <thead>
+              <tr className="text-xs font-bold text-muted bg-gray-50 dark:bg-black/20 border-b border-gold/10">
+                <th className="p-4">العميل</th>
+                <th className="p-4">رقم السند</th>
+                <th className="p-4">رقم الطلب</th>
+                <th className="p-4">المبلغ</th>
+                <th className="p-4">تاريخ الإصدار</th>
+                <th className="p-4">حالة التوقيع</th>
+                <th className="p-4">إجراء</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gold/5">
+              {filteredPromissoryNotes.map((n: any) => (
+                <tr key={n.id} className="hover:bg-gold/5 transition-colors group">
+                  <td className="p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-brand text-gold flex items-center justify-center font-bold text-xs">{(n.user_name || '؟')[0]}</div>
+                      <div className="text-sm font-bold text-brand dark:text-white">{n.user_name || '---'}</div>
+                    </div>
+                  </td>
+                  <td className="p-4 text-xs font-mono text-muted">{n.id}</td>
+                  <td className="p-4 text-xs font-mono text-muted">{n.submission_id}</td>
+                  <td className="p-4 text-xs font-bold text-brand dark:text-white">{formatAmount(Number(n.amount) || 0)} ر.س</td>
+                  <td className="p-4 text-xs text-muted">{new Date(n.created_at).toLocaleDateString('ar-SA')}</td>
+                  <td className="p-4">
+                    <span className={`text-[10px] font-bold px-3 py-1 rounded-full border ${n.signed_at ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-amber-50 text-amber-600 border-amber-100'}`}>
+                      {n.signed_at ? 'موقع' : 'بانتظار التوقيع'}
+                    </span>
+                  </td>
+                  <td className="p-4">
+                    <button onClick={() => window.open(`#/promissory/${n.id}`, '_blank')} className="px-3 py-1.5 rounded-lg bg-brand text-gold text-[10px] font-bold hover:bg-brand/90">
+                      عرض السند
+                    </button>
+                  </td>
+                </tr>
+              ))}
+              {filteredPromissoryNotes.length === 0 && (
+                <tr><td colSpan={7} className="p-8 text-center text-xs text-muted">لا توجد سندات أمر حالياً</td></tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+        {/* Mobile cards */}
+        <div className="md:hidden divide-y divide-gold/5">
+          {filteredPromissoryNotes.map((n: any) => (
+            <div key={n.id} className="p-3 space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-full bg-brand text-gold flex items-center justify-center font-bold text-[10px]">{(n.user_name || '؟')[0]}</div>
+                  <div className="text-xs font-bold text-brand dark:text-white">{n.user_name || '---'}</div>
+                </div>
+                <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${n.signed_at ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-amber-50 text-amber-600 border-amber-100'}`}>
+                  {n.signed_at ? 'موقع' : 'بانتظار التوقيع'}
+                </span>
+              </div>
+              <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-[10px] pr-9">
+                <div><span className="text-muted">رقم السند:</span> <span className="font-mono text-muted">{n.id}</span></div>
+                <div><span className="text-muted">المبلغ:</span> <span className="font-bold text-brand dark:text-white">{formatAmount(Number(n.amount) || 0)} ر.س</span></div>
+              </div>
+              <button onClick={() => window.open(`#/promissory/${n.id}`, '_blank')} className="w-full mt-1 px-3 py-1.5 rounded-lg bg-brand text-gold text-[10px] font-bold">
+                عرض السند
+              </button>
+            </div>
+          ))}
+          {filteredPromissoryNotes.length === 0 && (
+            <div className="p-8 text-center text-xs text-muted">لا توجد سندات أمر حالياً</div>
+          )}
+        </div>
+      </Card>
+    </div>
+  );
+
   const renderContracts = () => (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <Card className="overflow-hidden">
@@ -2081,6 +2204,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
           <div className="mt-4 mb-2 px-4 text-[10px] font-bold text-muted uppercase tracking-widest">المتابعة</div>
           <NavButton active={activeTab === 'contracts'} onClick={() => { setActiveTab('contracts'); setIsSidebarOpen(false); }} icon={<PenTool size={18} />} label="عقود العملاء" />
           <NavButton active={activeTab === 'invoices'} onClick={() => { setActiveTab('invoices'); setIsSidebarOpen(false); }} icon={<CreditCard size={18} />} label="فواتير العملاء" />
+          <NavButton active={activeTab === 'promissory_notes'} onClick={() => { setActiveTab('promissory_notes'); setIsSidebarOpen(false); }} icon={<ScrollText size={18} />} label="سندات الأمر" />
           <NavButton active={activeTab === 'payments'} onClick={() => { setActiveTab('payments'); setIsSidebarOpen(false); }} icon={<CreditCard size={18} />} label="سداد المدفوعات" />
           <NavButton active={activeTab === 'notifications'} onClick={() => { setActiveTab('notifications'); setIsSidebarOpen(false); }} icon={<Bell size={18} />} label="التنبيهات" badge={notifications.filter(n => !n.is_read).length} />
         </aside>
@@ -2142,6 +2266,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   {activeTab === 'service_requests' && renderRequests('service_request')}
                   {activeTab === 'contracts' && renderContracts()}
                   {activeTab === 'invoices' && renderInvoices()}
+                  {activeTab === 'promissory_notes' && renderPromissoryNotes()}
                   {activeTab === 'payments' && <AdminPaymentRequests />}
                   {activeTab === 'notifications' && renderNotifications()}
                   {activeTab === 'document_request' && renderDocumentRequest()}
@@ -2383,6 +2508,14 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                         >
                           <FileText size={18} />
                           إرسال فاتورة الطلب
+                        </button>
+
+                        <button 
+                          onClick={() => sendPromissory(selectedSubmission.userId, selectedSubmission.id)}
+                          className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-brand text-gold border-2 border-gold rounded-xl text-sm font-bold hover:bg-brand/90 transition-all shadow-lg"
+                        >
+                          <ScrollText size={18} />
+                          إرسال سند لأمر
                         </button>
                       </div>
                     </div>
@@ -2937,7 +3070,32 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
         )}
       </AnimatePresence>
 
-      {/* Stat Popup */}
+      {/* Confirmation Modal for Sending Promissory Note */}
+      <AnimatePresence>
+        {isConfirmingSendPromissory && (
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-brand/60 backdrop-blur-md" onClick={() => setIsConfirmingSendPromissory(false)} />
+            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-md bg-white dark:bg-[#12031a] rounded-[32px] shadow-2xl overflow-hidden p-8 text-right">
+              <div className="w-20 h-20 bg-brand/10 rounded-full flex items-center justify-center mx-auto mb-6 text-brand dark:text-gold">
+                <ScrollText size={40} />
+              </div>
+              <h3 className="text-xl font-bold text-brand dark:text-white mb-4">تأكيد إرسال سند لأمر</h3>
+              <p className="text-muted mb-8">سيتم إصدار سند لأمر إلكتروني للعميل بقيمة الأتعاب المحتسبة، وإرسال إشعار له للتوقيع.</p>
+              <div className="flex items-center gap-4">
+                <Button onClick={handleConfirmSendPromissory} className="flex-1 bg-brand text-gold py-4 rounded-2xl font-bold shadow-lg shadow-brand/20">
+                  إصدار السند
+                </Button>
+                <Button onClick={() => setIsConfirmingSendPromissory(false)} variant="outline" className="flex-1 py-4 rounded-2xl font-bold border-gray-200">
+                  إلغاء
+                </Button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
       <AnimatePresence>
         {statPopup && (
           <div className="fixed inset-0 z-[200] flex items-center justify-center p-4" onClick={() => setStatPopup(null)}>
