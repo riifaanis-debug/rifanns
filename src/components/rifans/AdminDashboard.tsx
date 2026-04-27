@@ -1972,6 +1972,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
     </div>
   );
 
+  const renderContracts = () => (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <Card className="overflow-hidden">
       <div className="p-4 border-b border-gold/10 flex flex-col md:flex-row gap-4 items-center justify-between bg-gray-50/50 dark:bg-white/5">
