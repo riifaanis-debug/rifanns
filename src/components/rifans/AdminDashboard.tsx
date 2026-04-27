@@ -338,6 +338,29 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
     setIsConfirmingSendInvoice(true);
   };
 
+  const sendPromissory = async (userId: string, submissionId: string) => {
+    setPendingPromissoryData({ userId, submissionId });
+    setIsConfirmingSendPromissory(true);
+  };
+
+  const handleConfirmSendPromissory = async () => {
+    if (!pendingPromissoryData) return;
+    const { userId, submissionId } = pendingPromissoryData;
+    try {
+      const noteId = await apiSendPromissoryNote(userId, submissionId);
+      setIsConfirmingSendPromissory(false);
+      setPendingPromissoryData(null);
+      setShowSuccessMessage(true);
+      setTimeout(() => setShowSuccessMessage(false), 3000);
+      const notes = await getAdminPromissoryNotes();
+      setPromissoryNotes(notes);
+      window.open(`#/promissory/${noteId}`, '_blank');
+    } catch (err) {
+      console.error(err);
+      alert('حدث خطأ في إرسال سند الأمر');
+    }
+  };
+
   const handleConfirmSendContract = async () => {
     if (!pendingContractData) return;
     const { userId, submissionId } = pendingContractData;
@@ -453,6 +476,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
       case 'service_requests': return 'طلبات الخدمات';
       case 'contracts': return 'عقود العملاء';
       case 'invoices': return 'فواتير العملاء';
+      case 'promissory_notes': return 'سندات الأمر';
       case 'payments': return 'سداد المدفوعات';
       case 'notifications': return 'التنبيهات';
       case 'document_request': return 'طلب مستند';
@@ -471,6 +495,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
       case 'service_requests': return <Briefcase size={20} />;
       case 'contracts': return <PenTool size={20} />;
       case 'invoices': return <CreditCard size={20} />;
+      case 'promissory_notes': return <ScrollText size={20} />;
       case 'payments': return <CreditCard size={20} />;
       case 'notifications': return <Bell size={20} />;
       case 'document_request': return <FileCheck size={20} />;
@@ -2386,6 +2411,14 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                         >
                           <FileText size={18} />
                           إرسال فاتورة الطلب
+                        </button>
+
+                        <button 
+                          onClick={() => sendPromissory(selectedSubmission.userId, selectedSubmission.id)}
+                          className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-brand text-gold border-2 border-gold rounded-xl text-sm font-bold hover:bg-brand/90 transition-all shadow-lg"
+                        >
+                          <ScrollText size={18} />
+                          إرسال سند لأمر
                         </button>
                       </div>
                     </div>
