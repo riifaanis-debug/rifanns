@@ -249,7 +249,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
         fetchUsers(),
         fetchNotifications(),
         fetchContracts(),
-        fetchInvoices()
+        fetchInvoices(),
+        getAdminPromissoryNotes().then(setPromissoryNotes).catch(console.error),
       ]);
     } catch (err) {
       console.error("Error fetching dashboard data:", err);
@@ -2109,6 +2110,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
           <div className="mt-4 mb-2 px-4 text-[10px] font-bold text-muted uppercase tracking-widest">المتابعة</div>
           <NavButton active={activeTab === 'contracts'} onClick={() => { setActiveTab('contracts'); setIsSidebarOpen(false); }} icon={<PenTool size={18} />} label="عقود العملاء" />
           <NavButton active={activeTab === 'invoices'} onClick={() => { setActiveTab('invoices'); setIsSidebarOpen(false); }} icon={<CreditCard size={18} />} label="فواتير العملاء" />
+          <NavButton active={activeTab === 'promissory_notes'} onClick={() => { setActiveTab('promissory_notes'); setIsSidebarOpen(false); }} icon={<ScrollText size={18} />} label="سندات الأمر" />
           <NavButton active={activeTab === 'payments'} onClick={() => { setActiveTab('payments'); setIsSidebarOpen(false); }} icon={<CreditCard size={18} />} label="سداد المدفوعات" />
           <NavButton active={activeTab === 'notifications'} onClick={() => { setActiveTab('notifications'); setIsSidebarOpen(false); }} icon={<Bell size={18} />} label="التنبيهات" badge={notifications.filter(n => !n.is_read).length} />
         </aside>
@@ -2170,6 +2172,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   {activeTab === 'service_requests' && renderRequests('service_request')}
                   {activeTab === 'contracts' && renderContracts()}
                   {activeTab === 'invoices' && renderInvoices()}
+                  {activeTab === 'promissory_notes' && renderPromissoryNotes()}
                   {activeTab === 'payments' && <AdminPaymentRequests />}
                   {activeTab === 'notifications' && renderNotifications()}
                   {activeTab === 'document_request' && renderDocumentRequest()}
