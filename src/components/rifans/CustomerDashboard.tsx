@@ -1163,6 +1163,47 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
              </div>
            )}
 
+           {/* Promissory Notes Tab */}
+           {activeTab === 'promissory' && (
+             <div className="space-y-3">
+               {isLoading ? (
+                 <div className="flex justify-center py-10">
+                   <Loader2 className="animate-spin text-gold" size={32} />
+                 </div>
+               ) : promissoryNotes.length > 0 ? (
+                 promissoryNotes.map((note) => (
+                   <div key={note.id} className="bg-white dark:bg-[#12031a] p-4 rounded-[16px] border border-gold/20 shadow-sm hover:border-gold/50 transition-all text-right">
+                     <div className="flex justify-between items-start mb-2">
+                       <div className="flex items-center gap-2">
+                         <FileText className="text-gold" size={16} />
+                         <h3 className="text-[13px] font-bold text-brand dark:text-white">سند لأمر رقم {note.id}</h3>
+                       </div>
+                       <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${note.status === 'signed' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>
+                         {note.status === 'signed' ? 'موقّع' : 'بانتظار التوقيع'}
+                       </span>
+                     </div>
+                     <div className="flex justify-between items-center mb-3">
+                       <span className="text-[11px] text-muted">{new Date(note.created_at).toLocaleDateString('ar-SA')}</span>
+                       <span className="text-sm font-black text-gold">{formatAmount(note.amount)} ر.س</span>
+                     </div>
+                     <button
+                       onClick={() => window.location.hash = `#/promissory/${note.id}`}
+                       className="w-full py-2.5 bg-white text-brand font-bold text-[12px] rounded-xl shadow-sm hover:bg-gray-50 transition-all flex items-center justify-center gap-2 border border-gold/30"
+                     >
+                       <FileText size={14} />
+                       {note.status === 'signed' ? 'عرض السند' : 'توقيع وعرض السند'}
+                     </button>
+                   </div>
+                 ))
+               ) : (
+                 <div className="text-right py-10 text-muted flex flex-col items-start gap-3">
+                   <FileText size={40} className="opacity-20" />
+                   <p className="text-[12px]">لا توجد سندات أمر حالياً</p>
+                 </div>
+               )}
+             </div>
+           )}
+
            {/* Payments Tab */}
            {activeTab === 'payments' && (
              <CustomerPaymentRequests userId={String(user.id)} />
