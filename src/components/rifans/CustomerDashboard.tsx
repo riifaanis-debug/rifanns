@@ -54,11 +54,12 @@ const DOCUMENT_TYPES = [
 
 const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, onLogout }) => {
   const { user: authUser } = useAuth();
-  const [activeTab, setActiveTab] = useState<'profile' | 'requests' | 'contracts' | 'invoices' | 'payments' | 'open_requests'>(() => {
+  const [activeTab, setActiveTab] = useState<'profile' | 'requests' | 'contracts' | 'invoices' | 'payments' | 'open_requests' | 'promissory'>(() => {
     const hash = window.location.hash;
     if (hash.includes('tab=contracts')) return 'contracts';
     if (hash.includes('tab=requests')) return 'requests';
     if (hash.includes('tab=invoices')) return 'invoices';
+    if (hash.includes('tab=promissory')) return 'promissory';
     if (hash.includes('tab=payments')) return 'payments';
     if (hash.includes('tab=open_requests')) return 'open_requests';
     return 'profile';
@@ -67,6 +68,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
   const [requests, setRequests] = useState<any[]>([]);
   const [contracts, setContracts] = useState<any[]>([]);
   const [invoices, setInvoices] = useState<any[]>([]);
+  const [promissoryNotes, setPromissoryNotes] = useState<any[]>([]);
   const [notifications, setNotifications] = useState<any[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
