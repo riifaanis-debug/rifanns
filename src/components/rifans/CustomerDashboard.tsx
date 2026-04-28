@@ -760,6 +760,13 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
              فواتيري
            </button>
            <button 
+             onClick={() => setActiveTab('promissory')}
+             className={`flex-1 min-w-[80px] py-2.5 rounded-[12px] text-[11px] font-bold transition-all flex flex-col items-center justify-center gap-1
+               ${activeTab === 'promissory' ? 'bg-brand text-gold shadow-md' : 'bg-white text-muted border border-gray-100 hover:bg-gray-50'}`}
+           >
+             <FileText size={14} />
+             سندات الأمر
+           <button 
              onClick={() => setActiveTab('open_requests')}
              className={`flex-1 min-w-[80px] py-2.5 rounded-[12px] text-[11px] font-bold transition-all flex flex-col items-center justify-center gap-1
                ${activeTab === 'open_requests' ? 'bg-brand text-gold shadow-md' : 'bg-white text-muted border border-gray-100 hover:bg-gray-50'}`}
