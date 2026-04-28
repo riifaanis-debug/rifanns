@@ -491,6 +491,13 @@ export const getPromissoryNotesBySubmission = async (submissionId: string) => {
   return data || [];
 };
 
+export const getMyPromissoryNotes = async () => {
+  const userId = getCurrentUserId();
+  if (!userId) return [];
+  const { data } = await supabase.from('promissory_notes').select('*').eq('user_id', userId).order('created_at', { ascending: false });
+  return data || [];
+};
+
 export const signPromissoryNote = async (id: string, signatureData: string) => {
   await supabase.from('promissory_notes').update({
     signature_data: signatureData,
