@@ -74,7 +74,7 @@ const PromissoryNotePage: React.FC<PromissoryNotePageProps> = ({ noteId, onClose
     const canvas = sigCanvasRef.current; if (!canvas) return;
     const ctx = canvas.getContext('2d'); if (!ctx) return;
     const { x, y } = getCanvasPos(canvas, e);
-    ctx.lineTo(x, y); ctx.strokeStyle = '#22042C'; ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.stroke();
+    ctx.lineTo(x, y); ctx.strokeStyle = '#1d4ed8'; ctx.lineWidth = 2.5; ctx.lineCap = 'round'; ctx.stroke();
     setHasSignature(true);
   };
 
@@ -185,24 +185,24 @@ const PromissoryNotePage: React.FC<PromissoryNotePageProps> = ({ noteId, onClose
       </div>
 
       {/* Note Sheet — single A4 page, RTL, right-aligned */}
-      <div className="flex-1 flex items-start justify-center p-3 sm:p-6">
+      <div className="flex-1 flex items-start justify-center p-3 sm:p-6 promissory-print-wrap">
         <div
           ref={noteRef}
-          className="w-full max-w-[794px] bg-white shadow-xl px-8 py-6"
+          className="w-full max-w-[794px] bg-white shadow-xl px-5 py-5 promissory-sheet"
           dir="rtl"
           style={{ minHeight: '1123px', textAlign: 'right' }}
         >
           {/* Header: logo on RIGHT (start in RTL), title on LEFT (end in RTL) */}
           <div className="flex items-center justify-between mb-4" dir="rtl">
             <div className="flex items-center gap-3">
-              <img src={rifansLogo} alt="ريفانس المالية" className="h-14 w-auto object-contain" />
+              <img src={rifansLogo} alt="ريفانس المالية" className="h-20 w-auto object-contain" />
               <div className="leading-tight text-right">
-                <div className="text-[16px] font-black text-[#22042C]">ريفانس المالية</div>
-                <div className="text-[10px] tracking-wider font-bold text-[#22042C]">RIFANIS FINANCE</div>
+                <div className="text-[18px] font-black text-[#22042C]">ريفانس المالية</div>
+                <div className="text-[11px] tracking-wider font-bold text-[#22042C]">RIFANIS FINANCE</div>
               </div>
             </div>
             <div className="text-left">
-              <div className="text-[26px] font-black text-[#22042C] leading-none">سند لأمر</div>
+              <div className="text-[28px] font-black text-[#22042C] leading-none">سند لأمر</div>
               <div className="mt-1 flex items-center justify-start gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#C7A969]"></span>
                 <span className="h-[2px] w-10 bg-[#C7A969]/60"></span>
@@ -261,10 +261,10 @@ const PromissoryNotePage: React.FC<PromissoryNotePageProps> = ({ noteId, onClose
                 <Box className="flex-1">{note.debtor_name}</Box>
               </div>
               <div className="flex items-center gap-2">
-                <div className="text-[11px] font-bold text-[#22042C] min-w-[60px]">التوقيع :</div>
-                <div className="flex-1 min-h-[36px] bg-white border border-gray-300 rounded-[6px] flex items-center justify-center overflow-hidden">
+              <div className="text-[11px] font-bold text-[#22042C] min-w-[60px]">التوقيع :</div>
+                <div className="flex-1 min-h-[88px] bg-white border border-gray-300 rounded-[6px] flex items-center justify-center overflow-hidden p-1">
                   {isSigned && note.signature_data ? (
-                    <img src={note.signature_data} alt="توقيع المدين" className="max-h-[32px] object-contain" />
+                    <img src={note.signature_data} alt="توقيع المدين" className="w-full h-auto max-h-[84px] object-contain" />
                   ) : (
                     <span className="text-[9px] text-gray-400">بانتظار التوقيع</span>
                   )}
@@ -291,7 +291,7 @@ const PromissoryNotePage: React.FC<PromissoryNotePageProps> = ({ noteId, onClose
 
           {/* Stamp - bottom-left in RTL = "start" side */}
           <div className="mt-3 flex items-end justify-start" dir="rtl">
-            <img src={rifansStampImg} alt="ختم وتوقيع شركة ريفانس المالية" className="h-24 w-auto object-contain" />
+            <img src={rifansStampImg} alt="ختم وتوقيع شركة ريفانس المالية" className="h-28 w-auto object-contain" />
           </div>
 
           {/* Footer */}
