@@ -6,6 +6,7 @@ import { getPromissoryNoteById, signPromissoryNote } from '../../lib/api';
 import { formatAmount } from '../../lib/formatNumber';
 import { numberToArabicWords } from '../../lib/arabicNumberToWords';
 import { toPng } from 'html-to-image';
+import jsPDF from 'jspdf';
 import rifansLogo from '@/assets/rifans-logo.png';
 import rifansStampImg from '@/assets/rifans-stamp.png';
 
