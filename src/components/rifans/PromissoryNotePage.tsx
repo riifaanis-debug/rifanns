@@ -115,29 +115,26 @@ const PromissoryNotePage: React.FC<PromissoryNotePageProps> = ({ noteId, onClose
     finally { setIsDownloading(false); }
   };
 
-  // Auto-fit print: measure the sheet and scale so it fits ONE A4 page exactly.
-  // A4 printable area at our @page margins (6mm top/bot, 4mm sides) ≈ 202mm x 285mm.
-  // Convert to px @ 96dpi (1mm = 3.7795px): ~763px x ~1077px.
-  const A4_PRINT_W_PX = 202 * 3.7795;
-  const A4_PRINT_H_PX = 285 * 3.7795;
+  // Auto-fit print: scale so the sheet fits ONE A4 page exactly with 10mm margins.
+  // A4 printable area = 210-20 x 297-20 = 190mm x 277mm @96dpi (1mm=3.7795px).
+  const A4_PRINT_W_PX = 190 * 3.7795;
+  const A4_PRINT_H_PX = 277 * 3.7795;
 
   const handlePrint = useCallback(() => {
     const el = noteRef.current;
     if (!el) { window.print(); return; }
-    // Reset any previous scale before measuring at natural size.
     el.style.setProperty('--print-scale', '1');
-    // Force layout flush, then measure.
     requestAnimationFrame(() => {
-      const rect = el.getBoundingClientRect();
-      const naturalW = rect.width || el.scrollWidth;
-      const naturalH = el.scrollHeight;
-      const scaleW = A4_PRINT_W_PX / naturalW;
-      const scaleH = A4_PRINT_H_PX / naturalH;
-      // Use the smaller ratio; never upscale beyond 1.
-      const scale = Math.min(1, scaleW, scaleH);
-      el.style.setProperty('--print-scale', String(scale));
-      // Give the browser a tick to apply the variable, then print.
-      setTimeout(() => window.print(), 50);
+      requestAnimationFrame(() => {
+        const naturalW = el.scrollWidth;
+        const naturalH = el.scrollHeight;
+        const scaleW = A4_PRINT_W_PX / naturalW;
+        const scaleH = A4_PRINT_H_PX / naturalH;
+        // Tiny safety margin (0.98) to absorb sub-pixel rounding across browsers.
+        const scale = Math.min(scaleW, scaleH) * 0.98;
+        el.style.setProperty('--print-scale', String(scale));
+        setTimeout(() => window.print(), 80);
+      });
     });
   }, []);
 
