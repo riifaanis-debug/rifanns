@@ -6,6 +6,7 @@ import { getPromissoryNoteById, signPromissoryNote } from '../../lib/api';
 import { formatAmount } from '../../lib/formatNumber';
 import { numberToArabicWords } from '../../lib/arabicNumberToWords';
 import { toPng } from 'html-to-image';
+import jsPDF from 'jspdf';
 import rifansLogo from '@/assets/rifans-logo.png';
 import rifansStampImg from '@/assets/rifans-stamp.png';
 
@@ -106,11 +107,26 @@ const PromissoryNotePage: React.FC<PromissoryNotePageProps> = ({ noteId, onClose
     const el = noteRef.current; if (!el) return;
     setIsDownloading(true);
     try {
-      const dataUrl = await toPng(el, { quality: 0.95, backgroundColor: '#ffffff', pixelRatio: 2 });
-      const link = document.createElement('a');
-      link.download = `promissory-note-${noteId}.png`;
-      link.href = dataUrl;
-      link.click();
+      const dataUrl = await toPng(el, { quality: 1, backgroundColor: '#ffffff', pixelRatio: 2 });
+      // A4 dimensions in mm
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+      const pageW = pdf.internal.pageSize.getWidth();
+      const pageH = pdf.internal.pageSize.getHeight();
+      const margin = 10;
+      const availW = pageW - margin * 2;
+      const availH = pageH - margin * 2;
+      // Load image to get natural ratio
+      const img = new Image();
+      img.src = dataUrl;
+      await new Promise((res) => { img.onload = res; });
+      const ratio = img.width / img.height;
+      let drawW = availW;
+      let drawH = drawW / ratio;
+      if (drawH > availH) { drawH = availH; drawW = drawH * ratio; }
+      const x = (pageW - drawW) / 2;
+      const y = (pageH - drawH) / 2;
+      pdf.addImage(dataUrl, 'PNG', x, y, drawW, drawH);
+      pdf.save(`promissory-note-${noteId}.pdf`);
     } catch (err) { console.error('Download failed:', err); }
     finally { setIsDownloading(false); }
   };
