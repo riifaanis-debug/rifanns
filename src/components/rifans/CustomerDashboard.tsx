@@ -10,7 +10,7 @@ import { Button } from './Shared';
 import { useAuth } from '../../contexts/AuthContext';
 import Logo from './Logo';
 import { safeStringify, safeParse } from '../../utils/safeJson';
-import { getMyRequests, getMyNotifications, getMyContracts, getMyInvoices, getProfile, updateProfile, markAllNotificationsRead, uploadDocument, deleteRequest } from '../../lib/api';
+import { getMyRequests, getMyNotifications, getMyContracts, getMyInvoices, getMyPromissoryNotes, getProfile, updateProfile, markAllNotificationsRead, uploadDocument, deleteRequest } from '../../lib/api';
 import { formatAmount } from '../../lib/formatNumber';
 
 interface CustomerDashboardProps {
@@ -54,11 +54,12 @@ const DOCUMENT_TYPES = [
 
 const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, onLogout }) => {
   const { user: authUser } = useAuth();
-  const [activeTab, setActiveTab] = useState<'profile' | 'requests' | 'contracts' | 'invoices' | 'payments' | 'open_requests'>(() => {
+  const [activeTab, setActiveTab] = useState<'profile' | 'requests' | 'contracts' | 'invoices' | 'payments' | 'open_requests' | 'promissory'>(() => {
     const hash = window.location.hash;
     if (hash.includes('tab=contracts')) return 'contracts';
     if (hash.includes('tab=requests')) return 'requests';
     if (hash.includes('tab=invoices')) return 'invoices';
+    if (hash.includes('tab=promissory')) return 'promissory';
     if (hash.includes('tab=payments')) return 'payments';
     if (hash.includes('tab=open_requests')) return 'open_requests';
     return 'profile';
@@ -67,6 +68,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
   const [requests, setRequests] = useState<any[]>([]);
   const [contracts, setContracts] = useState<any[]>([]);
   const [invoices, setInvoices] = useState<any[]>([]);
+  const [promissoryNotes, setPromissoryNotes] = useState<any[]>([]);
   const [notifications, setNotifications] = useState<any[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -186,6 +188,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
       if (hash.includes('tab=contracts')) setActiveTab('contracts');
       else if (hash.includes('tab=requests')) setActiveTab('requests');
       else if (hash.includes('tab=invoices')) setActiveTab('invoices');
+      else if (hash.includes('tab=promissory')) setActiveTab('promissory');
     };
     window.addEventListener('hashchange', handleHashChange);
 
@@ -287,9 +290,10 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
   const fetchContracts = async () => {
     if (!authUser) return;
     try {
-      const [contractsData, invoicesData] = await Promise.all([getMyContracts(), getMyInvoices()]);
+      const [contractsData, invoicesData, notesData] = await Promise.all([getMyContracts(), getMyInvoices(), getMyPromissoryNotes()]);
       setContracts(contractsData);
       setInvoices(invoicesData);
+      setPromissoryNotes(notesData);
     } catch (err) {
       console.error(err);
     }
@@ -756,6 +760,14 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
              فواتيري
            </button>
            <button 
+             onClick={() => setActiveTab('promissory')}
+             className={`flex-1 min-w-[80px] py-2.5 rounded-[12px] text-[11px] font-bold transition-all flex flex-col items-center justify-center gap-1
+               ${activeTab === 'promissory' ? 'bg-brand text-gold shadow-md' : 'bg-white text-muted border border-gray-100 hover:bg-gray-50'}`}
+           >
+             <FileText size={14} />
+              سندات الأمر
+            </button>
+            <button 
              onClick={() => setActiveTab('open_requests')}
              className={`flex-1 min-w-[80px] py-2.5 rounded-[12px] text-[11px] font-bold transition-all flex flex-col items-center justify-center gap-1
                ${activeTab === 'open_requests' ? 'bg-brand text-gold shadow-md' : 'bg-white text-muted border border-gray-100 hover:bg-gray-50'}`}
@@ -1146,6 +1158,47 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                  <div className="text-right py-10 text-muted flex flex-col items-start gap-3">
                     <Receipt size={40} className="opacity-20" />
                     <p className="text-[12px]">لا توجد فواتير حالياً</p>
+                 </div>
+               )}
+             </div>
+           )}
+
+           {/* Promissory Notes Tab */}
+           {activeTab === 'promissory' && (
+             <div className="space-y-3">
+               {isLoading ? (
+                 <div className="flex justify-center py-10">
+                   <Loader2 className="animate-spin text-gold" size={32} />
+                 </div>
+               ) : promissoryNotes.length > 0 ? (
+                 promissoryNotes.map((note) => (
+                   <div key={note.id} className="bg-white dark:bg-[#12031a] p-4 rounded-[16px] border border-gold/20 shadow-sm hover:border-gold/50 transition-all text-right">
+                     <div className="flex justify-between items-start mb-2">
+                       <div className="flex items-center gap-2">
+                         <FileText className="text-gold" size={16} />
+                         <h3 className="text-[13px] font-bold text-brand dark:text-white">سند لأمر رقم {note.id}</h3>
+                       </div>
+                       <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${note.status === 'signed' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>
+                         {note.status === 'signed' ? 'موقّع' : 'بانتظار التوقيع'}
+                       </span>
+                     </div>
+                     <div className="flex justify-between items-center mb-3">
+                       <span className="text-[11px] text-muted">{new Date(note.created_at).toLocaleDateString('ar-SA')}</span>
+                       <span className="text-sm font-black text-gold">{formatAmount(note.amount)} ر.س</span>
+                     </div>
+                     <button
+                       onClick={() => window.location.hash = `#/promissory/${note.id}`}
+                       className="w-full py-2.5 bg-white text-brand font-bold text-[12px] rounded-xl shadow-sm hover:bg-gray-50 transition-all flex items-center justify-center gap-2 border border-gold/30"
+                     >
+                       <FileText size={14} />
+                       {note.status === 'signed' ? 'عرض السند' : 'توقيع وعرض السند'}
+                     </button>
+                   </div>
+                 ))
+               ) : (
+                 <div className="text-right py-10 text-muted flex flex-col items-start gap-3">
+                   <FileText size={40} className="opacity-20" />
+                   <p className="text-[12px]">لا توجد سندات أمر حالياً</p>
                  </div>
                )}
              </div>
