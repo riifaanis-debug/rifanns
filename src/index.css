@@ -129,4 +129,25 @@ All colors MUST be HSL.
     position: static !important;
     overflow: visible !important;
   }
+
+  /* Promissory note: single A4 page with minimal side margins */
+  @page {
+    size: A4;
+    margin: 6mm 4mm;
+  }
+  .promissory-print-wrap {
+    padding: 0 !important;
+    background: #fff !important;
+  }
+  .promissory-sheet {
+    box-shadow: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: auto !important;
+    padding: 4mm 5mm !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    transform-origin: top center;
+  }
 }
+
