@@ -115,6 +115,43 @@ const PromissoryNotePage: React.FC<PromissoryNotePageProps> = ({ noteId, onClose
     finally { setIsDownloading(false); }
   };
 
+  // Auto-fit print: measure the sheet and scale so it fits ONE A4 page exactly.
+  // A4 printable area at our @page margins (6mm top/bot, 4mm sides) ≈ 202mm x 285mm.
+  // Convert to px @ 96dpi (1mm = 3.7795px): ~763px x ~1077px.
+  const A4_PRINT_W_PX = 202 * 3.7795;
+  const A4_PRINT_H_PX = 285 * 3.7795;
+
+  const handlePrint = useCallback(() => {
+    const el = noteRef.current;
+    if (!el) { window.print(); return; }
+    // Reset any previous scale before measuring at natural size.
+    el.style.setProperty('--print-scale', '1');
+    // Force layout flush, then measure.
+    requestAnimationFrame(() => {
+      const rect = el.getBoundingClientRect();
+      const naturalW = rect.width || el.scrollWidth;
+      const naturalH = el.scrollHeight;
+      const scaleW = A4_PRINT_W_PX / naturalW;
+      const scaleH = A4_PRINT_H_PX / naturalH;
+      // Use the smaller ratio; never upscale beyond 1.
+      const scale = Math.min(1, scaleW, scaleH);
+      el.style.setProperty('--print-scale', String(scale));
+      // Give the browser a tick to apply the variable, then print.
+      setTimeout(() => window.print(), 50);
+    });
+  }, []);
+
+  // Re-fit if window resizes while open (so the scale stored is accurate for current layout).
+  useEffect(() => {
+    const onAfterPrint = () => {
+      const el = noteRef.current;
+      if (el) el.style.removeProperty('--print-scale');
+    };
+    window.addEventListener('afterprint', onAfterPrint);
+    return () => window.removeEventListener('afterprint', onAfterPrint);
+  }, []);
+
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#F0F2F5] flex items-center justify-center">
@@ -178,7 +215,7 @@ const PromissoryNotePage: React.FC<PromissoryNotePageProps> = ({ noteId, onClose
           <button onClick={handleDownload} disabled={isDownloading} className="p-2 hover:bg-gray-100 rounded-xl transition-colors text-gold">
             <Download size={20} />
           </button>
-          <button onClick={() => window.print()} className="p-2 hover:bg-gray-100 rounded-xl transition-colors text-gold">
+          <button onClick={handlePrint} className="p-2 hover:bg-gray-100 rounded-xl transition-colors text-gold">
             <Printer size={20} />
           </button>
         </div>
