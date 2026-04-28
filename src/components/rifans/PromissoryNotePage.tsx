@@ -346,10 +346,10 @@ const PromissoryNotePage: React.FC<PromissoryNotePageProps> = ({ noteId, onClose
 
           {/* Footer */}
           <div className="mt-4 pt-3 border-t border-gray-200 flex flex-row-reverse justify-between items-center gap-2 text-[9.5px] text-[#22042C]" dir="rtl">
-            <div className="flex items-center gap-1"><Phone size={11} className="text-[#C7A969]" /> 9200 11 825</div>
-            <div className="flex items-center gap-1"><Mail size={11} className="text-[#C7A969]" /> info@rifans.sa</div>
-            <div className="flex items-center gap-1"><Globe size={11} className="text-[#C7A969]" /> www.rifans.sa</div>
-            <div className="flex items-center gap-1"><MapPin size={11} className="text-[#C7A969]" /> جدة - المملكة العربية السعودية</div>
+            <div className="flex items-center gap-1"><Phone size={11} className="text-[#C7A969]" /> 800 2440 432</div>
+            <div className="flex items-center gap-1"><Mail size={11} className="text-[#C7A969]" /> info@rifans.net</div>
+            <div className="flex items-center gap-1"><Globe size={11} className="text-[#C7A969]" /> www.rifanss.com</div>
+            <div className="flex items-center gap-1"><MapPin size={11} className="text-[#C7A969]" /> Jeddah, Saudi Arabia</div>
           </div>
         </div>
       </div>
