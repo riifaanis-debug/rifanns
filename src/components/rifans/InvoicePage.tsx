@@ -279,7 +279,10 @@ const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
               </div>
             ) : (
               <div className="space-y-3">
-                <PayPalFormButton />
+                <p className="text-xs sm:text-sm font-bold text-brand leading-relaxed text-center">
+                  يتم سداد الفاتورة عن طريق حساب شركة ريفانيس المالية لدى STC BANK كما هو موضح أدناه
+                </p>
+                <img src={bankAccountImg} alt="بيانات الحساب البنكي" className="w-full rounded-xl border border-gray-200" />
               </div>
             )}
           </div>
