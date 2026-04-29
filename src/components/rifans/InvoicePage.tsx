@@ -159,25 +159,25 @@ const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
       </div>
 
       {/* Invoice Content */}
-      <div className="flex-1 flex items-start justify-center p-4 sm:p-8">
+      <div className="flex-1 flex items-stretch justify-center p-4 sm:p-8">
         <div
           ref={invoiceRef}
-          className="invoice-container w-full max-w-[800px] bg-white shadow-xl overflow-hidden flex flex-col"
+          className="invoice-container w-full max-w-[800px] bg-white shadow-xl overflow-hidden flex flex-col min-h-[1050px]"
           dir="rtl"
           style={{ fontFamily: 'Tajawal, sans-serif' }}
         >
-          {/* Header: Logo + Title */}
-          <div className="px-8 pt-8 pb-4 flex justify-between items-center">
+          {/* Header: Title (right) + Logo (left) */}
+          <div className="px-8 pt-8 pb-4 flex justify-between items-center" dir="rtl">
+            <h1 className="text-3xl sm:text-4xl font-black text-brand text-right">فاتورة تقديم خدمات</h1>
             <Logo />
-            <h1 className="text-3xl sm:text-4xl font-black text-brand">فاتورة تقديم خدمات</h1>
           </div>
 
           {/* Body */}
-          <div className="px-8 py-4 flex-1 space-y-4">
+          <div className="px-8 py-4 flex-1 flex flex-col gap-4">
             {/* Client Info */}
             <div>
               <h2 className="text-base font-bold text-brand mb-2">بيانات العميل</h2>
-              <div className="grid grid-cols-2 gap-x-6 gap-y-1.5 text-xs border-b border-gray-200 pb-3">
+              <div className="grid grid-cols-2 gap-x-6 gap-y-1.5 text-xs pb-3">
                 <div className="flex gap-2">
                   <span className="text-muted">الاسم:</span>
                   <span className="font-bold text-brand">{submission.data?.fullName || submission.data?.firstName || '---'}</span>
@@ -189,6 +189,9 @@ const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
               </div>
             </div>
 
+            {/* Visual separator */}
+            <div className="h-px bg-gradient-to-l from-transparent via-gold/40 to-transparent" />
+
             {/* Service Block */}
             <div className="bg-gray-50 rounded-lg p-3">
               <div className="text-[11px] text-muted mb-0.5">نوع الخدمة</div>
@@ -197,6 +200,9 @@ const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
                 <div className="text-[11px] text-muted mt-1">الجهة: <span className="text-brand font-bold">{submission.data.bank}</span></div>
               )}
             </div>
+
+            {/* Visual separator */}
+            <div className="h-px bg-gradient-to-l from-transparent via-gold/40 to-transparent" />
 
             {/* Products Table */}
             {products.length > 0 && (
@@ -259,13 +265,13 @@ const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
                 )}
               </div>
             ) : (
-              <div className="space-y-2">
+              <div className="space-y-2 mt-auto">
                 <p className="text-xs sm:text-sm font-bold text-brand text-center">
                   يتم سداد الفاتورة عن طريق حساب شركة ريفانيس المالية لدى STC BANK كما هو موضح أدناه
                 </p>
                 <div className="flex justify-between items-center gap-3">
-                  <img src={rifansStampImg} alt="ختم" className="h-32 object-contain" />
                   <img src={bankAccountImg} alt="بيانات الحساب البنكي" className="h-36 object-contain" />
+                  <img src={rifansStampImg} alt="ختم" className="h-32 object-contain" />
                 </div>
               </div>
             )}
