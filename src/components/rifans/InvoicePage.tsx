@@ -160,7 +160,7 @@ const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
 
       {/* Invoice Content */}
       <div className="flex-1 flex items-start justify-center p-4 sm:p-8">
-        <div ref={invoiceRef} className="w-full max-w-[700px] bg-white rounded-2xl shadow-xl overflow-hidden" dir="rtl">
+        <div ref={invoiceRef} className="invoice-container w-full max-w-[700px] bg-white rounded-2xl shadow-xl overflow-hidden" dir="rtl">
           {/* Header */}
           <div className="bg-[#22042C] text-white p-6 sm:p-8">
             <div className="flex justify-between items-start">
