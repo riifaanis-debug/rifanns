@@ -102,7 +102,7 @@ const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
     if (!el) return;
     setIsDownloading(true);
     try {
-      const opt = {
+      const opt: any = {
         margin: 5,
         filename: `invoice-${submissionId}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
