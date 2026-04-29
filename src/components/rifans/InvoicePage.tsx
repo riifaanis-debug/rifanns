@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import rifansStampImg from '@/assets/rifans-stamp.png';
+import bankAccountImg from '@/assets/rifans-bank-account.png';
 import { X, Download, Printer, FileText, Loader2 } from 'lucide-react';
 import { Button } from './Shared';
 import { useAuth } from '../../contexts/AuthContext';
