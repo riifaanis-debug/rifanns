@@ -166,10 +166,10 @@ const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
           dir="rtl"
           style={{ fontFamily: 'Tajawal, sans-serif' }}
         >
-          {/* Header: Logo + Title */}
-          <div className="px-8 pt-8 pb-4 flex justify-between items-center">
+          {/* Header: Title (right) + Logo (left) */}
+          <div className="px-8 pt-8 pb-4 flex justify-between items-center" dir="rtl">
+            <h1 className="text-3xl sm:text-4xl font-black text-brand text-right">فاتورة تقديم خدمات</h1>
             <Logo />
-            <h1 className="text-3xl sm:text-4xl font-black text-brand">فاتورة تقديم خدمات</h1>
           </div>
 
           {/* Body */}
