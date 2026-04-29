@@ -7,7 +7,8 @@ import { useAuth } from '../../contexts/AuthContext';
 import { safeParse } from '../../utils/safeJson';
 import { getSubmission, getInvoiceBySubmission } from '../../lib/api';
 import { formatAmount } from '../../lib/formatNumber';
-import { toPng } from 'html-to-image';
+// @ts-ignore
+import html2pdf from 'html2pdf.js';
 import Logo from './Logo';
 
 interface InvoicePageProps {
@@ -101,11 +102,15 @@ const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
     if (!el) return;
     setIsDownloading(true);
     try {
-      const dataUrl = await toPng(el, { quality: 0.95, backgroundColor: '#ffffff', pixelRatio: 2 });
-      const link = document.createElement('a');
-      link.download = `invoice-${submissionId}.png`;
-      link.href = dataUrl;
-      link.click();
+      const opt: any = {
+        margin: 5,
+        filename: `invoice-${submissionId}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['avoid-all'] },
+      };
+      await html2pdf().set(opt).from(el).save();
     } catch (err) {
       console.error('Download failed:', err);
     } finally {
@@ -155,7 +160,7 @@ const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
 
       {/* Invoice Content */}
       <div className="flex-1 flex items-start justify-center p-4 sm:p-8">
-        <div ref={invoiceRef} className="w-full max-w-[700px] bg-white rounded-2xl shadow-xl overflow-hidden" dir="rtl">
+        <div ref={invoiceRef} className="invoice-container w-full max-w-[700px] bg-white rounded-2xl shadow-xl overflow-hidden" dir="rtl">
           {/* Header */}
           <div className="bg-[#22042C] text-white p-6 sm:p-8">
             <div className="flex justify-between items-start">

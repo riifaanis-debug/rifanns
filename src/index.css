@@ -182,5 +182,26 @@ All colors MUST be HSL.
   /* Hide everything outside the sheet during print to prevent stray pages */
   body * { visibility: hidden !important; }
   .promissory-print-wrap, .promissory-print-wrap * { visibility: visible !important; }
+  .invoice-container, .invoice-container * { visibility: visible !important; }
+  .invoice-container {
+    position: absolute !important;
+    inset: 0 !important;
+    margin: 0 auto !important;
+    width: 210mm !important;
+    zoom: 0.75;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+  .invoice-container * {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+  .invoice-container table { width: 100%; font-size: 10px; }
+  .invoice-container h1, .invoice-container h2, .invoice-container h3 {
+    font-size: 14px; margin: 5px 0;
+  }
+  .invoice-container img { max-width: 100%; height: auto; }
 }
 
