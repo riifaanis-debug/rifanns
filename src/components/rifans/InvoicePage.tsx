@@ -7,7 +7,8 @@ import { useAuth } from '../../contexts/AuthContext';
 import { safeParse } from '../../utils/safeJson';
 import { getSubmission, getInvoiceBySubmission } from '../../lib/api';
 import { formatAmount } from '../../lib/formatNumber';
-import { toPng } from 'html-to-image';
+// @ts-ignore
+import html2pdf from 'html2pdf.js';
 import Logo from './Logo';
 
 interface InvoicePageProps {
@@ -101,11 +102,15 @@ const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
     if (!el) return;
     setIsDownloading(true);
     try {
-      const dataUrl = await toPng(el, { quality: 0.95, backgroundColor: '#ffffff', pixelRatio: 2 });
-      const link = document.createElement('a');
-      link.download = `invoice-${submissionId}.png`;
-      link.href = dataUrl;
-      link.click();
+      const opt = {
+        margin: 5,
+        filename: `invoice-${submissionId}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['avoid-all'] },
+      };
+      await html2pdf().set(opt).from(el).save();
     } catch (err) {
       console.error('Download failed:', err);
     } finally {
