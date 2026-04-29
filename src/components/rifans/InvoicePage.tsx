@@ -177,7 +177,7 @@ const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
             {/* Client Info */}
             <div>
               <h2 className="text-base font-bold text-brand mb-2">بيانات العميل</h2>
-              <div className="grid grid-cols-2 gap-x-6 gap-y-1.5 text-xs pb-3">
+              <div className="grid grid-cols-3 gap-x-6 gap-y-1.5 text-xs pb-3">
                 <div className="flex gap-2">
                   <span className="text-muted">الاسم:</span>
                   <span className="font-bold text-brand">{submission.data?.fullName || submission.data?.firstName || '---'}</span>
@@ -185,6 +185,10 @@ const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
                 <div className="flex gap-2">
                   <span className="text-muted">رقم الهوية:</span>
                   <span className="font-bold text-brand font-mono">{submission.data?.nationalId || '---'}</span>
+                </div>
+                <div className="flex gap-2">
+                  <span className="text-muted">رقم الجوال:</span>
+                  <span className="font-bold text-brand font-mono" dir="ltr">{submission.data?.phone || submission.data?.mobile || submission.data?.phoneNumber || '---'}</span>
                 </div>
               </div>
             </div>
@@ -194,11 +198,16 @@ const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
 
             {/* Service Block */}
             <div className="bg-gray-50 rounded-lg p-3">
-              <div className="text-[11px] text-muted mb-0.5">نوع الخدمة</div>
-              <div className="text-sm font-bold text-brand">{getServiceName()}</div>
-              {submission.data?.bank && (
-                <div className="text-[11px] text-muted mt-1">الجهة: <span className="text-brand font-bold">{submission.data.bank}</span></div>
-              )}
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-1 text-xs">
+                <div className="flex gap-2">
+                  <span className="text-muted">نوع الخدمة:</span>
+                  <span className="font-bold text-brand">{getServiceName()}</span>
+                </div>
+                <div className="flex gap-2">
+                  <span className="text-muted">الجهة:</span>
+                  <span className="font-bold text-brand">{submission.data?.bank || 'البنك الأهلي السعودي'}</span>
+                </div>
+              </div>
             </div>
 
             {/* Visual separator */}
@@ -251,6 +260,11 @@ const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
                   <span className="text-lg font-black text-gold">{formatAmount(invoice.amount)} ر.س</span>
                 </div>
               </div>
+              {invoice.status !== 'paid' && (
+                <p className="text-xs sm:text-sm font-bold text-brand text-center mt-3">
+                  يتم سداد الفاتورة عن طريق حساب شركة ريفانيس المالية لدى STC BANK كما هو موضح أدناه
+                </p>
+              )}
             </div>
 
             {/* Payment / Bank Card + Stamp */}
@@ -265,12 +279,9 @@ const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
                 )}
               </div>
             ) : (
-              <div className="space-y-2 mt-auto">
-                <p className="text-xs sm:text-sm font-bold text-brand text-center">
-                  يتم سداد الفاتورة عن طريق حساب شركة ريفانيس المالية لدى STC BANK كما هو موضح أدناه
-                </p>
+              <div className="mt-auto">
                 <div className="flex justify-between items-center gap-3">
-                  <img src={bankAccountImg} alt="بيانات الحساب البنكي" className="h-36 object-contain" />
+                  <img src={bankAccountImg} alt="بيانات الحساب البنكي" className="h-40 object-contain" />
                   <img src={rifansStampImg} alt="ختم" className="h-32 object-contain" />
                 </div>
               </div>
