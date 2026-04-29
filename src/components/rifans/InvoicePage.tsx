@@ -141,7 +141,7 @@ const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
   return (
     <div className="min-h-screen bg-[#F0F2F5] flex flex-col overflow-x-hidden">
       {/* Top Bar */}
-      <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200 px-4 py-3 flex justify-between items-center">
+      <div className="print-hidden sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200 px-4 py-3 flex justify-between items-center">
         <div className="flex items-center gap-2">
           <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-xl transition-colors">
             <X size={20} />
@@ -150,7 +150,7 @@ const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
         </div>
         <div className="flex items-center gap-2">
           <button onClick={handleDownload} disabled={isDownloading} className="p-2 hover:bg-gray-100 rounded-xl transition-colors text-gold">
-            <Download size={20} />
+            {isDownloading ? <Loader2 size={20} className="animate-spin" /> : <Download size={20} />}
           </button>
           <button onClick={() => window.print()} className="p-2 hover:bg-gray-100 rounded-xl transition-colors text-gold">
             <Printer size={20} />
@@ -160,120 +160,96 @@ const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
 
       {/* Invoice Content */}
       <div className="flex-1 flex items-start justify-center p-4 sm:p-8">
-        <div ref={invoiceRef} className="invoice-container w-full max-w-[700px] bg-white rounded-2xl shadow-xl overflow-hidden" dir="rtl">
-          {/* Header */}
-          <div className="bg-[#22042C] text-white p-6 sm:p-8">
-            <div className="flex justify-between items-start">
-              <div>
-                <h1 className="text-2xl font-black mb-1">فاتورة</h1>
-                <p className="text-gold text-sm font-bold">INVOICE</p>
-              </div>
-              <div className="text-left">
-                <Logo />
-              </div>
-            </div>
-            <div className="mt-4 grid grid-cols-2 gap-4 text-xs">
-              <div>
-                <span className="text-gold/70">رقم الفاتورة:</span>
-                <span className="block font-mono text-white mt-0.5">{invoice.id}</span>
-              </div>
-              <div className="text-left">
-                <span className="text-gold/70">التاريخ:</span>
-                <span className="block text-white mt-0.5">{invoiceDate}</span>
-              </div>
-            </div>
+        <div
+          ref={invoiceRef}
+          className="invoice-container w-full max-w-[800px] bg-white shadow-xl overflow-hidden flex flex-col"
+          dir="rtl"
+          style={{ fontFamily: 'Tajawal, sans-serif' }}
+        >
+          {/* Header: Logo + Title */}
+          <div className="px-8 pt-8 pb-4 flex justify-between items-center">
+            <Logo />
+            <h1 className="text-3xl sm:text-4xl font-black text-brand">فاتورة تقديم خدمات</h1>
           </div>
 
-          {/* Client Info */}
-          <div className="p-6 sm:p-8 border-b border-gray-100">
-            <h2 className="text-sm font-bold text-brand mb-3">بيانات العميل</h2>
-            <div className="grid grid-cols-2 gap-3 text-xs">
-              <div>
-                <span className="text-muted">الاسم:</span>
-                <span className="block font-bold text-brand mt-0.5">{submission.data?.fullName || submission.data?.firstName || '---'}</span>
-              </div>
-              <div>
-                <span className="text-muted">رقم الهوية:</span>
-                <span className="block font-bold text-brand mt-0.5 font-mono">{submission.data?.nationalId || '---'}</span>
-              </div>
-              <div>
-                <span className="text-muted">الجوال:</span>
-                <span className="block font-bold text-brand mt-0.5 font-mono text-right" dir="ltr">{submission.data?.mobile || '---'}</span>
-              </div>
-              <div>
-                <span className="text-muted">رقم الملف:</span>
-                <span className="block font-bold text-brand mt-0.5 font-mono">{submissionId}</span>
+          {/* Body */}
+          <div className="px-8 py-4 flex-1 space-y-4">
+            {/* Client Info */}
+            <div>
+              <h2 className="text-base font-bold text-brand mb-2">بيانات العميل</h2>
+              <div className="grid grid-cols-2 gap-x-6 gap-y-1.5 text-xs border-b border-gray-200 pb-3">
+                <div className="flex gap-2">
+                  <span className="text-muted">الاسم:</span>
+                  <span className="font-bold text-brand">{submission.data?.fullName || submission.data?.firstName || '---'}</span>
+                </div>
+                <div className="flex gap-2">
+                  <span className="text-muted">رقم الهوية:</span>
+                  <span className="font-bold text-brand font-mono">{submission.data?.nationalId || '---'}</span>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Service Details */}
-          <div className="p-6 sm:p-8 border-b border-gray-100">
-            <h2 className="text-sm font-bold text-brand mb-3">تفاصيل الخدمة</h2>
-            <div className="bg-gray-50 rounded-xl p-4 mb-4">
-              <div className="text-xs text-muted mb-1">نوع الخدمة</div>
+            {/* Service Block */}
+            <div className="bg-gray-50 rounded-lg p-3">
+              <div className="text-[11px] text-muted mb-0.5">نوع الخدمة</div>
               <div className="text-sm font-bold text-brand">{getServiceName()}</div>
               {submission.data?.bank && (
-                <div className="text-xs text-muted mt-2">الجهة: <span className="text-brand font-bold">{submission.data.bank}</span></div>
+                <div className="text-[11px] text-muted mt-1">الجهة: <span className="text-brand font-bold">{submission.data.bank}</span></div>
               )}
             </div>
 
             {/* Products Table */}
             {products.length > 0 && (
-              <div className="overflow-x-auto">
-                <table className="w-full text-xs">
-                  <thead>
-                    <tr className="bg-[#22042C] text-white">
-                      <th className="p-3 text-right font-bold">المنتج التمويلي</th>
-                      <th className="p-3 text-right font-bold">رقم الحساب</th>
-                      <th className="p-3 text-right font-bold">المبلغ</th>
+              <table className="w-full text-xs">
+                <thead>
+                  <tr className="bg-[#22042C] text-white">
+                    <th className="p-2.5 text-right font-bold">المنتج التمويلي</th>
+                    <th className="p-2.5 text-right font-bold">رقم الحساب</th>
+                    <th className="p-2.5 text-right font-bold">المبلغ</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {products.map((p: any, i: number) => (
+                    <tr key={i} className="border-b border-gray-200">
+                      <td className="p-2.5 text-brand">{p.type}</td>
+                      <td className="p-2.5 text-muted font-mono">{p.accountNumber || '---'}</td>
+                      <td className="p-2.5 font-bold text-brand">{formatAmount(p.amount)} ر.س</td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    {products.map((p: any, i: number) => (
-                      <tr key={i} className="border-b border-gray-100">
-                        <td className="p-3 text-brand">{p.type}</td>
-                        <td className="p-3 text-muted font-mono">{p.accountNumber || '---'}</td>
-                        <td className="p-3 font-bold text-brand">{formatAmount(p.amount)} ر.س</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                  <tfoot>
-                    <tr className="bg-brand/5 border-t-2 border-gold/20">
-                      <td colSpan={2} className="p-3 font-black text-brand text-right">إجمالي المديونية</td>
-                      <td className="p-3 font-black text-brand">{formatAmount(totalDebt)} ر.س</td>
-                    </tr>
-                  </tfoot>
-                </table>
-              </div>
+                  ))}
+                </tbody>
+                <tfoot>
+                  <tr className="bg-gray-50 border-t-2 border-gold/40">
+                    <td colSpan={2} className="p-2.5 font-black text-brand text-right">إجمالي المديونية</td>
+                    <td className="p-2.5 font-black text-brand">{formatAmount(totalDebt)} ر.س</td>
+                  </tr>
+                </tfoot>
+              </table>
             )}
-          </div>
 
-          {/* Fee Calculation */}
-          <div className="p-6 sm:p-8 border-b border-gray-100">
-            <h2 className="text-sm font-bold text-brand mb-3">احتساب الأتعاب</h2>
-            <div className="bg-gold/5 border border-gold/20 rounded-xl p-4 space-y-3">
-              <div className="flex justify-between items-center text-xs">
-                <span className="text-muted">طريقة الاحتساب:</span>
-                <span className="font-bold text-brand">{getFeeDescription()}</span>
-              </div>
-              {!isRescheduling && (
+            {/* Fee Calculation */}
+            <div>
+              <h2 className="text-base font-bold text-brand mb-2">احتساب الأتعاب</h2>
+              <div className="bg-gold/5 border border-gold/30 rounded-lg p-3 space-y-2">
                 <div className="flex justify-between items-center text-xs">
-                  <span className="text-muted">إجمالي المبلغ الأساسي:</span>
-                  <span className="font-bold text-brand">{formatAmount(totalDebt)} ر.س</span>
+                  <span className="text-muted">طريقة الاحتساب:</span>
+                  <span className="font-bold text-brand">{getFeeDescription()}</span>
                 </div>
-              )}
-              <div className="flex justify-between items-center pt-3 border-t border-gold/20">
-                <span className="text-sm font-black text-brand">المبلغ المستحق</span>
-                <span className="text-lg font-black text-gold">{formatAmount(invoice.amount)} ر.س</span>
+                {!isRescheduling && (
+                  <div className="flex justify-between items-center text-xs">
+                    <span className="text-muted">إجمالي المبلغ الأساسي:</span>
+                    <span className="font-bold text-brand">{formatAmount(totalDebt)} ر.س</span>
+                  </div>
+                )}
+                <div className="flex justify-between items-center pt-2 border-t border-gold/30">
+                  <span className="text-sm font-black text-brand">المبلغ المستحق</span>
+                  <span className="text-lg font-black text-gold">{formatAmount(invoice.amount)} ر.س</span>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Payment Status */}
-          <div className="p-6 sm:p-8 border-b border-gray-100">
+            {/* Payment / Bank Card + Stamp */}
             {invoice.status === 'paid' ? (
-              <div className="flex items-center justify-between p-4 rounded-xl bg-green-50 border border-green-200">
+              <div className="flex items-center justify-between p-3 rounded-lg bg-green-50 border border-green-200">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-green-500"></div>
                   <span className="text-sm font-bold text-green-700">تم السداد</span>
@@ -283,23 +259,36 @@ const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
                 )}
               </div>
             ) : (
-              <div className="space-y-3">
-                <p className="text-xs sm:text-sm font-bold text-brand leading-relaxed text-center">
+              <div className="space-y-2">
+                <p className="text-xs sm:text-sm font-bold text-brand text-center">
                   يتم سداد الفاتورة عن طريق حساب شركة ريفانيس المالية لدى STC BANK كما هو موضح أدناه
                 </p>
-                <img src={bankAccountImg} alt="بيانات الحساب البنكي" className="w-full rounded-xl border border-gray-200" />
+                <div className="flex justify-between items-center gap-3">
+                  <img src={rifansStampImg} alt="ختم" className="h-32 object-contain" />
+                  <img src={bankAccountImg} alt="بيانات الحساب البنكي" className="h-36 object-contain" />
+                </div>
               </div>
             )}
           </div>
 
-          {/* Footer with stamp */}
-          <div className="p-6 sm:p-8 flex justify-between items-end">
-            <div className="text-[9px] text-muted space-y-0.5">
-              <p>ريفانز للحلول المالية والاستشارية</p>
-              <p>سجل تجاري: 4030XXXXXX</p>
-              <p>www.rifans.sa</p>
+          {/* Purple Footer Bar */}
+          <div className="bg-[#22042C] text-white px-6 py-2.5 flex justify-between items-center text-[11px] mt-auto" dir="ltr">
+            <div className="flex items-center gap-1.5">
+              <span>www.rifanss.com</span>
+              <span className="text-gold">🌐</span>
             </div>
-            <img src={rifansStampImg} alt="ختم" className="w-20 h-20 opacity-70" />
+            <div className="flex items-center gap-1.5">
+              <span>info@rifans.net</span>
+              <span className="text-gold">✉</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span dir="ltr">800 2440 432</span>
+              <span className="text-gold">📞</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span>Jeddah, Saudi Arabia</span>
+              <span className="text-gold">📍</span>
+            </div>
           </div>
         </div>
       </div>
