@@ -159,10 +159,10 @@ const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
       </div>
 
       {/* Invoice Content */}
-      <div className="flex-1 flex items-start justify-center p-4 sm:p-8">
+      <div className="flex-1 flex items-stretch justify-center p-4 sm:p-8">
         <div
           ref={invoiceRef}
-          className="invoice-container w-full max-w-[800px] bg-white shadow-xl overflow-hidden flex flex-col"
+          className="invoice-container w-full max-w-[800px] bg-white shadow-xl overflow-hidden flex flex-col min-h-[1050px]"
           dir="rtl"
           style={{ fontFamily: 'Tajawal, sans-serif' }}
         >
