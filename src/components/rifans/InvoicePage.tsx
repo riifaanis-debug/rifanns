@@ -173,11 +173,11 @@ const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
           </div>
 
           {/* Body */}
-          <div className="px-8 py-4 flex-1 space-y-4">
+          <div className="px-8 py-4 flex-1 flex flex-col gap-4">
             {/* Client Info */}
             <div>
               <h2 className="text-base font-bold text-brand mb-2">بيانات العميل</h2>
-              <div className="grid grid-cols-2 gap-x-6 gap-y-1.5 text-xs border-b border-gray-200 pb-3">
+              <div className="grid grid-cols-2 gap-x-6 gap-y-1.5 text-xs pb-3">
                 <div className="flex gap-2">
                   <span className="text-muted">الاسم:</span>
                   <span className="font-bold text-brand">{submission.data?.fullName || submission.data?.firstName || '---'}</span>
@@ -189,6 +189,9 @@ const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
               </div>
             </div>
 
+            {/* Visual separator */}
+            <div className="h-px bg-gradient-to-l from-transparent via-gold/40 to-transparent" />
+
             {/* Service Block */}
             <div className="bg-gray-50 rounded-lg p-3">
               <div className="text-[11px] text-muted mb-0.5">نوع الخدمة</div>
@@ -197,6 +200,9 @@ const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
                 <div className="text-[11px] text-muted mt-1">الجهة: <span className="text-brand font-bold">{submission.data.bank}</span></div>
               )}
             </div>
+
+            {/* Visual separator */}
+            <div className="h-px bg-gradient-to-l from-transparent via-gold/40 to-transparent" />
 
             {/* Products Table */}
             {products.length > 0 && (
