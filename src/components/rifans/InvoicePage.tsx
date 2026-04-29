@@ -260,6 +260,11 @@ const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
                   <span className="text-lg font-black text-gold">{formatAmount(invoice.amount)} ر.س</span>
                 </div>
               </div>
+              {invoice.status !== 'paid' && (
+                <p className="text-xs sm:text-sm font-bold text-brand text-center mt-3">
+                  يتم سداد الفاتورة عن طريق حساب شركة ريفانيس المالية لدى STC BANK كما هو موضح أدناه
+                </p>
+              )}
             </div>
 
             {/* Payment / Bank Card + Stamp */}
@@ -274,12 +279,9 @@ const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
                 )}
               </div>
             ) : (
-              <div className="space-y-2 mt-auto">
-                <p className="text-xs sm:text-sm font-bold text-brand text-center">
-                  يتم سداد الفاتورة عن طريق حساب شركة ريفانيس المالية لدى STC BANK كما هو موضح أدناه
-                </p>
+              <div className="mt-auto">
                 <div className="flex justify-between items-center gap-3">
-                  <img src={bankAccountImg} alt="بيانات الحساب البنكي" className="h-36 object-contain" />
+                  <img src={bankAccountImg} alt="بيانات الحساب البنكي" className="h-40 object-contain" />
                   <img src={rifansStampImg} alt="ختم" className="h-32 object-contain" />
                 </div>
               </div>
