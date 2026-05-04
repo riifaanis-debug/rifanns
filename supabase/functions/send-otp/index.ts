@@ -42,7 +42,7 @@ serve(async (req) => {
     const { error: insertError } = await supabase.from('otp_codes').insert({
       phone: key,
       code,
-      user_id: userId || null,
+      user_id: userId && userId !== 'pending' ? userId : null,
       expires_at: expiresAt,
     });
 
