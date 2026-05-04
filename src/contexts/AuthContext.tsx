@@ -292,6 +292,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       role: inserted.role as 'admin' | 'user',
     };
   };
+
+  const loginWithEmail = async (email: string, password: string): Promise<User> => {
     setIsLoading(true);
     try {
       // Use server-side edge function for secure bcrypt password verification
