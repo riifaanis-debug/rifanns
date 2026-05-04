@@ -167,7 +167,7 @@ const OtpVerification: React.FC<OtpVerificationProps> = ({ email, userId, onVeri
           <Button
             onClick={handleVerify}
             className="w-full py-1.5 text-xs gap-2 rounded-lg mb-2"
-            disabled={isLoading || otp.join('').length !== 6}
+            disabled={isLoading || otp.join('').length !== 4}
           >
             {isLoading ? (
               <Loader2 className="animate-spin mx-auto" size={16} />
