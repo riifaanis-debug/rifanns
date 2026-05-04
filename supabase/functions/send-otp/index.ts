@@ -6,8 +6,9 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const GATEWAY_URL = 'https://connector-gateway.lovable.dev/resend';
-const FROM_ADDRESS = 'Rifans Finance <onboarding@resend.dev>';
+const SITE_NAME = 'ريفانس المالية';
+const SENDER_DOMAIN = 'notify.rifans.net';
+const FROM_ADDRESS = `${SITE_NAME} <noreply@rifans.net>`;
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -24,14 +25,12 @@ serve(async (req) => {
       });
     }
 
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
-    if (!LOVABLE_API_KEY || !RESEND_API_KEY) throw new Error('Email service not configured');
-
     const code = Math.floor(1000 + Math.random() * 9000).toString();
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    if (!supabaseUrl || !supabaseServiceKey) throw new Error('Server configuration missing');
+
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     // Use email as the lookup key (stored in `phone` column for backward compatibility)
@@ -80,31 +79,47 @@ serve(async (req) => {
       </div>
     `;
 
-    const response = await fetch(`${GATEWAY_URL}/emails`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
-        'X-Connection-Api-Key': RESEND_API_KEY,
-      },
-      body: JSON.stringify({
-        from: FROM_ADDRESS,
-        to: [email],
-        subject: `رمز التحقق: ${code} - ريفانس المالية`,
-        html,
-      }),
+    const messageId = crypto.randomUUID();
+
+    await supabase.from('email_send_log').insert({
+      message_id: messageId,
+      template_name: 'otp_email',
+      recipient_email: email,
+      status: 'pending',
     });
 
-    const data = await response.json();
-    if (!response.ok) {
-      console.error('Resend error:', response.status, JSON.stringify(data));
+    const { error: enqueueError } = await supabase.rpc('enqueue_email', {
+      queue_name: 'transactional_emails',
+      payload: {
+        message_id: messageId,
+        to: email,
+        from: FROM_ADDRESS,
+        sender_domain: SENDER_DOMAIN,
+        subject: `رمز التحقق: ${code} - ريفانس المالية`,
+        html,
+        purpose: 'transactional',
+        label: 'otp_email',
+        idempotency_key: `otp-${key}-${messageId}`,
+        queued_at: new Date().toISOString(),
+      },
+    });
+
+    if (enqueueError) {
+      console.error('OTP email enqueue error:', enqueueError);
+      await supabase.from('email_send_log').insert({
+        message_id: messageId,
+        template_name: 'otp_email',
+        recipient_email: email,
+        status: 'failed',
+        error_message: 'Failed to enqueue OTP email',
+      });
       return new Response(JSON.stringify({ success: false, error: 'فشل إرسال رمز التحقق إلى البريد الإلكتروني' }), {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
-    return new Response(JSON.stringify({ success: true, messageId: data.id }), {
+    return new Response(JSON.stringify({ success: true, messageId }), {
       status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
