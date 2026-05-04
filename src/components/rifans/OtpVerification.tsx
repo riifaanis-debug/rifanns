@@ -88,7 +88,7 @@ const OtpVerification: React.FC<OtpVerificationProps> = ({ email, userId, onVeri
 
   const handleVerify = async () => {
     const code = otp.join('');
-    if (code.length !== 6) {
+    if (code.length !== 4) {
       setError('يرجى إدخال رمز التحقق كاملاً');
       return;
     }
