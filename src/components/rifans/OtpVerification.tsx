@@ -5,13 +5,13 @@ import { supabase } from '@/integrations/supabase/client';
 import Logo from './Logo';
 
 interface OtpVerificationProps {
-  phone: string;
+  email: string;
   userId: string;
   onVerified: () => void;
   onCancel: () => void;
 }
 
-const OtpVerification: React.FC<OtpVerificationProps> = ({ phone, userId, onVerified, onCancel }) => {
+const OtpVerification: React.FC<OtpVerificationProps> = ({ email, userId, onVerified, onCancel }) => {
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [isLoading, setIsLoading] = useState(false);
   const [isSending, setIsSending] = useState(false);
@@ -36,7 +36,7 @@ const OtpVerification: React.FC<OtpVerificationProps> = ({ phone, userId, onVeri
     setError('');
     try {
       const { data, error: fnError } = await supabase.functions.invoke('send-otp', {
-        body: { phone, userId },
+        body: { email, userId },
       });
 
       if (fnError || !data?.success) {
@@ -97,7 +97,7 @@ const OtpVerification: React.FC<OtpVerificationProps> = ({ phone, userId, onVeri
     setError('');
     try {
       const { data, error: fnError } = await supabase.functions.invoke('verify-otp', {
-        body: { phone, code, userId },
+        body: { email, code, userId },
       });
 
       if (fnError || !data?.success) {
@@ -113,7 +113,12 @@ const OtpVerification: React.FC<OtpVerificationProps> = ({ phone, userId, onVeri
     }
   };
 
-  const maskedPhone = phone ? `${phone.slice(0, 4)}****${phone.slice(-2)}` : '';
+  const maskedPhone = email ? (() => {
+    const [local, domain] = email.split('@');
+    if (!domain) return email;
+    const masked = local.length <= 2 ? local[0] + '*' : local.slice(0, 2) + '***';
+    return `${masked}@${domain}`;
+  })() : '';
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
