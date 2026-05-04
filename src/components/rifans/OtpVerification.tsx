@@ -132,7 +132,7 @@ const OtpVerification: React.FC<OtpVerificationProps> = ({ email, userId, onVeri
             <ShieldCheck className="text-gold" size={24} />
           </div>
           
-          <h2 className="text-sm font-bold text-brand dark:text-white mb-1">التحقق من رقم الجوال</h2>
+          <h2 className="text-sm font-bold text-brand dark:text-white mb-1">التحقق من البريد الإلكتروني</h2>
           <p className="text-[10px] text-muted mb-3">
             {sent ? (
               <>تم إرسال رمز التحقق إلى <span className="font-bold text-brand dark:text-gold dir-ltr inline-block">{maskedPhone}</span></>
