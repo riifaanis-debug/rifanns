@@ -12,7 +12,7 @@ interface OtpVerificationProps {
 }
 
 const OtpVerification: React.FC<OtpVerificationProps> = ({ email, userId, onVerified, onCancel }) => {
-  const [otp, setOtp] = useState(['', '', '', '', '', '']);
+  const [otp, setOtp] = useState(['', '', '', '']);
   const [isLoading, setIsLoading] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState('');
