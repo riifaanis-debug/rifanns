@@ -182,21 +182,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
             </p>
           </div>
 
-          {/* Top tabs: client vs admin */}
-          <div className="flex bg-gray-100 dark:bg-white/5 p-1 rounded-lg mb-2">
-            <button
-              onClick={() => { setMode('login'); setError(''); }}
-              className={`flex-1 py-1 text-[10px] font-bold rounded-md transition-all ${mode !== 'admin' ? 'bg-white dark:bg-brand text-brand dark:text-gold shadow-sm' : 'text-muted'}`}
-            >
-              عميل
-            </button>
-            <button
-              onClick={() => { setMode('admin'); setError(''); }}
-              className={`flex-1 py-1 text-[10px] font-bold rounded-md transition-all ${mode === 'admin' ? 'bg-white dark:bg-brand text-brand dark:text-gold shadow-sm' : 'text-muted'}`}
-            >
-              إدارة
-            </button>
-          </div>
+          {/* Top tabs visible only in client modes */}
 
           {/* Sub-tabs: login vs register (only for client mode) */}
           {mode !== 'admin' && (
