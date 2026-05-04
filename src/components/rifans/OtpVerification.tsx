@@ -61,7 +61,7 @@ const OtpVerification: React.FC<OtpVerificationProps> = ({ email, userId, onVeri
     setOtp(newOtp);
     setError('');
 
-    if (value && index < 5) {
+    if (value && index < 3) {
       inputRefs.current[index + 1]?.focus();
     }
   };
