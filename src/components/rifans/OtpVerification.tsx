@@ -5,13 +5,13 @@ import { supabase } from '@/integrations/supabase/client';
 import Logo from './Logo';
 
 interface OtpVerificationProps {
-  phone: string;
+  email: string;
   userId: string;
   onVerified: () => void;
   onCancel: () => void;
 }
 
-const OtpVerification: React.FC<OtpVerificationProps> = ({ phone, userId, onVerified, onCancel }) => {
+const OtpVerification: React.FC<OtpVerificationProps> = ({ email, userId, onVerified, onCancel }) => {
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [isLoading, setIsLoading] = useState(false);
   const [isSending, setIsSending] = useState(false);
