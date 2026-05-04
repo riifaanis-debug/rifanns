@@ -30,7 +30,7 @@ serve(async (req) => {
     const { data: otpRecords, error: lookupError } = await supabase
       .from('otp_codes')
       .select('*')
-      .eq('phone', phone)
+      .eq('phone', key)
       .eq('code', code)
       .eq('verified', false)
       .limit(1);
@@ -44,7 +44,6 @@ serve(async (req) => {
 
     const otp = otpRecords[0];
 
-    // Check expiry
     if (new Date(otp.expires_at) < new Date()) {
       return new Response(JSON.stringify({ success: false, error: 'رمز التحقق منتهي الصلاحية' }), {
         status: 401,
@@ -52,16 +51,13 @@ serve(async (req) => {
       });
     }
 
-    // Mark OTP as verified
     await supabase.from('otp_codes').update({ verified: true }).eq('id', otp.id);
 
-    // Mark user as phone_verified
     if (userId) {
       await supabase.from('app_users').update({ phone_verified: true }).eq('id', userId);
     }
 
-    // Clean up old OTPs for this phone
-    await supabase.from('otp_codes').delete().eq('phone', phone);
+    await supabase.from('otp_codes').delete().eq('phone', key);
 
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
