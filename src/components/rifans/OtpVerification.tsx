@@ -74,14 +74,14 @@ const OtpVerification: React.FC<OtpVerificationProps> = ({ email, userId, onVeri
 
   const handlePaste = (e: React.ClipboardEvent) => {
     e.preventDefault();
-    const pasted = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
+    const pasted = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 4);
     const newOtp = [...otp];
     for (let i = 0; i < pasted.length; i++) {
       newOtp[i] = pasted[i];
     }
     setOtp(newOtp);
     if (pasted.length > 0) {
-      const focusIdx = Math.min(pasted.length, 5);
+      const focusIdx = Math.min(pasted.length, 3);
       inputRefs.current[focusIdx]?.focus();
     }
   };
