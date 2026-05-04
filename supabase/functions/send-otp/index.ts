@@ -6,8 +6,8 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const GATEWAY_URL = 'https://connector-gateway.lovable.dev/twilio';
-const TWILIO_FROM = '+14785518214';
+const GATEWAY_URL = 'https://connector-gateway.lovable.dev/resend';
+const FROM_ADDRESS = 'Rifans Finance <noreply@notify.rifans.net>';
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -15,36 +15,32 @@ serve(async (req) => {
   }
 
   try {
-    const { phone, userId } = await req.json();
+    const { email, userId, phone } = await req.json();
 
-    if (!phone) {
-      return new Response(JSON.stringify({ success: false, error: 'رقم الجوال مطلوب' }), {
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return new Response(JSON.stringify({ success: false, error: 'يرجى إدخال بريد إلكتروني صحيح' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    if (!LOVABLE_API_KEY) throw new Error('LOVABLE_API_KEY is not configured');
+    const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
+    if (!LOVABLE_API_KEY || !RESEND_API_KEY) throw new Error('Email service not configured');
 
-    const TWILIO_API_KEY = Deno.env.get('TWILIO_API_KEY');
-    if (!TWILIO_API_KEY) throw new Error('TWILIO_API_KEY is not configured');
-
-    // Generate 6-digit OTP
     const code = Math.floor(100000 + Math.random() * 900000).toString();
 
-    // Store OTP in database
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Delete old OTPs for this phone
-    await supabase.from('otp_codes').delete().eq('phone', phone);
+    // Use email as the lookup key (stored in `phone` column for backward compatibility)
+    const key = email.toLowerCase();
+    await supabase.from('otp_codes').delete().eq('phone', key);
 
-    // Insert new OTP (expires in 5 minutes)
     const expiresAt = new Date(Date.now() + 5 * 60 * 1000).toISOString();
     const { error: insertError } = await supabase.from('otp_codes').insert({
-      phone,
+      phone: key,
       code,
       user_id: userId || null,
       expires_at: expiresAt,
@@ -58,41 +54,57 @@ serve(async (req) => {
       });
     }
 
-    // Format phone to E.164
-    let formattedPhone = phone.replace(/\D/g, '');
-    if (formattedPhone.startsWith('0')) {
-      formattedPhone = '966' + formattedPhone.slice(1);
-    }
-    if (!formattedPhone.startsWith('+')) {
-      formattedPhone = '+' + formattedPhone;
-    }
+    const html = `
+      <div dir="rtl" style="font-family: Tahoma, Arial, sans-serif; background:#ffffff; padding:24px; max-width:520px; margin:auto; color:#22042C;">
+        <div style="text-align:center; padding:16px 0; border-bottom:2px solid #C7A969;">
+          <h1 style="margin:0; color:#22042C; font-size:22px;">ريفانس المالية</h1>
+        </div>
+        <div style="padding:24px 8px;">
+          <h2 style="color:#22042C; font-size:18px; margin:0 0 12px;">رمز التحقق الخاص بك</h2>
+          <p style="font-size:14px; color:#444; line-height:1.7; margin:0 0 20px;">
+            مرحبًا، استخدم الرمز التالي لإكمال تسجيل الدخول إلى حسابك:
+          </p>
+          <div style="text-align:center; background:#22042C; color:#C7A969; font-size:32px; font-weight:bold; letter-spacing:8px; padding:18px; border-radius:12px; margin:16px 0;">
+            ${code}
+          </div>
+          <p style="font-size:13px; color:#666; line-height:1.7; margin:20px 0 0;">
+            هذا الرمز صالح لمدة <b>5 دقائق</b>. لا تشارك هذا الرمز مع أي شخص حفاظًا على أمان حسابك.
+          </p>
+          <p style="font-size:12px; color:#999; margin:16px 0 0;">
+            إذا لم تطلب هذا الرمز، يمكنك تجاهل هذه الرسالة.
+          </p>
+        </div>
+        <div style="text-align:center; padding:16px; border-top:1px solid #eee; font-size:11px; color:#999;">
+          © ${new Date().getFullYear()} Rifans Finance · جميع الحقوق محفوظة
+        </div>
+      </div>
+    `;
 
-    // Send SMS via Twilio gateway
-    const response = await fetch(`${GATEWAY_URL}/Messages.json`, {
+    const response = await fetch(`${GATEWAY_URL}/emails`, {
       method: 'POST',
       headers: {
+        'Content-Type': 'application/json',
         'Authorization': `Bearer ${LOVABLE_API_KEY}`,
-        'X-Connection-Api-Key': TWILIO_API_KEY,
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'X-Connection-Api-Key': RESEND_API_KEY,
       },
-      body: new URLSearchParams({
-        To: formattedPhone,
-        From: TWILIO_FROM,
-        Body: `مرحبًا،\n\nرمز التحقق الخاص بك في ريفانس المالية هو: ${code}\n\nهذا الرمز صالح لمدة 5 دقائق. يرجى عدم مشاركته مع أي شخص حفاظًا على أمان حسابك.\n\nRifans Finance`,
+      body: JSON.stringify({
+        from: FROM_ADDRESS,
+        to: [email],
+        subject: `رمز التحقق: ${code} - ريفانس المالية`,
+        html,
       }),
     });
 
     const data = await response.json();
-
     if (!response.ok) {
-      console.error('Twilio error:', response.status, JSON.stringify(data));
-      return new Response(JSON.stringify({ success: false, error: 'فشل إرسال رسالة التحقق' }), {
+      console.error('Resend error:', response.status, JSON.stringify(data));
+      return new Response(JSON.stringify({ success: false, error: 'فشل إرسال رمز التحقق إلى البريد الإلكتروني' }), {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
-    return new Response(JSON.stringify({ success: true, messageSid: data.sid }), {
+    return new Response(JSON.stringify({ success: true, messageId: data.id }), {
       status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });

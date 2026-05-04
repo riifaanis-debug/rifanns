@@ -12,10 +12,11 @@ serve(async (req) => {
   }
 
   try {
-    const { phone, code, userId } = await req.json();
+    const { phone, email, code, userId } = await req.json();
+    const key = (email || phone || '').toString().toLowerCase();
 
-    if (!phone || !code) {
-      return new Response(JSON.stringify({ success: false, error: 'رقم الجوال ورمز التحقق مطلوبان' }), {
+    if (!key || !code) {
+      return new Response(JSON.stringify({ success: false, error: 'البريد الإلكتروني ورمز التحقق مطلوبان' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
