@@ -20,7 +20,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [showOtp, setShowOtp] = useState(false);
-  const [pendingUser, setPendingUser] = useState<{ id: string; phone: string; role: string } | null>(null);
+  const [pendingUser, setPendingUser] = useState<{ id: string; email: string; role: string } | null>(null);
   
   const { loginOrRegisterUser, lookupOrCreateUser, loginWithEmail, loginWithGoogle, loginWithApple, login } = useAuth();
 
@@ -86,10 +86,17 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
 
     try {
       if (isUserMode) {
-        // Lookup user WITHOUT logging in yet
         const foundUser = await lookupOrCreateUser(formData.nationalId, formData.mobile);
         
-        // Login directly (OTP disabled)
+        // If user has an email on file, require email OTP verification
+        if (foundUser.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(foundUser.email)) {
+          setPendingUser({ id: foundUser.id, email: foundUser.email, role: foundUser.role || 'user' });
+          setShowOtp(true);
+          setIsLoading(false);
+          return;
+        }
+
+        // No email on file → login directly (legacy behavior)
         login({ user: foundUser, token: `session-${foundUser.id}` });
 
         if (foundUser.role === 'admin') {
@@ -116,7 +123,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
   if (showOtp && pendingUser) {
     return (
       <OtpVerification
-        phone={pendingUser.phone}
+        email={pendingUser.email}
         userId={pendingUser.id}
         onVerified={() => {
           // Now login after OTP verification
