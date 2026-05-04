@@ -28,7 +28,7 @@ serve(async (req) => {
     const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
     if (!LOVABLE_API_KEY || !RESEND_API_KEY) throw new Error('Email service not configured');
 
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    const code = Math.floor(1000 + Math.random() * 9000).toString();
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;

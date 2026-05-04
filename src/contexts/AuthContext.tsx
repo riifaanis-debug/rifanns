@@ -27,6 +27,8 @@ interface AuthContextType {
   isLoading: boolean;
   loginOrRegisterUser: (nationalId: string, phone: string) => Promise<User>;
   lookupOrCreateUser: (nationalId: string, phone: string) => Promise<User>;
+  lookupUserByNationalId: (nationalId: string) => Promise<User>;
+  registerNewUser: (nationalId: string, phone: string, email: string) => Promise<User>;
   loginWithEmail: (email: string, password: string) => Promise<User>;
   loginWithGoogle: () => Promise<User>;
   loginWithApple: () => Promise<User>;
@@ -209,6 +211,88 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  // Lookup user by national ID only (for login flow)
+  const lookupUserByNationalId = async (nationalId: string): Promise<User> => {
+    const { data: existingUsers, error: lookupError } = await supabase
+      .from('app_users')
+      .select('*')
+      .eq('national_id', nationalId)
+      .limit(1);
+
+    if (lookupError) throw new Error('خطأ في قاعدة البيانات');
+    if (!existingUsers || existingUsers.length === 0) {
+      throw new Error('لا يوجد حساب بهذه الهوية. يرجى إنشاء حساب جديد.');
+    }
+    const appUser = existingUsers[0];
+    if (!appUser.email) {
+      throw new Error('هذا الحساب لا يحتوي على بريد إلكتروني. يرجى التواصل مع الدعم.');
+    }
+    return {
+      id: appUser.id,
+      fullName: appUser.full_name,
+      name: appUser.full_name,
+      email: appUser.email,
+      phone: appUser.phone,
+      national_id: appUser.national_id,
+      role: appUser.role as 'admin' | 'user',
+    };
+  };
+
+  // Create new user account (registration flow) - requires email
+  const registerNewUser = async (nationalId: string, phone: string, email: string): Promise<User> => {
+    const { data: existing } = await supabase
+      .from('app_users')
+      .select('id')
+      .eq('national_id', nationalId)
+      .limit(1);
+
+    if (existing && existing.length > 0) {
+      throw new Error('يوجد حساب مسجل بهذه الهوية بالفعل. يرجى تسجيل الدخول.');
+    }
+
+    const newUser = {
+      id: Date.now().toString(),
+      full_name: `عميل ${nationalId.slice(-4)}`,
+      email: email.toLowerCase().trim(),
+      phone,
+      national_id: nationalId,
+      role: 'user',
+    };
+    const { data: inserted, error: insertError } = await supabase
+      .from('app_users')
+      .insert(newUser)
+      .select()
+      .single();
+
+    if (insertError) throw new Error('خطأ في إنشاء الحساب');
+
+    try {
+      supabase.functions.invoke('hubspot-sync', {
+        body: {
+          action: 'upsert_contact',
+          contact: {
+            email: inserted.email,
+            phone: inserted.phone,
+            firstname: inserted.full_name,
+            national_id: inserted.national_id,
+          },
+        },
+      });
+    } catch (e) {
+      console.error('hubspot-sync (new contact) failed', e);
+    }
+
+    return {
+      id: inserted.id,
+      fullName: inserted.full_name,
+      name: inserted.full_name,
+      email: inserted.email,
+      phone: inserted.phone,
+      national_id: inserted.national_id,
+      role: inserted.role as 'admin' | 'user',
+    };
+  };
+
   const loginWithEmail = async (email: string, password: string): Promise<User> => {
     setIsLoading(true);
     try {
@@ -275,7 +359,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, isLoading, loginOrRegisterUser, lookupOrCreateUser, loginWithEmail, loginWithGoogle, loginWithApple }}>
+    <AuthContext.Provider value={{ user, token, login, logout, isLoading, loginOrRegisterUser, lookupOrCreateUser, lookupUserByNationalId, registerNewUser, loginWithEmail, loginWithGoogle, loginWithApple }}>
       {children}
     </AuthContext.Provider>
   );

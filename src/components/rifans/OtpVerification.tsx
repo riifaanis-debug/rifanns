@@ -12,7 +12,7 @@ interface OtpVerificationProps {
 }
 
 const OtpVerification: React.FC<OtpVerificationProps> = ({ email, userId, onVerified, onCancel }) => {
-  const [otp, setOtp] = useState(['', '', '', '', '', '']);
+  const [otp, setOtp] = useState(['', '', '', '']);
   const [isLoading, setIsLoading] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState('');
@@ -61,7 +61,7 @@ const OtpVerification: React.FC<OtpVerificationProps> = ({ email, userId, onVeri
     setOtp(newOtp);
     setError('');
 
-    if (value && index < 5) {
+    if (value && index < 3) {
       inputRefs.current[index + 1]?.focus();
     }
   };
@@ -74,21 +74,21 @@ const OtpVerification: React.FC<OtpVerificationProps> = ({ email, userId, onVeri
 
   const handlePaste = (e: React.ClipboardEvent) => {
     e.preventDefault();
-    const pasted = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
+    const pasted = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 4);
     const newOtp = [...otp];
     for (let i = 0; i < pasted.length; i++) {
       newOtp[i] = pasted[i];
     }
     setOtp(newOtp);
     if (pasted.length > 0) {
-      const focusIdx = Math.min(pasted.length, 5);
+      const focusIdx = Math.min(pasted.length, 3);
       inputRefs.current[focusIdx]?.focus();
     }
   };
 
   const handleVerify = async () => {
     const code = otp.join('');
-    if (code.length !== 6) {
+    if (code.length !== 4) {
       setError('يرجى إدخال رمز التحقق كاملاً');
       return;
     }
@@ -132,7 +132,7 @@ const OtpVerification: React.FC<OtpVerificationProps> = ({ email, userId, onVeri
             <ShieldCheck className="text-gold" size={24} />
           </div>
           
-          <h2 className="text-sm font-bold text-brand dark:text-white mb-1">التحقق من رقم الجوال</h2>
+          <h2 className="text-sm font-bold text-brand dark:text-white mb-1">التحقق من البريد الإلكتروني</h2>
           <p className="text-[10px] text-muted mb-3">
             {sent ? (
               <>تم إرسال رمز التحقق إلى <span className="font-bold text-brand dark:text-gold dir-ltr inline-block">{maskedPhone}</span></>
@@ -167,7 +167,7 @@ const OtpVerification: React.FC<OtpVerificationProps> = ({ email, userId, onVeri
           <Button
             onClick={handleVerify}
             className="w-full py-1.5 text-xs gap-2 rounded-lg mb-2"
-            disabled={isLoading || otp.join('').length !== 6}
+            disabled={isLoading || otp.join('').length !== 4}
           >
             {isLoading ? (
               <Loader2 className="animate-spin mx-auto" size={16} />
