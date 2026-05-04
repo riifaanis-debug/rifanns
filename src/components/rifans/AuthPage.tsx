@@ -350,6 +350,14 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
             >
               إلغاء والرجوع للرئيسية
             </button>
+
+            <button
+              type="button"
+              onClick={() => { setMode(mode === 'admin' ? 'login' : 'admin'); setError(''); }}
+              className="w-full mt-1 text-[10px] text-muted hover:text-brand dark:hover:text-gold underline underline-offset-2"
+            >
+              {mode === 'admin' ? 'العودة لتسجيل دخول العميل' : 'تسجيل دخول الإدارة'}
+            </button>
           </form>
         </div>
       </div>
