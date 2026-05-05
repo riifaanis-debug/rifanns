@@ -35,6 +35,7 @@ import PromissoryNotePage from './components/rifans/PromissoryNotePage';
 import ClientCard from './components/rifans/ClientCard';
 import ProfileCompletionModal from './components/rifans/ProfileCompletionModal';
 import { WaiveInfoPage, SchedulingInfoPage, SeizedAmountsInfoPage } from './components/rifans/ServiceInfoPage';
+import DomainVerificationCheck from './components/rifans/DomainVerificationCheck';
 
 const StorySection = () => {
   const { t, direction } = useLanguage();
@@ -349,6 +350,7 @@ const AppContent: React.FC = () => {
       case '#/scheduling-info': return <SchedulingInfoPage />;
       case '#/seized-amounts-info': return <SeizedAmountsInfoPage />;
       case '#/client-card': return <ClientCard />;
+      case '#/domain-check': return <DomainVerificationCheck />;
       case '#/admin': return user?.role === 'admin' ? <AdminDashboard onClose={() => { window.location.hash = '#/';}} /> : <LandingPage />;
       case '#/dashboard': return user ? <CustomerDashboard user={{ id: user.id, fullName: '', email: '', nationalId: user.national_id || '', mobile: user.phone || '', joinDate: new Date().toISOString() }} onClose={() => { window.location.hash = '#/';}} onLogout={logout} /> : <LandingPage />;
       default: return <LandingPage />;
