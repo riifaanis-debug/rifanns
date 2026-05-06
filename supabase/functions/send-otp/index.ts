@@ -97,6 +97,7 @@ serve(async (req) => {
         sender_domain: SENDER_DOMAIN,
         subject: `رمز التحقق: ${code} - ريفانس المالية`,
         html,
+        text: `رمز التحقق الخاص بك في ريفانس المالية: ${code}\n\nهذا الرمز صالح لمدة 5 دقائق. لا تشاركه مع أي شخص.\n\nإذا لم تطلب هذا الرمز، تجاهل هذه الرسالة.`,
         purpose: 'transactional',
         label: 'otp_email',
         idempotency_key: `otp-${key}-${messageId}`,
