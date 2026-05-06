@@ -80,6 +80,20 @@ serve(async (req) => {
     `;
 
     const messageId = crypto.randomUUID();
+    const unsubscribeToken = crypto.randomUUID();
+
+    const { error: unsubscribeError } = await supabase.from('email_unsubscribe_tokens').insert({
+      token: unsubscribeToken,
+      email: key,
+    });
+
+    if (unsubscribeError) {
+      console.error('OTP unsubscribe token insert error:', unsubscribeError);
+      return new Response(JSON.stringify({ success: false, error: 'فشل تجهيز رسالة التحقق' }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
 
     await supabase.from('email_send_log').insert({
       message_id: messageId,
@@ -100,6 +114,7 @@ serve(async (req) => {
         text: `رمز التحقق الخاص بك في ريفانس المالية: ${code}\n\nهذا الرمز صالح لمدة 5 دقائق. لا تشاركه مع أي شخص.\n\nإذا لم تطلب هذا الرمز، تجاهل هذه الرسالة.`,
         purpose: 'transactional',
         label: 'otp_email',
+        unsubscribe_token: unsubscribeToken,
         idempotency_key: `otp-${key}-${messageId}`,
         queued_at: new Date().toISOString(),
       },
