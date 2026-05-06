@@ -80,19 +80,28 @@ serve(async (req) => {
     `;
 
     const messageId = crypto.randomUUID();
-    const unsubscribeToken = crypto.randomUUID();
+    let unsubscribeToken = crypto.randomUUID();
 
-    const { error: unsubscribeError } = await supabase.from('email_unsubscribe_tokens').insert({
-      token: unsubscribeToken,
-      email: key,
-    });
+    // Reuse existing token for this email if present (unique constraint on email)
+    const { data: existingToken } = await supabase
+      .from('email_unsubscribe_tokens')
+      .select('token')
+      .eq('email', key)
+      .maybeSingle();
 
-    if (unsubscribeError) {
-      console.error('OTP unsubscribe token insert error:', unsubscribeError);
-      return new Response(JSON.stringify({ success: false, error: 'فشل تجهيز رسالة التحقق' }), {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
+    if (existingToken?.token) {
+      unsubscribeToken = existingToken.token;
+    } else {
+      const { error: unsubscribeError } = await supabase
+        .from('email_unsubscribe_tokens')
+        .insert({ token: unsubscribeToken, email: key });
+      if (unsubscribeError && unsubscribeError.code !== '23505') {
+        console.error('OTP unsubscribe token insert error:', unsubscribeError);
+        return new Response(JSON.stringify({ success: false, error: 'فشل تجهيز رسالة التحقق' }), {
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
     }
 
     await supabase.from('email_send_log').insert({
