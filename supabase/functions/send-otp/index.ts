@@ -8,7 +8,7 @@ const corsHeaders = {
 
 const SITE_NAME = 'ريفانس المالية';
 const SENDER_DOMAIN = 'notify.rifans.net';
-const FROM_ADDRESS = `${SITE_NAME} <noreply@rifans.net>`;
+const FROM_ADDRESS = `${SITE_NAME} <noreply@${SENDER_DOMAIN}>`;
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
