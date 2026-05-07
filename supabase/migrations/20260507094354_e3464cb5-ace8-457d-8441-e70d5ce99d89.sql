@@ -1,0 +1,1 @@
+UPDATE public.app_users SET password_hash = extensions.crypt('123456', extensions.gen_salt('bf')) WHERE email = 'r.iifaanis@gmail.com';
