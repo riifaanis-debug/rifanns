@@ -301,6 +301,14 @@ const AppContent: React.FC = () => {
   }, []);
 
   const getComponent = () => {
+    // Admins always see only the admin dashboard
+    if (user?.role === 'admin') {
+      if (route.startsWith('#/promissory/')) {
+        const noteId = route.replace('#/promissory/', '');
+        return <PromissoryNotePage noteId={noteId} onClose={() => window.location.hash = '#/admin'} />;
+      }
+      return <AdminDashboard onClose={() => { window.location.hash = '#/admin';}} />;
+    }
     if (route.startsWith('#/section/')) {
       const sectionId = route.replace('#/section/', '');
       return user ? <SectionPage sectionId={sectionId} /> : <LandingPage />;
