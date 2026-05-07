@@ -358,7 +358,7 @@ const AppContent: React.FC = () => {
       case '#/seized-amounts-info': return <SeizedAmountsInfoPage />;
       case '#/client-card': return <ClientCard />;
       case '#/domain-check': return <DomainVerificationCheck />;
-      case '#/admin': return user?.role === 'admin' ? <AdminDashboard onClose={() => { window.location.hash = '#/';}} /> : <LandingPage />;
+      case '#/admin': return <LandingPage />;
       case '#/dashboard': return user ? <CustomerDashboard user={{ id: user.id, fullName: '', email: '', nationalId: user.national_id || '', mobile: user.phone || '', joinDate: new Date().toISOString() }} onClose={() => { window.location.hash = '#/';}} onLogout={logout} /> : <LandingPage />;
       default: return <LandingPage />;
     }
