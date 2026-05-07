@@ -336,8 +336,7 @@ const AppContent: React.FC = () => {
     }
     if (route.startsWith('#/promissory/')) {
       const noteId = route.replace('#/promissory/', '');
-      const back = user?.role === 'admin' ? '#/admin' : '#/dashboard';
-      return user ? <PromissoryNotePage noteId={noteId} onClose={() => window.location.hash = back} /> : <LandingPage />;
+      return user ? <PromissoryNotePage noteId={noteId} onClose={() => window.location.hash = '#/dashboard'} /> : <LandingPage />;
     }
     switch(route) {
       case '#/services': return <ServicesPage />;
