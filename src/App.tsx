@@ -301,6 +301,14 @@ const AppContent: React.FC = () => {
   }, []);
 
   const getComponent = () => {
+    // Admins always see only the admin dashboard
+    if (user?.role === 'admin') {
+      if (route.startsWith('#/promissory/')) {
+        const noteId = route.replace('#/promissory/', '');
+        return <PromissoryNotePage noteId={noteId} onClose={() => window.location.hash = '#/admin'} />;
+      }
+      return <AdminDashboard onClose={() => { window.location.hash = '#/admin';}} />;
+    }
     if (route.startsWith('#/section/')) {
       const sectionId = route.replace('#/section/', '');
       return user ? <SectionPage sectionId={sectionId} /> : <LandingPage />;
@@ -328,8 +336,7 @@ const AppContent: React.FC = () => {
     }
     if (route.startsWith('#/promissory/')) {
       const noteId = route.replace('#/promissory/', '');
-      const back = user?.role === 'admin' ? '#/admin' : '#/dashboard';
-      return user ? <PromissoryNotePage noteId={noteId} onClose={() => window.location.hash = back} /> : <LandingPage />;
+      return user ? <PromissoryNotePage noteId={noteId} onClose={() => window.location.hash = '#/dashboard'} /> : <LandingPage />;
     }
     switch(route) {
       case '#/services': return <ServicesPage />;
@@ -351,7 +358,7 @@ const AppContent: React.FC = () => {
       case '#/seized-amounts-info': return <SeizedAmountsInfoPage />;
       case '#/client-card': return <ClientCard />;
       case '#/domain-check': return <DomainVerificationCheck />;
-      case '#/admin': return user?.role === 'admin' ? <AdminDashboard onClose={() => { window.location.hash = '#/';}} /> : <LandingPage />;
+      case '#/admin': return <LandingPage />;
       case '#/dashboard': return user ? <CustomerDashboard user={{ id: user.id, fullName: '', email: '', nationalId: user.national_id || '', mobile: user.phone || '', joinDate: new Date().toISOString() }} onClose={() => { window.location.hash = '#/';}} onLogout={logout} /> : <LandingPage />;
       default: return <LandingPage />;
     }
