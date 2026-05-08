@@ -224,9 +224,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       throw new Error('لا يوجد حساب بهذه الهوية. يرجى إنشاء حساب جديد.');
     }
     const appUser = existingUsers[0];
-    if (!appUser.email) {
-      throw new Error('هذا الحساب لا يحتوي على بريد إلكتروني. يرجى التواصل مع الدعم.');
-    }
     return {
       id: appUser.id,
       fullName: appUser.full_name,
