@@ -225,7 +225,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
                     placeholder="10 أرقام"
                   />
                 </div>
-                <p className="text-[9px] text-muted px-1 pt-1">سيتم إرسال رمز تحقق إلى بريدك الإلكتروني المسجل</p>
+                <p className="text-[9px] text-muted px-1 pt-1">أدخل رقم الهوية الوطنية لتسجيل الدخول مباشرة</p>
               </div>
             )}
 
