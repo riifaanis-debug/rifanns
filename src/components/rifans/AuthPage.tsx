@@ -80,11 +80,17 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
 
     if (mode === 'login') {
       if (!/^[0-9]{10}$/.test(formData.nationalId)) return setError('رقم الهوية يجب أن يتكون من 10 أرقام');
+      if (!/^05[0-9]{8}$/.test(formData.mobile)) return setError('رقم الجوال يجب أن يتكون من 10 أرقام ويبدأ بـ 05');
       setIsLoading(true);
       try {
         const u = await lookupUserByNationalId(formData.nationalId);
+        if (u.phone && u.phone !== formData.mobile) {
+          setError('رقم الجوال غير مطابق للحساب المسجل');
+          setIsLoading(false);
+          return;
+        }
         login({
-          user: { id: u.id, email: u.email, role: (u.role || 'user') as 'admin' | 'user' },
+          user: { id: u.id, email: u.email, phone: formData.mobile, national_id: formData.nationalId, role: (u.role || 'user') as 'admin' | 'user' },
           token: `session-${u.id}`,
         });
         window.location.hash = u.role === 'admin' ? '#/admin' : '#/dashboard';
