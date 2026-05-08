@@ -83,9 +83,12 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
       setIsLoading(true);
       try {
         const u = await lookupUserByNationalId(formData.nationalId);
-        setPendingUser({ id: u.id, email: u.email!, role: u.role || 'user' });
-        setPendingRegistration(null);
-        setShowOtp(true);
+        login({
+          user: { id: u.id, email: u.email, role: (u.role || 'user') as 'admin' | 'user' },
+          token: `session-${u.id}`,
+        });
+        window.location.hash = u.role === 'admin' ? '#/admin' : '#/dashboard';
+        onClose();
       } catch (err: any) {
         setError(err.message || 'تعذّر تسجيل الدخول');
       } finally {
