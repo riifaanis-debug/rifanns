@@ -80,11 +80,17 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
 
     if (mode === 'login') {
       if (!/^[0-9]{10}$/.test(formData.nationalId)) return setError('رقم الهوية يجب أن يتكون من 10 أرقام');
+      if (!/^05[0-9]{8}$/.test(formData.mobile)) return setError('رقم الجوال يجب أن يتكون من 10 أرقام ويبدأ بـ 05');
       setIsLoading(true);
       try {
         const u = await lookupUserByNationalId(formData.nationalId);
+        if (u.phone && u.phone !== formData.mobile) {
+          setError('رقم الجوال غير مطابق للحساب المسجل');
+          setIsLoading(false);
+          return;
+        }
         login({
-          user: { id: u.id, email: u.email, role: (u.role || 'user') as 'admin' | 'user' },
+          user: { id: u.id, email: u.email, phone: formData.mobile, national_id: formData.nationalId, role: (u.role || 'user') as 'admin' | 'user' },
           token: `session-${u.id}`,
         });
         window.location.hash = u.role === 'admin' ? '#/admin' : '#/dashboard';
@@ -214,19 +220,32 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
 
           <form onSubmit={handleInitialSubmit} className="space-y-2.5" noValidate>
             {mode === 'login' && (
-              <div className="space-y-1">
-                <label className="text-[10px] font-bold text-brand dark:text-gold/80 px-1">رقم الهوية الوطنية</label>
-                <div className="relative group">
-                  <CreditCard className="absolute right-3 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-gold" size={16} />
-                  <input
-                    type="text" name="nationalId" inputMode="numeric"
-                    value={formData.nationalId} onChange={handleChange} onKeyDown={onlyNumbers} maxLength={10}
-                    className="w-full bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg py-2 pr-9 pl-3 text-xs focus:border-gold outline-none dark:text-white"
-                    placeholder="10 أرقام"
-                  />
+              <>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-brand dark:text-gold/80 px-1">رقم الهوية الوطنية</label>
+                  <div className="relative group">
+                    <CreditCard className="absolute right-3 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-gold" size={16} />
+                    <input
+                      type="text" name="nationalId" inputMode="numeric"
+                      value={formData.nationalId} onChange={handleChange} onKeyDown={onlyNumbers} maxLength={10}
+                      className="w-full bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg py-2 pr-9 pl-3 text-xs focus:border-gold outline-none dark:text-white"
+                      placeholder="10 أرقام"
+                    />
+                  </div>
                 </div>
-                <p className="text-[9px] text-muted px-1 pt-1">أدخل رقم الهوية الوطنية لتسجيل الدخول مباشرة</p>
-              </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-brand dark:text-gold/80 px-1">رقم الجوال</label>
+                  <div className="relative group">
+                    <Phone className="absolute right-3 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-gold" size={16} />
+                    <input
+                      type="text" name="mobile" inputMode="numeric"
+                      value={formData.mobile} onChange={handleChange} onKeyDown={onlyNumbers} maxLength={10}
+                      className="w-full bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg py-2 pr-9 pl-3 text-xs font-bold focus:border-gold outline-none dark:text-white text-left dir-ltr"
+                      placeholder="05xxxxxxxx"
+                    />
+                  </div>
+                </div>
+              </>
             )}
 
             {mode === 'register' && (
