@@ -165,7 +165,7 @@ const ClientReviews: React.FC = () => {
 
         <div className="mt-2 [mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)]">
           <div ref={viewportRef} dir="ltr" className="overflow-hidden">
-            <div ref={trackRef} className="flex w-max gap-0" style={{ willChange: 'transform' }}>
+            <div ref={trackRef} className="flex w-max gap-2" style={{ willChange: 'transform' }}>
               {Array.from({ length: repeatGroups }).map((_, groupIndex) => (
                 <div
                   key={`reviews-group-${groupIndex}`}
