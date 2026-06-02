@@ -199,10 +199,10 @@ const LoginPrompt: React.FC = () => {
 
       {/* SAMA & CMA Logos */}
       <div className="flex justify-center items-center gap-3 mb-4">
-        <div className="flex h-12 items-center justify-center">
-          <img src={samaLogo} alt="البنك المركزي السعودي" className="h-12 w-auto object-contain" />
+        <div className="flex h-10 items-center justify-center">
+          <img src={samaLogo} alt="البنك المركزي السعودي" className="h-10 w-auto object-contain" />
         </div>
-        <div className="flex h-12 items-center justify-center">
+        <div className="flex h-10 items-center justify-center">
           <img src={cmaLogo} alt="هيئة السوق المالية" className="h-10 w-auto object-contain" />
         </div>
       </div>
