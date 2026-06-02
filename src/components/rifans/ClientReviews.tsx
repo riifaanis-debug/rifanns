@@ -170,7 +170,7 @@ const ClientReviews: React.FC = () => {
                 <div
                   key={`reviews-group-${groupIndex}`}
                   ref={groupIndex === 0 ? firstGroupRef : undefined}
-                  className="flex shrink-0 gap-0"
+                  className="flex shrink-0 gap-2"
                   aria-hidden={groupIndex > 0 ? 'true' : undefined}
                 >
                   {reviews.map((review) => (
