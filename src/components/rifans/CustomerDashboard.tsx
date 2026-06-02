@@ -12,6 +12,7 @@ import Logo from './Logo';
 import { safeStringify, safeParse } from '../../utils/safeJson';
 import { getMyRequests, getMyNotifications, getMyContracts, getMyInvoices, getMyPromissoryNotes, getProfile, updateProfile, markAllNotificationsRead, uploadDocument, deleteRequest } from '../../lib/api';
 import { formatAmount } from '../../lib/formatNumber';
+import clientCardBgAsset from '../../assets/client-card-bg.png.asset.json';
 
 interface CustomerDashboardProps {
   user: UserProfile;
@@ -1214,51 +1215,49 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                
                 {/* Client Card */}
                 <div className="mb-6">
-                  <div ref={cardSaveRef} className="relative w-full aspect-[1.78/1] rounded-[14px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.45)]">
-                    {/* Background */}
-                    <div className="absolute inset-0" style={{ background: 'linear-gradient(145deg, #2a1045 0%, #1e0a3c 40%, #2d1050 70%, #1a0830 100%)' }}></div>
-                    <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 70% 50%, transparent 40%, rgba(0,0,0,0.3) 100%)' }}></div>
+                  <div ref={cardSaveRef} className="relative w-full aspect-[1536/1024] rounded-[14px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.45)] bg-[#160521]">
+                    <img
+                      src={clientCardBgAsset.url}
+                      alt="بطاقة بيانات العميل"
+                      className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
+                      draggable={false}
+                      crossOrigin="anonymous"
+                    />
 
-                    {/* Large R Watermark */}
-                    <div className="absolute left-[5%] top-[10%] w-[50%] h-[80%] opacity-[0.08] pointer-events-none" style={{ background: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 500'%3E%3Cpath d='M150 80h115c75 0 125 40 125 115 0 63-35 102-86 113l112 112-58 58-140-140h-30v140h-78V80zm78 70v118h40c35 0 56-20 56-59 0-39-21-59-56-59h-40z' fill='%23C7A969'/%3E%3C/svg%3E") center/contain no-repeat` }}></div>
-
-                    <div className="absolute inset-0 flex flex-col justify-between p-[14px] z-10">
-                      {/* Top Row: QR left, Logo right */}
-                      <div className="flex items-start justify-between" dir="ltr">
-                        <div className="bg-[#C7A969]/10 rounded-md p-1.5 border border-[#C7A969]/15">
-                          <QRCodeSVG
-                            value={window.location.origin + `/#/client-card?file=${userData.fileNumber}&name=${encodeURIComponent(userData.fullName || '')}`}
-                            size={38}
-                            level="L"
-                            bgColor="transparent"
-                            fgColor="#C7A969"
-                          />
-                        </div>
-                        <div className="text-right">
-                          <div className="text-[14px] font-[900] text-[#C7A969] leading-none">ريفانس المالية</div>
-                          <div className="w-full h-[1px] bg-gradient-to-l from-[#C7A969]/70 via-[#C7A969]/30 to-transparent mt-1.5 mb-1"></div>
-                          <div className="text-[7px] font-bold text-[#C7A969]/50 tracking-[0.3em] uppercase">RIFANIS FINANCE</div>
-                        </div>
+                    {[
+                      { value: userData.fullName || '---', top: 26.5, mono: false },
+                      { value: userData.fileNumber || 'RF-0000-0000', top: 45, mono: true },
+                      { value: userData.nationalId || '---', top: 63, mono: true },
+                      { value: userData.mobile || '---', top: 80.5, mono: true },
+                    ].map((field, index) => (
+                      <div
+                        key={index}
+                        className="absolute flex items-center justify-end"
+                        style={{ top: `${field.top}%`, right: '6.5%', width: '46%', height: '10%' }}
+                      >
+                        <div
+                          className="absolute inset-0 rounded-[4px]"
+                          style={{ background: 'linear-gradient(90deg, rgba(20,4,32,0) 0%, rgba(20,4,32,0.96) 12%, rgba(20,4,32,1) 100%)' }}
+                        />
+                        <span
+                          className={`relative text-right leading-none font-[800] ${field.mono ? 'font-mono tracking-wide' : ''}`}
+                          style={{ color: '#E0C57A', fontSize: 'clamp(10px, 3.2cqw, 22px)', textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}
+                        >
+                          {field.value}
+                        </span>
                       </div>
+                    ))}
 
-                      {/* Data Fields - right side */}
-                      <div className="flex flex-col justify-end gap-[8px] w-[55%] ml-auto mt-auto">
-                        <div className="text-right">
-                          <div className="text-[8px] text-[#C7A969]/60">الاسم / Name</div>
-                          <div className="text-[11px] font-[700] text-[#C7A969]">{userData.fullName || '---'}</div>
-                        </div>
-                        <div className="text-right">
-                          <div className="text-[8px] text-[#C7A969]/60">رقم الملف / File No</div>
-                          <div className="text-[11px] font-[700] text-[#C7A969] font-mono tracking-wide">{userData.fileNumber || 'RF-0000-0000'}</div>
-                        </div>
-                        <div className="text-right">
-                          <div className="text-[8px] text-[#C7A969]/60">رقم الهوية / ID</div>
-                          <div className="text-[11px] font-[700] text-[#C7A969] font-mono tracking-wide">{userData.nationalId || '---'}</div>
-                        </div>
-                        <div className="text-right">
-                          <div className="text-[8px] text-[#C7A969]/60">رقم الجوال / Mobile No</div>
-                          <div className="text-[11px] font-[700] text-[#C7A969] font-mono tracking-wide">{userData.mobile || '---'}</div>
-                        </div>
+                    <div className="absolute" style={{ left: '18.5%', top: '70%', width: '17%', aspectRatio: '1 / 1' }}>
+                      <div className="w-full h-full rounded-[6px] p-[6%] bg-[#1a0530] border border-[#C7A969]/30">
+                        <QRCodeSVG
+                          value={window.location.origin + `/#/client-card?file=${userData.fileNumber || ''}&name=${encodeURIComponent(userData.fullName || '')}`}
+                          size={256}
+                          level="M"
+                          bgColor="transparent"
+                          fgColor="#C7A969"
+                          style={{ width: '100%', height: '100%' }}
+                        />
                       </div>
                     </div>
                   </div>
