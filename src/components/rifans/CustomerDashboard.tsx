@@ -12,7 +12,6 @@ import Logo from './Logo';
 import { safeStringify, safeParse } from '../../utils/safeJson';
 import { getMyRequests, getMyNotifications, getMyContracts, getMyInvoices, getMyPromissoryNotes, getProfile, updateProfile, markAllNotificationsRead, uploadDocument, deleteRequest } from '../../lib/api';
 import { formatAmount } from '../../lib/formatNumber';
-import clientCardBgAsset from '../../assets/client-card-bg.png.asset.json';
 
 interface CustomerDashboardProps {
   user: UserProfile;
@@ -104,7 +103,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
     if (!cardSaveRef.current || savingCard) return;
     setSavingCard(true);
     try {
-      const dataUrl = await toPng(cardSaveRef.current, { quality: 1, pixelRatio: 3, backgroundColor: '#0a0612' });
+      const dataUrl = await toPng(cardSaveRef.current, { quality: 1, pixelRatio: 3, backgroundColor: 'transparent' });
       const link = document.createElement('a');
       link.download = `بطاقة-عميل-${userData.fileNumber || 'card'}.png`;
       link.href = dataUrl;
@@ -1214,10 +1213,10 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
              <div className="space-y-4 pb-10">
                
                  {/* Client Card - built natively, no background image */}
-                 <div className="mb-6 bg-transparent">
+                  <div className="mb-6 -mx-4 px-4 py-4 bg-brand dark:bg-[#06010a]">
                    <div
                      ref={cardSaveRef}
-                     dir="rtl"
+                      dir="ltr"
                      className="relative w-full aspect-[1.586/1] rounded-[18px] overflow-hidden shadow-[0_20px_50px_-10px_rgba(0,0,0,0.6)]"
                      style={{
                        background:
@@ -1290,14 +1289,14 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                      </div>
 
                      {/* Fields */}
-                     <div className="absolute" style={{ right: '6%', left: '6%', top: '36%', bottom: '8%' }}>
+                      <div className="absolute flex flex-col justify-between" dir="rtl" style={{ right: '6%', top: '33%', width: '56%', height: '52%' }}>
                        {[
                          { label: 'الاسم', value: userData.fullName || '---', mono: false },
                          { label: 'رقم الملف', value: userData.fileNumber || 'RF-0000-0000', mono: true },
                          { label: 'رقم الهوية', value: userData.nationalId || '---', mono: true },
                          { label: 'رقم الجوال', value: userData.mobile || '---', mono: true },
                        ].map((f, i) => (
-                         <div key={i} className="flex flex-col items-end" style={{ marginBottom: '3.5%' }}>
+                          <div key={i} className="flex flex-col items-end min-w-0">
                            <span
                              className="leading-none"
                              style={{ color: 'rgba(255,255,255,0.55)', fontSize: 'clamp(7px, 2cqw, 11px)', letterSpacing: '0.08em' }}
@@ -1305,8 +1304,8 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                              {f.label}
                            </span>
                            <span
-                             className={`leading-none mt-[1.5%] font-bold ${f.mono ? 'font-mono tracking-wider' : ''}`}
-                             style={{ color: '#E0C57A', fontSize: 'clamp(11px, 3.4cqw, 22px)' }}
+                              className={`w-full truncate text-right leading-none mt-[1.5%] font-bold ${f.mono ? 'font-mono tracking-wider' : ''}`}
+                              style={{ color: '#E0C57A', fontSize: 'clamp(10px, 3.1cqw, 20px)' }}
                            >
                              {f.value}
                            </span>
@@ -1317,7 +1316,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                      {/* QR */}
                      <div
                        className="absolute bg-white/5 backdrop-blur-sm rounded-[6px] p-[1%] border border-[#C7A969]/25"
-                       style={{ left: '6%', bottom: '8%', width: '18%', aspectRatio: '1/1' }}
+                        style={{ left: '6%', bottom: '8%', width: '18%', aspectRatio: '1/1' }}
                      >
                        <QRCodeSVG
                          value={window.location.origin + `/#/client-card?file=${userData.fileNumber || ''}&name=${encodeURIComponent(userData.fullName || '')}`}
