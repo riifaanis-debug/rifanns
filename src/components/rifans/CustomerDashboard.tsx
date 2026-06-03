@@ -1213,7 +1213,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
              <div className="space-y-4 pb-10">
                
                  {/* Client Card - built natively, no background image */}
-                  <div className="mb-6 -mx-4 px-4 py-3 bg-transparent">
+                  <div className="mb-6 -mx-4 px-4 py-4 bg-brand dark:bg-[#06010a]">
                    <div
                      ref={cardSaveRef}
                       dir="ltr"
@@ -1289,7 +1289,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                      </div>
 
                      {/* Fields */}
-                      <div className="absolute flex flex-col justify-between" dir="rtl" style={{ right: '6%', top: '33%', width: '58%', height: '52%' }}>
+                      <div className="absolute flex flex-col justify-between" dir="rtl" style={{ right: '6%', top: '33%', width: '56%', height: '52%' }}>
                        {[
                          { label: 'الاسم', value: userData.fullName || '---', mono: false },
                          { label: 'رقم الملف', value: userData.fileNumber || 'RF-0000-0000', mono: true },
@@ -1316,7 +1316,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                      {/* QR */}
                      <div
                        className="absolute bg-white/5 backdrop-blur-sm rounded-[6px] p-[1%] border border-[#C7A969]/25"
-                        style={{ left: '6%', bottom: '8%', width: '20%', aspectRatio: '1/1' }}
+                        style={{ left: '6%', bottom: '8%', width: '18%', aspectRatio: '1/1' }}
                      >
                        <QRCodeSVG
                          value={window.location.origin + `/#/client-card?file=${userData.fileNumber || ''}&name=${encodeURIComponent(userData.fullName || '')}`}
