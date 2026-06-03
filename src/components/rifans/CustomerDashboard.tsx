@@ -1213,65 +1213,133 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
            {activeTab === 'profile' && (
              <div className="space-y-4 pb-10">
                
-                {/* Client Card */}
-                <div className="mb-6">
-                  <div ref={cardSaveRef} className="relative w-full aspect-[1536/1024] rounded-[14px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.45)] bg-[#160521]">
-                    <img
-                      src={clientCardBgAsset.url}
-                      alt="بطاقة بيانات العميل"
-                      className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
-                      draggable={false}
-                      crossOrigin="anonymous"
-                    />
+                 {/* Client Card - built natively, no background image */}
+                 <div className="mb-6 bg-transparent">
+                   <div
+                     ref={cardSaveRef}
+                     dir="rtl"
+                     className="relative w-full aspect-[1.586/1] rounded-[18px] overflow-hidden shadow-[0_20px_50px_-10px_rgba(0,0,0,0.6)]"
+                     style={{
+                       background:
+                         'radial-gradient(120% 80% at 100% 0%, #3a0a4d 0%, #22042C 55%, #160521 100%)',
+                       containerType: 'inline-size',
+                     }}
+                   >
+                     {/* Decorative gold rings */}
+                     <div
+                       className="absolute pointer-events-none"
+                       style={{
+                         right: '-15%',
+                         top: '-30%',
+                         width: '55%',
+                         aspectRatio: '1/1',
+                         borderRadius: '50%',
+                         border: '1px solid rgba(199,169,105,0.18)',
+                         boxShadow: 'inset 0 0 0 12px rgba(199,169,105,0.05)',
+                       }}
+                     />
+                     <div
+                       className="absolute pointer-events-none"
+                       style={{
+                         right: '-25%',
+                         top: '-45%',
+                         width: '70%',
+                         aspectRatio: '1/1',
+                         borderRadius: '50%',
+                         border: '1px solid rgba(199,169,105,0.1)',
+                       }}
+                     />
 
-                    {[
-                      { value: userData.fullName || '---', top: 26.5, mono: false },
-                      { value: userData.fileNumber || 'RF-0000-0000', top: 45, mono: true },
-                      { value: userData.nationalId || '---', top: 63, mono: true },
-                      { value: userData.mobile || '---', top: 80.5, mono: true },
-                    ].map((field, index) => (
-                      <div
-                        key={index}
-                        className="absolute flex items-center justify-end"
-                        style={{ top: `${field.top}%`, right: '6.5%', width: '46%', height: '10%' }}
-                      >
-                        <div
-                          className="absolute inset-0 rounded-[4px]"
-                          style={{ background: 'linear-gradient(90deg, rgba(20,4,32,0) 0%, rgba(20,4,32,0.96) 12%, rgba(20,4,32,1) 100%)' }}
-                        />
-                        <span
-                          className={`relative text-right leading-none font-[800] ${field.mono ? 'font-mono tracking-wide' : ''}`}
-                          style={{ color: '#E0C57A', fontSize: 'clamp(10px, 3.2cqw, 22px)', textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}
-                        >
-                          {field.value}
-                        </span>
-                      </div>
-                    ))}
+                     {/* EMV-style chip */}
+                     <div
+                       className="absolute"
+                       style={{
+                         right: '6%',
+                         top: '14%',
+                         width: '11%',
+                         aspectRatio: '4/3',
+                         borderRadius: '6px',
+                         background:
+                           'linear-gradient(135deg, #d4b878 0%, #8a6f3d 50%, #d4b878 100%)',
+                         boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.3)',
+                       }}
+                     >
+                       <div
+                         className="w-full h-full"
+                         style={{
+                           backgroundImage:
+                             'linear-gradient(0deg, transparent 32%, rgba(0,0,0,0.35) 32%, rgba(0,0,0,0.35) 36%, transparent 36%, transparent 64%, rgba(0,0,0,0.35) 64%, rgba(0,0,0,0.35) 68%, transparent 68%), linear-gradient(90deg, transparent 32%, rgba(0,0,0,0.35) 32%, rgba(0,0,0,0.35) 36%, transparent 36%, transparent 64%, rgba(0,0,0,0.35) 64%, rgba(0,0,0,0.35) 68%, transparent 68%)',
+                         }}
+                       />
+                     </div>
 
-                    <div className="absolute" style={{ left: '18.5%', top: '70%', width: '17%', aspectRatio: '1 / 1' }}>
-                      <div className="w-full h-full rounded-[6px] p-[6%] bg-[#1a0530] border border-[#C7A969]/30">
-                        <QRCodeSVG
-                          value={window.location.origin + `/#/client-card?file=${userData.fileNumber || ''}&name=${encodeURIComponent(userData.fullName || '')}`}
-                          size={256}
-                          level="M"
-                          bgColor="transparent"
-                          fgColor="#C7A969"
-                          style={{ width: '100%', height: '100%' }}
-                        />
-                      </div>
-                    </div>
-                  </div>
+                     {/* Brand header */}
+                     <div className="absolute" style={{ top: '8%', left: '6%' }}>
+                       <div
+                         className="font-black leading-none"
+                         style={{ color: '#C7A969', fontSize: 'clamp(14px, 5.2cqw, 34px)', letterSpacing: '0.18em' }}
+                       >
+                         RIFANS
+                       </div>
+                       <div
+                         className="leading-none mt-[2%]"
+                         style={{ color: 'rgba(255,255,255,0.55)', fontSize: 'clamp(7px, 2.2cqw, 13px)', letterSpacing: '0.3em' }}
+                       >
+                         CLIENT CARD
+                       </div>
+                     </div>
 
-                  {/* Save button */}
-                  <button
-                    onClick={handleSaveCard}
-                    disabled={savingCard}
-                    className="mt-3 w-full flex items-center justify-center gap-2 bg-[#C7A969]/10 hover:bg-[#C7A969]/20 border border-[#C7A969]/20 text-[#C7A969] py-2.5 rounded-xl text-[11px] font-bold transition-all"
-                  >
-                    {savingCard ? <Loader2 size={12} className="animate-spin" /> : <Download size={12} />}
-                    {savingCard ? 'جاري الحفظ...' : 'حفظ البطاقة'}
-                  </button>
-                </div>
+                     {/* Fields */}
+                     <div className="absolute" style={{ right: '6%', left: '6%', top: '36%', bottom: '8%' }}>
+                       {[
+                         { label: 'الاسم', value: userData.fullName || '---', mono: false },
+                         { label: 'رقم الملف', value: userData.fileNumber || 'RF-0000-0000', mono: true },
+                         { label: 'رقم الهوية', value: userData.nationalId || '---', mono: true },
+                         { label: 'رقم الجوال', value: userData.mobile || '---', mono: true },
+                       ].map((f, i) => (
+                         <div key={i} className="flex flex-col items-end" style={{ marginBottom: '3.5%' }}>
+                           <span
+                             className="leading-none"
+                             style={{ color: 'rgba(255,255,255,0.55)', fontSize: 'clamp(7px, 2cqw, 11px)', letterSpacing: '0.08em' }}
+                           >
+                             {f.label}
+                           </span>
+                           <span
+                             className={`leading-none mt-[1.5%] font-bold ${f.mono ? 'font-mono tracking-wider' : ''}`}
+                             style={{ color: '#E0C57A', fontSize: 'clamp(11px, 3.4cqw, 22px)' }}
+                           >
+                             {f.value}
+                           </span>
+                         </div>
+                       ))}
+                     </div>
+
+                     {/* QR */}
+                     <div
+                       className="absolute bg-white/5 backdrop-blur-sm rounded-[6px] p-[1%] border border-[#C7A969]/25"
+                       style={{ left: '6%', bottom: '8%', width: '18%', aspectRatio: '1/1' }}
+                     >
+                       <QRCodeSVG
+                         value={window.location.origin + `/#/client-card?file=${userData.fileNumber || ''}&name=${encodeURIComponent(userData.fullName || '')}`}
+                         size={256}
+                         level="M"
+                         bgColor="transparent"
+                         fgColor="#E0C57A"
+                         style={{ width: '100%', height: '100%' }}
+                       />
+                     </div>
+                   </div>
+
+                   {/* Save button */}
+                   <button
+                     onClick={handleSaveCard}
+                     disabled={savingCard}
+                     className="mt-3 w-full flex items-center justify-center gap-2 bg-[#C7A969]/10 hover:bg-[#C7A969]/20 border border-[#C7A969]/20 text-[#C7A969] py-2.5 rounded-xl text-[11px] font-bold transition-all"
+                   >
+                     {savingCard ? <Loader2 size={12} className="animate-spin" /> : <Download size={12} />}
+                     {savingCard ? 'جاري الحفظ...' : 'حفظ البطاقة'}
+                   </button>
+                 </div>
 
                {/* Info Sections with Improved Design */}
                <div className="space-y-5">
