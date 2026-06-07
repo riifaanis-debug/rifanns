@@ -88,7 +88,7 @@ const Services: React.FC = () => {
       
       <div className="max-w-[520px] mx-auto overflow-hidden">
         <div 
-          className="relative w-full aspect-square overflow-hidden shadow-2xl group"
+          className="relative w-full aspect-[4/3] overflow-hidden shadow-2xl group"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
