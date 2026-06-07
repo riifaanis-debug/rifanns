@@ -23,6 +23,7 @@ import ClientReviews from './components/rifans/ClientReviews';
 import { Terms, Privacy, Complaints, Contact, AboutPage, GoalPage, VisionPage, MessagePage, MissionPage, ServicesPage, AcceptableUse, CookiePolicy, IntellectualProperty } from './components/rifans/StaticPages';
 import { ServiceDetailPage } from './components/rifans/ServiceDetailPage';
 import { SectionPage } from './components/rifans/SectionPage';
+import { ServiceCategoryPage } from './components/rifans/ServiceCategoryPage';
 import { ProductPage } from './components/rifans/ProductPage';
 import { ProductRequestForm } from './components/rifans/ProductRequestForm';
 import WaiveRequestForm from './components/rifans/WaiveRequestForm';
@@ -312,6 +313,10 @@ const AppContent: React.FC = () => {
     if (route.startsWith('#/section/')) {
       const sectionId = route.replace('#/section/', '');
       return user ? <SectionPage sectionId={sectionId} /> : <LandingPage />;
+    }
+    if (route.startsWith('#/category/')) {
+      const categoryId = route.replace('#/category/', '');
+      return user ? <ServiceCategoryPage categoryId={categoryId} /> : <LandingPage />;
     }
     if (route.startsWith('#/product/') && route.endsWith('/apply')) {
       const productId = route.replace('#/product/', '').replace('/apply', '');

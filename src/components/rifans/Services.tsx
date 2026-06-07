@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Section, SectionHeader, Card, Button } from './Shared';
-import { 
-  Scale, Building2, Home, Receipt, BarChart3, MessageSquare, 
-  RefreshCw, ShieldCheck, ChevronLeft, ChevronRight, ArrowLeft, ArrowRight 
-} from 'lucide-react';
+import { Section, SectionHeader, Button } from './Shared';
+import { Building2, Scale, Home, Receipt, BarChart3, ChevronLeft, ChevronRight, ArrowLeft, ArrowRight } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
+import bankingImg from '../../assets/srv-banking.png.asset.json';
+import legalImg from '../../assets/srv-legal.png.asset.json';
+import realestateImg from '../../assets/srv-realestate.png.asset.json';
+import taxImg from '../../assets/srv-tax.png.asset.json';
+import creditImg from '../../assets/srv-credit.png.asset.json';
 
 const Services: React.FC = () => {
   const { t, direction } = useLanguage();
@@ -12,53 +14,45 @@ const Services: React.FC = () => {
   const [isPaused, setIsPaused] = useState(false);
 
   const services = [
-    { 
-      id: 'judicial', 
-      name: t('srv_legal'), 
-      desc: t('srv_legal_desc'), 
-      icon: <Scale className="text-gold" size={24} />,
-      link: '#/section/judicial',
-      image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&q=80&w=800"
-    },
-    { 
-      id: 'banking', 
-      name: t('srv_banking'), 
-      desc: t('srv_banking_desc'), 
+    {
+      id: 'banking',
+      name: 'الخدمات المالية والمصرفية',
+      desc: 'حلول مالية ومصرفية متكاملة لتسهيل التعاملات البنكية ومعالجة الالتزامات وتحقيق الاستقرار المالي.',
       icon: <Building2 className="text-gold" size={24} />,
-      link: '#/section/banking',
-      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800"
+      link: '#/category/banking',
+      image: bankingImg.url,
     },
-    { 
-      id: 'realestate', 
-      name: t('srv_realestate'), 
-      desc: t('srv_realestate_desc'), 
+    {
+      id: 'legal',
+      name: 'الخدمات القانونية والقضائية',
+      desc: 'دعم قانوني متخصص في القضايا المالية والمصرفية والتنفيذية لحماية حقوقك وتمثيل مصالحك.',
+      icon: <Scale className="text-gold" size={24} />,
+      link: '#/category/legal',
+      image: legalImg.url,
+    },
+    {
+      id: 'realestate',
+      name: 'الخدمات العقارية',
+      desc: 'خدمات عقارية متكاملة تشمل الوساطة والتسويق وإدارة الأملاك والتقييم العقاري المعتمد.',
       icon: <Home className="text-gold" size={24} />,
-      link: '#/section/realestate',
-      image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800"
+      link: '#/category/realestate',
+      image: realestateImg.url,
     },
-    { 
-      id: 'tax', 
-      name: t('srv_zakat'), 
-      desc: t('srv_zakat_desc'), 
+    {
+      id: 'tax',
+      name: 'الخدمات الزكوية والضريبية',
+      desc: 'خدمات احترافية للأفراد والمنشآت تضمن الامتثال الزكوي والضريبي وتقليل المخاطر المالية.',
       icon: <Receipt className="text-gold" size={24} />,
-      link: '#/section/tax',
-      image: "https://images.unsplash.com/photo-1586486855514-8c633cc6fd38?auto=format&fit=crop&q=80&w=800"
+      link: '#/category/tax',
+      image: taxImg.url,
     },
-    { 
-      id: 'credit', 
-      name: t('srv_credit'), 
-      desc: t('srv_credit_desc'), 
+    {
+      id: 'credit',
+      name: 'الخدمات الائتمانية والاستشارية',
+      desc: 'حلول واستشارات متخصصة لتحسين الوضع الائتماني واتخاذ قرارات مالية أكثر كفاءة واستدامة.',
       icon: <BarChart3 className="text-gold" size={24} />,
-      link: '#/section/credit',
-      image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=800"
-    },
-    { 
-      id: 'consulting', 
-      name: t('srv_consult'), 
-      desc: t('srv_consult_desc'), 
-      icon: <MessageSquare className="text-gold" size={24} />,
-      link: '#/section/consulting',
-      image: "https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&q=80&w=800"
+      link: '#/category/credit',
+      image: creditImg.url,
     },
   ];
 
