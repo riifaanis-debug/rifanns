@@ -19,12 +19,11 @@ const menuItems: MenuItem[] = [
   { label: 'احصل على استشارة', href: '#/contact', highlight: true },
   { label: 'من نحن', href: '#/about' },
   { label: 'اتصل بنا', href: '#/contact' },
-  { label: 'الخدمات القضائية والعدلية', href: '#/service/legal' },
-  { label: 'الخدمات المصرفية', href: '#/service/banking' },
-  { label: 'الخدمات العقارية', href: '#/service/realestate' },
-  { label: 'الخدمات الزكوية والضريبية', href: '#/service/zakat' },
-  { label: 'الخدمات الائتمانية', href: '#/service/credit' },
-  { label: 'الخدمات الاستشارية', href: '#/service/consulting' },
+  { label: 'الخدمات المالية والمصرفية', href: '#/category/banking' },
+  { label: 'الخدمات القانونية والقضائية', href: '#/category/legal' },
+  { label: 'الخدمات العقارية', href: '#/category/realestate' },
+  { label: 'الخدمات الزكوية والضريبية', href: '#/category/tax' },
+  { label: 'الخدمات الائتمانية والاستشارية', href: '#/category/credit' },
 ];
 
 const socialLinks = [
