@@ -153,7 +153,7 @@ const PdfNumberedList: React.FC<{ items: string[]; className?: string }> = ({ it
 );
 
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
-  const { user: authUser } = useAuth();
+  const { user: authUser, logout } = useAuth();
   const [activeTab, setActiveTab] = useState<DashboardTab>('home');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
