@@ -4,7 +4,7 @@ import rifansStampImg from '@/assets/rifans-stamp.png';
 import { useAuth } from '../../contexts/AuthContext';
 import { 
   X, LayoutDashboard, FileText, Users, CheckCircle, Clock, AlertCircle, 
-  Download, ExternalLink, Search, Filter, Bell, RefreshCw, PenTool, 
+  Download, Search, Filter, Bell, RefreshCw, PenTool, 
   IdCard, ChevronRight, ChevronLeft, MoreVertical, Trash2, Eye, 
   FileCheck, FileClock, History, UserCheck, UserPlus, TrendingUp,
   ArrowUpRight, ArrowDownRight, Calendar, Mail, Phone, MapPin,
