@@ -63,11 +63,23 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
     setError('');
 
     if (mode === 'admin') {
-      if (!formData.email) return setError('يرجى إدخال البريد الإلكتروني');
+      if (!formData.nationalId) return setError('يرجى إدخال رقم الهوية');
       if (!formData.password) return setError('يرجى إدخال كلمة المرور');
       setIsLoading(true);
       try {
-        const u = await loginWithEmail(formData.email, formData.password);
+        const { supabase } = await import('@/integrations/supabase/client');
+        const { data: rows, error: lookupErr } = await supabase
+          .from('app_users')
+          .select('email')
+          .eq('national_id', formData.nationalId)
+          .eq('role', 'admin')
+          .limit(1);
+        if (lookupErr || !rows || rows.length === 0 || !rows[0].email) {
+          setError('بيانات الدخول غير صحيحة');
+          setIsLoading(false);
+          return;
+        }
+        const u = await loginWithEmail(rows[0].email, formData.password);
         window.location.hash = u.role === 'admin' ? '#/admin' : '#/dashboard';
         onClose();
       } catch (err: any) {
