@@ -2168,6 +2168,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
           >
             <RefreshCw size={20} className={isLoading ? 'animate-spin' : ''} />
           </button>
+          <button 
+            onClick={logout}
+            className="w-10 h-10 rounded-xl bg-white/5 hover:bg-rose-500/20 flex items-center justify-center transition-all text-white border border-white/10"
+            title="تسجيل خروج"
+          >
+            <LogOut size={22} />
+          </button>
           <button onClick={onClose} className="w-10 h-10 rounded-xl bg-white/5 hover:bg-rose-500/20 flex items-center justify-center transition-all text-white border border-white/10">
             <X size={24} />
           </button>
