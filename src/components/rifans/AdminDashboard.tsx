@@ -8,7 +8,8 @@ import {
   IdCard, ChevronRight, ChevronLeft, MoreVertical, Trash2, Eye, 
   FileCheck, FileClock, History, UserCheck, UserPlus, TrendingUp,
   ArrowUpRight, ArrowDownRight, Calendar, Mail, Phone, MapPin,
-  CreditCard, Briefcase, Hash, Menu, Printer, MessageCircle, Star, ScrollText
+  CreditCard, Briefcase, Hash, Menu, Printer, MessageCircle, Star, ScrollText,
+  LogOut
 } from 'lucide-react';
 import { AdminPaymentRequests } from './PaymentRequests';
 import ChatPage from './ChatPage';
@@ -152,7 +153,7 @@ const PdfNumberedList: React.FC<{ items: string[]; className?: string }> = ({ it
 );
 
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
-  const { user: authUser } = useAuth();
+  const { user: authUser, logout } = useAuth();
   const [activeTab, setActiveTab] = useState<DashboardTab>('home');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
@@ -2166,6 +2167,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
             title="تحديث البيانات"
           >
             <RefreshCw size={20} className={isLoading ? 'animate-spin' : ''} />
+          </button>
+          <button 
+            onClick={logout}
+            className="w-10 h-10 rounded-xl bg-white/5 hover:bg-rose-500/20 flex items-center justify-center transition-all text-white border border-white/10"
+            title="تسجيل خروج"
+          >
+            <LogOut size={22} />
           </button>
           <button onClick={onClose} className="w-10 h-10 rounded-xl bg-white/5 hover:bg-rose-500/20 flex items-center justify-center transition-all text-white border border-white/10">
             <X size={24} />
