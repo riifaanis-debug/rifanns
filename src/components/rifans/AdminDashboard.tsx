@@ -161,6 +161,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState<DashboardTab>('home');
   const [mobileReqFilter, setMobileReqFilter] = useState<'new' | 'processing' | 'signature' | 'completed' | 'stopped'>('new');
   const [mobileDocFilter, setMobileDocFilter] = useState<'all' | 'contracts' | 'invoices' | 'promissory'>('all');
+  const [clientFileTab, setClientFileTab] = useState<'profile' | 'requests' | 'contracts' | 'invoices' | 'promissory' | 'chat' | 'activity'>('profile');
+  const [clientLastMessage, setClientLastMessage] = useState<{ content: string; created_at: string } | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
   const [submissions, setSubmissions] = useState<any[]>([]);
