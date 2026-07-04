@@ -1586,35 +1586,28 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
     <div className="p-3 pb-28 space-y-3" dir="rtl">
       <div className="relative">
         <Search className="absolute right-3 top-1/2 -translate-y-1/2 text-muted" size={16} />
-        <input type="text" placeholder="بحث باسم العميل أو رقم الملف..."
+        <input type="text" placeholder="بحث باسم العميل أو رقم الجوال..."
           value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
           className="w-full pr-9 pl-3 h-11 bg-white dark:bg-[#12031a] border border-gold/20 rounded-xl text-[15px] focus:border-gold outline-none" />
       </div>
-      <div className="space-y-2">
+      <div className="rounded-2xl bg-white dark:bg-[#12031a] border border-gold/10 divide-y divide-gold/5 overflow-hidden">
         {filteredUsers.length === 0 && <div className="p-8 text-center text-xs text-muted">لا يوجد عملاء</div>}
-        {filteredUsers.map(u => {
-          const lastReq = submissions.find(s => (s.userId || s.user_id) === u.id);
-          return (
-            <div key={u.id} className="rounded-2xl bg-white dark:bg-[#12031a] border border-gold/10 p-3">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-10 h-10 rounded-full bg-brand text-gold flex items-center justify-center font-bold text-sm shrink-0">{(u.name || '؟')[0]}</div>
-                <div className="min-w-0 flex-1">
-                  <div className="text-sm font-bold text-brand dark:text-white truncate">{u.name || '---'}</div>
-                  <div className="text-[10px] font-mono text-muted">رقم الملف: {u.file_number || '---'}</div>
-                </div>
-                {lastReq && mobileStatusBadge(lastReq.status)}
-              </div>
-              <div className="text-[10px] text-muted mb-2">نوع الطلب: <span className="text-brand dark:text-gray-300 font-bold">{lastReq ? getRequestTypeLabel(lastReq.type) : 'لا يوجد طلبات'}</span></div>
-              <button onClick={() => setSelectedUser(u)}
-                className="w-full h-10 rounded-xl bg-brand text-gold text-xs font-bold flex items-center justify-center gap-2 active:scale-95 transition-all">
-                <Eye size={14} /> فتح الملف
-              </button>
+        {filteredUsers.map(u => (
+          <button key={u.id} onClick={() => setSelectedUser(u)}
+            className="w-full flex items-center gap-3 p-3 active:bg-gold/5 transition-colors text-right">
+            <div className="w-10 h-10 rounded-full bg-brand text-gold flex items-center justify-center font-bold text-sm shrink-0">{(u.name || '؟')[0]}</div>
+            <div className="min-w-0 flex-1">
+              <div className="text-sm font-bold text-brand dark:text-white truncate">{u.name || '---'}</div>
+              <div className="text-[11px] font-mono text-muted mt-0.5" dir="ltr" style={{ textAlign: 'right' }}>{u.phone || u.mobile || '---'}</div>
             </div>
-          );
-        })}
+            <ChevronLeft size={18} className="text-muted shrink-0" />
+          </button>
+        ))}
       </div>
     </div>
   );
+
+
 
   const renderMobileDocuments = () => {
     const items: Array<{ kind: string; date: string; open: () => void; badge: JSX.Element; title: string; sub: string; }> = [];
