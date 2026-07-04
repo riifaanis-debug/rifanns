@@ -1415,6 +1415,226 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
     );
   };
 
+  // ==================== CLIENT FILE (unified mobile & desktop) ====================
+  useEffect(() => {
+    if (!selectedUser) { setClientFileTab('profile'); setClientLastMessage(null); return; }
+    let cancelled = false;
+    (async () => {
+      const { supabase } = await import('@/integrations/supabase/client');
+      const { data } = await supabase.from('chat_messages')
+        .select('content,created_at')
+        .or(`sender_id.eq.${selectedUser.id},receiver_id.eq.${selectedUser.id}`)
+        .order('created_at', { ascending: false }).limit(1).maybeSingle();
+      if (!cancelled) setClientLastMessage(data as any);
+    })();
+    return () => { cancelled = true; };
+  }, [selectedUser]);
+
+  const renderClientFile = (u: any) => {
+    const userReqs = submissions.filter(s => (s.userId || s.user_id) === u.id);
+    const userContracts = contracts.filter(c => c.user_id === u.id);
+    const userInvoices = adminInvoices.filter(inv => inv.user_id === u.id);
+    const userNotes = promissoryNotes.filter((n: any) => n.user_id === u.id);
+    const currentStatus = userReqs[0]?.status;
+    const tabs: Array<{ id: typeof clientFileTab; label: string; count?: number }> = [
+      { id: 'profile', label: 'بيانات العميل' },
+      { id: 'requests', label: 'الطلبات', count: userReqs.length },
+      { id: 'contracts', label: 'العقود', count: userContracts.length },
+      { id: 'invoices', label: 'الفواتير', count: userInvoices.length },
+      { id: 'promissory', label: 'سندات الأمر', count: userNotes.length },
+      { id: 'chat', label: 'المحادثات' },
+      { id: 'activity', label: 'النشاطات' },
+    ];
+    const activity = [
+      ...userReqs.map(s => ({ t: s.created_at || s.timestamp, kind: 'طلب', label: `${getRequestTypeLabel(s.type)} — ${getStatusLabel(s.status)}` })),
+      ...userContracts.map(c => ({ t: c.created_at, kind: 'عقد', label: c.signed_at ? 'عقد موقّع' : 'عقد بانتظار التوقيع' })),
+      ...userInvoices.map(inv => ({ t: inv.created_at, kind: 'فاتورة', label: `${formatAmount(inv.amount)} ر.س — ${inv.status === 'paid' ? 'مسددة' : 'بانتظار السداد'}` })),
+      ...userNotes.map((n: any) => ({ t: n.created_at, kind: 'سند أمر', label: `${formatAmount(Number(n.amount) || 0)} ر.س` })),
+    ].filter(a => a.t).sort((a,b) => new Date(b.t).getTime() - new Date(a.t).getTime());
+
+    return (
+      <div className="fixed inset-0 z-[120] bg-[#F5F4FA] dark:bg-[#06010a] flex flex-col font-['Tajawal']" dir="rtl">
+        {/* Header with back */}
+        <header className="bg-brand text-white sticky top-0 z-10 shadow-lg shrink-0">
+          <div className="px-3 sm:px-5 h-14 sm:h-16 flex items-center justify-between">
+            <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+              <button onClick={() => setSelectedUser(null)}
+                className="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-white shrink-0" title="رجوع">
+                <ChevronRight size={20} />
+              </button>
+              <div className="min-w-0">
+                <div className="text-[10px] text-gold/70 font-bold">ملف العميل</div>
+                <h1 className="text-sm sm:text-base font-black truncate">{u.name || 'عميل'}</h1>
+              </div>
+            </div>
+            <button onClick={() => setSelectedUser(null)} className="w-10 h-10 rounded-xl hover:bg-white/10 flex items-center justify-center text-white shrink-0">
+              <X size={20} />
+            </button>
+          </div>
+          {/* Summary strip */}
+          <div className="px-3 sm:px-5 pb-3 grid grid-cols-2 sm:grid-cols-4 gap-2 text-[10px] sm:text-xs">
+            <div className="bg-white/10 rounded-lg px-2 py-1.5"><div className="text-gold/70">رقم الملف</div><div className="font-bold font-mono">{u.file_number || u.fileNumber || '---'}</div></div>
+            <div className="bg-white/10 rounded-lg px-2 py-1.5"><div className="text-gold/70">رقم الجوال</div><div className="font-bold font-mono" dir="ltr" style={{textAlign:'right'}}>{u.phone || u.mobile || '---'}</div></div>
+            <div className="bg-white/10 rounded-lg px-2 py-1.5"><div className="text-gold/70">حالة العميل</div><div className="font-bold">{currentStatus ? getStatusLabel(currentStatus) : (userReqs.length ? '—' : 'بدون طلبات')}</div></div>
+            <div className="bg-white/10 rounded-lg px-2 py-1.5"><div className="text-gold/70">نوع العميل</div><div className="font-bold">{u.role === 'admin' ? 'مدير' : 'عميل'}</div></div>
+          </div>
+          {/* Tabs */}
+          <div className="flex gap-1 overflow-x-auto no-scrollbar px-3 sm:px-5 bg-brand/95">
+            {tabs.map(t => (
+              <button key={t.id} onClick={() => setClientFileTab(t.id)}
+                className={`shrink-0 h-11 px-3 text-[12px] font-bold border-b-2 transition-all ${clientFileTab === t.id ? 'border-gold text-gold' : 'border-transparent text-white/70 hover:text-white'}`}>
+                {t.label}{typeof t.count === 'number' ? ` (${t.count})` : ''}
+              </button>
+            ))}
+          </div>
+        </header>
+
+        {/* Body */}
+        <main className="flex-1 overflow-y-auto p-3 sm:p-5 pb-24 sm:pb-8 max-w-5xl w-full mx-auto">
+          {clientFileTab === 'profile' && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <InfoItem icon={<Hash size={14} />} label="رقم الملف" value={u.file_number || u.fileNumber} />
+              <InfoItem icon={<Users size={14} />} label="اسم العميل" value={u.name} isBold />
+              <InfoItem icon={<IdCard size={14} />} label="رقم الهوية" value={u.national_id || u.nationalId} isLtr />
+              <InfoItem icon={<Phone size={14} />} label="رقم الجوال" value={u.phone || u.mobile} isLtr />
+              <InfoItem icon={<Mail size={14} />} label="البريد الإلكتروني" value={u.email} isLtr />
+              <InfoItem icon={<CheckCircle size={14} />} label="حالة العميل" value={currentStatus ? getStatusLabel(currentStatus) : (userReqs.length ? '—' : 'بدون طلبات')} />
+              <InfoItem icon={<Briefcase size={14} />} label="نوع العميل" value={u.role === 'admin' ? 'مدير' : 'عميل'} />
+              <InfoItem icon={<Calendar size={14} />} label="تاريخ إنشاء الملف" value={u.created_at ? new Date(u.created_at).toLocaleDateString('ar-SA') : '---'} />
+            </div>
+          )}
+
+          {clientFileTab === 'requests' && (
+            <div className="space-y-2">
+              {userReqs.length === 0 && <div className="p-8 text-center text-xs text-muted rounded-xl bg-white dark:bg-[#12031a] border border-gold/10">لا توجد طلبات لهذا العميل</div>}
+              {userReqs.map(s => (
+                <div key={s.id} className="rounded-2xl bg-white dark:bg-[#12031a] border border-gold/10 p-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="text-xs font-bold text-brand dark:text-white">{getRequestTypeLabel(s.type)}</div>
+                    {mobileStatusBadge(s.status)}
+                  </div>
+                  <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-[10px] mb-2">
+                    <div><span className="text-muted">رقم الطلب:</span> <span className="font-mono text-brand dark:text-gray-300">{String(s.id).slice(0,12)}</span></div>
+                    <div><span className="text-muted">التاريخ:</span> <span className="text-muted">{s.created_at ? new Date(s.created_at).toLocaleDateString('ar-SA') : '---'}</span></div>
+                  </div>
+                  <button onClick={() => { setSelectedSubmission(s); fetchSubmissionHistory(s.id); }}
+                    className="w-full h-10 rounded-xl bg-brand text-gold text-xs font-bold flex items-center justify-center gap-2 active:scale-95">
+                    <Eye size={14} /> عرض التفاصيل
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {clientFileTab === 'contracts' && (
+            <div className="space-y-2">
+              {userContracts.length === 0 && <div className="p-8 text-center text-xs text-muted rounded-xl bg-white dark:bg-[#12031a] border border-gold/10">لا توجد عقود</div>}
+              {userContracts.map(c => (
+                <div key={c.id} className="rounded-2xl bg-white dark:bg-[#12031a] border border-gold/10 p-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="text-xs font-bold text-brand dark:text-white">{c.type || 'عقد خدمة'}</div>
+                    <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${c.signed_at ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-amber-50 text-amber-600 border-amber-100'}`}>{c.signed_at ? 'موقّع' : 'بانتظار التوقيع'}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-[10px] mb-2">
+                    <div><span className="text-muted">رقم العقد:</span> <span className="font-mono text-brand dark:text-gray-300">{String(c.id).slice(0,12)}</span></div>
+                    <div><span className="text-muted">التاريخ:</span> <span className="text-muted">{c.created_at ? new Date(c.created_at).toLocaleDateString('ar-SA') : '---'}</span></div>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2">
+                    <button onClick={() => setSelectedContract(c)} className="h-10 rounded-xl bg-brand text-gold text-[11px] font-bold flex items-center justify-center gap-1 active:scale-95"><Eye size={13} /> عرض</button>
+                    <button onClick={() => { setSelectedContract(c); setAutoPrint(true); }} className="h-10 rounded-xl bg-gold/10 text-gold text-[11px] font-bold flex items-center justify-center gap-1 active:scale-95"><Download size={13} /> تحميل</button>
+                    <button onClick={() => { setSelectedContract(c); setAutoPrint(true); }} className="h-10 rounded-xl bg-gold/10 text-gold text-[11px] font-bold flex items-center justify-center gap-1 active:scale-95"><Printer size={13} /> طباعة</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {clientFileTab === 'invoices' && (
+            <div className="space-y-2">
+              {userInvoices.length === 0 && <div className="p-8 text-center text-xs text-muted rounded-xl bg-white dark:bg-[#12031a] border border-gold/10">لا توجد فواتير</div>}
+              {userInvoices.map(inv => (
+                <div key={inv.id} className="rounded-2xl bg-white dark:bg-[#12031a] border border-gold/10 p-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="text-xs font-bold text-brand dark:text-white">{formatAmount(inv.amount)} ر.س</div>
+                    <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${inv.status === 'paid' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-amber-50 text-amber-600 border-amber-100'}`}>{inv.status === 'paid' ? 'مسددة' : 'بانتظار السداد'}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-[10px] mb-2">
+                    <div><span className="text-muted">رقم الفاتورة:</span> <span className="font-mono text-brand dark:text-gray-300">{String(inv.id).slice(0,12)}</span></div>
+                    <div><span className="text-muted">التاريخ:</span> <span className="text-muted">{inv.created_at ? new Date(inv.created_at).toLocaleDateString('ar-SA') : '---'}</span></div>
+                  </div>
+                  <button onClick={() => window.open(`#/invoice/${inv.submission_id}`, '_blank')}
+                    className="w-full h-10 rounded-xl bg-brand text-gold text-xs font-bold flex items-center justify-center gap-2 active:scale-95">
+                    <Eye size={14} /> عرض الفاتورة
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {clientFileTab === 'promissory' && (
+            <div className="space-y-2">
+              {userNotes.length === 0 && <div className="p-8 text-center text-xs text-muted rounded-xl bg-white dark:bg-[#12031a] border border-gold/10">لا توجد سندات أمر</div>}
+              {userNotes.map((n: any) => (
+                <div key={n.id} className="rounded-2xl bg-white dark:bg-[#12031a] border border-gold/10 p-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="text-xs font-bold text-brand dark:text-white">{formatAmount(Number(n.amount) || 0)} ر.س</div>
+                    <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${n.signed_at ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-amber-50 text-amber-600 border-amber-100'}`}>{n.signed_at ? 'موقّع' : 'بانتظار التوقيع'}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-[10px] mb-2">
+                    <div><span className="text-muted">رقم السند:</span> <span className="font-mono text-brand dark:text-gray-300">{String(n.id).slice(0,12)}</span></div>
+                    <div><span className="text-muted">التاريخ:</span> <span className="text-muted">{n.created_at ? new Date(n.created_at).toLocaleDateString('ar-SA') : '---'}</span></div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button onClick={() => window.open(`#/promissory/${n.id}`, '_blank')} className="h-10 rounded-xl bg-brand text-gold text-[11px] font-bold flex items-center justify-center gap-1 active:scale-95"><Eye size={13} /> عرض</button>
+                    <button onClick={() => window.open(`#/promissory/${n.id}?print=1`, '_blank')} className="h-10 rounded-xl bg-gold/10 text-gold text-[11px] font-bold flex items-center justify-center gap-1 active:scale-95"><Download size={13} /> تحميل</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {clientFileTab === 'chat' && (
+            <div className="rounded-2xl bg-white dark:bg-[#12031a] border border-gold/10 p-4 space-y-3">
+              {clientLastMessage ? (
+                <>
+                  <div className="text-[10px] text-muted">آخر رسالة</div>
+                  <div className="text-sm text-brand dark:text-white line-clamp-3">{clientLastMessage.content}</div>
+                  <div className="text-[10px] text-muted">{new Date(clientLastMessage.created_at).toLocaleString('ar-SA')}</div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[9px] font-bold px-2 py-0.5 rounded-full border bg-emerald-50 text-emerald-600 border-emerald-100">نشطة</span>
+                  </div>
+                </>
+              ) : (
+                <div className="text-xs text-muted text-center py-4">لا توجد محادثات سابقة</div>
+              )}
+              <button onClick={() => { setChatTargetUser({ id: u.id, name: u.name || 'عميل' }); setIsChatOpen(true); }}
+                className="w-full h-11 rounded-xl bg-brand text-gold text-sm font-bold flex items-center justify-center gap-2 active:scale-95">
+                <MessageCircle size={16} /> فتح المحادثة
+              </button>
+            </div>
+          )}
+
+          {clientFileTab === 'activity' && (
+            <div className="rounded-2xl bg-white dark:bg-[#12031a] border border-gold/10 overflow-hidden divide-y divide-gold/5">
+              {activity.length === 0 && <div className="p-8 text-center text-xs text-muted">لا يوجد نشاط مسجّل</div>}
+              {activity.map((a, i) => (
+                <div key={i} className="p-3 flex items-start gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-gold/10 text-gold flex items-center justify-center shrink-0"><History size={16} /></div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-xs font-bold text-brand dark:text-white">{a.kind}</div>
+                    <div className="text-[10px] text-muted truncate">{a.label}</div>
+                  </div>
+                  <div className="text-[9px] text-muted whitespace-nowrap">{new Date(a.t).toLocaleDateString('ar-SA')}</div>
+                </div>
+              ))}
+            </div>
+          )}
+        </main>
+      </div>
+    );
+  };
+  // ==================== END CLIENT FILE ====================
+
   // ==================== MOBILE-ONLY RENDERERS ====================
   const mobileStatusMap = {
     new: 'pending',
