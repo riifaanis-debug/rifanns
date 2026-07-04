@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import rifansLogo from '@/assets/rifans-logo.png';
 import rifansStampImg from '@/assets/rifans-stamp.png';
 import { useAuth } from '../../contexts/AuthContext';
+import { useIsMobile } from '../../hooks/use-mobile';
 import { 
   X, LayoutDashboard, FileText, Users, CheckCircle, Clock, AlertCircle, 
   Download, Search, Filter, Bell, RefreshCw, PenTool, 
@@ -9,7 +10,7 @@ import {
   FileCheck, FileClock, History, UserCheck, UserPlus, TrendingUp,
   ArrowUpRight, ArrowDownRight, Calendar, Mail, Phone, MapPin,
   CreditCard, Briefcase, Hash, Menu, Printer, MessageCircle, Star, ScrollText,
-  LogOut
+  LogOut, Home, MoreHorizontal, FolderOpen, ChevronDown
 } from 'lucide-react';
 import { AdminPaymentRequests } from './PaymentRequests';
 import ChatPage from './ChatPage';
@@ -26,7 +27,9 @@ interface AdminDashboardProps {
   onClose: () => void;
 }
 
-type DashboardTab = 'home' | 'stats' | 'clients' | 'waive_requests' | 'rescheduling_requests' | 'service_requests' | 'contracts' | 'invoices' | 'promissory_notes' | 'payments' | 'notifications' | 'document_request' | 'open_request' | 'reviews';
+type DashboardTab = 'home' | 'stats' | 'clients' | 'waive_requests' | 'rescheduling_requests' | 'service_requests' | 'contracts' | 'invoices' | 'promissory_notes' | 'payments' | 'notifications' | 'document_request' | 'open_request' | 'reviews' | 'mobile_requests' | 'mobile_documents' | 'mobile_more';
+
+const MOBILE_INLINE_TABS = new Set<DashboardTab>(['home','mobile_requests','clients','mobile_documents','mobile_more']);
 
 type AdminDocumentKind = 'contract' | 'invoice' | 'receipt' | 'authorization' | 'general_invoice';
 
