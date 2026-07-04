@@ -305,13 +305,14 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
             {mode === 'admin' && (
               <>
                 <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-brand dark:text-gold/80 px-1">البريد الإلكتروني</label>
+                  <label className="text-[10px] font-bold text-brand dark:text-gold/80 px-1">رقم الهوية</label>
                   <div className="relative group">
-                    <User className="absolute right-3 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-gold" size={16} />
+                    <CreditCard className="absolute right-3 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-gold" size={16} />
                     <input
-                      type="email" name="email" required value={formData.email} onChange={handleChange}
+                      type="text" name="nationalId" inputMode="numeric" required
+                      value={formData.nationalId} onChange={handleChange} onKeyDown={onlyNumbers}
                       className="w-full bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg py-2 pr-9 pl-3 text-xs focus:border-gold outline-none dark:text-white text-left dir-ltr"
-                      placeholder="admin@rifans.net"
+                      placeholder="رقم الهوية"
                     />
                   </div>
                 </div>
