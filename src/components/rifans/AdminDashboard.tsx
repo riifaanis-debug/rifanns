@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import rifansLogo from '@/assets/rifans-logo.png';
 import rifansStampImg from '@/assets/rifans-stamp.png';
 import { useAuth } from '../../contexts/AuthContext';
+import { useIsMobile } from '../../hooks/use-mobile';
 import { 
   X, LayoutDashboard, FileText, Users, CheckCircle, Clock, AlertCircle, 
   Download, Search, Filter, Bell, RefreshCw, PenTool, 
@@ -9,7 +10,7 @@ import {
   FileCheck, FileClock, History, UserCheck, UserPlus, TrendingUp,
   ArrowUpRight, ArrowDownRight, Calendar, Mail, Phone, MapPin,
   CreditCard, Briefcase, Hash, Menu, Printer, MessageCircle, Star, ScrollText,
-  LogOut
+  LogOut, Home, MoreHorizontal, FolderOpen, ChevronDown
 } from 'lucide-react';
 import { AdminPaymentRequests } from './PaymentRequests';
 import ChatPage from './ChatPage';
@@ -26,7 +27,9 @@ interface AdminDashboardProps {
   onClose: () => void;
 }
 
-type DashboardTab = 'home' | 'stats' | 'clients' | 'waive_requests' | 'rescheduling_requests' | 'service_requests' | 'contracts' | 'invoices' | 'promissory_notes' | 'payments' | 'notifications' | 'document_request' | 'open_request' | 'reviews';
+type DashboardTab = 'home' | 'stats' | 'clients' | 'waive_requests' | 'rescheduling_requests' | 'service_requests' | 'contracts' | 'invoices' | 'promissory_notes' | 'payments' | 'notifications' | 'document_request' | 'open_request' | 'reviews' | 'mobile_requests' | 'mobile_documents' | 'mobile_more';
+
+const MOBILE_INLINE_TABS = new Set<DashboardTab>(['home','mobile_requests','clients','mobile_documents','mobile_more']);
 
 type AdminDocumentKind = 'contract' | 'invoice' | 'receipt' | 'authorization' | 'general_invoice';
 
@@ -154,7 +157,10 @@ const PdfNumberedList: React.FC<{ items: string[]; className?: string }> = ({ it
 
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
   const { user: authUser, logout } = useAuth();
+  const isMobile = useIsMobile();
   const [activeTab, setActiveTab] = useState<DashboardTab>('home');
+  const [mobileReqFilter, setMobileReqFilter] = useState<'new' | 'processing' | 'signature' | 'completed' | 'stopped'>('new');
+  const [mobileDocFilter, setMobileDocFilter] = useState<'all' | 'contracts' | 'invoices' | 'promissory'>('all');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
   const [submissions, setSubmissions] = useState<any[]>([]);
@@ -1406,6 +1412,358 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
       </div>
     );
   };
+
+  // ==================== MOBILE-ONLY RENDERERS ====================
+  const mobileStatusMap = {
+    new: 'pending',
+    processing: 'processing',
+    signature: 'executing',
+    completed: 'completed',
+    stopped: 'rejected',
+  } as const;
+
+  const mobileRequestsFiltered = useMemo(() => {
+    const status = mobileStatusMap[mobileReqFilter];
+    // "signature" also surfaces unsigned contracts as bucket
+    if (mobileReqFilter === 'signature') {
+      const withUnsignedContract = new Set(contracts.filter(c => !c.signed_at).map(c => c.submission_id));
+      return submissions.filter(s => s.status === status || withUnsignedContract.has(s.id));
+    }
+    return submissions.filter(s => s.status === status);
+  }, [submissions, contracts, mobileReqFilter]);
+
+  const recentActivity = useMemo(() => {
+    const items = [
+      ...submissions.map(s => ({ kind: 'طلب', name: s.user_name || 'عميل', date: s.created_at || s.timestamp, meta: getRequestTypeLabel(s.type), id: s.id })),
+      ...contracts.map(c => ({ kind: 'عقد', name: c.user_name || 'عميل', date: c.created_at, meta: c.signed_at ? 'موقع' : 'بانتظار التوقيع', id: c.id })),
+      ...adminInvoices.map(inv => ({ kind: 'فاتورة', name: inv.user_name || 'عميل', date: inv.created_at, meta: `${formatAmount(inv.amount)} ر.س`, id: inv.id })),
+    ].filter(x => x.date);
+    items.sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    return items.slice(0, 5);
+  }, [submissions, contracts, adminInvoices]);
+
+  const todaySummary = useMemo(() => {
+    const isToday = (d: string) => d && new Date(d).toDateString() === new Date().toDateString();
+    return {
+      requests: submissions.filter(s => isToday(s.created_at || s.timestamp)).length,
+      newClients: users.filter(u => isToday(u.created_at)).length,
+      pendingDocs: contracts.filter(c => !c.signed_at).length,
+    };
+  }, [submissions, users, contracts]);
+
+  const renderMobileHome = () => (
+    <div className="p-4 space-y-5 pb-28" dir="rtl">
+      {/* Today Summary */}
+      <div className="rounded-2xl bg-gradient-to-br from-brand to-[#3b0a4d] text-white p-4 shadow-lg">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-sm font-black text-gold">ملخص اليوم</h3>
+          <Calendar size={16} className="text-gold/70" />
+        </div>
+        <div className="grid grid-cols-3 gap-2 text-center">
+          <div><div className="text-2xl font-black text-gold">{todaySummary.requests}</div><div className="text-[10px] text-white/70 mt-1">طلبات اليوم</div></div>
+          <div><div className="text-2xl font-black text-gold">{todaySummary.newClients}</div><div className="text-[10px] text-white/70 mt-1">عملاء جدد</div></div>
+          <div><div className="text-2xl font-black text-gold">{todaySummary.pendingDocs}</div><div className="text-[10px] text-white/70 mt-1">مستندات معلّقة</div></div>
+        </div>
+      </div>
+
+      {/* Top 4 KPIs */}
+      <div>
+        <h3 className="text-sm font-bold text-brand dark:text-white mb-3 flex items-center gap-2"><TrendingUp size={16} className="text-gold" /> أهم المؤشرات</h3>
+        <div className="grid grid-cols-2 gap-3">
+          {[
+            { label: 'إجمالي الطلبات', value: stats.totalRequests, color: 'from-blue-500/10 to-blue-500/5', text: 'text-blue-600', icon: <FileText size={18} /> },
+            { label: 'قيد المعالجة', value: stats.processing + stats.executing, color: 'from-amber-500/10 to-amber-500/5', text: 'text-amber-600', icon: <RefreshCw size={18} /> },
+            { label: 'مكتملة', value: stats.completed, color: 'from-emerald-500/10 to-emerald-500/5', text: 'text-emerald-600', icon: <CheckCircle size={18} /> },
+            { label: 'إجمالي العملاء', value: stats.totalUsers, color: 'from-purple-500/10 to-purple-500/5', text: 'text-purple-600', icon: <Users size={18} /> },
+          ].map((k, i) => (
+            <div key={i} className={`rounded-2xl p-3 bg-gradient-to-br ${k.color} border border-gold/10 bg-white dark:bg-[#12031a]`}>
+              <div className={`w-9 h-9 rounded-xl bg-white dark:bg-white/5 flex items-center justify-center ${k.text} mb-2`}>{k.icon}</div>
+              <div className="text-[11px] text-muted font-bold">{k.label}</div>
+              <div className="text-xl font-black text-brand dark:text-white mt-1">{formatAmount(k.value)}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Recent activity */}
+      <div>
+        <h3 className="text-sm font-bold text-brand dark:text-white mb-3 flex items-center gap-2"><History size={16} className="text-gold" /> آخر النشاطات</h3>
+        <div className="rounded-2xl bg-white dark:bg-[#12031a] border border-gold/10 divide-y divide-gold/5 overflow-hidden">
+          {recentActivity.length === 0 && <div className="p-6 text-center text-xs text-muted">لا يوجد نشاط حديث</div>}
+          {recentActivity.map((a, i) => (
+            <div key={i} className="p-3 flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-brand text-gold flex items-center justify-center font-bold text-xs shrink-0">{a.name[0]}</div>
+              <div className="flex-1 min-w-0">
+                <div className="text-xs font-bold text-brand dark:text-white truncate">{a.name}</div>
+                <div className="text-[10px] text-muted truncate">{a.kind} • {a.meta}</div>
+              </div>
+              <div className="text-[9px] text-muted whitespace-nowrap">{new Date(a.date).toLocaleDateString('ar-SA')}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Quick actions */}
+      <div>
+        <h3 className="text-sm font-bold text-brand dark:text-white mb-3 flex items-center gap-2"><ArrowUpRight size={16} className="text-gold" /> إجراءات سريعة</h3>
+        <div className="grid grid-cols-2 gap-3">
+          <button onClick={() => setActiveTab('open_request')} className="rounded-2xl bg-brand text-gold p-4 flex flex-col items-center gap-2 shadow-md active:scale-95 transition-all">
+            <FileText size={22} /><span className="text-xs font-bold">طلب جديد</span>
+          </button>
+          <button onClick={() => setActiveTab('mobile_requests')} className="rounded-2xl bg-white dark:bg-[#12031a] text-brand dark:text-gold p-4 flex flex-col items-center gap-2 border border-gold/20 active:scale-95 transition-all">
+            <FolderOpen size={22} /><span className="text-xs font-bold">عرض الطلبات</span>
+          </button>
+          <button onClick={() => setActiveTab('clients')} className="rounded-2xl bg-white dark:bg-[#12031a] text-brand dark:text-gold p-4 flex flex-col items-center gap-2 border border-gold/20 active:scale-95 transition-all">
+            <Users size={22} /><span className="text-xs font-bold">العملاء</span>
+          </button>
+          <button onClick={() => setIsChatOpen(true)} className="relative rounded-2xl bg-white dark:bg-[#12031a] text-brand dark:text-gold p-4 flex flex-col items-center gap-2 border border-gold/20 active:scale-95 transition-all">
+            <MessageCircle size={22} /><span className="text-xs font-bold">المحادثات</span>
+            {unreadChatCount > 0 && <span className="absolute top-2 left-2 min-w-[18px] h-[18px] rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center px-1">{unreadChatCount}</span>}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const mobileStatusBadge = (status: string) => {
+    const map: Record<string, { label: string; cls: string }> = {
+      pending: { label: 'جديد', cls: 'bg-blue-50 text-blue-600 border-blue-100' },
+      processing: { label: 'تحت الإجراء', cls: 'bg-indigo-50 text-indigo-600 border-indigo-100' },
+      executing: { label: 'قيد التنفيذ', cls: 'bg-amber-50 text-amber-600 border-amber-100' },
+      completed: { label: 'مكتمل', cls: 'bg-emerald-50 text-emerald-600 border-emerald-100' },
+      rejected: { label: 'متوقف', cls: 'bg-rose-50 text-rose-600 border-rose-100' },
+    };
+    const m = map[status] || { label: status, cls: 'bg-gray-50 text-gray-600 border-gray-100' };
+    return <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${m.cls}`}>{m.label}</span>;
+  };
+
+  const renderMobileRequests = () => {
+    const chips: Array<{ id: typeof mobileReqFilter; label: string }> = [
+      { id: 'new', label: 'جديدة' },
+      { id: 'processing', label: 'قيد المعالجة' },
+      { id: 'signature', label: 'بانتظار التوقيع' },
+      { id: 'completed', label: 'مكتملة' },
+      { id: 'stopped', label: 'متوقفة' },
+    ];
+    return (
+      <div className="p-3 pb-28 space-y-3" dir="rtl">
+        <div className="flex gap-2 overflow-x-auto pb-1 -mx-3 px-3 no-scrollbar">
+          {chips.map(c => (
+            <button key={c.id} onClick={() => setMobileReqFilter(c.id)}
+              className={`whitespace-nowrap px-3 py-1.5 rounded-full text-[11px] font-bold border transition-all shrink-0 ${mobileReqFilter === c.id ? 'bg-brand text-gold border-brand' : 'bg-white dark:bg-[#12031a] text-brand dark:text-gray-300 border-gold/20'}`}>
+              {c.label}
+            </button>
+          ))}
+        </div>
+        <div className="space-y-2">
+          {mobileRequestsFiltered.length === 0 && <div className="p-8 text-center text-xs text-muted">لا توجد طلبات في هذه الحالة</div>}
+          {mobileRequestsFiltered.map(s => (
+            <div key={s.id} className="rounded-2xl bg-white dark:bg-[#12031a] border border-gold/10 p-3">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2 min-w-0">
+                  <div className="w-8 h-8 rounded-full bg-brand text-gold flex items-center justify-center font-bold text-xs shrink-0">{(s.user_name || '؟')[0]}</div>
+                  <div className="text-xs font-bold text-brand dark:text-white truncate">{s.user_name || 'عميل'}</div>
+                </div>
+                {mobileStatusBadge(s.status)}
+              </div>
+              <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-[10px] mb-2">
+                <div><span className="text-muted">رقم الطلب:</span> <span className="font-mono text-brand dark:text-gray-300">{String(s.id).slice(0,10)}</span></div>
+                <div><span className="text-muted">النوع:</span> <span className="text-brand dark:text-gray-300">{getRequestTypeLabel(s.type)}</span></div>
+                <div className="col-span-2"><span className="text-muted">التاريخ:</span> <span className="text-muted">{s.created_at ? new Date(s.created_at).toLocaleDateString('ar-SA') : '---'}</span></div>
+              </div>
+              <button onClick={() => { setSelectedSubmission(s); fetchSubmissionHistory(s.id); }}
+                className="w-full h-10 rounded-xl bg-brand text-gold text-xs font-bold flex items-center justify-center gap-2 active:scale-95 transition-all">
+                <Eye size={14} /> فتح الطلب
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  const renderMobileClients = () => (
+    <div className="p-3 pb-28 space-y-3" dir="rtl">
+      <div className="relative">
+        <Search className="absolute right-3 top-1/2 -translate-y-1/2 text-muted" size={16} />
+        <input type="text" placeholder="بحث باسم العميل أو رقم الملف..."
+          value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full pr-9 pl-3 h-11 bg-white dark:bg-[#12031a] border border-gold/20 rounded-xl text-[15px] focus:border-gold outline-none" />
+      </div>
+      <div className="space-y-2">
+        {filteredUsers.length === 0 && <div className="p-8 text-center text-xs text-muted">لا يوجد عملاء</div>}
+        {filteredUsers.map(u => {
+          const lastReq = submissions.find(s => (s.userId || s.user_id) === u.id);
+          return (
+            <div key={u.id} className="rounded-2xl bg-white dark:bg-[#12031a] border border-gold/10 p-3">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-10 h-10 rounded-full bg-brand text-gold flex items-center justify-center font-bold text-sm shrink-0">{(u.name || '؟')[0]}</div>
+                <div className="min-w-0 flex-1">
+                  <div className="text-sm font-bold text-brand dark:text-white truncate">{u.name || '---'}</div>
+                  <div className="text-[10px] font-mono text-muted">رقم الملف: {u.file_number || '---'}</div>
+                </div>
+                {lastReq && mobileStatusBadge(lastReq.status)}
+              </div>
+              <div className="text-[10px] text-muted mb-2">نوع الطلب: <span className="text-brand dark:text-gray-300 font-bold">{lastReq ? getRequestTypeLabel(lastReq.type) : 'لا يوجد طلبات'}</span></div>
+              <button onClick={() => setSelectedUser(u)}
+                className="w-full h-10 rounded-xl bg-brand text-gold text-xs font-bold flex items-center justify-center gap-2 active:scale-95 transition-all">
+                <Eye size={14} /> فتح الملف
+              </button>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  const renderMobileDocuments = () => {
+    const items: Array<{ kind: string; date: string; open: () => void; badge: JSX.Element; title: string; sub: string; }> = [];
+    if (mobileDocFilter === 'all' || mobileDocFilter === 'contracts') {
+      contracts.forEach(c => items.push({
+        kind: 'عقد', date: c.created_at, title: c.user_name || 'عميل', sub: `رقم العقد: ${String(c.id).slice(0,10)}`,
+        badge: <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${c.signed_at ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-amber-50 text-amber-600 border-amber-100'}`}>{c.signed_at ? 'موقع' : 'بانتظار التوقيع'}</span>,
+        open: () => setSelectedContract(c),
+      }));
+    }
+    if (mobileDocFilter === 'all' || mobileDocFilter === 'invoices') {
+      adminInvoices.forEach(inv => items.push({
+        kind: 'فاتورة', date: inv.created_at, title: inv.user_name || 'عميل', sub: `${formatAmount(inv.amount)} ر.س`,
+        badge: <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${inv.status === 'paid' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-amber-50 text-amber-600 border-amber-100'}`}>{inv.status === 'paid' ? 'مسددة' : 'بانتظار السداد'}</span>,
+        open: () => window.open(`#/invoice/${inv.submission_id}`, '_blank'),
+      }));
+    }
+    if (mobileDocFilter === 'all' || mobileDocFilter === 'promissory') {
+      promissoryNotes.forEach((n: any) => items.push({
+        kind: 'سند أمر', date: n.created_at, title: n.user_name || 'عميل', sub: `${formatAmount(Number(n.amount) || 0)} ر.س`,
+        badge: <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${n.signed_at ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-amber-50 text-amber-600 border-amber-100'}`}>{n.signed_at ? 'موقع' : 'بانتظار التوقيع'}</span>,
+        open: () => window.open(`#/promissory/${n.id}`, '_blank'),
+      }));
+    }
+    items.sort((a,b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime());
+    const chips: Array<{ id: typeof mobileDocFilter; label: string }> = [
+      { id: 'all', label: 'الكل' }, { id: 'contracts', label: 'عقود' }, { id: 'invoices', label: 'فواتير' }, { id: 'promissory', label: 'سندات' },
+    ];
+    return (
+      <div className="p-3 pb-28 space-y-3" dir="rtl">
+        <div className="flex gap-2 overflow-x-auto pb-1 -mx-3 px-3 no-scrollbar">
+          {chips.map(c => (
+            <button key={c.id} onClick={() => setMobileDocFilter(c.id)}
+              className={`whitespace-nowrap px-3 py-1.5 rounded-full text-[11px] font-bold border transition-all shrink-0 ${mobileDocFilter === c.id ? 'bg-brand text-gold border-brand' : 'bg-white dark:bg-[#12031a] text-brand dark:text-gray-300 border-gold/20'}`}>
+              {c.label}
+            </button>
+          ))}
+        </div>
+        <div className="space-y-2">
+          {items.length === 0 && <div className="p-8 text-center text-xs text-muted">لا توجد مستندات</div>}
+          {items.map((it, i) => (
+            <div key={i} className="rounded-2xl bg-white dark:bg-[#12031a] border border-gold/10 p-3">
+              <div className="flex items-center justify-between mb-1.5">
+                <div className="flex items-center gap-2 min-w-0">
+                  <div className="w-8 h-8 rounded-lg bg-gold/10 text-gold flex items-center justify-center shrink-0"><FileText size={16} /></div>
+                  <div className="text-xs font-bold text-brand dark:text-white truncate">{it.title}</div>
+                </div>
+                {it.badge}
+              </div>
+              <div className="text-[10px] text-muted mb-2">{it.kind} • {it.sub}</div>
+              <button onClick={it.open} className="w-full h-10 rounded-xl bg-brand text-gold text-xs font-bold flex items-center justify-center gap-2 active:scale-95 transition-all">
+                <Eye size={14} /> فتح
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  const renderMobileMore = () => {
+    const items: Array<{ icon: React.ReactNode; label: string; onClick: () => void; badge?: number; danger?: boolean }> = [
+      { icon: <TrendingUp size={18} />, label: 'الإحصائيات المفصّلة', onClick: () => setActiveTab('stats') },
+      { icon: <Bell size={18} />, label: 'التنبيهات', onClick: () => setActiveTab('notifications'), badge: notifications.filter(n => !n.is_read).length },
+      { icon: <MessageCircle size={18} />, label: 'المحادثات', onClick: () => setIsChatOpen(true), badge: unreadChatCount },
+      { icon: <CreditCard size={18} />, label: 'سداد المدفوعات', onClick: () => setActiveTab('payments') },
+      { icon: <FileCheck size={18} />, label: 'طلب مستند', onClick: () => setActiveTab('document_request') },
+      { icon: <FileText size={18} />, label: 'طلب مفتوح', onClick: () => setActiveTab('open_request') },
+      { icon: <Star size={18} />, label: 'إرسال تقييم', onClick: () => setActiveTab('reviews') },
+      { icon: <RefreshCw size={18} />, label: 'تحديث البيانات', onClick: () => fetchAllData() },
+      { icon: <LogOut size={18} />, label: 'تسجيل الخروج', onClick: () => logout(), danger: true },
+    ];
+    return (
+      <div className="p-3 pb-28 space-y-2" dir="rtl">
+        <div className="rounded-2xl bg-white dark:bg-[#12031a] border border-gold/10 divide-y divide-gold/5 overflow-hidden">
+          {items.map((it, i) => (
+            <button key={i} onClick={it.onClick}
+              className={`w-full flex items-center gap-3 p-4 active:bg-gold/5 transition-colors ${it.danger ? 'text-rose-600' : 'text-brand dark:text-white'}`}>
+              <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${it.danger ? 'bg-rose-50 text-rose-600' : 'bg-gold/10 text-gold'}`}>{it.icon}</div>
+              <span className="flex-1 text-right text-sm font-bold">{it.label}</span>
+              {it.badge ? <span className="min-w-[20px] h-5 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center px-1.5">{it.badge}</span> : null}
+              <ChevronLeft size={16} className="text-muted" />
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  const renderMobileShell = () => {
+    const navs: Array<{ id: DashboardTab; icon: React.ReactNode; label: string; badge?: number }> = [
+      { id: 'home', icon: <Home size={20} />, label: 'الرئيسية' },
+      { id: 'mobile_requests', icon: <FileText size={20} />, label: 'الطلبات' },
+      { id: 'clients', icon: <Users size={20} />, label: 'العملاء' },
+      { id: 'mobile_documents', icon: <FolderOpen size={20} />, label: 'المستندات' },
+      { id: 'mobile_more', icon: <MoreHorizontal size={20} />, label: 'المزيد', badge: notifications.filter(n => !n.is_read).length + unreadChatCount },
+    ];
+    let content: React.ReactNode = null;
+    if (isLoading) content = <div className="flex flex-col items-center justify-center h-96 gap-3"><div className="w-10 h-10 border-4 border-gold/30 border-t-gold rounded-full animate-spin" /><p className="text-xs text-muted">جاري التحميل...</p></div>;
+    else if (activeTab === 'home') content = renderMobileHome();
+    else if (activeTab === 'mobile_requests') content = renderMobileRequests();
+    else if (activeTab === 'clients') content = renderMobileClients();
+    else if (activeTab === 'mobile_documents') content = renderMobileDocuments();
+    else if (activeTab === 'mobile_more') content = renderMobileMore();
+
+    const inline = MOBILE_INLINE_TABS.has(activeTab);
+    return (
+      <>
+        {/* Compact mobile header */}
+        <header className="bg-brand text-white px-4 h-14 flex items-center justify-between sticky top-0 z-[102] shadow-md">
+          <div className="flex items-center gap-2">
+            <div className="w-9 h-9 rounded-xl bg-white/10 border border-white/10 flex items-center justify-center text-gold"><LayoutDashboard size={18} /></div>
+            <h1 className="text-sm font-black tracking-tight">لوحة تحكم الإدارة</h1>
+          </div>
+          <div className="flex items-center gap-1">
+            <button onClick={() => setActiveTab('notifications')} className="relative w-10 h-10 rounded-xl flex items-center justify-center text-gold active:bg-white/10">
+              <Bell size={20} />
+              {notifications.filter(n => !n.is_read).length > 0 && <span className="absolute top-1 left-1 min-w-[16px] h-4 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center px-1">{notifications.filter(n => !n.is_read).length}</span>}
+            </button>
+            <button onClick={onClose} className="w-10 h-10 rounded-xl flex items-center justify-center text-white active:bg-white/10"><X size={22} /></button>
+          </div>
+        </header>
+
+        {/* Content */}
+        <main className="flex-1 overflow-y-auto overflow-x-hidden bg-[#F5F4FA] dark:bg-[#06010a]">
+          {inline ? content : null}
+        </main>
+
+        {/* Bottom nav */}
+        <nav className="fixed bottom-0 inset-x-0 z-[103] bg-white dark:bg-[#12031a] border-t border-gold/15 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] pb-[env(safe-area-inset-bottom)]">
+          <div className="grid grid-cols-5 h-16">
+            {navs.map(n => {
+              const active = activeTab === n.id;
+              return (
+                <button key={n.id} onClick={() => { setActiveTab(n.id); setSearchTerm(''); }}
+                  className={`relative flex flex-col items-center justify-center gap-1 transition-all ${active ? 'text-gold' : 'text-muted'}`}>
+                  <div className={active ? 'scale-110' : ''}>{n.icon}</div>
+                  <span className={`text-[10px] font-bold ${active ? 'text-brand dark:text-gold' : ''}`}>{n.label}</span>
+                  {active && <span className="absolute top-0 h-1 w-10 rounded-b-full bg-gold" />}
+                  {n.badge ? <span className="absolute top-1 left-1/2 translate-x-3 min-w-[16px] h-4 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center px-1">{n.badge > 99 ? '99+' : n.badge}</span> : null}
+                </button>
+              );
+            })}
+          </div>
+        </nav>
+      </>
+    );
+  };
+  // ==================== END MOBILE-ONLY RENDERERS ====================
 
   const renderHome = () => (
     <div className="space-y-4 sm:space-y-6 md:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
