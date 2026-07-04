@@ -1958,46 +1958,24 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
           </Button>
         </div>
       </div>
-      {/* Table - shows only client name and file number */}
-      <div className="overflow-x-auto custom-scrollbar">
-        <table className="w-full text-right border-collapse">
-          <thead>
-            <tr className="text-[10px] sm:text-xs font-bold text-muted bg-gray-50 dark:bg-black/20 border-b border-gold/10">
-              <th className="p-3 sm:p-4 whitespace-nowrap">العميل</th>
-              <th className="p-3 sm:p-4 whitespace-nowrap">رقم الملف</th>
-              <th className="p-3 sm:p-4 whitespace-nowrap">الإجراءات</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gold/5">
-            {filteredUsers.map((u) => (
-              <tr key={u.id} className="hover:bg-gold/5 transition-colors group">
-                <td className="p-3 sm:p-4 whitespace-nowrap">
-                  <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-brand text-gold flex items-center justify-center font-bold text-[10px] sm:text-xs shadow-sm">
-                      {(u.name || '؟')[0]}
-                    </div>
-                    <span className="text-[10px] sm:text-xs font-bold text-brand dark:text-white group-hover:text-gold transition-colors">{u.name || '---'}</span>
-                  </div>
-                </td>
-                <td className="p-3 sm:p-4 text-[10px] sm:text-xs font-mono text-muted whitespace-nowrap">{u.file_number || '---'}</td>
-                <td className="p-3 sm:p-4 whitespace-nowrap">
-                  <button 
-                    onClick={() => setSelectedUser(u)} 
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-gold/10 hover:bg-gold text-gold hover:text-brand rounded-lg transition-colors text-[10px] sm:text-xs font-bold"
-                    title="فتح ملف العميل"
-                  >
-                    <Eye size={14} />
-                    فتح ملف العميل
-                  </button>
-                </td>
-              </tr>
-            ))}
-            {filteredUsers.length === 0 && (
-              <tr><td colSpan={3} className="p-8 text-center text-muted text-sm">لا يوجد عملاء مسجلين</td></tr>
-            )}
-          </tbody>
-        </table>
+      {/* Simple list — client name + phone + open arrow */}
+      <div className="divide-y divide-gold/5">
+        {filteredUsers.map((u) => (
+          <button key={u.id} onClick={() => setSelectedUser(u)}
+            className="w-full flex items-center gap-3 p-4 hover:bg-gold/5 transition-colors text-right group">
+            <div className="w-10 h-10 rounded-full bg-brand text-gold flex items-center justify-center font-bold text-sm shrink-0">{(u.name || '؟')[0]}</div>
+            <div className="min-w-0 flex-1">
+              <div className="text-sm font-bold text-brand dark:text-white truncate group-hover:text-gold transition-colors">{u.name || '---'}</div>
+              <div className="text-xs font-mono text-muted mt-0.5">{u.phone || u.mobile || '---'}</div>
+            </div>
+            <ChevronLeft size={18} className="text-muted group-hover:text-gold shrink-0" />
+          </button>
+        ))}
+        {filteredUsers.length === 0 && (
+          <div className="p-8 text-center text-muted text-sm">لا يوجد عملاء مسجلين</div>
+        )}
       </div>
+
     </Card>
     </div>
   );
