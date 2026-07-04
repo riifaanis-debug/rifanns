@@ -157,7 +157,10 @@ const PdfNumberedList: React.FC<{ items: string[]; className?: string }> = ({ it
 
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
   const { user: authUser, logout } = useAuth();
+  const isMobile = useIsMobile();
   const [activeTab, setActiveTab] = useState<DashboardTab>('home');
+  const [mobileReqFilter, setMobileReqFilter] = useState<'new' | 'processing' | 'signature' | 'completed' | 'stopped'>('new');
+  const [mobileDocFilter, setMobileDocFilter] = useState<'all' | 'contracts' | 'invoices' | 'promissory'>('all');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
   const [submissions, setSubmissions] = useState<any[]>([]);
