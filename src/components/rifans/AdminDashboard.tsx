@@ -3162,57 +3162,9 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
         )}
       </AnimatePresence>
 
-      {/* User Details Modal */}
-      <AnimatePresence>
-        {selectedUser && (
-          <div className="fixed inset-0 z-[120] flex items-center justify-center p-0 sm:p-4">
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-brand/40 backdrop-blur-md" 
-              onClick={() => setSelectedUser(null)} 
-            />
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="relative w-full sm:w-[95%] max-w-3xl max-h-screen sm:max-h-[90vh] bg-white dark:bg-[#12031a] rounded-none sm:rounded-[32px] shadow-2xl overflow-hidden flex flex-col"
-            >
-              <div className="p-3 sm:p-5 border-b border-gold/10 flex items-center justify-between bg-brand text-white shrink-0">
-                <div className="flex items-center gap-2 sm:gap-4">
-                  <div className="w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-gold text-brand flex items-center justify-center font-bold text-sm sm:text-lg">
-                    {(selectedUser.name || '؟')[0]}
-                  </div>
-                  <div>
-                    <h2 className="text-sm sm:text-lg font-bold">{selectedUser.name}</h2>
-                    <p className="text-[8px] sm:text-[10px] text-gold/80">{selectedUser.email}</p>
-                  </div>
-                </div>
-                <button onClick={() => setSelectedUser(null)} className="w-7 h-7 sm:w-9 sm:h-9 rounded-lg bg-white/10 flex items-center justify-center hover:bg-white/20 transition-all">
-                  <X size={14} />
-                </button>
-              </div>
-              <div className="p-3 sm:p-6 space-y-3 sm:space-y-5">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
-                  <InfoItem icon={<IdCard size={14} />} label="رقم الهوية" value={selectedUser.nationalId} />
-                  <InfoItem icon={<Phone size={14} />} label="رقم الجوال" value={selectedUser.mobile} isLtr />
-                  <InfoItem icon={<Hash size={14} />} label="رقم الملف" value={selectedUser.fileNumber} />
-                  <InfoItem icon={<Calendar size={14} />} label="تاريخ الانضمام" value={new Date(selectedUser.created_at || '').toLocaleDateString('ar-SA')} />
-                </div>
-                <div className="p-4 rounded-2xl bg-gold/5 border border-gold/10">
-                  <h4 className="text-xs font-bold text-brand mb-2">ملاحظات إضافية</h4>
-                  <p className="text-xs text-muted leading-relaxed">لا توجد ملاحظات مسجلة لهذا العميل حالياً.</p>
-                </div>
-              </div>
-              <div className="p-6 border-t border-gold/10 bg-gray-50 dark:bg-black/20 flex items-center justify-end gap-3">
-                <Button variant="outline" onClick={() => setSelectedUser(null)}>إغلاق</Button>
-                <Button className="bg-brand text-gold">تعديل البيانات</Button>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+      {/* Client File — full-page (mobile + desktop) */}
+      {selectedUser && renderClientFile(selectedUser)}
+
 
       {/* Contract View Modal */}
       <AnimatePresence>
