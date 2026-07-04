@@ -8,7 +8,8 @@ import {
   IdCard, ChevronRight, ChevronLeft, MoreVertical, Trash2, Eye, 
   FileCheck, FileClock, History, UserCheck, UserPlus, TrendingUp,
   ArrowUpRight, ArrowDownRight, Calendar, Mail, Phone, MapPin,
-  CreditCard, Briefcase, Hash, Menu, Printer, MessageCircle, Star, ScrollText
+  CreditCard, Briefcase, Hash, Menu, Printer, MessageCircle, Star, ScrollText,
+  LogOut
 } from 'lucide-react';
 import { AdminPaymentRequests } from './PaymentRequests';
 import ChatPage from './ChatPage';
