@@ -1607,31 +1607,20 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
           </Button>
         </div>
       </div>
-      {/* Table - scrollable on all screens */}
+      {/* Table - shows only client name and file number */}
       <div className="overflow-x-auto custom-scrollbar">
-        <table className="w-full text-right border-collapse min-w-[800px]">
+        <table className="w-full text-right border-collapse">
           <thead>
             <tr className="text-[10px] sm:text-xs font-bold text-muted bg-gray-50 dark:bg-black/20 border-b border-gold/10">
-              <th className="p-2 sm:p-3 whitespace-nowrap">#</th>
-              <th className="p-2 sm:p-3 whitespace-nowrap">العميل</th>
-              <th className="p-2 sm:p-3 whitespace-nowrap">رقم الملف</th>
-              <th className="p-2 sm:p-3 whitespace-nowrap">رقم الهوية</th>
-              <th className="p-2 sm:p-3 whitespace-nowrap">الجوال</th>
-              <th className="p-2 sm:p-3 whitespace-nowrap">البريد</th>
-              <th className="p-2 sm:p-3 whitespace-nowrap">المنطقة</th>
-              <th className="p-2 sm:p-3 whitespace-nowrap">المدينة</th>
-              <th className="p-2 sm:p-3 whitespace-nowrap">البنك</th>
-              <th className="p-2 sm:p-3 whitespace-nowrap">الحالة الوظيفية</th>
-              <th className="p-2 sm:p-3 whitespace-nowrap">العمر</th>
-              <th className="p-2 sm:p-3 whitespace-nowrap">تاريخ التسجيل</th>
-              <th className="p-2 sm:p-3 whitespace-nowrap">الإجراءات</th>
+              <th className="p-3 sm:p-4 whitespace-nowrap">العميل</th>
+              <th className="p-3 sm:p-4 whitespace-nowrap">رقم الملف</th>
+              <th className="p-3 sm:p-4 whitespace-nowrap">الإجراءات</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gold/5">
-            {filteredUsers.map((u, idx) => (
+            {filteredUsers.map((u) => (
               <tr key={u.id} className="hover:bg-gold/5 transition-colors group">
-                <td className="p-2 sm:p-3 text-[10px] sm:text-xs text-muted">{idx + 1}</td>
-                <td className="p-2 sm:p-3 whitespace-nowrap">
+                <td className="p-3 sm:p-4 whitespace-nowrap">
                   <div className="flex items-center gap-2">
                     <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-brand text-gold flex items-center justify-center font-bold text-[10px] sm:text-xs shadow-sm">
                       {(u.name || '؟')[0]}
@@ -1639,32 +1628,21 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                     <span className="text-[10px] sm:text-xs font-bold text-brand dark:text-white group-hover:text-gold transition-colors">{u.name || '---'}</span>
                   </div>
                 </td>
-                <td className="p-2 sm:p-3 text-[10px] sm:text-xs font-mono text-muted whitespace-nowrap">{u.file_number || '---'}</td>
-                <td className="p-2 sm:p-3 text-[10px] sm:text-xs text-brand dark:text-gray-300 whitespace-nowrap">{u.national_id || '---'}</td>
-                <td className="p-2 sm:p-3 text-[10px] sm:text-xs text-brand dark:text-gray-300 whitespace-nowrap" dir="ltr">{u.phone || '---'}</td>
-                <td className="p-2 sm:p-3 text-[10px] sm:text-xs text-muted whitespace-nowrap">{u.email || '---'}</td>
-                <td className="p-2 sm:p-3 text-[10px] sm:text-xs text-muted whitespace-nowrap">{u.region || '---'}</td>
-                <td className="p-2 sm:p-3 text-[10px] sm:text-xs text-muted whitespace-nowrap">{u.city || '---'}</td>
-                <td className="p-2 sm:p-3 text-[10px] sm:text-xs text-muted whitespace-nowrap">{u.bank || '---'}</td>
-                <td className="p-2 sm:p-3 text-[10px] sm:text-xs text-muted whitespace-nowrap">{u.job_status || '---'}</td>
-                <td className="p-2 sm:p-3 text-[10px] sm:text-xs text-muted whitespace-nowrap">{u.age || '---'}</td>
-                <td className="p-2 sm:p-3 text-[10px] sm:text-xs text-muted whitespace-nowrap">{new Date(u.created_at || '').toLocaleDateString('ar-SA')}</td>
-                <td className="p-2 sm:p-3">
-                  <div className="flex items-center gap-1">
-                    <button onClick={() => setSelectedUser(u)} className="p-1.5 hover:bg-gold/10 text-gold rounded-lg transition-colors" title="عرض الملف"><Eye size={14} /></button>
-                    <button 
-                      onClick={() => {
-                        const sub = submissions.find(s => s.userId === u.id);
-                        if (sub) { setSelectedSubmission(sub); fetchSubmissionHistory(sub.id); } else { alert('لا يوجد طلبات نشطة لهذا العميل'); }
-                      }}
-                      className="p-1.5 hover:bg-gold/10 text-gold rounded-lg transition-colors" title="فتح الطلب"
-                    ><ExternalLink size={14} /></button>
-                  </div>
+                <td className="p-3 sm:p-4 text-[10px] sm:text-xs font-mono text-muted whitespace-nowrap">{u.file_number || '---'}</td>
+                <td className="p-3 sm:p-4 whitespace-nowrap">
+                  <button 
+                    onClick={() => setSelectedUser(u)} 
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-gold/10 hover:bg-gold text-gold hover:text-brand rounded-lg transition-colors text-[10px] sm:text-xs font-bold"
+                    title="فتح ملف العميل"
+                  >
+                    <Eye size={14} />
+                    فتح ملف العميل
+                  </button>
                 </td>
               </tr>
             ))}
             {filteredUsers.length === 0 && (
-              <tr><td colSpan={13} className="p-8 text-center text-muted text-sm">لا يوجد عملاء مسجلين</td></tr>
+              <tr><td colSpan={3} className="p-8 text-center text-muted text-sm">لا يوجد عملاء مسجلين</td></tr>
             )}
           </tbody>
         </table>
