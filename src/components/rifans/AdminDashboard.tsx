@@ -1590,7 +1590,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
           <Search className="absolute right-3 top-1/2 -translate-y-1/2 text-muted" size={18} />
           <input 
             type="text" 
-            placeholder="بحث باسم العميل، رقم الملف، أو الهوية..."
+            placeholder="بحث باسم العميل أو رقم الملف..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pr-9 pl-3 py-2 bg-white dark:bg-[#06010a] border border-gold/20 rounded-xl text-xs sm:text-sm focus:border-gold outline-none shadow-sm"
