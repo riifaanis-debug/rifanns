@@ -12,6 +12,7 @@ import Logo from './Logo';
 import { safeStringify, safeParse } from '../../utils/safeJson';
 import { getMyRequests, getMyNotifications, getMyContracts, getMyInvoices, getMyPromissoryNotes, getProfile, updateProfile, markAllNotificationsRead, uploadDocument, deleteRequest } from '../../lib/api';
 import { formatAmount } from '../../lib/formatNumber';
+import { useIsMobile } from '../../hooks/use-mobile';
 
 interface CustomerDashboardProps {
   user: UserProfile;
@@ -54,6 +55,7 @@ const DOCUMENT_TYPES = [
 
 const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, onLogout }) => {
   const { user: authUser } = useAuth();
+  const isMobile = useIsMobile();
   const [activeTab, setActiveTab] = useState<'profile' | 'requests' | 'contracts' | 'invoices' | 'payments' | 'open_requests' | 'promissory'>(() => {
     const hash = window.location.hash;
     if (hash.includes('tab=contracts')) return 'contracts';
