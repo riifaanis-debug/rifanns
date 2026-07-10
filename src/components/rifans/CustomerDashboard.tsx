@@ -512,7 +512,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
       <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={onClose} />
 
       {/* Drawer */}
-      <div className="relative w-full max-w-[450px] h-full bg-[#F9F8FC] dark:bg-[#06010a] shadow-2xl flex flex-col animate-in slide-in-from-left duration-300 border-r border-gold/20">
+      <div className={`relative w-full max-w-[450px] h-full ${isMobile ? 'bg-[#FAFAF7]' : 'bg-[#F9F8FC]'} dark:bg-[#06010a] shadow-2xl flex flex-col animate-in slide-in-from-left duration-300 border-r border-gold/20`}>
         
         {/* Complete Profile Popup */}
         {showCompleteProfile && (
