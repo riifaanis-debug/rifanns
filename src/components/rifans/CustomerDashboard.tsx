@@ -728,7 +728,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
         </div>
 
         {/* Tabs - بياناتي، طلباتي، عقودي، فواتيري */}
-        <div className="flex p-4 gap-1.5 overflow-x-auto no-scrollbar">
+        <div className={`flex ${isMobile ? 'px-5 pt-4 pb-2 gap-2' : 'p-4 gap-1.5'} overflow-x-auto no-scrollbar`}>
            <button 
              onClick={() => setActiveTab('profile')}
              className={`flex-1 min-w-[80px] py-2.5 rounded-[12px] text-[11px] font-bold transition-all flex flex-col items-center justify-center gap-1
@@ -788,7 +788,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto px-4 pb-8 custom-scrollbar">
+        <div className={`flex-1 overflow-y-auto ${isMobile ? 'px-5 pb-10 pt-2' : 'px-4 pb-8'} custom-scrollbar`}>
            
            {activeTab === 'requests' && (
              <div className="space-y-3">
