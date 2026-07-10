@@ -789,7 +789,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
         <div className="flex-1 overflow-y-auto px-4 pb-8 custom-scrollbar">
            
            {activeTab === 'requests' && (
-             <div className={`space-y-3 ${isMobile ? 'rifans-mobile-list' : ''}`}>
+             <div className={`space-y-3`}>
                {isLoading ? (
                  <div className="flex justify-center py-10">
                    <Loader2 className="animate-spin text-gold" size={32} />
@@ -1052,7 +1052,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
            )}
 
            {activeTab === 'contracts' && (
-             <div className={`space-y-3 ${isMobile ? 'rifans-mobile-list' : ''}`}>
+             <div className={`space-y-3`}>
                <h3 className="text-[13px] font-bold text-brand dark:text-white mb-2 px-1">عقودي الإلكترونية</h3>
                {isLoading ? (
                  <div className="flex justify-center py-10">
@@ -1117,7 +1117,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
 
            {/* Invoices Tab */}
            {activeTab === 'invoices' && (
-             <div className={`space-y-3 ${isMobile ? 'rifans-mobile-list' : ''}`}>
+             <div className={`space-y-3`}>
                {isLoading ? (
                  <div className="flex justify-center py-10">
                    <Loader2 className="animate-spin text-gold" size={32} />
@@ -1165,7 +1165,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
 
            {/* Promissory Notes Tab */}
            {activeTab === 'promissory' && (
-             <div className={`space-y-3 ${isMobile ? 'rifans-mobile-list' : ''}`}>
+             <div className={`space-y-3`}>
                {isLoading ? (
                  <div className="flex justify-center py-10">
                    <Loader2 className="animate-spin text-gold" size={32} />
@@ -1210,7 +1210,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
            )}
 
            {activeTab === 'profile' && (
-             <div className={`space-y-4 pb-10 ${isMobile ? 'rifans-mobile-profile' : ''}`}>
+             <div className={`space-y-4 pb-10`}>
                
                  {/* Client Card - built natively, no background image */}
                   <div className="mb-6 -mx-4 px-4 py-4 bg-brand dark:bg-[#06010a]">
