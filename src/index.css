@@ -205,3 +205,72 @@ All colors MUST be HSL.
   .invoice-container img { max-width: 100%; height: auto; }
 }
 
+
+/* Mobile-only: enlarge Customer Dashboard profile fields */
+@media (max-width: 767px) {
+  .rifans-mobile-profile {
+    font-family: 'Cairo', 'Tajawal', sans-serif;
+  }
+  .rifans-mobile-profile label {
+    font-size: 12px !important;
+    color: #C7A969 !important;
+    font-weight: 700 !important;
+    margin-bottom: 8px !important;
+    display: block;
+  }
+  .rifans-mobile-profile > div > div,
+  .rifans-mobile-profile .space-y-5 > div {
+    border-radius: 24px !important;
+  }
+  /* Display value boxes */
+  .rifans-mobile-profile div[class*="bg-gray-50"][class*="rounded-[10px]"],
+  .rifans-mobile-profile div[class*="bg-gray-50"][class*="dark:bg-white/5"][class*="rounded-[10px]"] {
+    min-height: 48px !important;
+    padding: 12px 16px !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    border-radius: 16px !important;
+    background: #FAFAF7 !important;
+    border-color: #EDE7DC !important;
+    display: flex;
+    align-items: center;
+  }
+  /* Input & select fields */
+  .rifans-mobile-profile input,
+  .rifans-mobile-profile select {
+    min-height: 48px !important;
+    padding: 12px 16px !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    border-radius: 16px !important;
+    background: #FAFAF7 !important;
+  }
+  /* Cards */
+  .rifans-mobile-profile .bg-white,
+  .rifans-mobile-profile .dark\:bg-\[\#12031a\] {
+    border-radius: 28px !important;
+    box-shadow: 0 2px 12px rgba(34,4,44,0.06) !important;
+    padding: 20px !important;
+  }
+  /* Section title */
+  .rifans-mobile-profile h3 {
+    font-size: 17px !important;
+    font-weight: 800 !important;
+    font-family: 'Cairo', 'Tajawal', sans-serif;
+  }
+  /* Spacing between fields */
+  .rifans-mobile-profile .grid.grid-cols-1.gap-4 { gap: 16px !important; }
+  .rifans-mobile-profile .space-y-5 > * + * { margin-top: 20px !important; }
+}
+
+/* Mobile-only: enlarge Customer Dashboard request/contract/invoice cards */
+@media (max-width: 767px) {
+  .rifans-mobile-list > div[class*="bg-white"] {
+    border-radius: 24px !important;
+    padding: 18px !important;
+    box-shadow: 0 2px 12px rgba(34,4,44,0.06) !important;
+  }
+  .rifans-mobile-list h3 { font-size: 15px !important; }
+  .rifans-mobile-list p { font-size: 13px !important; line-height: 1.7 !important; }
+  .rifans-mobile-list button { min-height: 44px !important; font-size: 13px !important; }
+}
