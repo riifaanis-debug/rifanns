@@ -12,7 +12,6 @@ import Logo from './Logo';
 import { safeStringify, safeParse } from '../../utils/safeJson';
 import { getMyRequests, getMyNotifications, getMyContracts, getMyInvoices, getMyPromissoryNotes, getProfile, updateProfile, markAllNotificationsRead, uploadDocument, deleteRequest } from '../../lib/api';
 import { formatAmount } from '../../lib/formatNumber';
-import { useIsMobile } from '../../hooks/use-mobile';
 
 interface CustomerDashboardProps {
   user: UserProfile;
@@ -55,7 +54,6 @@ const DOCUMENT_TYPES = [
 
 const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, onLogout }) => {
   const { user: authUser } = useAuth();
-  const isMobile = useIsMobile();
   const [activeTab, setActiveTab] = useState<'profile' | 'requests' | 'contracts' | 'invoices' | 'payments' | 'open_requests' | 'promissory'>(() => {
     const hash = window.location.hash;
     if (hash.includes('tab=contracts')) return 'contracts';
@@ -512,7 +510,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
       <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={onClose} />
 
       {/* Drawer */}
-      <div className={`relative w-full max-w-[450px] h-full ${isMobile ? 'bg-[#FAFAF7]' : 'bg-[#F9F8FC]'} dark:bg-[#06010a] shadow-2xl flex flex-col animate-in slide-in-from-left duration-300 border-r border-gold/20`}>
+      <div className="relative w-full max-w-[450px] h-full bg-[#F9F8FC] dark:bg-[#06010a] shadow-2xl flex flex-col animate-in slide-in-from-left duration-300 border-r border-gold/20">
         
         {/* Complete Profile Popup */}
         {showCompleteProfile && (
@@ -681,14 +679,14 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
         <ChatPage isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
         
         {/* Header */}
-        <div className={`bg-white dark:bg-[#12031a] ${isMobile ? 'px-5 py-4' : 'p-5'} border-b border-gold/10 flex items-center justify-between sticky top-0 z-10`}>
+        <div className="bg-white dark:bg-[#12031a] p-5 border-b border-gold/10 flex items-center justify-between sticky top-0 z-10">
            <div className="flex items-center gap-3">
-              <div className={`${isMobile ? 'w-12 h-12 rounded-2xl' : 'w-10 h-10 rounded-full'} bg-gold/10 text-gold flex items-center justify-center border border-gold/20`}>
-                 <User size={isMobile ? 22 : 20} />
+              <div className="w-10 h-10 rounded-full bg-gold/10 text-gold flex items-center justify-center border border-gold/20">
+                 <User size={20} />
               </div>
               <div>
-                 <h2 className={`${isMobile ? 'text-[17px] font-extrabold font-display' : 'text-[14px] font-bold'} text-brand dark:text-white`}>{userData.fullName}</h2>
-                 <p className={`${isMobile ? 'text-[12px]' : 'text-[10px]'} text-muted`}>ملف رقم: <span className="font-mono text-gold">{userData.fileNumber || ''}</span></p>
+                 <h2 className="text-[14px] font-bold text-brand dark:text-white">{userData.fullName}</h2>
+                 <p className="text-[10px] text-muted">ملف رقم: <span className="font-mono text-gold">{userData.fileNumber || ''}</span></p>
               </div>
            </div>
            <div className="flex items-center gap-2">
@@ -698,10 +696,10 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                   fetchNotifications();
                   markAllAsRead();
                 }}
-                className={`${isMobile ? 'w-11 h-11' : 'w-9 h-9'} rounded-full bg-brand/10 dark:bg-white/5 flex items-center justify-center hover:bg-brand/20 dark:hover:bg-white/10 transition-colors relative`}
+                className="w-9 h-9 rounded-full bg-brand/10 dark:bg-white/5 flex items-center justify-center hover:bg-brand/20 dark:hover:bg-white/10 transition-colors relative"
                 title="التنبيهات"
               >
-                <Bell size={isMobile ? 20 : 18} className="text-brand dark:text-gold" />
+                <Bell size={18} className="text-brand dark:text-gold" />
                 {unreadCount > 0 && (
                   <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center px-1">
                     {unreadCount > 99 ? '99+' : unreadCount}
@@ -711,24 +709,24 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
               {/* Chat */}
               <button 
                 onClick={() => setIsChatOpen(true)} 
-                className={`${isMobile ? 'w-11 h-11' : 'w-9 h-9'} rounded-full bg-brand/10 dark:bg-white/5 flex items-center justify-center hover:bg-brand/20 dark:hover:bg-white/10 transition-colors relative`}
+                className="w-9 h-9 rounded-full bg-brand/10 dark:bg-white/5 flex items-center justify-center hover:bg-brand/20 dark:hover:bg-white/10 transition-colors relative"
                 title="المحادثة الفورية"
                >
-                <MessageCircle size={isMobile ? 20 : 18} className="text-brand dark:text-gold" />
+                <MessageCircle size={18} className="text-brand dark:text-gold" />
                 {unreadChatCount > 0 && (
                   <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center px-1">
                     {unreadChatCount > 99 ? '99+' : unreadChatCount}
                   </span>
                 )}
                </button>
-              <button onClick={onClose} className={`${isMobile ? 'w-11 h-11' : 'w-8 h-8'} rounded-full bg-gray-50 dark:bg-white/5 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-white/10 transition-colors`}>
-                <X size={isMobile ? 20 : 18} />
+              <button onClick={onClose} className="w-8 h-8 rounded-full bg-gray-50 dark:bg-white/5 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
+                <X size={18} />
               </button>
            </div>
         </div>
 
         {/* Tabs - بياناتي، طلباتي، عقودي، فواتيري */}
-        <div className={`flex ${isMobile ? 'px-5 pt-4 pb-2 gap-2' : 'p-4 gap-1.5'} overflow-x-auto no-scrollbar`}>
+        <div className="flex p-4 gap-1.5 overflow-x-auto no-scrollbar">
            <button 
              onClick={() => setActiveTab('profile')}
              className={`flex-1 min-w-[80px] py-2.5 rounded-[12px] text-[11px] font-bold transition-all flex flex-col items-center justify-center gap-1
@@ -788,10 +786,10 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
         </div>
 
         {/* Content */}
-        <div className={`flex-1 overflow-y-auto ${isMobile ? 'px-5 pb-10 pt-2' : 'px-4 pb-8'} custom-scrollbar`}>
+        <div className="flex-1 overflow-y-auto px-4 pb-8 custom-scrollbar">
            
            {activeTab === 'requests' && (
-             <div className={`space-y-3 ${isMobile ? 'rifans-mobile-list' : ''}`}>
+             <div className={`space-y-3`}>
                {isLoading ? (
                  <div className="flex justify-center py-10">
                    <Loader2 className="animate-spin text-gold" size={32} />
@@ -1054,7 +1052,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
            )}
 
            {activeTab === 'contracts' && (
-             <div className={`space-y-3 ${isMobile ? 'rifans-mobile-list' : ''}`}>
+             <div className={`space-y-3`}>
                <h3 className="text-[13px] font-bold text-brand dark:text-white mb-2 px-1">عقودي الإلكترونية</h3>
                {isLoading ? (
                  <div className="flex justify-center py-10">
@@ -1119,7 +1117,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
 
            {/* Invoices Tab */}
            {activeTab === 'invoices' && (
-             <div className={`space-y-3 ${isMobile ? 'rifans-mobile-list' : ''}`}>
+             <div className={`space-y-3`}>
                {isLoading ? (
                  <div className="flex justify-center py-10">
                    <Loader2 className="animate-spin text-gold" size={32} />
@@ -1167,7 +1165,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
 
            {/* Promissory Notes Tab */}
            {activeTab === 'promissory' && (
-             <div className={`space-y-3 ${isMobile ? 'rifans-mobile-list' : ''}`}>
+             <div className={`space-y-3`}>
                {isLoading ? (
                  <div className="flex justify-center py-10">
                    <Loader2 className="animate-spin text-gold" size={32} />
@@ -1212,7 +1210,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
            )}
 
            {activeTab === 'profile' && (
-             <div className={`space-y-4 pb-10 ${isMobile ? 'rifans-mobile-profile' : ''}`}>
+             <div className={`space-y-4 pb-10`}>
                
                  {/* Client Card - built natively, no background image */}
                   <div className="mb-6 -mx-4 px-4 py-4 bg-brand dark:bg-[#06010a]">
