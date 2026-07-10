@@ -681,14 +681,14 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
         <ChatPage isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
         
         {/* Header */}
-        <div className="bg-white dark:bg-[#12031a] p-5 border-b border-gold/10 flex items-center justify-between sticky top-0 z-10">
+        <div className={`bg-white dark:bg-[#12031a] ${isMobile ? 'px-5 py-4' : 'p-5'} border-b border-gold/10 flex items-center justify-between sticky top-0 z-10`}>
            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-gold/10 text-gold flex items-center justify-center border border-gold/20">
-                 <User size={20} />
+              <div className={`${isMobile ? 'w-12 h-12 rounded-2xl' : 'w-10 h-10 rounded-full'} bg-gold/10 text-gold flex items-center justify-center border border-gold/20`}>
+                 <User size={isMobile ? 22 : 20} />
               </div>
               <div>
-                 <h2 className="text-[14px] font-bold text-brand dark:text-white">{userData.fullName}</h2>
-                 <p className="text-[10px] text-muted">ملف رقم: <span className="font-mono text-gold">{userData.fileNumber || ''}</span></p>
+                 <h2 className={`${isMobile ? 'text-[17px] font-extrabold font-display' : 'text-[14px] font-bold'} text-brand dark:text-white`}>{userData.fullName}</h2>
+                 <p className={`${isMobile ? 'text-[12px]' : 'text-[10px]'} text-muted`}>ملف رقم: <span className="font-mono text-gold">{userData.fileNumber || ''}</span></p>
               </div>
            </div>
            <div className="flex items-center gap-2">
@@ -698,10 +698,10 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                   fetchNotifications();
                   markAllAsRead();
                 }}
-                className="w-9 h-9 rounded-full bg-brand/10 dark:bg-white/5 flex items-center justify-center hover:bg-brand/20 dark:hover:bg-white/10 transition-colors relative"
+                className={`${isMobile ? 'w-11 h-11' : 'w-9 h-9'} rounded-full bg-brand/10 dark:bg-white/5 flex items-center justify-center hover:bg-brand/20 dark:hover:bg-white/10 transition-colors relative`}
                 title="التنبيهات"
               >
-                <Bell size={18} className="text-brand dark:text-gold" />
+                <Bell size={isMobile ? 20 : 18} className="text-brand dark:text-gold" />
                 {unreadCount > 0 && (
                   <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center px-1">
                     {unreadCount > 99 ? '99+' : unreadCount}
@@ -711,18 +711,18 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
               {/* Chat */}
               <button 
                 onClick={() => setIsChatOpen(true)} 
-                className="w-9 h-9 rounded-full bg-brand/10 dark:bg-white/5 flex items-center justify-center hover:bg-brand/20 dark:hover:bg-white/10 transition-colors relative"
+                className={`${isMobile ? 'w-11 h-11' : 'w-9 h-9'} rounded-full bg-brand/10 dark:bg-white/5 flex items-center justify-center hover:bg-brand/20 dark:hover:bg-white/10 transition-colors relative`}
                 title="المحادثة الفورية"
                >
-                <MessageCircle size={18} className="text-brand dark:text-gold" />
+                <MessageCircle size={isMobile ? 20 : 18} className="text-brand dark:text-gold" />
                 {unreadChatCount > 0 && (
                   <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center px-1">
                     {unreadChatCount > 99 ? '99+' : unreadChatCount}
                   </span>
                 )}
                </button>
-              <button onClick={onClose} className="w-8 h-8 rounded-full bg-gray-50 dark:bg-white/5 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
-                <X size={18} />
+              <button onClick={onClose} className={`${isMobile ? 'w-11 h-11' : 'w-8 h-8'} rounded-full bg-gray-50 dark:bg-white/5 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-white/10 transition-colors`}>
+                <X size={isMobile ? 20 : 18} />
               </button>
            </div>
         </div>
