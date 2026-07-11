@@ -1212,95 +1212,118 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
             {activeTab === 'profile' && (
               <div className={`space-y-4 pb-10`}>
 
-                 {/* Bento Grid Overview - نظرة سريعة */}
-                 <div className="grid grid-cols-4 auto-rows-[72px] gap-2 mb-2">
-                   {/* Welcome / greeting - wide */}
-                   <button
-                     onClick={() => setIsEditing(true)}
-                     className="col-span-4 row-span-1 relative overflow-hidden rounded-[18px] p-3 text-right flex items-center justify-between bg-gradient-to-l from-brand to-[#3a0a4d] shadow-[0_10px_30px_-12px_rgba(34,4,44,0.6)]"
-                   >
-                     <div className="w-10 h-10 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center">
-                       <User size={18} className="text-gold" />
-                     </div>
-                     <div className="flex-1 mr-3">
-                       <div className="text-[10px] text-gold/70 font-medium">أهلاً بك</div>
-                       <div className="text-[13px] font-bold text-white truncate">{userData.fullName || 'أكمل بياناتك'}</div>
-                     </div>
-                     <Edit size={14} className="text-gold/80" />
-                   </button>
+                 {/* === Mobile Dashboard Overview (matches mockup) === */}
+                 {(() => {
+                   const profileFields = [userData.firstName, userData.lastName, userData.nationalId, userData.mobile, userData.email, userData.jobStatus, userData.region, userData.city, userData.bank, userData.age];
+                   const completion = Math.round((profileFields.filter(Boolean).length / profileFields.length) * 100);
+                   const dash = 2 * Math.PI * 34;
+                   const overdue = invoices.find((i:any) => (i.status || '').toLowerCase() !== 'paid');
+                   const quickActions = [
+                     { icon: Plus, label: 'طلب جديد', onClick: () => { window.location.hash = '#/waive-info'; onClose(); } },
+                     { icon: PenTool, label: 'عقودي', onClick: () => setActiveTab('contracts') },
+                     { icon: Receipt, label: 'دفع فاتورة', onClick: () => setActiveTab('invoices') },
+                     { icon: Edit, label: 'سندات الأمر', onClick: () => setActiveTab('promissory') },
+                     { icon: FolderOpen, label: 'مستنداتي', onClick: () => setIsEditing(true) },
+                     { icon: User, label: 'بياناتي', onClick: () => setIsEditing(true) },
+                   ];
+                   return (
+                     <>
+                       {/* Hero — profile completion */}
+                       <div className="relative overflow-hidden rounded-[22px] p-5 bg-gradient-to-bl from-[#3a0a4d] via-brand to-[#160521] shadow-[0_20px_40px_-18px_rgba(34,4,44,0.7)]">
+                         <div className="absolute -left-8 -top-8 w-40 h-40 rounded-full border border-gold/10" />
+                         <div className="flex items-start justify-between gap-4">
+                           <div className="flex-1 text-right">
+                             <div className="text-[12px] text-gold/70 mb-1">مرحباً،</div>
+                             <div className="text-[20px] font-black text-gold leading-tight truncate">{userData.fullName || 'أكمل بياناتك'}</div>
+                             <div className="mt-4 grid grid-cols-2 gap-2">
+                               <div className="rounded-xl bg-white/5 border border-white/10 px-3 py-2">
+                                 <div className="text-[9px] text-white/50 mb-0.5 flex items-center gap-1 justify-end"><Clock size={9}/> آخر دخول</div>
+                                 <div className="text-[11px] text-white font-bold text-right">اليوم</div>
+                               </div>
+                               <div className="rounded-xl bg-white/5 border border-white/10 px-3 py-2">
+                                 <div className="text-[9px] text-white/50 mb-0.5 flex items-center gap-1 justify-end"><CreditCard size={9}/> رقم الملف</div>
+                                 <div className="text-[10px] text-white font-bold font-mono text-right truncate">{userData.fileNumber || '---'}</div>
+                               </div>
+                             </div>
+                           </div>
+                           <div className="flex flex-col items-center shrink-0">
+                             <div className="relative w-[86px] h-[86px]">
+                               <svg viewBox="0 0 80 80" className="w-full h-full -rotate-90">
+                                 <circle cx="40" cy="40" r="34" stroke="rgba(199,169,105,0.15)" strokeWidth="6" fill="none"/>
+                                 <circle cx="40" cy="40" r="34" stroke="#C7A969" strokeWidth="6" fill="none" strokeLinecap="round" strokeDasharray={dash} strokeDashoffset={dash - (dash * completion / 100)} />
+                               </svg>
+                               <div className="absolute inset-0 flex items-center justify-center text-gold text-[16px] font-black">{completion}%</div>
+                             </div>
+                             <div className="text-[9px] text-white/60 mt-1">اكتمال الملف</div>
+                             <button onClick={() => setShowCompleteProfile(true)} className="mt-2 bg-gold text-brand text-[10px] font-bold px-3 py-1.5 rounded-lg">إكمال الملف</button>
+                           </div>
+                         </div>
+                       </div>
 
-                   {/* Requests count */}
-                   <button
-                     onClick={() => setActiveTab('requests')}
-                     className="col-span-2 row-span-1 rounded-[18px] p-3 text-right bg-white dark:bg-[#12031a] border border-gold/20 hover:border-gold/50 transition-all flex flex-col justify-between"
-                   >
-                     <div className="flex items-center justify-between">
-                       <span className="text-[10px] text-muted font-medium">طلباتي</span>
-                       <FileText size={14} className="text-gold" />
-                     </div>
-                     <div className="text-[18px] font-black text-brand dark:text-white">{requests.length}</div>
-                   </button>
+                       {/* 4 stat cards */}
+                       <div className="grid grid-cols-4 gap-2">
+                         {[
+                           { label: 'طلباتي', sub: 'طلبات مفتوحة', value: requests.length, icon: FileText, tab: 'requests' as const },
+                           { label: 'العقود', sub: 'عقد نشط', value: contracts.length, icon: PenTool, tab: 'contracts' as const },
+                           { label: 'الفواتير', sub: 'فاتورة مستحقة', value: invoices.length, icon: Receipt, tab: 'invoices' as const },
+                           { label: 'سندات الأمر', sub: 'إجمالي السندات', value: promissoryNotes.length, icon: FileText, tab: 'promissory' as const },
+                         ].map((s, i) => (
+                           <button key={i} onClick={() => setActiveTab(s.tab)} className="rounded-2xl bg-white dark:bg-[#12031a] border border-gold/15 p-2.5 text-right hover:border-gold/50 transition-all shadow-sm">
+                             <div className="flex items-center justify-between mb-1">
+                               <span className="text-[9px] text-muted font-medium truncate">{s.label}</span>
+                               <s.icon size={12} className="text-gold shrink-0" />
+                             </div>
+                             <div className="text-[20px] font-black text-brand dark:text-white leading-none">{s.value}</div>
+                             <div className="text-[8px] text-muted mt-1 truncate">{s.sub}</div>
+                           </button>
+                         ))}
+                       </div>
 
-                   {/* Contracts count */}
-                   <button
-                     onClick={() => setActiveTab('contracts')}
-                     className="col-span-2 row-span-1 rounded-[18px] p-3 text-right bg-white dark:bg-[#12031a] border border-gold/20 hover:border-gold/50 transition-all flex flex-col justify-between"
-                   >
-                     <div className="flex items-center justify-between">
-                       <span className="text-[10px] text-muted font-medium">عقودي</span>
-                       <PenTool size={14} className="text-gold" />
-                     </div>
-                     <div className="text-[18px] font-black text-brand dark:text-white">{contracts.length}</div>
-                   </button>
+                       {/* Overdue invoice alert */}
+                       {overdue && (
+                         <div className="rounded-2xl bg-red-50 dark:bg-red-950/30 border border-red-100 dark:border-red-900/40 p-3">
+                           <div className="flex items-start gap-2 mb-2">
+                             <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center border border-red-200 shrink-0 relative">
+                               <Receipt size={14} className="text-red-500" />
+                               <span className="absolute -bottom-1 -right-1 w-3 h-3 rounded-full bg-red-500 border-2 border-white" />
+                             </div>
+                             <div className="flex-1 text-right">
+                               <div className="text-[13px] font-bold text-red-600">فاتورة مستحقة الدفع</div>
+                               <div className="text-[10px] text-gray-600 dark:text-gray-400 mt-0.5">لديك فاتورة رقم {overdue.invoice_number || overdue.number || '---'} بمبلغ {formatAmount(overdue.amount || 0)} ر.س</div>
+                             </div>
+                           </div>
+                           <div className="flex items-center justify-between gap-2">
+                             <button onClick={() => setActiveTab('invoices')} className="text-[10px] text-brand dark:text-gold font-bold flex items-center gap-1">
+                               عرض جميع الفواتير <ArrowRight size={11} />
+                             </button>
+                             <button onClick={() => setActiveTab('invoices')} className="bg-brand text-gold text-[11px] font-bold px-4 py-1.5 rounded-lg">سداد الآن</button>
+                           </div>
+                         </div>
+                       )}
 
-                   {/* Invoices */}
-                   <button
-                     onClick={() => setActiveTab('invoices')}
-                     className="col-span-2 row-span-1 rounded-[18px] p-3 text-right bg-gradient-to-br from-gold/15 to-gold/5 border border-gold/30 hover:border-gold/60 transition-all flex flex-col justify-between"
-                   >
-                     <div className="flex items-center justify-between">
-                       <span className="text-[10px] text-brand/70 dark:text-gold/80 font-medium">فواتيري</span>
-                       <Receipt size={14} className="text-brand dark:text-gold" />
-                     </div>
-                     <div className="text-[18px] font-black text-brand dark:text-gold">{invoices.length}</div>
-                   </button>
+                       {/* Header row before actions */}
+                       <div className="flex items-center justify-between pt-1">
+                         <h3 className="text-[13px] font-bold text-brand dark:text-white">إجراءات سريعة</h3>
+                         <button onClick={() => setIsChatOpen(true)} className="relative w-9 h-9 rounded-full bg-gold text-brand flex items-center justify-center">
+                           <MessageCircle size={16} />
+                           {unreadChatCount > 0 && <span className="absolute -top-1 -left-1 min-w-[16px] h-4 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center px-1">{unreadChatCount}</span>}
+                         </button>
+                       </div>
 
-                   {/* Notifications */}
-                   <button
-                     onClick={() => window.dispatchEvent(new CustomEvent('open-notifications'))}
-                     className="col-span-2 row-span-1 rounded-[18px] p-3 text-right bg-white dark:bg-[#12031a] border border-gold/20 hover:border-gold/50 transition-all flex flex-col justify-between relative"
-                   >
-                     <div className="flex items-center justify-between">
-                       <span className="text-[10px] text-muted font-medium">التنبيهات</span>
-                       <Bell size={14} className="text-gold" />
-                     </div>
-                     <div className="text-[18px] font-black text-brand dark:text-white">{unreadCount}</div>
-                     {unreadCount > 0 && <span className="absolute top-2 left-2 w-2 h-2 rounded-full bg-red-500 animate-pulse" />}
-                   </button>
-
-                   {/* Quick action - new request (tall/wide feature tile) */}
-                   <button
-                     onClick={() => { window.location.hash = '#/waive-info'; onClose(); }}
-                     className="col-span-3 row-span-1 rounded-[18px] p-3 text-right bg-brand dark:bg-[#06010a] border border-gold/40 hover:bg-brand/90 transition-all flex items-center justify-between"
-                   >
-                     <div className="w-9 h-9 rounded-full bg-gold flex items-center justify-center shrink-0">
-                       <Plus size={18} className="text-brand" />
-                     </div>
-                     <div className="flex-1 mr-2">
-                       <div className="text-[10px] text-gold/70">إجراء سريع</div>
-                       <div className="text-[12px] font-bold text-gold">تقديم طلب جديد</div>
-                     </div>
-                   </button>
-
-                   {/* Chat */}
-                   <button
-                     onClick={() => setIsChatOpen(true)}
-                     className="col-span-1 row-span-1 rounded-[18px] p-3 bg-gold text-brand hover:bg-gold/90 transition-all flex items-center justify-center relative"
-                   >
-                     <MessageCircle size={20} />
-                     {unreadChatCount > 0 && <span className="absolute top-1.5 left-1.5 min-w-[16px] h-[16px] rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center px-1">{unreadChatCount}</span>}
-                   </button>
-                 </div>
+                       {/* Quick actions grid 3x2 */}
+                       <div className="grid grid-cols-3 gap-2">
+                         {quickActions.map((a, i) => (
+                           <button key={i} onClick={a.onClick} className="rounded-2xl bg-white dark:bg-[#12031a] border border-gold/15 p-3 flex flex-col items-center gap-1.5 hover:border-gold/50 transition-all shadow-sm">
+                             <div className="w-9 h-9 rounded-xl bg-gold/10 flex items-center justify-center">
+                               <a.icon size={16} className="text-brand dark:text-gold" />
+                             </div>
+                             <span className="text-[10px] font-bold text-brand dark:text-white">{a.label}</span>
+                           </button>
+                         ))}
+                       </div>
+                     </>
+                   );
+                 })()}
 
                   {/* Client Card - built natively, no background image */}
                    <div className="mb-6 -mx-4 px-4 py-4 bg-brand dark:bg-[#06010a]">
