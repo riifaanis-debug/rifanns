@@ -71,8 +71,6 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
-  const [savingCard, setSavingCard] = useState(false);
-  const cardSaveRef = useRef<HTMLDivElement>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [unreadChatCount, setUnreadChatCount] = useState(0);
 
@@ -97,21 +95,6 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
     return () => { channel.then(ch => import('@/integrations/supabase/client').then(m => m.supabase.removeChannel(ch))); };
   }, [authUser?.id]);
 
-  const handleSaveCard = useCallback(async () => {
-    if (!cardSaveRef.current || savingCard) return;
-    setSavingCard(true);
-    try {
-      const dataUrl = await toPng(cardSaveRef.current, { quality: 1, pixelRatio: 3, backgroundColor: 'transparent' });
-      const link = document.createElement('a');
-      link.download = `بطاقة-عميل-${userData.fileNumber || 'card'}.png`;
-      link.href = dataUrl;
-      link.click();
-    } catch (e) {
-      alert("تعذر حفظ البطاقة.");
-    } finally {
-      setSavingCard(false);
-    }
-  }, [savingCard, userData.fileNumber]);
   const [showCompleteProfile, setShowCompleteProfile] = useState(false);
   const [profileError, setProfileError] = useState('');
   
