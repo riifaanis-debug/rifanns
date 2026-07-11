@@ -4,8 +4,6 @@ import { X, User, Phone, CreditCard, LogOut, FileText, Clock, Briefcase, Edit, C
 import CustomerOpenRequests from './CustomerOpenRequests';
 import { CustomerPaymentRequests } from './PaymentRequests';
 import ChatPage from './ChatPage';
-import { QRCodeSVG } from 'qrcode.react';
-import { toPng } from 'html-to-image';
 import { Button } from './Shared';
 import { useAuth } from '../../contexts/AuthContext';
 import Logo from './Logo';
