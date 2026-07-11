@@ -1243,21 +1243,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                          </div>
                        </div>
 
-                       {/* 4 stat cards — mockup style (label+icon top, big number, subtitle) */}
-                       <div className="grid grid-cols-4 gap-2">
-                         {stats.map((s, i) => (
-                           <button key={i} onClick={() => setActiveTab(s.tab)} className="rounded-2xl bg-white dark:bg-[#12031a] border border-gold/10 p-2.5 text-right hover:border-gold/40 transition-all shadow-[0_2px_8px_rgba(34,4,44,0.05)]">
-                             <div className="flex items-center justify-between mb-1.5">
-                               <span className="text-[10px] text-brand/70 dark:text-white/70 font-bold truncate">{s.label}</span>
-                               <s.icon size={13} className="text-brand dark:text-gold shrink-0" />
-                             </div>
-                             <div className="text-[22px] font-black text-brand dark:text-white leading-none text-center py-1">{s.value}</div>
-                             <div className="text-[8px] text-muted mt-1 truncate text-center">{s.sub}</div>
-                           </button>
-                         ))}
-                       </div>
-
-                       {/* Section title */}
+                        {/* Section title */}
                        {overdue && (
                          <>
                            <h3 className="text-[13px] font-black text-brand dark:text-white text-right pt-1">يتطلب إجراء منك</h3>
