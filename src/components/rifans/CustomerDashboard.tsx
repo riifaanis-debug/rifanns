@@ -1209,11 +1209,102 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
              <CustomerPaymentRequests userId={String(user.id)} />
            )}
 
-           {activeTab === 'profile' && (
-             <div className={`space-y-4 pb-10`}>
-               
-                 {/* Client Card - built natively, no background image */}
-                  <div className="mb-6 -mx-4 px-4 py-4 bg-brand dark:bg-[#06010a]">
+            {activeTab === 'profile' && (
+              <div className={`space-y-4 pb-10`}>
+
+                 {/* Bento Grid Overview - نظرة سريعة */}
+                 <div className="grid grid-cols-4 auto-rows-[72px] gap-2 mb-2">
+                   {/* Welcome / greeting - wide */}
+                   <button
+                     onClick={() => setIsEditing(true)}
+                     className="col-span-4 row-span-1 relative overflow-hidden rounded-[18px] p-3 text-right flex items-center justify-between bg-gradient-to-l from-brand to-[#3a0a4d] shadow-[0_10px_30px_-12px_rgba(34,4,44,0.6)]"
+                   >
+                     <div className="w-10 h-10 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center">
+                       <User size={18} className="text-gold" />
+                     </div>
+                     <div className="flex-1 mr-3">
+                       <div className="text-[10px] text-gold/70 font-medium">أهلاً بك</div>
+                       <div className="text-[13px] font-bold text-white truncate">{userData.fullName || 'أكمل بياناتك'}</div>
+                     </div>
+                     <Edit size={14} className="text-gold/80" />
+                   </button>
+
+                   {/* Requests count */}
+                   <button
+                     onClick={() => setActiveTab('requests')}
+                     className="col-span-2 row-span-1 rounded-[18px] p-3 text-right bg-white dark:bg-[#12031a] border border-gold/20 hover:border-gold/50 transition-all flex flex-col justify-between"
+                   >
+                     <div className="flex items-center justify-between">
+                       <span className="text-[10px] text-muted font-medium">طلباتي</span>
+                       <FileText size={14} className="text-gold" />
+                     </div>
+                     <div className="text-[18px] font-black text-brand dark:text-white">{requests.length}</div>
+                   </button>
+
+                   {/* Contracts count */}
+                   <button
+                     onClick={() => setActiveTab('contracts')}
+                     className="col-span-2 row-span-1 rounded-[18px] p-3 text-right bg-white dark:bg-[#12031a] border border-gold/20 hover:border-gold/50 transition-all flex flex-col justify-between"
+                   >
+                     <div className="flex items-center justify-between">
+                       <span className="text-[10px] text-muted font-medium">عقودي</span>
+                       <PenTool size={14} className="text-gold" />
+                     </div>
+                     <div className="text-[18px] font-black text-brand dark:text-white">{contracts.length}</div>
+                   </button>
+
+                   {/* Invoices */}
+                   <button
+                     onClick={() => setActiveTab('invoices')}
+                     className="col-span-2 row-span-1 rounded-[18px] p-3 text-right bg-gradient-to-br from-gold/15 to-gold/5 border border-gold/30 hover:border-gold/60 transition-all flex flex-col justify-between"
+                   >
+                     <div className="flex items-center justify-between">
+                       <span className="text-[10px] text-brand/70 dark:text-gold/80 font-medium">فواتيري</span>
+                       <Receipt size={14} className="text-brand dark:text-gold" />
+                     </div>
+                     <div className="text-[18px] font-black text-brand dark:text-gold">{invoices.length}</div>
+                   </button>
+
+                   {/* Notifications */}
+                   <button
+                     onClick={() => window.dispatchEvent(new CustomEvent('open-notifications'))}
+                     className="col-span-2 row-span-1 rounded-[18px] p-3 text-right bg-white dark:bg-[#12031a] border border-gold/20 hover:border-gold/50 transition-all flex flex-col justify-between relative"
+                   >
+                     <div className="flex items-center justify-between">
+                       <span className="text-[10px] text-muted font-medium">التنبيهات</span>
+                       <Bell size={14} className="text-gold" />
+                     </div>
+                     <div className="text-[18px] font-black text-brand dark:text-white">{unreadCount}</div>
+                     {unreadCount > 0 && <span className="absolute top-2 left-2 w-2 h-2 rounded-full bg-red-500 animate-pulse" />}
+                   </button>
+
+                   {/* Quick action - new request (tall/wide feature tile) */}
+                   <button
+                     onClick={() => { window.location.hash = '#/waive-info'; onClose(); }}
+                     className="col-span-3 row-span-1 rounded-[18px] p-3 text-right bg-brand dark:bg-[#06010a] border border-gold/40 hover:bg-brand/90 transition-all flex items-center justify-between"
+                   >
+                     <div className="w-9 h-9 rounded-full bg-gold flex items-center justify-center shrink-0">
+                       <Plus size={18} className="text-brand" />
+                     </div>
+                     <div className="flex-1 mr-2">
+                       <div className="text-[10px] text-gold/70">إجراء سريع</div>
+                       <div className="text-[12px] font-bold text-gold">تقديم طلب جديد</div>
+                     </div>
+                   </button>
+
+                   {/* Chat */}
+                   <button
+                     onClick={() => setIsChatOpen(true)}
+                     className="col-span-1 row-span-1 rounded-[18px] p-3 bg-gold text-brand hover:bg-gold/90 transition-all flex items-center justify-center relative"
+                   >
+                     <MessageCircle size={20} />
+                     {unreadChatCount > 0 && <span className="absolute top-1.5 left-1.5 min-w-[16px] h-[16px] rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center px-1">{unreadChatCount}</span>}
+                   </button>
+                 </div>
+
+                  {/* Client Card - built natively, no background image */}
+                   <div className="mb-6 -mx-4 px-4 py-4 bg-brand dark:bg-[#06010a]">
+
                    <div
                      ref={cardSaveRef}
                       dir="ltr"
