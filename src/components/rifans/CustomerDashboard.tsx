@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { UserProfile, CustomerRequest, UserProduct, UserDocument } from '../../types';
-import { X, User, Phone, CreditCard, LogOut, FileText, Clock, Briefcase, Edit, CheckCircle2, AlertTriangle, MapPin, Building2, Wallet, Plus, Trash2, FolderOpen, Upload, Paperclip, QrCode, Loader2, ArrowRight, Bell, PenTool, UserPlus, ChevronDown, Scale, Home, Receipt, BarChart3, MessageSquare, Download, Shield, Copy, CheckCircle, MessageCircle, Eye, Inbox } from 'lucide-react';
+import { X, User, Phone, CreditCard, LogOut, FileText, Clock, Briefcase, Edit, CheckCircle2, AlertTriangle, MapPin, Building2, Wallet, Plus, Trash2, FolderOpen, Upload, Paperclip, QrCode, Loader2, ArrowRight, Bell, PenTool, UserPlus, ChevronDown, Scale, Home, Receipt, BarChart3, MessageSquare, Shield, Copy, CheckCircle, MessageCircle, Eye, Inbox } from 'lucide-react';
 import CustomerOpenRequests from './CustomerOpenRequests';
 import { CustomerPaymentRequests } from './PaymentRequests';
 import ChatPage from './ChatPage';
