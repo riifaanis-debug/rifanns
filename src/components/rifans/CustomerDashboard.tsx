@@ -1201,20 +1201,14 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                    const overdue = invoices.find((i:any) => (i.status || '').toLowerCase() !== 'paid');
                    const now = new Date();
                    const timeStr = now.toLocaleTimeString('ar-SA', { hour: 'numeric', minute: '2-digit' });
-                   const stats = [
-                     { label: 'طلباتي', sub: 'طلبات مفتوحة', value: requests.length, icon: FileText, tab: 'requests' as const },
-                     { label: 'العقود', sub: 'عقد نشط', value: contracts.length, icon: PenTool, tab: 'contracts' as const },
-                     { label: 'الفواتير', sub: 'فاتورة مستحقة', value: invoices.length, icon: Receipt, tab: 'invoices' as const },
-                     { label: 'سندات الأمر', sub: 'إجمالي السندات', value: promissoryNotes.length, icon: FileText, tab: 'promissory' as const },
-                   ];
-                   const quickActions = [
-                     { icon: Plus, label: 'طلب جديد', onClick: () => { window.location.hash = '#/waive-info'; onClose(); } },
-                     { icon: PenTool, label: 'عقودي', onClick: () => setActiveTab('contracts') },
-                     { icon: Receipt, label: 'دفع فاتورة', onClick: () => setActiveTab('invoices') },
-                     { icon: Edit, label: 'سندات الأمر', onClick: () => setActiveTab('promissory') },
-                     { icon: FolderOpen, label: 'مستنداتي', onClick: () => setIsEditing(true) },
-                     { icon: User, label: 'بياناتي', onClick: () => setIsEditing(true) },
-                   ];
+                    const quickActions = [
+                      { icon: Plus, label: 'طلب جديد', onClick: () => { window.location.hash = '#/waive-info'; onClose(); } },
+                      { icon: PenTool, label: 'عقودي', onClick: () => setActiveTab('contracts') },
+                      { icon: Receipt, label: 'دفع فاتورة', onClick: () => setActiveTab('invoices') },
+                      { icon: Edit, label: 'سندات الأمر', onClick: () => setActiveTab('promissory') },
+                      { icon: FolderOpen, label: 'مستنداتي', onClick: () => setIsEditing(true) },
+                      { icon: User, label: 'بياناتي', onClick: () => setIsEditing(true) },
+                    ];
                     return (
                       <>
                         {/* Hero — profile completion */}
