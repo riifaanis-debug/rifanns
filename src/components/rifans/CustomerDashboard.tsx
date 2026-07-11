@@ -1350,6 +1350,71 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                            </button>
                          ))}
                        </div>
+
+                       {/* 3-column recent lists — طلبات / عقود / سندات */}
+                       <div className="grid grid-cols-3 gap-2 pt-1">
+                         {/* آخر سندات الأمر */}
+                         <div className="rounded-2xl bg-white dark:bg-[#12031a] border border-gold/15 p-2.5 shadow-sm">
+                           <div className="flex items-center justify-between mb-2">
+                             <button onClick={() => setActiveTab('promissory')} className="text-[8px] text-muted">عرض جميع السندات</button>
+                             <h4 className="text-[10px] font-black text-brand dark:text-white">آخر سندات الأمر</h4>
+                           </div>
+                           <div className="space-y-1.5">
+                             {promissoryNotes.slice(0,2).map((n:any) => (
+                               <div key={n.id} className="text-right border-t border-gold/10 pt-1.5 first:border-0 first:pt-0">
+                                 <div className="flex items-center justify-between gap-1">
+                                   <span className={`text-[7px] font-bold px-1.5 py-0.5 rounded ${n.status === 'signed' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>{n.status === 'signed' ? 'موقّع' : 'بانتظار'}</span>
+                                   <div className="text-[8px] font-bold text-brand dark:text-white truncate">سند رقم</div>
+                                 </div>
+                                 <div className="text-[8px] font-mono text-brand/70 dark:text-gold/70 truncate mt-0.5">{n.note_number || '---'}</div>
+                                 <div className="text-[7px] text-muted mt-0.5">{new Date(n.created_at).toLocaleDateString('ar-SA', { day:'numeric', month:'short' })}</div>
+                               </div>
+                             ))}
+                             {promissoryNotes.length === 0 && <div className="text-[8px] text-muted text-center py-2">لا يوجد</div>}
+                           </div>
+                         </div>
+
+                         {/* آخر العقود */}
+                         <div className="rounded-2xl bg-white dark:bg-[#12031a] border border-gold/15 p-2.5 shadow-sm">
+                           <div className="flex items-center justify-between mb-2">
+                             <button onClick={() => setActiveTab('contracts')} className="text-[8px] text-muted">عرض جميع العقود</button>
+                             <h4 className="text-[10px] font-black text-brand dark:text-white">آخر العقود</h4>
+                           </div>
+                           <div className="space-y-1.5">
+                             {contracts.slice(0,2).map((c:any) => (
+                               <div key={c.id} className="text-right border-t border-gold/10 pt-1.5 first:border-0 first:pt-0">
+                                 <div className="flex items-center justify-between gap-1">
+                                   <span className="text-[7px] font-bold px-1.5 py-0.5 rounded bg-green-100 text-green-700">نشط</span>
+                                   <div className="text-[8px] font-bold text-brand dark:text-white truncate">{c.contract_type || 'عقد'}</div>
+                                 </div>
+                                 <div className="text-[8px] font-mono text-brand/70 dark:text-gold/70 truncate mt-0.5">{c.contract_number || '---'}</div>
+                                 <div className="text-[7px] text-muted mt-0.5">{new Date(c.created_at).toLocaleDateString('ar-SA', { day:'numeric', month:'short' })}</div>
+                               </div>
+                             ))}
+                             {contracts.length === 0 && <div className="text-[8px] text-muted text-center py-2">لا يوجد</div>}
+                           </div>
+                         </div>
+
+                         {/* آخر الطلبات */}
+                         <div className="rounded-2xl bg-white dark:bg-[#12031a] border border-gold/15 p-2.5 shadow-sm">
+                           <div className="flex items-center justify-between mb-2">
+                             <button onClick={() => setActiveTab('requests')} className="text-[8px] text-muted">عرض جميع الطلبات</button>
+                             <h4 className="text-[10px] font-black text-brand dark:text-white">آخر الطلبات</h4>
+                           </div>
+                           <div className="space-y-1.5">
+                             {requests.slice(0,2).map((r:any) => (
+                               <div key={r.id} className="text-right border-t border-gold/10 pt-1.5 first:border-0 first:pt-0">
+                                 <div className="flex items-center justify-between gap-1">
+                                   <span className={`text-[7px] font-bold px-1.5 py-0.5 rounded ${r.status === 'completed' ? 'bg-green-100 text-green-700' : r.status === 'pending_client' ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'}`}>{r.status === 'completed' ? 'مكتمل' : r.status === 'pending_client' ? 'بانتظار' : 'قيد الدراسة'}</span>
+                                   <div className="text-[8px] font-bold text-brand dark:text-white truncate">{r.request_type || 'طلب'}</div>
+                                 </div>
+                                 <div className="text-[7px] text-muted mt-0.5 text-right">{new Date(r.created_at).toLocaleDateString('ar-SA', { day:'numeric', month:'short', year:'numeric' })}</div>
+                               </div>
+                             ))}
+                             {requests.length === 0 && <div className="text-[8px] text-muted text-center py-2">لا يوجد</div>}
+                           </div>
+                         </div>
+                       </div>
                      </>
                    );
                  })()}
