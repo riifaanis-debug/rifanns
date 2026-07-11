@@ -1212,12 +1212,20 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
             {activeTab === 'profile' && (
               <div className={`space-y-4 pb-10`}>
 
-                 {/* === Mobile Dashboard Overview (matches mockup) === */}
+                 {/* === Mobile Dashboard Overview (matches mockup 100%) === */}
                  {(() => {
                    const profileFields = [userData.firstName, userData.lastName, userData.nationalId, userData.mobile, userData.email, userData.jobStatus, userData.region, userData.city, userData.bank, userData.age];
                    const completion = Math.round((profileFields.filter(Boolean).length / profileFields.length) * 100);
                    const dash = 2 * Math.PI * 34;
                    const overdue = invoices.find((i:any) => (i.status || '').toLowerCase() !== 'paid');
+                   const now = new Date();
+                   const timeStr = now.toLocaleTimeString('ar-SA', { hour: 'numeric', minute: '2-digit' });
+                   const stats = [
+                     { label: 'طلباتي', sub: 'طلبات مفتوحة', value: requests.length, icon: FileText, tab: 'requests' as const },
+                     { label: 'العقود', sub: 'عقد نشط', value: contracts.length, icon: PenTool, tab: 'contracts' as const },
+                     { label: 'الفواتير', sub: 'فاتورة مستحقة', value: invoices.length, icon: Receipt, tab: 'invoices' as const },
+                     { label: 'سندات الأمر', sub: 'إجمالي السندات', value: promissoryNotes.length, icon: FileText, tab: 'promissory' as const },
+                   ];
                    const quickActions = [
                      { icon: Plus, label: 'طلب جديد', onClick: () => { window.location.hash = '#/waive-info'; onClose(); } },
                      { icon: PenTool, label: 'عقودي', onClick: () => setActiveTab('contracts') },
@@ -1228,6 +1236,35 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                    ];
                    return (
                      <>
+                       {/* Top action strip: settings / messages / notifications */}
+                       <div className="flex items-center justify-between">
+                         <div className="flex items-center gap-2">
+                           <button onClick={() => setIsEditing(true)} className="w-11 h-11 rounded-2xl bg-white dark:bg-[#12031a] border border-gold/15 shadow-sm flex flex-col items-center justify-center">
+                             <Edit size={14} className="text-brand dark:text-gold" />
+                             <span className="text-[8px] text-muted mt-0.5">الإعدادات</span>
+                           </button>
+                           <button onClick={() => setIsChatOpen(true)} className="w-11 h-11 rounded-2xl bg-white dark:bg-[#12031a] border border-gold/15 shadow-sm flex flex-col items-center justify-center relative">
+                             <MessageSquare size={14} className="text-brand dark:text-gold" />
+                             <span className="text-[8px] text-muted mt-0.5">الرسائل</span>
+                             {unreadChatCount > 0 && <span className="absolute -top-1 -left-1 min-w-[14px] h-3.5 rounded-full bg-red-500 text-white text-[8px] font-bold flex items-center justify-center px-1">{unreadChatCount}</span>}
+                           </button>
+                           <button className="w-11 h-11 rounded-2xl bg-white dark:bg-[#12031a] border border-gold/15 shadow-sm flex flex-col items-center justify-center relative">
+                             <Bell size={14} className="text-brand dark:text-gold" />
+                             <span className="text-[8px] text-muted mt-0.5">الإشعارات</span>
+                             {notifications.filter((n:any) => !n.read).length > 0 && <span className="absolute -top-1 -left-1 min-w-[14px] h-3.5 rounded-full bg-gold text-brand text-[8px] font-bold flex items-center justify-center px-1">{notifications.filter((n:any) => !n.read).length}</span>}
+                           </button>
+                         </div>
+                         <div className="flex items-center gap-2 min-w-0">
+                           <div className="text-right min-w-0">
+                             <div className="text-[13px] font-black text-brand dark:text-white truncate">{userData.fullName || 'مرحباً'}</div>
+                             <div className="text-[9px] text-muted truncate">رقم الملف : {userData.fileNumber || '---'}</div>
+                           </div>
+                           <div className="w-10 h-10 rounded-full bg-gold/15 border border-gold/30 flex items-center justify-center shrink-0">
+                             <User size={16} className="text-brand dark:text-gold" />
+                           </div>
+                         </div>
+                       </div>
+
                        {/* Hero — profile completion */}
                        <div className="relative overflow-hidden rounded-[22px] p-5 bg-gradient-to-bl from-[#3a0a4d] via-brand to-[#160521] shadow-[0_20px_40px_-18px_rgba(34,4,44,0.7)]">
                          <div className="absolute -left-8 -top-8 w-40 h-40 rounded-full border border-gold/10" />
@@ -1238,7 +1275,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                              <div className="mt-4 grid grid-cols-2 gap-2">
                                <div className="rounded-xl bg-white/5 border border-white/10 px-3 py-2">
                                  <div className="text-[9px] text-white/50 mb-0.5 flex items-center gap-1 justify-end"><Clock size={9}/> آخر دخول</div>
-                                 <div className="text-[11px] text-white font-bold text-right">اليوم</div>
+                                 <div className="text-[11px] text-white font-bold text-right">اليوم {timeStr}</div>
                                </div>
                                <div className="rounded-xl bg-white/5 border border-white/10 px-3 py-2">
                                  <div className="text-[9px] text-white/50 mb-0.5 flex items-center gap-1 justify-end"><CreditCard size={9}/> رقم الملف</div>
@@ -1254,61 +1291,53 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                                </svg>
                                <div className="absolute inset-0 flex items-center justify-center text-gold text-[16px] font-black">{completion}%</div>
                              </div>
-                             <div className="text-[9px] text-white/60 mt-1">اكتمال الملف</div>
+                             <div className="text-[9px] text-white/60 mt-1">درجة اكتمال الملف</div>
                              <button onClick={() => setShowCompleteProfile(true)} className="mt-2 bg-gold text-brand text-[10px] font-bold px-3 py-1.5 rounded-lg">إكمال الملف</button>
                            </div>
                          </div>
                        </div>
 
-                       {/* 4 stat cards */}
+                       {/* 4 stat cards — mockup style (label+icon top, big number, subtitle) */}
                        <div className="grid grid-cols-4 gap-2">
-                         {[
-                           { label: 'طلباتي', sub: 'طلبات مفتوحة', value: requests.length, icon: FileText, tab: 'requests' as const },
-                           { label: 'العقود', sub: 'عقد نشط', value: contracts.length, icon: PenTool, tab: 'contracts' as const },
-                           { label: 'الفواتير', sub: 'فاتورة مستحقة', value: invoices.length, icon: Receipt, tab: 'invoices' as const },
-                           { label: 'سندات الأمر', sub: 'إجمالي السندات', value: promissoryNotes.length, icon: FileText, tab: 'promissory' as const },
-                         ].map((s, i) => (
-                           <button key={i} onClick={() => setActiveTab(s.tab)} className="rounded-2xl bg-white dark:bg-[#12031a] border border-gold/15 p-2.5 text-right hover:border-gold/50 transition-all shadow-sm">
-                             <div className="flex items-center justify-between mb-1">
-                               <span className="text-[9px] text-muted font-medium truncate">{s.label}</span>
-                               <s.icon size={12} className="text-gold shrink-0" />
+                         {stats.map((s, i) => (
+                           <button key={i} onClick={() => setActiveTab(s.tab)} className="rounded-2xl bg-white dark:bg-[#12031a] border border-gold/10 p-2.5 text-right hover:border-gold/40 transition-all shadow-[0_2px_8px_rgba(34,4,44,0.05)]">
+                             <div className="flex items-center justify-between mb-1.5">
+                               <span className="text-[10px] text-brand/70 dark:text-white/70 font-bold truncate">{s.label}</span>
+                               <s.icon size={13} className="text-brand dark:text-gold shrink-0" />
                              </div>
-                             <div className="text-[20px] font-black text-brand dark:text-white leading-none">{s.value}</div>
-                             <div className="text-[8px] text-muted mt-1 truncate">{s.sub}</div>
+                             <div className="text-[22px] font-black text-brand dark:text-white leading-none text-center py-1">{s.value}</div>
+                             <div className="text-[8px] text-muted mt-1 truncate text-center">{s.sub}</div>
                            </button>
                          ))}
                        </div>
 
-                       {/* Overdue invoice alert */}
+                       {/* Section title */}
                        {overdue && (
-                         <div className="rounded-2xl bg-red-50 dark:bg-red-950/30 border border-red-100 dark:border-red-900/40 p-3">
-                           <div className="flex items-start gap-2 mb-2">
-                             <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center border border-red-200 shrink-0 relative">
-                               <Receipt size={14} className="text-red-500" />
-                               <span className="absolute -bottom-1 -right-1 w-3 h-3 rounded-full bg-red-500 border-2 border-white" />
+                         <>
+                           <h3 className="text-[13px] font-black text-brand dark:text-white text-right pt-1">يتطلب إجراء منك</h3>
+                           <div className="rounded-2xl bg-red-50/70 dark:bg-red-950/30 border border-red-100 dark:border-red-900/40 p-3.5">
+                             <div className="flex items-start gap-3 mb-3">
+                               <div className="flex-1 text-right">
+                                 <div className="text-[14px] font-black text-red-600">فاتورة مستحقة الدفع</div>
+                                 <div className="text-[10px] text-gray-600 dark:text-gray-400 mt-1 leading-relaxed">لديك فاتورة رقم {overdue.invoice_number || overdue.number || '---'} بمبلغ {formatAmount(overdue.amount || 0)} ر.س</div>
+                               </div>
+                               <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center border border-red-200 shrink-0 relative">
+                                 <Receipt size={18} className="text-red-500" />
+                                 <span className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-red-500 border-2 border-white flex items-center justify-center text-white text-[8px] font-black">!</span>
+                               </div>
                              </div>
-                             <div className="flex-1 text-right">
-                               <div className="text-[13px] font-bold text-red-600">فاتورة مستحقة الدفع</div>
-                               <div className="text-[10px] text-gray-600 dark:text-gray-400 mt-0.5">لديك فاتورة رقم {overdue.invoice_number || overdue.number || '---'} بمبلغ {formatAmount(overdue.amount || 0)} ر.س</div>
+                             <div className="flex items-center justify-between gap-2">
+                               <button onClick={() => setActiveTab('invoices')} className="bg-brand text-white text-[11px] font-bold px-4 py-2 rounded-xl">سداد الآن</button>
+                               <button onClick={() => setActiveTab('invoices')} className="text-[10px] text-brand/70 dark:text-gold font-bold flex items-center gap-1">
+                                 عرض جميع الفواتير <ArrowRight size={11} />
+                               </button>
                              </div>
                            </div>
-                           <div className="flex items-center justify-between gap-2">
-                             <button onClick={() => setActiveTab('invoices')} className="text-[10px] text-brand dark:text-gold font-bold flex items-center gap-1">
-                               عرض جميع الفواتير <ArrowRight size={11} />
-                             </button>
-                             <button onClick={() => setActiveTab('invoices')} className="bg-brand text-gold text-[11px] font-bold px-4 py-1.5 rounded-lg">سداد الآن</button>
-                           </div>
-                         </div>
+                         </>
                        )}
 
-                       {/* Header row before actions */}
-                       <div className="flex items-center justify-between pt-1">
-                         <h3 className="text-[13px] font-bold text-brand dark:text-white">إجراءات سريعة</h3>
-                         <button onClick={() => setIsChatOpen(true)} className="relative w-9 h-9 rounded-full bg-gold text-brand flex items-center justify-center">
-                           <MessageCircle size={16} />
-                           {unreadChatCount > 0 && <span className="absolute -top-1 -left-1 min-w-[16px] h-4 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center px-1">{unreadChatCount}</span>}
-                         </button>
-                       </div>
+                       {/* Header — quick actions */}
+                       <h3 className="text-[13px] font-black text-brand dark:text-white text-right pt-1">إجراءات سريعة</h3>
 
                        {/* Quick actions grid 3x2 */}
                        <div className="grid grid-cols-3 gap-2">
