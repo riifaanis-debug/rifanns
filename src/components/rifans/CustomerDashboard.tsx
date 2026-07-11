@@ -1215,38 +1215,9 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                      { icon: FolderOpen, label: 'مستنداتي', onClick: () => setIsEditing(true) },
                      { icon: User, label: 'بياناتي', onClick: () => setIsEditing(true) },
                    ];
-                   return (
-                     <>
-                       {/* Top action strip: settings / messages / notifications */}
-                       <div className="flex items-center justify-between">
-                         <div className="flex items-center gap-2">
-                           <button onClick={() => setIsEditing(true)} className="w-11 h-11 rounded-2xl bg-white dark:bg-[#12031a] border border-gold/15 shadow-sm flex flex-col items-center justify-center">
-                             <Edit size={14} className="text-brand dark:text-gold" />
-                             <span className="text-[8px] text-muted mt-0.5">الإعدادات</span>
-                           </button>
-                           <button onClick={() => setIsChatOpen(true)} className="w-11 h-11 rounded-2xl bg-white dark:bg-[#12031a] border border-gold/15 shadow-sm flex flex-col items-center justify-center relative">
-                             <MessageSquare size={14} className="text-brand dark:text-gold" />
-                             <span className="text-[8px] text-muted mt-0.5">الرسائل</span>
-                             {unreadChatCount > 0 && <span className="absolute -top-1 -left-1 min-w-[14px] h-3.5 rounded-full bg-red-500 text-white text-[8px] font-bold flex items-center justify-center px-1">{unreadChatCount}</span>}
-                           </button>
-                           <button className="w-11 h-11 rounded-2xl bg-white dark:bg-[#12031a] border border-gold/15 shadow-sm flex flex-col items-center justify-center relative">
-                             <Bell size={14} className="text-brand dark:text-gold" />
-                             <span className="text-[8px] text-muted mt-0.5">الإشعارات</span>
-                             {notifications.filter((n:any) => !n.read).length > 0 && <span className="absolute -top-1 -left-1 min-w-[14px] h-3.5 rounded-full bg-gold text-brand text-[8px] font-bold flex items-center justify-center px-1">{notifications.filter((n:any) => !n.read).length}</span>}
-                           </button>
-                         </div>
-                         <div className="flex items-center gap-2 min-w-0">
-                           <div className="text-right min-w-0">
-                             <div className="text-[13px] font-black text-brand dark:text-white truncate">{userData.fullName || 'مرحباً'}</div>
-                             <div className="text-[9px] text-muted truncate">رقم الملف : {userData.fileNumber || '---'}</div>
-                           </div>
-                           <div className="w-10 h-10 rounded-full bg-gold/15 border border-gold/30 flex items-center justify-center shrink-0">
-                             <User size={16} className="text-brand dark:text-gold" />
-                           </div>
-                         </div>
-                       </div>
-
-                       {/* Hero — profile completion */}
+                    return (
+                      <>
+                        {/* Hero — profile completion */}
                        <div className="relative overflow-hidden rounded-[22px] p-5 bg-gradient-to-bl from-[#3a0a4d] via-brand to-[#160521] shadow-[0_20px_40px_-18px_rgba(34,4,44,0.7)]">
                          <div className="absolute -left-8 -top-8 w-40 h-40 rounded-full border border-gold/10" />
                          <div className="flex items-start justify-between gap-4">
