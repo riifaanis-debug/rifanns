@@ -1242,8 +1242,215 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                             </div>
                           </div>
 
-                          {/* Quick actions — 3 cols on mobile, 6 on wider */}
-                          <div className="grid grid-cols-3 sm:grid-cols-6 gap-2" dir="rtl">
+                          {/* Personal Info */}
+                          <div className="bg-white dark:bg-[#12031a] rounded-[24px] border border-gold/20 p-3 shadow-sm relative overflow-hidden" dir="rtl">
+                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold/30 to-transparent"></div>
+                            <div className="flex flex-col gap-2 mb-3">
+                              <div className="flex items-center gap-2">
+                                <div className="w-7 h-7 rounded-lg bg-gold/10 flex items-center justify-center text-gold border border-gold/20">
+                                  <User size={16} />
+                                </div>
+                                <h3 className="text-[14px] font-black text-brand dark:text-gold">البيانات الشخصية</h3>
+                              </div>
+                              <button 
+                                onClick={() => setShowCompleteProfile(true)}
+                                className="text-[8px] font-bold text-white bg-brand dark:bg-gold dark:text-brand px-2 py-0.5 rounded-full shadow hover:scale-105 transition-transform flex items-center gap-1 w-fit self-end"
+                              >
+                                <UserPlus size={9} />
+                                إكمال الملف الشخصي
+                              </button>
+                            </div>
+
+                            <div className="grid grid-cols-1 gap-3">
+                              {/* First row: National ID, Mobile, Age */}
+                              <div className="grid grid-cols-3 gap-1.5">
+                                <div>
+                                  <label className="text-[9px] text-muted block mb-1">رقم الهوية الوطنية</label>
+                                  {isEditing ? (
+                                    <input 
+                                      type="text" 
+                                      value={userData.nationalId || ''} 
+                                      readOnly
+                                      className="w-full p-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none bg-gray-50 cursor-not-allowed opacity-80"
+                                    />
+                                  ) : (
+                                    <div className="text-[12px] font-medium text-brand dark:text-white font-mono p-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5 flex items-center gap-1.5">
+                                      <CreditCard size={10} />
+                                      {userData.nationalId || ''}
+                                    </div>
+                                  )}
+                                </div>
+                                <div>
+                                  <label className="text-[9px] text-muted block mb-1">رقم الجوال</label>
+                                  {isEditing ? (
+                                    <input 
+                                      type="tel" 
+                                      inputMode="numeric"
+                                      value={userData.mobile || ''} 
+                                      readOnly
+                                      className="w-full p-1.5 rounded-[8px] border border-gray-200 text-[11px] font-bold tracking-wider focus:border-gold outline-none dir-ltr text-left bg-gray-50 cursor-not-allowed opacity-80"
+                                      placeholder="05xxxxxxxx"
+                                    />
+                                  ) : (
+                                    <div className="text-[12px] font-medium text-brand dark:text-white p-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5 dir-ltr text-right">
+                                      {userData.mobile || ''}
+                                    </div>
+                                  )}
+                                </div>
+                                <div>
+                                  <label className="text-[9px] text-muted block mb-1">العمر</label>
+                                  {isEditing ? (
+                                    <input 
+                                      type="text" 
+                                      inputMode="numeric"
+                                      value={userData.age || ''} 
+                                      onChange={(e) => setUserData({...userData, age: e.target.value.replace(/\D/g, '')})}
+                                      className="w-full p-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none"
+                                      placeholder="بالسنوات"
+                                    />
+                                  ) : (
+                                    <div className="text-[12px] font-medium text-brand dark:text-white p-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">
+                                      {userData.age || ''}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+
+                              {/* Second row: Region, City, Job Status */}
+                              <div className="grid grid-cols-3 gap-1.5">
+                                <div>
+                                  <label className="text-[9px] text-muted block mb-1">المنطقة</label>
+                                  {isEditing ? (
+                                    <select value={userData.region || ''} onChange={(e) => setUserData({...userData, region: e.target.value, city: ''})} className="w-full p-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none bg-white dark:bg-white/5 dark:text-white">
+                                      <option value="">اختر المنطقة</option>
+                                      {Object.keys(REGION_CITIES).map(r => <option key={r} value={r}>{r}</option>)}
+                                    </select>
+                                  ) : (
+                                    <div className="text-[12px] font-medium text-brand dark:text-white p-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">{userData.region || '---'}</div>
+                                  )}
+                                </div>
+                                <div>
+                                  <label className="text-[9px] text-muted block mb-1">المدينة</label>
+                                  {isEditing ? (
+                                    <select value={userData.city || ''} onChange={(e) => setUserData({...userData, city: e.target.value})} className="w-full p-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none bg-white dark:bg-white/5 dark:text-white" disabled={!userData.region}>
+                                      <option value="">اختر المدينة</option>
+                                      {userData.region && REGION_CITIES[userData.region]?.map(c => <option key={c} value={c}>{c}</option>)}
+                                    </select>
+                                  ) : (
+                                    <div className="text-[12px] font-medium text-brand dark:text-white p-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">{userData.city || '---'}</div>
+                                  )}
+                                </div>
+                                <div>
+                                  <label className="text-[9px] text-muted block mb-1">الحالة الوظيفية</label>
+                                  {isEditing ? (
+                                    <select 
+                                      value={userData.jobStatus || ''} 
+                                      onChange={(e) => setUserData({...userData, jobStatus: e.target.value})}
+                                      className="w-full p-1.5 rounded-[8px] border border-gray-200 text-[11px] bg-white focus:border-gold outline-none"
+                                    >
+                                      <option value="">اختر الحالة</option>
+                                      <option value="موظف حكومي">موظف حكومي</option>
+                                      <option value="موظف قطاع خاص">موظف قطاع خاص</option>
+                                      <option value="متقاعد">متقاعد</option>
+                                      <option value="لا يوجد عمل">لا يوجد عمل</option>
+                                    </select>
+                                  ) : (
+                                    <div className="text-[12px] font-medium text-brand dark:text-white p-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">
+                                      {userData.jobStatus || ''}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+
+                              {/* Email */}
+                              <div className="grid grid-cols-1 gap-2">
+                                <div>
+                                  <label className="text-[9px] text-muted block mb-1">البريد الإلكتروني <span className="text-[8px] text-muted/60">(اختياري)</span></label>
+                                  <p className="text-[7px] text-muted/50 mb-1">لاستلام التقارير ونتائج الخدمات</p>
+                                  {isEditing ? (
+                                    <input 
+                                      type="email" 
+                                      value={userData.email || ''} 
+                                      onChange={(e) => setUserData({...userData, email: e.target.value})}
+                                      className="w-full p-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none dir-ltr text-left"
+                                      placeholder="example@email.com"
+                                    />
+                                  ) : (
+                                    <div className="text-[12px] font-medium text-brand dark:text-white p-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5 dir-ltr text-right">
+                                      {userData.email || '—'}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+
+                              <div className="grid grid-cols-1 gap-3">
+                                {/* Bank / Financial Entity */}
+                                <div>
+                                  <label className="text-[9px] text-muted block mb-1">الجهة المالية</label>
+                                  {isEditing ? (
+                                    <select value={userData.bank || ''} onChange={(e) => setUserData({...userData, bank: e.target.value})} className="w-full p-2 rounded-[8px] border border-gray-200 text-[11px] bg-white dark:bg-white/5 focus:border-gold outline-none dark:text-white">
+                                      <option value="">اختر البنك أو الجهة التمويلية</option>
+                                      {BANKS.map(b => <option key={b} value={b}>{b}</option>)}
+                                    </select>
+                                  ) : (
+                                    <div className="text-[12px] font-medium text-brand dark:text-white p-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">{userData.bank || '---'}</div>
+                                  )}
+                                </div>
+
+                                {/* Triple Name */}
+                                <div className="grid grid-cols-3 gap-1.5">
+                                  <div>
+                                    <label className="text-[9px] text-muted block mb-1">الاسم الأول</label>
+                                    {isEditing ? (
+                                      <input 
+                                        type="text" 
+                                        value={userData.firstName || ''} 
+                                        onChange={(e) => setUserData({...userData, firstName: e.target.value})}
+                                        className="w-full p-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none"
+                                      />
+                                    ) : (
+                                      <div className="text-[12px] font-medium text-brand dark:text-white p-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">
+                                        {userData.firstName || ''}
+                                      </div>
+                                    )}
+                                  </div>
+                                  <div>
+                                    <label className="text-[9px] text-muted block mb-1">الاسم الأوسط</label>
+                                    {isEditing ? (
+                                      <input 
+                                        type="text" 
+                                        value={userData.middleName || ''} 
+                                        onChange={(e) => setUserData({...userData, middleName: e.target.value})}
+                                        className="w-full p-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none"
+                                      />
+                                    ) : (
+                                      <div className="text-[12px] font-medium text-brand dark:text-white p-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">
+                                        {userData.middleName || ''}
+                                      </div>
+                                    )}
+                                  </div>
+                                  <div>
+                                    <label className="text-[9px] text-muted block mb-1">العائلة</label>
+                                    {isEditing ? (
+                                      <input 
+                                        type="text" 
+                                        value={userData.lastName || ''} 
+                                        onChange={(e) => setUserData({...userData, lastName: e.target.value})}
+                                        className="w-full p-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none"
+                                      />
+                                    ) : (
+                                      <div className="text-[12px] font-medium text-brand dark:text-white p-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">
+                                        {userData.lastName || ''}
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                           {/* Quick actions — 3 cols on mobile, 6 on wider */}
+                           <div className="grid grid-cols-3 sm:grid-cols-6 gap-2" dir="rtl">
                            {quickActions.map((a, i) => (
                               <button key={i} onClick={a.onClick} className="w-full h-[58px] rounded-[12px] bg-white dark:bg-[#12031a] border border-gold/60 flex flex-col items-center justify-center gap-1 hover:border-gold transition-all shadow-[0_6px_14px_rgba(34,4,44,0.05)]">
                                 <a.icon size={16} className="text-brand dark:text-gold" strokeWidth={1.8} />
@@ -1282,231 +1489,17 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
 
 
 
-               {/* Info Sections with Improved Design */}
-               <div className="space-y-5">
-                  {/* Personal Info */}
-                   <div className="bg-white dark:bg-[#12031a] rounded-[24px] border border-gold/20 p-3 shadow-sm relative overflow-hidden">
-                      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold/30 to-transparent"></div>
-                       <div className="flex flex-col gap-2 mb-3">
-                          <div className="flex items-center gap-2">
-                             <div className="w-7 h-7 rounded-lg bg-gold/10 flex items-center justify-center text-gold border border-gold/20">
-                                <User size={16} />
-                             </div>
-                             <h3 className="text-[14px] font-black text-brand dark:text-gold">البيانات الشخصية</h3>
-                          </div>
-                          <button 
-                             onClick={() => setShowCompleteProfile(true)}
-                             className="text-[8px] font-bold text-white bg-brand dark:bg-gold dark:text-brand px-2 py-0.5 rounded-full shadow hover:scale-105 transition-transform flex items-center gap-1 w-fit self-end"
-                          >
-                             <UserPlus size={9} />
-                             إكمال الملف الشخصي
-                          </button>
-                       </div>
-
-                    <div className="grid grid-cols-1 gap-3">
-                      {/* First row: National ID, Mobile, Age */}
-                      <div className="grid grid-cols-3 gap-1.5">
-                         <div>
-                            <label className="text-[9px] text-muted block mb-1">رقم الهوية الوطنية</label>
-                            {isEditing ? (
-                                <input 
-                                    type="text" 
-                                    value={userData.nationalId || ''} 
-                                    readOnly
-                                    className="w-full p-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none bg-gray-50 cursor-not-allowed opacity-80"
-                                />
-                            ) : (
-                                <div className="text-[12px] font-medium text-brand dark:text-white font-mono p-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5 flex items-center gap-1.5">
-                                    <CreditCard size={10} />
-                                    {userData.nationalId || ''}
-                                </div>
-                            )}
-                         </div>
-                         <div>
-                            <label className="text-[9px] text-muted block mb-1">رقم الجوال</label>
-                            {isEditing ? (
-                                <input 
-                                  type="tel" 
-                                  inputMode="numeric"
-                                  value={userData.mobile || ''} 
-                                  readOnly
-                                  className="w-full p-1.5 rounded-[8px] border border-gray-200 text-[11px] font-bold tracking-wider focus:border-gold outline-none dir-ltr text-left bg-gray-50 cursor-not-allowed opacity-80"
-                                  placeholder="05xxxxxxxx"
-                                />
-                            ) : (
-                                <div className="text-[12px] font-medium text-brand dark:text-white p-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5 dir-ltr text-right">
-                                   {userData.mobile || ''}
-                                </div>
-                            )}
-                         </div>
-                         <div>
-                            <label className="text-[9px] text-muted block mb-1">العمر</label>
-                            {isEditing ? (
-                                <input 
-                                  type="text" 
-                                  inputMode="numeric"
-                                  value={userData.age || ''} 
-                                  onChange={(e) => setUserData({...userData, age: e.target.value.replace(/\D/g, '')})}
-                                  className="w-full p-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none"
-                                  placeholder="بالسنوات"
-                                />
-                            ) : (
-                                <div className="text-[12px] font-medium text-brand dark:text-white p-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">
-                                {userData.age || ''}
-                                </div>
-                            )}
-                         </div>
-                      </div>
-
-                      {/* Second row: Region, City, Job Status */}
-                      <div className="grid grid-cols-3 gap-1.5">
-                         <div>
-                            <label className="text-[9px] text-muted block mb-1">المنطقة</label>
-                            {isEditing ? (
-                               <select value={userData.region || ''} onChange={(e) => setUserData({...userData, region: e.target.value, city: ''})} className="w-full p-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none bg-white dark:bg-white/5 dark:text-white">
-                                  <option value="">اختر المنطقة</option>
-                                  {Object.keys(REGION_CITIES).map(r => <option key={r} value={r}>{r}</option>)}
-                               </select>
-                            ) : (
-                               <div className="text-[12px] font-medium text-brand dark:text-white p-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">{userData.region || '---'}</div>
-                            )}
-                         </div>
-                         <div>
-                            <label className="text-[9px] text-muted block mb-1">المدينة</label>
-                            {isEditing ? (
-                               <select value={userData.city || ''} onChange={(e) => setUserData({...userData, city: e.target.value})} className="w-full p-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none bg-white dark:bg-white/5 dark:text-white" disabled={!userData.region}>
-                                  <option value="">اختر المدينة</option>
-                                  {userData.region && REGION_CITIES[userData.region]?.map(c => <option key={c} value={c}>{c}</option>)}
-                               </select>
-                            ) : (
-                               <div className="text-[12px] font-medium text-brand dark:text-white p-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">{userData.city || '---'}</div>
-                            )}
-                         </div>
-                         <div>
-                            <label className="text-[9px] text-muted block mb-1">الحالة الوظيفية</label>
-                            {isEditing ? (
-                               <select 
-                                  value={userData.jobStatus || ''} 
-                                  onChange={(e) => setUserData({...userData, jobStatus: e.target.value})}
-                                  className="w-full p-1.5 rounded-[8px] border border-gray-200 text-[11px] bg-white focus:border-gold outline-none"
-                               >
-                                  <option value="">اختر الحالة</option>
-                                  <option value="موظف حكومي">موظف حكومي</option>
-                                  <option value="موظف قطاع خاص">موظف قطاع خاص</option>
-                                  <option value="متقاعد">متقاعد</option>
-                                  <option value="لا يوجد عمل">لا يوجد عمل</option>
-                               </select>
-                            ) : (
-                               <div className="text-[12px] font-medium text-brand dark:text-white p-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">
-                                  {userData.jobStatus || ''}
-                               </div>
-                            )}
-                         </div>
-                      </div>
-
-                     {/* Email */}
-                     <div className="grid grid-cols-1 gap-2">
-                         <div>
-                             <label className="text-[9px] text-muted block mb-1">البريد الإلكتروني <span className="text-[8px] text-muted/60">(اختياري)</span></label>
-                             <p className="text-[7px] text-muted/50 mb-1">لاستلام التقارير ونتائج الخدمات</p>
-                             {isEditing ? (
-                                 <input 
-                                   type="email" 
-                                   value={userData.email || ''} 
-                                   onChange={(e) => setUserData({...userData, email: e.target.value})}
-                                   className="w-full p-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none dir-ltr text-left"
-                                   placeholder="example@email.com"
-                                 />
-                             ) : (
-                                 <div className="text-[12px] font-medium text-brand dark:text-white p-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5 dir-ltr text-right">
-                                    {userData.email || '—'}
-                                 </div>
-                             )}
-                         </div>
-                     </div>
-
-                     <div className="grid grid-cols-1 gap-3">
-                      {/* Bank / Financial Entity */}
-                      <div>
-                          <label className="text-[9px] text-muted block mb-1">الجهة المالية</label>
-                          {isEditing ? (
-                             <select value={userData.bank || ''} onChange={(e) => setUserData({...userData, bank: e.target.value})} className="w-full p-2 rounded-[8px] border border-gray-200 text-[11px] bg-white dark:bg-white/5 focus:border-gold outline-none dark:text-white">
-                                <option value="">اختر البنك أو الجهة التمويلية</option>
-                                {BANKS.map(b => <option key={b} value={b}>{b}</option>)}
-                             </select>
-                          ) : (
-                             <div className="text-[12px] font-medium text-brand dark:text-white p-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">{userData.bank || '---'}</div>
-                          )}
-                      </div>
-
-                      {/* Triple Name */}
-                      <div className="grid grid-cols-3 gap-1.5">
-                         <div>
-                            <label className="text-[9px] text-muted block mb-1">الاسم الأول</label>
-                            {isEditing ? (
-                              <input 
-                                type="text" 
-                                value={userData.firstName || ''} 
-                                onChange={(e) => setUserData({...userData, firstName: e.target.value})}
-                                className="w-full p-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none"
-                              />
-                            ) : (
-                              <div className="text-[12px] font-medium text-brand dark:text-white p-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">
-                                {userData.firstName || ''}
-                              </div>
-                            )}
-                         </div>
-                         <div>
-                            <label className="text-[9px] text-muted block mb-1">الاسم الأوسط</label>
-                            {isEditing ? (
-                              <input 
-                                type="text" 
-                                value={userData.middleName || ''} 
-                                onChange={(e) => setUserData({...userData, middleName: e.target.value})}
-                                className="w-full p-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none"
-                              />
-                            ) : (
-                              <div className="text-[12px] font-medium text-brand dark:text-white p-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">
-                                {userData.middleName || ''}
-                              </div>
-                            )}
-                         </div>
-                         <div>
-                            <label className="text-[9px] text-muted block mb-1">العائلة</label>
-                            {isEditing ? (
-                              <input 
-                                type="text" 
-                                value={userData.lastName || ''} 
-                                onChange={(e) => setUserData({...userData, lastName: e.target.value})}
-                                className="w-full p-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none"
-                              />
-                            ) : (
-                              <div className="text-[12px] font-medium text-brand dark:text-white p-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">
-                                {userData.lastName || ''}
-                              </div>
-                            )}
-                         </div>
-                      </div>
-
-                      </div>
-                    </div>
-                 </div>
-
-
-
-
-               {isEditing && (
-                  <div className="mt-4">
-                     <button 
-                       onClick={handleSaveProfile} 
-                       className="w-full py-3 bg-gold text-brand rounded-[14px] text-[13px] font-bold shadow-md hover:bg-gold/90 transition-all flex items-center justify-center gap-2"
-                     >
-                       <CheckCircle2 size={16} />
-                       حفظ التغييرات
-                     </button>
-                  </div>
-               )}
-               </div>
+                {isEditing && (
+                   <div className="mt-4">
+                      <button 
+                        onClick={handleSaveProfile} 
+                        className="w-full py-3 bg-gold text-brand rounded-[14px] text-[13px] font-bold shadow-md hover:bg-gold/90 transition-all flex items-center justify-center gap-2"
+                      >
+                        <CheckCircle2 size={16} />
+                        حفظ التغييرات
+                      </button>
+                   </div>
+                )}
              </div>
            )}
 
