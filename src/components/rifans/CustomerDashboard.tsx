@@ -660,7 +660,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
         <ChatPage isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
         
         {/* Header */}
-        <div className="bg-white dark:bg-[#12031a] p-5 border-b border-gold/10 flex items-center justify-between sticky top-0 z-10">
+        <div className="bg-white dark:bg-[#12031a] px-5 py-4 border-b border-gold/10 flex items-center justify-between sticky top-0 z-10" dir="rtl">
            <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-gold/10 text-gold flex items-center justify-center border border-gold/20">
                  <User size={20} />
@@ -1246,9 +1246,9 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                          </div>
 
                          {/* Quick actions — single row, all 6 side by side */}
-                         <div className="grid grid-cols-6 gap-1.5 -mx-4 px-4 py-3 bg-white/40" dir="rtl">
+                         <div className="grid grid-cols-6 gap-2 -mx-4 px-4 py-0 bg-white/40" dir="rtl">
                           {quickActions.map((a, i) => (
-                             <button key={i} onClick={a.onClick} className="w-full h-[52px] rounded-[12px] bg-white dark:bg-[#12031a] border border-gold/60 flex flex-col items-center justify-center gap-0.5 hover:border-gold transition-all shadow-[0_6px_14px_rgba(34,4,44,0.05)]">
+                             <button key={i} onClick={a.onClick} className="w-full h-[64px] rounded-[15px] bg-white dark:bg-[#12031a] border border-gold/60 flex flex-col items-center justify-center gap-1 hover:border-gold transition-all shadow-[0_6px_14px_rgba(34,4,44,0.05)]">
                                <a.icon size={19} className="text-brand dark:text-gold" strokeWidth={1.8} />
                                <span className="text-[10px] leading-none font-black text-brand dark:text-white whitespace-nowrap">{a.label}</span>
                             </button>
@@ -1257,21 +1257,21 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
 
                          {/* Requires action — red overdue invoice */}
                         {overdue && (
-                          <div className="-mx-4 px-4 pt-7 pb-7 bg-[#F8F6FB]">
+                          <div className="-mx-4 px-4 pt-0 pb-7 bg-[#F8F6FB]">
                             <h3 className="text-[18px] font-black text-brand dark:text-white text-right mb-6">يتطلب إجراء منك</h3>
-                            <div className="relative h-[112px] rounded-[18px] bg-red-50/70 dark:bg-red-950/30 border border-red-100 dark:border-red-900/40 px-5 py-5" dir="ltr">
+                            <div className="relative h-[100px] rounded-[18px] bg-red-50/70 dark:bg-red-950/30 border border-red-100 dark:border-red-900/40 px-5 py-5" dir="ltr">
                               <div className="absolute left-7 top-7 w-12 h-12 rounded-[14px] bg-white flex items-center justify-center border border-red-200 shrink-0">
                                 <Receipt size={22} className="text-red-500" />
                                 <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-red-500 border-2 border-white flex items-center justify-center text-white text-[9px] font-black">!</span>
                               </div>
                               <div className="absolute right-5 top-7 text-right" dir="rtl">
-                                <div className="text-[20px] leading-none font-black text-red-600">فاتورة مستحقة الدفع</div>
-                                <div className="text-[12px] text-gray-600 dark:text-gray-400 mt-3 leading-relaxed">لديك فاتورة رقم -- بمبلغ {formatAmount(overdue.amount || 0)} ر.س</div>
+                                <div className="text-[16px] leading-none font-black text-red-600">فاتورة مستحقة الدفع</div>
+                                <div className="text-[11px] text-gray-600 dark:text-gray-400 mt-2.5 leading-relaxed">لديك فاتورة رقم -- بمبلغ {formatAmount(overdue.amount || 0)} ر.س</div>
                               </div>
-                              <button onClick={() => setActiveTab('invoices')} className="absolute left-7 bottom-6 text-[13px] text-brand/70 dark:text-gold font-black flex items-center gap-1" dir="rtl">
+                              <button onClick={() => setActiveTab('invoices')} className="absolute left-7 bottom-5 text-[13px] text-brand/70 dark:text-gold font-black flex items-center gap-1" dir="rtl">
                                 عرض جميع الفواتير <ArrowRight size={14} />
                               </button>
-                              <button onClick={() => setActiveTab('invoices')} className="absolute right-5 bottom-5 h-[44px] min-w-[118px] bg-brand text-white text-[14px] font-black px-6 rounded-[14px]">سداد الآن</button>
+                              <button onClick={() => setActiveTab('invoices')} className="absolute right-5 bottom-4 h-[36px] min-w-[108px] bg-brand text-white text-[13px] font-black px-5 rounded-[14px]">سداد الآن</button>
                             </div>
                           </div>
                         )}
