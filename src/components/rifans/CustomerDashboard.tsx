@@ -1195,7 +1195,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
 
                  {/* === Mobile Dashboard Overview (matches mockup 100%) === */}
                  {(() => {
-                   const profileFields = [userData.firstName, userData.lastName, userData.nationalId, userData.mobile, userData.email, userData.jobStatus, userData.region, userData.city, userData.bank, userData.age];
+                   const profileFields = [userData.firstName, userData.lastName, userData.nationalId, userData.mobile, userData.email, userData.jobStatus, userData.region, userData.city, userData.age];
                    const completion = Math.round((profileFields.filter(Boolean).length / profileFields.length) * 100);
                    const dash = 2 * Math.PI * 34;
                    const overdue = invoices.find((i:any) => (i.status || '').toLowerCase() !== 'paid');
