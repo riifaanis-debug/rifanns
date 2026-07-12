@@ -522,7 +522,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                 <div className="grid grid-cols-3 gap-1.5">
                   <div className="space-y-0.5">
                     <label className="text-[8px] font-bold text-brand dark:text-gold/80 px-1">رقم الهوية الوطنية</label>
-                    <div className="w-full p-1.5 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg text-[11px] font-bold text-brand dark:text-white flex items-center justify-center">
+                    <div className="w-full py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg text-[11px] font-bold text-brand dark:text-white flex items-center justify-center">
                       {userData.nationalId || '—'}
                     </div>
                   </div>
@@ -534,7 +534,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                       value={userData.mobile || ''}
                       onChange={(e) => { setUserData({...userData, mobile: e.target.value}); setProfileError(''); }}
                       onKeyDown={onlyNumbers}
-                      className="w-full p-1.5 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg text-[11px] focus:border-gold outline-none dark:text-white dir-ltr text-right"
+                      className="w-full py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg text-[11px] focus:border-gold outline-none dark:text-white dir-ltr text-right"
                     />
                   </div>
                   <div className="space-y-0.5">
@@ -546,7 +546,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                       onKeyDown={onlyNumbers}
                       value={userData.age || ''}
                       onChange={(e) => setUserData({...userData, age: e.target.value.replace(/\D/g, '')})}
-                      className="w-full p-1.5 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg text-[11px] focus:border-gold outline-none dark:text-white"
+                      className="w-full py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg text-[11px] focus:border-gold outline-none dark:text-white"
                     />
                   </div>
                 </div>
@@ -557,7 +557,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                     <select 
                       value={userData.region || ''} 
                       onChange={(e) => { setUserData({...userData, region: e.target.value, city: ''}); setProfileError(''); }}
-                      className="w-full p-1.5 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg text-[11px] focus:border-gold outline-none dark:text-white"
+                      className="w-full py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg text-[11px] focus:border-gold outline-none dark:text-white"
                     >
                       <option value="">اختر</option>
                       {Object.keys(REGION_CITIES).map(r => <option key={r} value={r}>{r}</option>)}
@@ -568,7 +568,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                     <select 
                       value={userData.city || ''} 
                       onChange={(e) => { setUserData({...userData, city: e.target.value}); setProfileError(''); }}
-                      className="w-full p-1.5 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg text-[11px] focus:border-gold outline-none dark:text-white"
+                      className="w-full py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg text-[11px] focus:border-gold outline-none dark:text-white"
                       disabled={!userData.region}
                     >
                       <option value="">اختر</option>
@@ -580,7 +580,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                     <select 
                       value={userData.jobStatus || ''} 
                       onChange={(e) => { setUserData({...userData, jobStatus: e.target.value}); setProfileError(''); }}
-                      className="w-full p-1.5 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg text-[11px] focus:border-gold outline-none dark:text-white"
+                      className="w-full py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg text-[11px] focus:border-gold outline-none dark:text-white"
                     >
                       <option value="">اختر الحالة</option>
                       <option value="موظف حكومي">موظف حكومي</option>
@@ -599,21 +599,21 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                       placeholder="الأول"
                       value={userData.firstName || ''}
                       onChange={(e) => setUserData({...userData, firstName: e.target.value})}
-                      className="w-full p-1.5 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg text-[11px] focus:border-gold outline-none dark:text-white"
+                      className="w-full py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg text-[11px] focus:border-gold outline-none dark:text-white"
                     />
                     <input 
                       type="text" 
                       placeholder="الأوسط"
                       value={userData.middleName || ''}
                       onChange={(e) => setUserData({...userData, middleName: e.target.value})}
-                      className="w-full p-1.5 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg text-[11px] focus:border-gold outline-none dark:text-white"
+                      className="w-full py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg text-[11px] focus:border-gold outline-none dark:text-white"
                     />
                     <input 
                       type="text" 
                       placeholder="الأخير"
                       value={userData.lastName || ''}
                       onChange={(e) => setUserData({...userData, lastName: e.target.value})}
-                      className="w-full p-1.5 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg text-[11px] focus:border-gold outline-none dark:text-white"
+                      className="w-full py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg text-[11px] focus:border-gold outline-none dark:text-white"
                     />
                   </div>
                 </div>
@@ -623,7 +623,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                   <select 
                     value={userData.bank || ''} 
                     onChange={(e) => { setUserData({...userData, bank: e.target.value}); setProfileError(''); }}
-                    className="w-full p-1.5 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg text-[11px] focus:border-gold outline-none dark:text-white"
+                    className="w-full py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg text-[11px] focus:border-gold outline-none dark:text-white"
                   >
                     <option value="">اختر البنك أو الجهة التمويلية</option>
                     {BANKS.map(b => <option key={b} value={b}>{b}</option>)}
@@ -638,7 +638,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                     placeholder="example@email.com"
                     value={userData.email || ''}
                     onChange={(e) => setUserData({...userData, email: e.target.value})}
-                    className="w-full p-1.5 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg text-[11px] focus:border-gold outline-none dark:text-white dir-ltr text-right"
+                    className="w-full py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg text-[11px] focus:border-gold outline-none dark:text-white dir-ltr text-right"
                   />
                 </div>
 
@@ -1262,10 +1262,10 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                                       type="text" 
                                       value={userData.nationalId || ''} 
                                       readOnly
-                                      className="w-full p-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none bg-gray-50 cursor-not-allowed opacity-80"
+                                      className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none bg-gray-50 cursor-not-allowed opacity-80"
                                     />
                                   ) : (
-                                    <div className="text-[12px] font-medium text-brand dark:text-white font-mono p-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5 flex items-center gap-1.5">
+                                    <div className="text-[12px] font-medium text-brand dark:text-white font-mono py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5 flex items-center gap-1.5">
                                       <CreditCard size={10} />
                                       {userData.nationalId || ''}
                                     </div>
@@ -1279,11 +1279,11 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                                       inputMode="numeric"
                                       value={userData.mobile || ''} 
                                       readOnly
-                                      className="w-full p-1.5 rounded-[8px] border border-gray-200 text-[11px] font-bold tracking-wider focus:border-gold outline-none dir-ltr text-left bg-gray-50 cursor-not-allowed opacity-80"
+                                      className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] font-bold tracking-wider focus:border-gold outline-none dir-ltr text-left bg-gray-50 cursor-not-allowed opacity-80"
                                       placeholder="05xxxxxxxx"
                                     />
                                   ) : (
-                                    <div className="text-[12px] font-medium text-brand dark:text-white p-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5 dir-ltr text-right">
+                                    <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5 dir-ltr text-right">
                                       {userData.mobile || ''}
                                     </div>
                                   )}
@@ -1296,11 +1296,11 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                                       inputMode="numeric"
                                       value={userData.age || ''} 
                                       onChange={(e) => setUserData({...userData, age: e.target.value.replace(/\D/g, '')})}
-                                      className="w-full p-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none"
+                                      className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none"
                                       placeholder="بالسنوات"
                                     />
                                   ) : (
-                                    <div className="text-[12px] font-medium text-brand dark:text-white p-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">
+                                    <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">
                                       {userData.age || ''}
                                     </div>
                                   )}
@@ -1312,23 +1312,23 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                                 <div>
                                   <label className="text-[9px] text-muted block mb-1">المنطقة</label>
                                   {isEditing ? (
-                                    <select value={userData.region || ''} onChange={(e) => setUserData({...userData, region: e.target.value, city: ''})} className="w-full p-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none bg-white dark:bg-white/5 dark:text-white">
+                                    <select value={userData.region || ''} onChange={(e) => setUserData({...userData, region: e.target.value, city: ''})} className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none bg-white dark:bg-white/5 dark:text-white">
                                       <option value="">اختر المنطقة</option>
                                       {Object.keys(REGION_CITIES).map(r => <option key={r} value={r}>{r}</option>)}
                                     </select>
                                   ) : (
-                                    <div className="text-[12px] font-medium text-brand dark:text-white p-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">{userData.region || '---'}</div>
+                                    <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">{userData.region || '---'}</div>
                                   )}
                                 </div>
                                 <div>
                                   <label className="text-[9px] text-muted block mb-1">المدينة</label>
                                   {isEditing ? (
-                                    <select value={userData.city || ''} onChange={(e) => setUserData({...userData, city: e.target.value})} className="w-full p-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none bg-white dark:bg-white/5 dark:text-white" disabled={!userData.region}>
+                                    <select value={userData.city || ''} onChange={(e) => setUserData({...userData, city: e.target.value})} className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none bg-white dark:bg-white/5 dark:text-white" disabled={!userData.region}>
                                       <option value="">اختر المدينة</option>
                                       {userData.region && REGION_CITIES[userData.region]?.map(c => <option key={c} value={c}>{c}</option>)}
                                     </select>
                                   ) : (
-                                    <div className="text-[12px] font-medium text-brand dark:text-white p-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">{userData.city || '---'}</div>
+                                    <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">{userData.city || '---'}</div>
                                   )}
                                 </div>
                                 <div>
@@ -1337,7 +1337,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                                     <select 
                                       value={userData.jobStatus || ''} 
                                       onChange={(e) => setUserData({...userData, jobStatus: e.target.value})}
-                                      className="w-full p-1.5 rounded-[8px] border border-gray-200 text-[11px] bg-white focus:border-gold outline-none"
+                                      className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] bg-white focus:border-gold outline-none"
                                     >
                                       <option value="">اختر الحالة</option>
                                       <option value="موظف حكومي">موظف حكومي</option>
@@ -1346,7 +1346,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                                       <option value="لا يوجد عمل">لا يوجد عمل</option>
                                     </select>
                                   ) : (
-                                    <div className="text-[12px] font-medium text-brand dark:text-white p-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">
+                                    <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">
                                       {userData.jobStatus || ''}
                                     </div>
                                   )}
@@ -1363,11 +1363,11 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                                       type="email" 
                                       value={userData.email || ''} 
                                       onChange={(e) => setUserData({...userData, email: e.target.value})}
-                                      className="w-full p-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none dir-ltr text-left"
+                                      className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none dir-ltr text-left"
                                       placeholder="example@email.com"
                                     />
                                   ) : (
-                                    <div className="text-[12px] font-medium text-brand dark:text-white p-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5 dir-ltr text-right">
+                                    <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5 dir-ltr text-right">
                                       {userData.email || '—'}
                                     </div>
                                   )}
@@ -1379,12 +1379,12 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                                 <div>
                                   <label className="text-[9px] text-muted block mb-1">الجهة المالية</label>
                                   {isEditing ? (
-                                    <select value={userData.bank || ''} onChange={(e) => setUserData({...userData, bank: e.target.value})} className="w-full p-2 rounded-[8px] border border-gray-200 text-[11px] bg-white dark:bg-white/5 focus:border-gold outline-none dark:text-white">
+                                    <select value={userData.bank || ''} onChange={(e) => setUserData({...userData, bank: e.target.value})} className="w-full py-1 px-2 rounded-[8px] border border-gray-200 text-[11px] bg-white dark:bg-white/5 focus:border-gold outline-none dark:text-white">
                                       <option value="">اختر البنك أو الجهة التمويلية</option>
                                       {BANKS.map(b => <option key={b} value={b}>{b}</option>)}
                                     </select>
                                   ) : (
-                                    <div className="text-[12px] font-medium text-brand dark:text-white p-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">{userData.bank || '---'}</div>
+                                    <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">{userData.bank || '---'}</div>
                                   )}
                                 </div>
 
@@ -1397,10 +1397,10 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                                         type="text" 
                                         value={userData.firstName || ''} 
                                         onChange={(e) => setUserData({...userData, firstName: e.target.value})}
-                                        className="w-full p-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none"
+                                        className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none"
                                       />
                                     ) : (
-                                      <div className="text-[12px] font-medium text-brand dark:text-white p-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">
+                                      <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">
                                         {userData.firstName || ''}
                                       </div>
                                     )}
@@ -1412,10 +1412,10 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                                         type="text" 
                                         value={userData.middleName || ''} 
                                         onChange={(e) => setUserData({...userData, middleName: e.target.value})}
-                                        className="w-full p-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none"
+                                        className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none"
                                       />
                                     ) : (
-                                      <div className="text-[12px] font-medium text-brand dark:text-white p-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">
+                                      <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">
                                         {userData.middleName || ''}
                                       </div>
                                     )}
@@ -1427,10 +1427,10 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                                         type="text" 
                                         value={userData.lastName || ''} 
                                         onChange={(e) => setUserData({...userData, lastName: e.target.value})}
-                                        className="w-full p-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none"
+                                        className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none"
                                       />
                                     ) : (
-                                      <div className="text-[12px] font-medium text-brand dark:text-white p-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">
+                                      <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">
                                         {userData.lastName || ''}
                                       </div>
                                     )}

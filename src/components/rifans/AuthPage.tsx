@@ -240,7 +240,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
                     <input
                       type="text" name="nationalId" inputMode="numeric"
                       value={formData.nationalId} onChange={handleChange} onKeyDown={onlyNumbers} maxLength={10}
-                      className="w-full bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg py-2 pr-9 pl-3 text-xs focus:border-gold outline-none dark:text-white"
+                      className="w-full bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg py-1 pr-9 pl-3 text-xs focus:border-gold outline-none dark:text-white"
                       placeholder="10 أرقام"
                     />
                   </div>
@@ -252,7 +252,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
                     <input
                       type="text" name="mobile" inputMode="numeric"
                       value={formData.mobile} onChange={handleChange} onKeyDown={onlyNumbers} maxLength={10}
-                      className="w-full bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg py-2 pr-9 pl-3 text-xs font-bold focus:border-gold outline-none dark:text-white text-left dir-ltr"
+                      className="w-full bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg py-1 pr-9 pl-3 text-xs font-bold focus:border-gold outline-none dark:text-white text-left dir-ltr"
                       placeholder="05xxxxxxxx"
                     />
                   </div>
@@ -269,7 +269,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
                     <input
                       type="text" name="nationalId" inputMode="numeric"
                       value={formData.nationalId} onChange={handleChange} onKeyDown={onlyNumbers} maxLength={10}
-                      className="w-full bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg py-2 pr-9 pl-3 text-xs focus:border-gold outline-none dark:text-white"
+                      className="w-full bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg py-1 pr-9 pl-3 text-xs focus:border-gold outline-none dark:text-white"
                       placeholder="10 أرقام"
                     />
                   </div>
@@ -281,7 +281,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
                     <input
                       type="text" name="mobile" inputMode="numeric"
                       value={formData.mobile} onChange={handleChange} onKeyDown={onlyNumbers} maxLength={10}
-                      className="w-full bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg py-2 pr-9 pl-3 text-xs font-bold focus:border-gold outline-none dark:text-white text-left dir-ltr"
+                      className="w-full bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg py-1 pr-9 pl-3 text-xs font-bold focus:border-gold outline-none dark:text-white text-left dir-ltr"
                       placeholder="05xxxxxxxx"
                     />
                   </div>
@@ -293,7 +293,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
                     <input
                       type="email" name="email" required
                       value={formData.email} onChange={handleChange}
-                      className="w-full bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg py-2 pr-9 pl-3 text-xs focus:border-gold outline-none dark:text-white text-left dir-ltr"
+                      className="w-full bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg py-1 pr-9 pl-3 text-xs focus:border-gold outline-none dark:text-white text-left dir-ltr"
                       placeholder="example@mail.com"
                     />
                   </div>
@@ -311,7 +311,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
                     <input
                       type="text" name="nationalId" inputMode="numeric" required
                       value={formData.nationalId} onChange={handleChange} onKeyDown={onlyNumbers}
-                      className="w-full bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg py-2 pr-9 pl-3 text-xs focus:border-gold outline-none dark:text-white text-left dir-ltr"
+                      className="w-full bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg py-1 pr-9 pl-3 text-xs focus:border-gold outline-none dark:text-white text-left dir-ltr"
                       placeholder="رقم الهوية"
                     />
                   </div>
@@ -322,7 +322,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose }) => {
                     <Lock className="absolute right-3 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-gold" size={16} />
                     <input
                       type="password" name="password" required value={formData.password} onChange={handleChange}
-                      className="w-full bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg py-2 pr-9 pl-3 text-xs focus:border-gold outline-none dark:text-white text-left dir-ltr"
+                      className="w-full bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg py-1 pr-9 pl-3 text-xs focus:border-gold outline-none dark:text-white text-left dir-ltr"
                       placeholder="••••"
                     />
                   </div>
