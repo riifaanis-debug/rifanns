@@ -1253,7 +1253,56 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                             </div>
 
                             <div className="grid grid-cols-1 gap-3">
-                              {/* First row: National ID, Mobile, Age */}
+                              {/* First row: First Name, Middle Name, Last Name */}
+                              <div className="grid grid-cols-3 gap-1.5">
+                                <div>
+                                  <label className="text-[9px] text-muted block mb-1">الاسم الأول</label>
+                                  {isEditing ? (
+                                    <input 
+                                      type="text" 
+                                      value={userData.firstName || ''} 
+                                      onChange={(e) => setUserData({...userData, firstName: e.target.value})}
+                                      className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none"
+                                    />
+                                  ) : (
+                                    <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">
+                                      {userData.firstName || ''}
+                                    </div>
+                                  )}
+                                </div>
+                                <div>
+                                  <label className="text-[9px] text-muted block mb-1">الاسم الأوسط</label>
+                                  {isEditing ? (
+                                    <input 
+                                      type="text" 
+                                      value={userData.middleName || ''} 
+                                      onChange={(e) => setUserData({...userData, middleName: e.target.value})}
+                                      className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none"
+                                    />
+                                  ) : (
+                                    <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">
+                                      {userData.middleName || ''}
+                                    </div>
+                                  )}
+                                </div>
+                                <div>
+                                  <label className="text-[9px] text-muted block mb-1">العائلة</label>
+                                  {isEditing ? (
+                                    <input 
+                                      type="text" 
+                                      value={userData.lastName || ''} 
+                                      onChange={(e) => setUserData({...userData, lastName: e.target.value})}
+                                      className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none"
+                                    />
+                                  ) : (
+                                    <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">
+                                      {userData.lastName || ''}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+
+                              {/* Second row: National ID, Mobile, Age */}
                               <div className="grid grid-cols-3 gap-1.5">
                                 <div>
                                   <label className="text-[9px] text-muted block mb-1">رقم الهوية الوطنية</label>
@@ -1307,7 +1356,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                                 </div>
                               </div>
 
-                              {/* Second row: Region, City, Job Status */}
+                              {/* Third row: Region, City, Job Status */}
                               <div className="grid grid-cols-3 gap-1.5">
                                 <div>
                                   <label className="text-[9px] text-muted block mb-1">المنطقة</label>
@@ -1386,55 +1435,6 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                                   ) : (
                                     <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">{userData.bank || '---'}</div>
                                   )}
-                                </div>
-
-                                {/* Triple Name */}
-                                <div className="grid grid-cols-3 gap-1.5">
-                                  <div>
-                                    <label className="text-[9px] text-muted block mb-1">الاسم الأول</label>
-                                    {isEditing ? (
-                                      <input 
-                                        type="text" 
-                                        value={userData.firstName || ''} 
-                                        onChange={(e) => setUserData({...userData, firstName: e.target.value})}
-                                        className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none"
-                                      />
-                                    ) : (
-                                      <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">
-                                        {userData.firstName || ''}
-                                      </div>
-                                    )}
-                                  </div>
-                                  <div>
-                                    <label className="text-[9px] text-muted block mb-1">الاسم الأوسط</label>
-                                    {isEditing ? (
-                                      <input 
-                                        type="text" 
-                                        value={userData.middleName || ''} 
-                                        onChange={(e) => setUserData({...userData, middleName: e.target.value})}
-                                        className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none"
-                                      />
-                                    ) : (
-                                      <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">
-                                        {userData.middleName || ''}
-                                      </div>
-                                    )}
-                                  </div>
-                                  <div>
-                                    <label className="text-[9px] text-muted block mb-1">العائلة</label>
-                                    {isEditing ? (
-                                      <input 
-                                        type="text" 
-                                        value={userData.lastName || ''} 
-                                        onChange={(e) => setUserData({...userData, lastName: e.target.value})}
-                                        className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none"
-                                      />
-                                    ) : (
-                                      <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">
-                                        {userData.lastName || ''}
-                                      </div>
-                                    )}
-                                  </div>
                                 </div>
                               </div>
                             </div>
