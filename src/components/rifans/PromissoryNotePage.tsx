@@ -222,7 +222,7 @@ const PromissoryNotePage: React.FC<PromissoryNotePageProps> = ({ noteId, onClose
           <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-xl transition-colors">
             <X size={20} />
           </button>
-          <span className="text-sm font-bold text-brand">سند لأمر رقم {note.id}</span>
+          <span className="text-sm font-bold text-brand">سند لأمر رقم <span className="font-mono">{note.id}</span></span>
         </div>
         <div className="flex items-center gap-2">
           <button onClick={handleDownload} disabled={isDownloading} className="p-2 hover:bg-gray-100 rounded-xl transition-colors text-gold">
@@ -265,7 +265,7 @@ const PromissoryNotePage: React.FC<PromissoryNotePageProps> = ({ noteId, onClose
           <div className="flex items-center gap-3 mb-3" dir="rtl">
             <div className="w-[130px] text-right text-[11px] font-bold text-[#22042C]">رقم السند</div>
             <div className="flex-1 max-w-[260px]">
-              <Box>{note.id}</Box>
+              <Box className="font-mono">{note.id}</Box>
             </div>
           </div>
 
@@ -275,7 +275,7 @@ const PromissoryNotePage: React.FC<PromissoryNotePageProps> = ({ noteId, onClose
             <FieldRow label="تاريخ الإنشاء"><Box>{issueDateLabel}</Box></FieldRow>
             <FieldRow label="مدينة الإصدار"><Box>{note.issue_city}</Box></FieldRow>
             <FieldRow label="مدينة الوفاء"><Box>{note.payment_city}</Box></FieldRow>
-            <FieldRow label="قيمة السند رقماً"><Box>{formattedAmount}</Box></FieldRow>
+            <FieldRow label="قيمة السند رقماً"><Box className="font-mono">{formattedAmount}</Box></FieldRow>
             <FieldRow label="قيمة السند كتابة"><Box>{wordsAmount}</Box></FieldRow>
             <FieldRow label="تاريخ الإستحقاق"><Box>{note.due_date}</Box></FieldRow>
           </div>
