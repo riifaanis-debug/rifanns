@@ -98,7 +98,7 @@ const OpenRequestBuilder: React.FC<Props> = ({ clients, adminId, onCreated }) =>
         <select
           value={clientId}
           onChange={(e) => setClientId(e.target.value)}
-          className="w-full p-2.5 rounded-[12px] border border-gold/30 text-[13px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none bg-white dark:bg-[#06010a] dark:text-white"
+          className="w-full py-1 px-2.5 rounded-[12px] border border-gold/30 text-[13px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none bg-white dark:bg-[#06010a] dark:text-white"
         >
           <option value="">-- اختر العميل --</option>
           {clients.map(c => (
@@ -117,7 +117,7 @@ const OpenRequestBuilder: React.FC<Props> = ({ clients, adminId, onCreated }) =>
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="مثال: تحديث بيانات الحساب البنكي"
-          className="w-full p-2.5 rounded-[12px] border border-gold/30 text-[13px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none bg-white dark:bg-[#06010a] dark:text-white"
+          className="w-full py-1 px-2.5 rounded-[12px] border border-gold/30 text-[13px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none bg-white dark:bg-[#06010a] dark:text-white"
         />
       </div>
 
@@ -129,7 +129,7 @@ const OpenRequestBuilder: React.FC<Props> = ({ clients, adminId, onCreated }) =>
           onChange={(e) => setDescription(e.target.value)}
           rows={2}
           placeholder="اشرح للعميل سبب الطلب أو أي تعليمات..."
-          className="w-full p-2.5 rounded-[12px] border border-gold/30 text-[13px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none bg-white dark:bg-[#06010a] dark:text-white resize-none"
+          className="w-full py-1 px-2.5 rounded-[12px] border border-gold/30 text-[13px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none bg-white dark:bg-[#06010a] dark:text-white resize-none"
         />
       </div>
 
@@ -167,7 +167,7 @@ const OpenRequestBuilder: React.FC<Props> = ({ clients, adminId, onCreated }) =>
               value={f.label}
               onChange={(e) => updateField(idx, { label: e.target.value })}
               placeholder="السؤال / اسم الحقل"
-              className="w-full p-2 rounded-lg border border-gold/30 text-[12px] focus:border-gold outline-none bg-white dark:bg-[#06010a] dark:text-white"
+              className="w-full py-1 px-2 rounded-lg border border-gold/30 text-[12px] focus:border-gold outline-none bg-white dark:bg-[#06010a] dark:text-white"
             />
 
             {/* Type */}
@@ -205,7 +205,7 @@ const OpenRequestBuilder: React.FC<Props> = ({ clients, adminId, onCreated }) =>
                     })
                   }
                   placeholder="خيار 1, خيار 2, خيار 3"
-                  className="w-full p-2 rounded-lg border border-gold/30 text-[12px] focus:border-gold outline-none bg-white dark:bg-[#06010a] dark:text-white"
+                  className="w-full py-1 px-2 rounded-lg border border-gold/30 text-[12px] focus:border-gold outline-none bg-white dark:bg-[#06010a] dark:text-white"
                 />
               </div>
             )}
