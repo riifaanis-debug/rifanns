@@ -848,7 +848,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                           value={doc.type}
                           onChange={(e) => updateDocumentType(doc.id, e.target.value)}
                           disabled={isViewOnly}
-                          className="w-1/3 p-2 rounded-[10px] border border-gold/20 text-[11px] bg-white disabled:bg-gray-50 disabled:cursor-not-allowed"
+                          className="w-1/3 py-1 px-2 rounded-[10px] border border-gold/20 text-[11px] bg-white disabled:bg-gray-50 disabled:cursor-not-allowed"
                        >
                           <option value="">نوع المرفق</option>
                           {prefill?.requestType === 'seized_amounts_request' ? (
