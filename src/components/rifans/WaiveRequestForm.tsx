@@ -582,34 +582,34 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
              <div className="col-span-2">
                <label className="block text-[11px] font-bold text-brand mb-1">الاسم الثلاثي <span className="text-red-500">*</span></label>
                <div className="flex gap-1.5">
-                  <input type="text" name="firstName" placeholder="الأول" required value={formData.firstName} onChange={(e) => setFormData({...formData, firstName: e.target.value})} disabled={isViewOnly} className="w-full p-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none disabled:bg-gray-50 disabled:cursor-not-allowed" />
-                  <input type="text" name="middleName" placeholder="الأوسط" required value={formData.middleName} onChange={(e) => setFormData({...formData, middleName: e.target.value})} disabled={isViewOnly} className="w-full p-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none disabled:bg-gray-50 disabled:cursor-not-allowed" />
-                  <input type="text" name="lastName" placeholder="العائلة" required value={formData.lastName} onChange={(e) => setFormData({...formData, lastName: e.target.value})} disabled={isViewOnly} className="w-full p-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none disabled:bg-gray-50 disabled:cursor-not-allowed" />
+                  <input type="text" name="firstName" placeholder="الأول" required value={formData.firstName} onChange={(e) => setFormData({...formData, firstName: e.target.value})} disabled={isViewOnly} className="w-full py-0.5 px-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none disabled:bg-gray-50 disabled:cursor-not-allowed" />
+                  <input type="text" name="middleName" placeholder="الأوسط" required value={formData.middleName} onChange={(e) => setFormData({...formData, middleName: e.target.value})} disabled={isViewOnly} className="w-full py-0.5 px-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none disabled:bg-gray-50 disabled:cursor-not-allowed" />
+                  <input type="text" name="lastName" placeholder="العائلة" required value={formData.lastName} onChange={(e) => setFormData({...formData, lastName: e.target.value})} disabled={isViewOnly} className="w-full py-0.5 px-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none disabled:bg-gray-50 disabled:cursor-not-allowed" />
                </div>
              </div>
 
              {/* Row 2: National ID & Mobile */}
              <div>
                 <label className="block text-[11px] font-bold text-brand mb-1">رقم الهوية <span className="text-red-500">*</span></label>
-                <input type="text" name="nationalId" inputMode="numeric" onKeyDown={onlyNumbers} maxLength={10} required value={formData.nationalId} onChange={(e) => setFormData({...formData, nationalId: e.target.value})} disabled={isViewOnly} className="w-full p-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none disabled:bg-gray-50 disabled:cursor-not-allowed" placeholder="10 أرقام" />
+                <input type="text" name="nationalId" inputMode="numeric" onKeyDown={onlyNumbers} maxLength={10} required value={formData.nationalId} onChange={(e) => setFormData({...formData, nationalId: e.target.value})} disabled={isViewOnly} className="w-full py-0.5 px-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none disabled:bg-gray-50 disabled:cursor-not-allowed" placeholder="10 أرقام" />
              </div>
              <div>
                 <label className="block text-[11px] font-bold text-brand mb-1">رقم الجوال <span className="text-red-500">*</span></label>
-                <input type="text" name="mobile" inputMode="numeric" required value={formData.mobile} onChange={(e) => { const val = e.target.value.replace(/\D/g, '').slice(0, 10); setFormData({...formData, mobile: val}); }} onKeyDown={onlyNumbers} maxLength={10} disabled={isViewOnly} className="w-full p-1.5 rounded-lg border border-gold/30 text-[12px] font-bold tracking-wider focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none text-left dir-ltr disabled:bg-gray-50 disabled:cursor-not-allowed" placeholder="05xxxxxxxx" />
+                <input type="text" name="mobile" inputMode="numeric" required value={formData.mobile} onChange={(e) => { const val = e.target.value.replace(/\D/g, '').slice(0, 10); setFormData({...formData, mobile: val}); }} onKeyDown={onlyNumbers} maxLength={10} disabled={isViewOnly} className="w-full py-0.5 px-1.5 rounded-lg border border-gold/30 text-[12px] font-bold tracking-wider focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none text-left dir-ltr disabled:bg-gray-50 disabled:cursor-not-allowed" placeholder="05xxxxxxxx" />
                 <p className="text-[9px] text-muted mt-0.5 pr-1">يبدأ بـ 05 - 10 أرقام</p>
              </div>
 
              {/* Row 3: Region & City */}
              <div>
                 <label className="block text-[11px] font-bold text-brand mb-1">المنطقة <span className="text-red-500">*</span></label>
-                <select name="region" value={region} onChange={(e) => setRegion(e.target.value)} required disabled={isViewOnly} className="w-full p-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none bg-white disabled:bg-gray-50 disabled:cursor-not-allowed">
+                <select name="region" value={region} onChange={(e) => setRegion(e.target.value)} required disabled={isViewOnly} className="w-full py-0.5 px-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none bg-white disabled:bg-gray-50 disabled:cursor-not-allowed">
                   <option value="">اختر المنطقة</option>
                   {Object.keys(REGION_CITIES).map(r => <option key={r} value={r}>{r}</option>)}
                 </select>
              </div>
              <div>
                 <label className="block text-[11px] font-bold text-brand mb-1">المدينة <span className="text-red-500">*</span></label>
-                <select name="city" required disabled={!region || isViewOnly} value={formData.city} onChange={(e) => setFormData({...formData, city: e.target.value})} className="w-full p-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none bg-white disabled:bg-gray-50 disabled:cursor-not-allowed">
+                <select name="city" required disabled={!region || isViewOnly} value={formData.city} onChange={(e) => setFormData({...formData, city: e.target.value})} className="w-full py-0.5 px-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none bg-white disabled:bg-gray-50 disabled:cursor-not-allowed">
                   <option value="">اختر المدينة</option>
                   {region && REGION_CITIES[region]?.map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
@@ -618,11 +618,11 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
              {/* Row 4: Age & Job Status */}
              <div>
                 <label className="block text-[11px] font-bold text-brand mb-1">العمر <span className="text-red-500">*</span></label>
-                <input type="text" name="age" inputMode="numeric" onKeyDown={onlyNumbers} required value={formData.age} onChange={(e) => setFormData({...formData, age: e.target.value})} disabled={isViewOnly} className="w-full p-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none disabled:bg-gray-50 disabled:cursor-not-allowed" placeholder="بالسنوات" />
+                <input type="text" name="age" inputMode="numeric" onKeyDown={onlyNumbers} required value={formData.age} onChange={(e) => setFormData({...formData, age: e.target.value})} disabled={isViewOnly} className="w-full py-0.5 px-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none disabled:bg-gray-50 disabled:cursor-not-allowed" placeholder="بالسنوات" />
              </div>
              <div>
                 <label className="block text-[11px] font-bold text-brand mb-1">الحالة الوظيفية <span className="text-red-500">*</span></label>
-                <select name="jobStatus" required value={formData.jobStatus} onChange={(e) => setFormData({...formData, jobStatus: e.target.value})} disabled={isViewOnly} className="w-full p-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none bg-white disabled:bg-gray-50 disabled:cursor-not-allowed">
+                <select name="jobStatus" required value={formData.jobStatus} onChange={(e) => setFormData({...formData, jobStatus: e.target.value})} disabled={isViewOnly} className="w-full py-0.5 px-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none bg-white disabled:bg-gray-50 disabled:cursor-not-allowed">
                   <option value="">اختر الحالة</option>
                   <option value="موظف حكومي">موظف حكومي</option>
                   <option value="موظف قطاع خاص">موظف قطاع خاص</option>
@@ -634,7 +634,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
              {/* Bank */}
              <div className="col-span-2">
                 <label className="block text-[11px] font-bold text-brand mb-1">الجهة المالية <span className="text-red-500">*</span></label>
-                <select name="bank" required value={formData.bank} onChange={(e) => setFormData({...formData, bank: e.target.value})} disabled={isViewOnly} className="w-full p-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none bg-white disabled:bg-gray-50 disabled:cursor-not-allowed">
+                <select name="bank" required value={formData.bank} onChange={(e) => setFormData({...formData, bank: e.target.value})} disabled={isViewOnly} className="w-full py-0.5 px-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none bg-white disabled:bg-gray-50 disabled:cursor-not-allowed">
                   <option value="">اختر البنك أو الجهة التمويلية</option>
                   {BANKS.map(b => <option key={b} value={b}>{b}</option>)}
                 </select>
@@ -669,7 +669,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                           value={product.accountNumber || ''}
                           onChange={(e) => updateProduct(product.id, 'accountNumber', e.target.value.replace(/\D/g, ''))}
                           disabled={isViewOnly}
-                          className="w-full p-2 rounded-[10px] border border-gold/20 text-[12px] disabled:bg-gray-50 disabled:cursor-not-allowed" 
+                          className="w-full py-1 px-2 rounded-[10px] border border-gold/20 text-[12px] disabled:bg-gray-50 disabled:cursor-not-allowed" 
                           placeholder="رقم الحساب الجاري"
                          />
                       </div>
@@ -684,7 +684,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                           value={product.amount}
                           onChange={(e) => updateProduct(product.id, 'amount', e.target.value.replace(/\D/g, ''))}
                           disabled={isViewOnly}
-                          className="w-full p-2 rounded-[10px] border border-gold/20 text-[12px] disabled:bg-gray-50 disabled:cursor-not-allowed" 
+                          className="w-full py-1 px-2 rounded-[10px] border border-gold/20 text-[12px] disabled:bg-gray-50 disabled:cursor-not-allowed" 
                           placeholder="0.00"
                         />
                       </div>
@@ -698,7 +698,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                           value={product.type}
                           onChange={(e) => updateProduct(product.id, 'type', e.target.value)}
                           disabled={isViewOnly}
-                          className="w-full p-2 rounded-[10px] border border-gold/20 text-[12px] bg-white disabled:bg-gray-50 disabled:cursor-not-allowed"
+                          className="w-full py-1 px-2 rounded-[10px] border border-gold/20 text-[12px] bg-white disabled:bg-gray-50 disabled:cursor-not-allowed"
                         >
                           <option value="">اختر المصدر</option>
                           <option value="راتب">راتب</option>
@@ -719,7 +719,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                           value={product.depositDate || ''}
                           onChange={(e) => updateProduct(product.id, 'depositDate' as any, e.target.value)}
                           disabled={isViewOnly}
-                          className="w-full p-2 rounded-[10px] border border-gold/20 text-[12px] disabled:bg-gray-50 disabled:cursor-not-allowed" 
+                          className="w-full py-1 px-2 rounded-[10px] border border-gold/20 text-[12px] disabled:bg-gray-50 disabled:cursor-not-allowed" 
                         />
                       </div>
                     </div>
@@ -758,7 +758,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                            value={product.type}
                            onChange={(e) => updateProduct(product.id, 'type', e.target.value)}
                            disabled={isViewOnly}
-                           className="w-full p-2 rounded-[10px] border border-gold/20 text-[12px] bg-white disabled:bg-gray-50 disabled:cursor-not-allowed"
+                           className="w-full py-1 px-2 rounded-[10px] border border-gold/20 text-[12px] bg-white disabled:bg-gray-50 disabled:cursor-not-allowed"
                          >
                             <option value="">اختر النوع</option>
                             <option value="تمويل شخصي">تمويل شخصي</option>
@@ -777,7 +777,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                            value={product.accountNumber || ''}
                            onChange={(e) => updateProduct(product.id, 'accountNumber', e.target.value.replace(/\D/g, ''))}
                            disabled={isViewOnly}
-                           className="w-full p-2 rounded-[10px] border border-gold/20 text-[12px] disabled:bg-gray-50 disabled:cursor-not-allowed"
+                           className="w-full py-1 px-2 rounded-[10px] border border-gold/20 text-[12px] disabled:bg-gray-50 disabled:cursor-not-allowed"
                            placeholder="رقم الحساب"
                          />
                        </div>
@@ -792,7 +792,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                            value={product.amount}
                            onChange={(e) => updateProduct(product.id, 'amount', e.target.value.replace(/\D/g, ''))}
                            disabled={isViewOnly}
-                           className="w-full p-2 rounded-[10px] border border-gold/20 text-[12px] disabled:bg-gray-50 disabled:cursor-not-allowed"
+                           className="w-full py-1 px-2 rounded-[10px] border border-gold/20 text-[12px] disabled:bg-gray-50 disabled:cursor-not-allowed"
                            placeholder="0.00"
                          />
                        </div>
@@ -889,7 +889,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                            onChange={(e) => updateDocumentFile(doc.id, e.target.files?.[0] || null)}
                            className="absolute inset-0 opacity-0 cursor-pointer z-10" 
                          />
-                         <div className="w-full p-2 rounded-[10px] border border-gold/20 text-[11px] bg-gray-50 flex items-center justify-between">
+                         <div className="w-full py-1 px-2 rounded-[10px] border border-gold/20 text-[11px] bg-gray-50 flex items-center justify-between">
                            <span className="truncate max-w-[150px]">{doc.fileName || 'اختر ملفاً...'}</span>
                            <Hash size={12} className="text-gold/50" />
                          </div>
