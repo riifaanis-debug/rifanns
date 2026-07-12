@@ -669,7 +669,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                           value={product.accountNumber || ''}
                           onChange={(e) => updateProduct(product.id, 'accountNumber', e.target.value.replace(/\D/g, ''))}
                           disabled={isViewOnly}
-                          className="w-full py-1 px-2 rounded-[10px] border border-gold/20 text-[12px] disabled:bg-gray-50 disabled:cursor-not-allowed" 
+                          className="w-full py-1 px-2 rounded-[10px] border border-gold/20 text-[12px] disabled:bg-gray-50 disabled:cursor-not-allowed font-mono" 
                           placeholder="رقم الحساب الجاري"
                          />
                       </div>
@@ -684,7 +684,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                           value={product.amount}
                           onChange={(e) => updateProduct(product.id, 'amount', e.target.value.replace(/\D/g, ''))}
                           disabled={isViewOnly}
-                          className="w-full py-1 px-2 rounded-[10px] border border-gold/20 text-[12px] disabled:bg-gray-50 disabled:cursor-not-allowed" 
+                          className="w-full py-1 px-2 rounded-[10px] border border-gold/20 text-[12px] disabled:bg-gray-50 disabled:cursor-not-allowed font-mono" 
                           placeholder="0.00"
                         />
                       </div>
@@ -737,7 +737,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
 
               <div className="mt-4 pt-3 border-t border-gold/10 flex justify-between items-center">
                 <span className="text-[12px] text-muted font-bold">إجمالي المبالغ المحجوزة:</span>
-                <span className="text-[14px] font-extrabold text-brand tabular-nums">{formatAmount(totalAmount)} ر.س</span>
+                <span className="text-[14px] font-extrabold text-brand tabular-nums font-mono">{formatAmount(totalAmount)} ر.س</span>
               </div>
             </div>
           ) : (
@@ -777,7 +777,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                            value={product.accountNumber || ''}
                            onChange={(e) => updateProduct(product.id, 'accountNumber', e.target.value.replace(/\D/g, ''))}
                            disabled={isViewOnly}
-                           className="w-full py-1 px-2 rounded-[10px] border border-gold/20 text-[12px] disabled:bg-gray-50 disabled:cursor-not-allowed"
+                            className="w-full py-1 px-2 rounded-[10px] border border-gold/20 text-[12px] disabled:bg-gray-50 disabled:cursor-not-allowed font-mono"
                            placeholder="رقم الحساب"
                          />
                        </div>
@@ -792,7 +792,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                            value={product.amount}
                            onChange={(e) => updateProduct(product.id, 'amount', e.target.value.replace(/\D/g, ''))}
                            disabled={isViewOnly}
-                           className="w-full py-1 px-2 rounded-[10px] border border-gold/20 text-[12px] disabled:bg-gray-50 disabled:cursor-not-allowed"
+                            className="w-full py-1 px-2 rounded-[10px] border border-gold/20 text-[12px] disabled:bg-gray-50 disabled:cursor-not-allowed font-mono"
                            placeholder="0.00"
                          />
                        </div>
@@ -816,7 +816,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
 
               <div className="mt-4 pt-3 border-t border-gold/10 flex justify-between items-center">
                  <span className="text-[12px] text-muted font-bold">المجموع الكلي:</span>
-                 <span className="text-[14px] font-extrabold text-brand tabular-nums">{formatAmount(totalAmount)} ر.س</span>
+                 <span className="text-[14px] font-extrabold text-brand tabular-nums font-mono">{formatAmount(totalAmount)} ر.س</span>
               </div>
             </div>
           )}
