@@ -1443,9 +1443,10 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                                   ) : (
                                     <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">{userData.bank || '---'}</div>
                                   )}
-                                </div>
                               </div>
                             </div>
+                            </div>
+                          </div>
                           </div>
 
                            {/* Quick actions — 3 cols on mobile, 6 on wider */}
