@@ -1214,12 +1214,12 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                      return (
                        <>
                           {/* Hero — profile completion */}
-                         <div className="relative h-[158px] overflow-hidden rounded-[20px] px-6 py-5 bg-gradient-to-bl from-[#320540] via-brand to-[#19011f] shadow-[0_18px_34px_-18px_rgba(34,4,44,0.65)]" dir="rtl">
+                         <div className="relative h-[178px] overflow-hidden rounded-[20px] px-6 py-5 bg-gradient-to-bl from-[#320540] via-brand to-[#19011f] shadow-[0_18px_34px_-18px_rgba(34,4,44,0.65)]" dir="rtl">
                            <div className="absolute -left-14 -top-10 w-[178px] h-[178px] rounded-full border border-gold/10" />
                            <div className="relative z-[1] flex h-full items-start justify-between gap-4">
                              <div className="flex-1 min-w-0 text-right pt-1">
                                <div className="text-[12px] text-gold/70 mb-2">مرحباً،</div>
-                               <div className="text-[24px] font-black text-gold leading-tight truncate">{userData.fullName || 'أكمل بياناتك'}</div>
+                               <div className="text-[22px] font-black text-gold leading-tight truncate">{userData.fullName || 'أكمل بياناتك'}</div>
                                <div className="mt-6 grid grid-cols-2 gap-2.5">
                                  <div className="h-[50px] rounded-[14px] bg-white/5 border border-white/10 px-3 py-2">
                                    <div className="text-[10px] text-white/50 mb-1 flex items-center gap-1 justify-end"><Clock size={10}/> آخر دخول</div>
@@ -1231,8 +1231,8 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                                  </div>
                                </div>
                              </div>
-                             <div className="flex w-[102px] shrink-0 flex-col items-center pt-1">
-                               <div className="relative w-[94px] h-[94px]">
+                             <div className="flex w-[96px] shrink-0 flex-col items-center pt-1">
+                               <div className="relative w-[86px] h-[86px]">
                                  <svg viewBox="0 0 80 80" className="w-full h-full -rotate-90">
                                    <circle cx="40" cy="40" r="34" stroke="rgba(199,169,105,0.15)" strokeWidth="6" fill="none"/>
                                    <circle cx="40" cy="40" r="34" stroke="#C7A969" strokeWidth="6" fill="none" strokeLinecap="round" strokeDasharray={dash} strokeDashoffset={dash - (dash * completion / 100)} />
