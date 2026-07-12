@@ -657,7 +657,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
         <ChatPage isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
         
         {/* Header */}
-        <div className="bg-white dark:bg-[#12031a] px-5 py-4 border-b border-gold/10 flex items-center justify-between sticky top-0 z-10" dir="rtl">
+        <div className="bg-white dark:bg-[#12031a] px-3 py-4 border-b border-gold/10 flex items-center justify-between sticky top-0 z-10" dir="rtl">
            <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-gold/10 text-gold flex items-center justify-center border border-gold/20">
                  <User size={20} />
@@ -705,7 +705,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
 
         {/* Tabs - hidden on profile (mockup uses quick-action row instead) */}
         {activeTab !== 'profile' && (
-        <div className="flex p-4 gap-1.5 overflow-x-auto no-scrollbar">
+        <div className="flex px-3 py-3 gap-1.5 overflow-x-auto no-scrollbar">
            <button 
              onClick={() => setActiveTab('profile')}
              className={`flex-1 min-w-[80px] py-2.5 rounded-[12px] text-[11px] font-bold transition-all flex flex-col items-center justify-center gap-1
@@ -766,7 +766,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
         )}
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto px-4 pb-8 custom-scrollbar">
+        <div className="flex-1 overflow-y-auto px-2 pb-8 custom-scrollbar">
            
            {activeTab === 'requests' && (
              <div className={`space-y-3`}>
@@ -776,7 +776,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                  </div>
                ) : requests.length > 0 ? (
                  requests.map((req) => (
-                    <div key={req.id} className="bg-white dark:bg-[#12031a] p-4 rounded-[16px] border border-gold/20 shadow-sm group hover:border-gold/50 transition-all text-right">
+                    <div key={req.id} className="bg-white dark:bg-[#12031a] p-3 rounded-[16px] border border-gold/20 shadow-sm group hover:border-gold/50 transition-all text-right">
                        <div className="flex justify-between items-start mb-2">
                           <div className="flex items-center gap-2">
                             <span className="w-2 h-2 rounded-full bg-gold block animate-pulse"></span>
@@ -950,7 +950,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                )}
                
                {requests.length > 0 && showRequestTypeSelector && (
-                   <div className="mt-6 bg-white dark:bg-[#12031a] p-4 rounded-2xl border border-gold/20 animate-in slide-in-from-bottom-2">
+                   <div className="mt-6 bg-white dark:bg-[#12031a] p-3 rounded-2xl border border-gold/20 animate-in slide-in-from-bottom-2">
                         <p className="text-[11px] font-bold text-brand dark:text-gold mb-3">اختر نوع الطلب <span className="text-[10px] text-muted font-normal">(الخدمات الأكثر طلباً)</span></p>
                         <div className="space-y-2">
                           <button onClick={() => handleOpenRequestForm('waive_request')} className="w-full p-3 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl text-[12px] font-bold text-brand dark:text-white hover:border-gold transition-all text-right flex justify-between items-center">
@@ -1042,7 +1042,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                  contracts.map((contract) => {
                    const req = requests.find(r => r.id === contract.submission_id) || { id: contract.submission_id, status: 'unknown', type: contract.type };
                    return (
-                     <div key={contract.id} className="bg-white dark:bg-[#12031a] p-4 rounded-[16px] border border-gold/20 shadow-sm group hover:border-gold/50 transition-all text-right">
+                     <div key={contract.id} className="bg-white dark:bg-[#12031a] p-3 rounded-[16px] border border-gold/20 shadow-sm group hover:border-gold/50 transition-all text-right">
                         <div className="flex justify-between items-start mb-2">
                            <div className="flex items-center gap-2">
                              <PenTool className="text-gold" size={16} />
@@ -1104,7 +1104,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                  </div>
                ) : invoices.length > 0 ? (
                  invoices.map((inv) => (
-                   <div key={inv.id} className="bg-white dark:bg-[#12031a] p-4 rounded-[16px] border border-gold/20 shadow-sm group hover:border-gold/50 transition-all text-right">
+                   <div key={inv.id} className="bg-white dark:bg-[#12031a] p-3 rounded-[16px] border border-gold/20 shadow-sm group hover:border-gold/50 transition-all text-right">
                      <div className="flex justify-between items-start mb-2">
                        <div className="flex items-center gap-2">
                          <Receipt className="text-gold" size={16} />
@@ -1152,7 +1152,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                  </div>
                ) : promissoryNotes.length > 0 ? (
                  promissoryNotes.map((note) => (
-                   <div key={note.id} className="bg-white dark:bg-[#12031a] p-4 rounded-[16px] border border-gold/20 shadow-sm hover:border-gold/50 transition-all text-right">
+                   <div key={note.id} className="bg-white dark:bg-[#12031a] p-3 rounded-[16px] border border-gold/20 shadow-sm hover:border-gold/50 transition-all text-right">
                      <div className="flex justify-between items-start mb-2">
                        <div className="flex items-center gap-2">
                          <FileText className="text-gold" size={16} />
@@ -1211,7 +1211,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                      return (
                        <>
                           {/* Hero — profile completion */}
-                          <div className="relative min-h-[150px] overflow-hidden rounded-[18px] px-4 py-4 bg-gradient-to-bl from-[#320540] via-brand to-[#19011f] shadow-[0_18px_34px_-18px_rgba(34,4,44,0.65)]" dir="rtl">
+                          <div className="relative min-h-[150px] overflow-hidden rounded-[18px] px-3 py-4 bg-gradient-to-bl from-[#320540] via-brand to-[#19011f] shadow-[0_18px_34px_-18px_rgba(34,4,44,0.65)]" dir="rtl">
                             <div className="absolute -left-14 -top-10 w-[160px] h-[160px] rounded-full border border-gold/10" />
                             <div className="relative z-[1] flex h-full items-start justify-between gap-3">
                               <div className="flex-1 min-w-0 text-right">
@@ -1285,7 +1285,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                {/* Info Sections with Improved Design */}
                <div className="space-y-5">
                   {/* Personal Info */}
-                   <div className="bg-white dark:bg-[#12031a] rounded-[24px] border border-gold/20 p-4 shadow-sm relative overflow-hidden">
+                   <div className="bg-white dark:bg-[#12031a] rounded-[24px] border border-gold/20 p-3 shadow-sm relative overflow-hidden">
                       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold/30 to-transparent"></div>
                        <div className="flex flex-col gap-2 mb-3">
                           <div className="flex items-center gap-2">
@@ -1513,7 +1513,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
         </div>
 
         {/* Logout */}
-        <div className="p-4 border-t border-gray-100 dark:border-white/10 bg-white dark:bg-[#12031a]">
+        <div className="px-3 py-3 border-t border-gray-100 dark:border-white/10 bg-white dark:bg-[#12031a]">
            <button 
              onClick={onLogout}
              className="w-full flex items-center justify-center gap-2 text-[12px] font-bold text-red-500 bg-red-50 dark:bg-red-900/20 py-3 rounded-[14px] hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors"
