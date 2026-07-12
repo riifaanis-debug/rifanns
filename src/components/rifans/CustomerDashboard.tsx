@@ -1245,12 +1245,12 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                           </div>
                         </div>
 
-                        {/* Quick actions — horizontal scroll row (matches mockup) */}
-                        <div className="flex gap-2 overflow-x-auto no-scrollbar -mx-1 px-1 py-1" dir="rtl">
+                        {/* Quick actions — static grid (matches mockup) */}
+                        <div className="grid grid-cols-3 gap-2 sm:grid-cols-6 -mx-1 px-1 py-1" dir="rtl">
                           {quickActions.map((a, i) => (
-                            <button key={i} onClick={a.onClick} className="shrink-0 w-[72px] h-[72px] rounded-2xl bg-white dark:bg-[#12031a] border border-gold/40 flex flex-col items-center justify-center gap-1 hover:border-gold transition-all shadow-sm">
+                            <button key={i} onClick={a.onClick} className="w-full aspect-square min-h-[72px] rounded-2xl bg-white dark:bg-[#12031a] border border-gold/40 flex flex-col items-center justify-center gap-1 hover:border-gold transition-all shadow-sm">
                               <a.icon size={20} className="text-brand dark:text-gold" strokeWidth={1.5} />
-                              <span className="text-[10px] font-bold text-brand dark:text-white">{a.label}</span>
+                              <span className="text-[10px] font-bold text-brand dark:text-white whitespace-nowrap">{a.label}</span>
                             </button>
                           ))}
                         </div>
