@@ -250,7 +250,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
     
     // Manual Validation with clear alerts
     if (!formData.firstName || !formData.middleName || !formData.lastName) {
-      const msg = 'يرجى إدخال الاسم الثلاثي كاملاً (الأول، الأب، العائلة).';
+      const msg = 'يرجى إدخال الاسم الثلاثي كاملاً (الأول، الأب، الأخير).';
       setStatusMessage(msg);
       alert(msg);
       return;
@@ -584,7 +584,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                <div className="flex gap-1.5">
                   <input type="text" name="firstName" placeholder="الأول" required value={formData.firstName} onChange={(e) => setFormData({...formData, firstName: e.target.value})} disabled={isViewOnly} className="w-full py-0.5 px-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none disabled:bg-gray-50 disabled:cursor-not-allowed" />
                   <input type="text" name="middleName" placeholder="الأوسط" required value={formData.middleName} onChange={(e) => setFormData({...formData, middleName: e.target.value})} disabled={isViewOnly} className="w-full py-0.5 px-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none disabled:bg-gray-50 disabled:cursor-not-allowed" />
-                  <input type="text" name="lastName" placeholder="العائلة" required value={formData.lastName} onChange={(e) => setFormData({...formData, lastName: e.target.value})} disabled={isViewOnly} className="w-full py-0.5 px-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none disabled:bg-gray-50 disabled:cursor-not-allowed" />
+                  <input type="text" name="lastName" placeholder="الأخير" required value={formData.lastName} onChange={(e) => setFormData({...formData, lastName: e.target.value})} disabled={isViewOnly} className="w-full py-0.5 px-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none disabled:bg-gray-50 disabled:cursor-not-allowed" />
                </div>
              </div>
 

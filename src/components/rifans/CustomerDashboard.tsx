@@ -1286,7 +1286,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                                   )}
                                 </div>
                                 <div>
-                                  <label className="text-[9px] text-muted block mb-1">العائلة</label>
+                                  <label className="text-[9px] text-muted block mb-1">الاسم الأخير</label>
                                   {isEditing ? (
                                     <input 
                                       type="text" 

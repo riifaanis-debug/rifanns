@@ -458,7 +458,7 @@ export const ProductRequestForm: React.FC<Props> = ({ productId }) => {
               </p>
               <p className="mb-2">
                 <b>3.</b> أوافق على دفع <b>رسوم فتح الملف</b> وقدرها{' '}
-                <b className="text-brand dark:text-gold">
+                <b className="text-brand dark:text-gold font-mono">
                   {formatAmount(INITIAL_FEE_SAR)} ريال سعودي
                 </b>
                 ، وأُقرّ بأن هذه الرسوم غير مسترجعة بمجرد البدء بالعمل على الطلب.
@@ -521,7 +521,7 @@ export const ProductRequestForm: React.FC<Props> = ({ productId }) => {
                 </div>
               </div>
               <div className="text-left">
-                <div className="text-[22px] font-extrabold text-brand dark:text-gold tabular-nums leading-none">
+                <div className="text-[22px] font-extrabold text-brand dark:text-gold tabular-nums leading-none font-mono">
                   {formatAmount(INITIAL_FEE_SAR)}
                 </div>
                 <div className="text-[10px] text-muted dark:text-gray-400">
@@ -587,7 +587,7 @@ export const ProductRequestForm: React.FC<Props> = ({ productId }) => {
                   type="submit"
                   className="w-full rounded-full bg-[#003087] text-white text-[13px] font-extrabold py-2.5 active:scale-95 flex items-center justify-center gap-2"
                 >
-                  <CreditCard size={14} /> سداد الرسوم — {formatAmount(INITIAL_FEE_SAR)} ر.س
+                  <CreditCard size={14} /> سداد الرسوم — <span className="font-mono">{formatAmount(INITIAL_FEE_SAR)}</span> ر.س
                 </button>
               </form>
             ) : (
@@ -596,10 +596,10 @@ export const ProductRequestForm: React.FC<Props> = ({ productId }) => {
                   بيانات التحويل البنكي
                 </div>
                 <div>اسم المستفيد: <b>ريفانس المالية</b></div>
-                <div>الآيبان: <b dir="ltr">SA00 0000 0000 0000 0000 0000</b></div>
+                <div>الآيبان: <b dir="ltr" className="font-mono">SA00 0000 0000 0000 0000 0000</b></div>
                 <div className="text-[11px] mt-2 text-muted">
                   بعد التحويل، يرجى إرسال صورة الإيصال على واتساب{' '}
-                  <a className="text-gold underline" href="https://wa.me/9668002440432" target="_blank" rel="noopener noreferrer">
+                  <a className="text-gold underline font-mono" href="https://wa.me/9668002440432" target="_blank" rel="noopener noreferrer">
                     8002440432
                   </a>
                 </div>
@@ -614,7 +614,7 @@ export const ProductRequestForm: React.FC<Props> = ({ productId }) => {
                 className="mt-0.5 w-4 h-4 accent-[#C7A969]"
               />
               <span className="text-[12px] text-brand dark:text-gray-200 leading-relaxed">
-                أُقرّ بأنني قمت بسداد رسوم فتح الملف ({formatAmount(INITIAL_FEE_SAR)} ر.س).
+                أُقرّ بأنني قمت بسداد رسوم فتح الملف (<span className="font-mono">{formatAmount(INITIAL_FEE_SAR)}</span> ر.س).
               </span>
             </label>
 

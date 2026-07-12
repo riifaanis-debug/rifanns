@@ -140,7 +140,7 @@ const Calculator: React.FC = () => {
                     type="number"
                     value={salary || ''}
                     onChange={handleSalaryChange}
-                    className="w-16 text-left text-sm font-bold text-brand focus:outline-none"
+                    className="w-16 text-left text-sm font-bold text-brand focus:outline-none font-mono"
                     placeholder="0"
                   />
                 </div>
@@ -171,7 +171,7 @@ const Calculator: React.FC = () => {
                     type="number"
                     value={obligations || ''}
                     onChange={handleObligationsChange}
-                    className="w-16 text-left text-sm font-bold text-brand focus:outline-none"
+                    className="w-16 text-left text-sm font-bold text-brand focus:outline-none font-mono"
                     placeholder="0"
                   />
                 </div>
@@ -238,7 +238,7 @@ const Calculator: React.FC = () => {
                           <span className="text-xs text-muted font-medium select-none">نسبة الاستقطاع</span>
                           <Info size={11} className="text-muted/60 group-hover:text-gold transition-colors" />
                         </button>
-                        <span className={`text-2xl font-bold ${result.statusColor} tabular-nums leading-none`}>
+                        <span className={`text-2xl font-bold ${result.statusColor} tabular-nums leading-none font-mono`}>
                           {(obligations/salary*100).toFixed(1)}%
                         </span>
                         <span className={`text-xs font-bold mt-1 px-2 py-0.5 rounded-full bg-white/80 border ${result.statusColor.replace('text-', 'border-')} ${result.statusColor}`}>
@@ -253,14 +253,14 @@ const Calculator: React.FC = () => {
                <div className="grid grid-cols-2 gap-3 mb-4">
                   <div className="bg-white p-3 rounded-2xl border border-gold/10 shadow-sm text-center group hover:border-gold/40 transition-colors">
                     <div className="text-xs text-muted mb-1 group-hover:text-brand transition-colors">الراتب المتبقي</div>
-                    <div className="text-xl font-bold text-brand tabular-nums">
+                    <div className="text-xl font-bold text-brand tabular-nums font-mono">
                       {formatAmount(salary - obligations)} <span className="text-xs font-normal text-muted">ر.س</span>
                     </div>
                   </div>
                   <div className="bg-gold-gradient p-[1px] rounded-2xl shadow-sm">
                     <div className="bg-white h-full w-full rounded-[15px] p-3 text-center flex flex-col justify-center items-center">
                         <div className="text-xs text-muted mb-1">القدرة التمويلية (المتبقية)</div>
-                        <div className="text-xl font-bold text-brand tabular-nums">
+                        <div className="text-xl font-bold text-brand tabular-nums font-mono">
                         {formatAmount(Math.floor(result.available))} <span className="text-xs font-normal text-muted">ر.س</span>
                         </div>
                     </div>
