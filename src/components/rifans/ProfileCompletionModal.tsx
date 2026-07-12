@@ -171,7 +171,7 @@ const ProfileCompletionModal: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-[11px] text-muted dark:text-gray-400 mb-1 text-right">اسم العائلة</label>
+              <label className="block text-[11px] text-muted dark:text-gray-400 mb-1 text-right">الاسم الأخير</label>
               <input
                 type="text"
                 value={lastName}
