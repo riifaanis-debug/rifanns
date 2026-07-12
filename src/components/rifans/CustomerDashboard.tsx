@@ -1271,10 +1271,10 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                                 </div>
                               </div>
                               <div className="flex items-center justify-between gap-2">
-                                <button onClick={() => setActiveTab('invoices')} className="bg-brand text-white text-[11px] font-bold px-4 py-2 rounded-xl">سداد الآن</button>
                                 <button onClick={() => setActiveTab('invoices')} className="text-[10px] text-brand/70 dark:text-gold font-bold flex items-center gap-1">
                                   عرض جميع الفواتير <ArrowRight size={11} />
                                 </button>
+                                <button onClick={() => setActiveTab('invoices')} className="bg-brand text-white text-[11px] font-bold px-4 py-2 rounded-xl">سداد الآن</button>
                               </div>
                             </div>
                           </>
