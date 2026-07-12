@@ -1245,8 +1245,8 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                           </div>
                         </div>
 
-                        {/* Quick actions — static grid (matches mockup) */}
-                        <div className="grid grid-cols-3 gap-2 sm:grid-cols-6 -mx-1 px-1 py-1" dir="rtl">
+                        {/* Quick actions — single row, all 6 side by side */}
+                        <div className="grid grid-cols-6 gap-2 -mx-1 px-1 py-1" dir="rtl">
                           {quickActions.map((a, i) => (
                             <button key={i} onClick={a.onClick} className="w-full aspect-square min-h-[72px] rounded-2xl bg-white dark:bg-[#12031a] border border-gold/40 flex flex-col items-center justify-center gap-1 hover:border-gold transition-all shadow-sm">
                               <a.icon size={20} className="text-brand dark:text-gold" strokeWidth={1.5} />
