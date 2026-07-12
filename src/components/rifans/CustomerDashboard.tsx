@@ -1379,7 +1379,6 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                             </div>
                             </div>
                           </div>
-                          </div>
 
                            {/* Quick actions — 3 cols on mobile, 6 on wider */}
                            <div className="grid grid-cols-3 sm:grid-cols-6 gap-2" dir="rtl">
