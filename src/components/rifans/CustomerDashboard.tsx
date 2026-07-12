@@ -497,48 +497,48 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
         {showCompleteProfile && (
           <div className="absolute inset-0 z-[100] bg-brand/90 backdrop-blur-md flex items-center justify-center p-4 text-right overflow-y-auto">
             <div className="bg-white dark:bg-[#12031a] w-full max-w-[340px] rounded-[24px] p-5 shadow-2xl border border-gold/30 animate-in zoom-in-95 duration-300 my-auto">
-              <div className="text-right mb-5 relative">
+              <div className="text-right mb-3 relative">
                 <button 
                   onClick={() => setShowCompleteProfile(false)}
-                  className="absolute -top-2 -left-2 w-8 h-8 rounded-full bg-gray-100 dark:bg-white/10 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-white/20 transition-colors"
+                  className="absolute -top-2 -left-2 w-7 h-7 rounded-full bg-gray-100 dark:bg-white/10 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-white/20 transition-colors"
                 >
-                  <X size={16} />
+                  <X size={14} />
                 </button>
-                <div className="w-14 h-14 bg-gold/10 rounded-full flex items-center justify-center mr-auto ml-auto mb-3 border border-gold/20">
-                  <UserPlus className="text-gold" size={28} />
+                <div className="w-11 h-11 bg-gold/10 rounded-full flex items-center justify-center mr-auto ml-auto mb-2 border border-gold/20">
+                  <UserPlus className="text-gold" size={22} />
                 </div>
-                <h3 className="text-lg font-bold text-brand dark:text-white">إكمال ملفك الشخصي</h3>
-                <p className="text-[10px] text-muted mt-1 leading-relaxed">يرجى تزويدنا ببعض المعلومات الإضافية لنتمكن من خدمتك بشكل أفضل</p>
+                <h3 className="text-base font-bold text-brand dark:text-white">إكمال ملفك الشخصي</h3>
+                <p className="text-[9px] text-muted mt-0.5 leading-relaxed">يرجى تزويدنا ببعض المعلومات الإضافية لنتمكن من خدمتك بشكل أفضل</p>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {profileError && (
-                  <div className="p-2.5 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800 rounded-xl text-red-600 dark:text-red-400 text-[10px] flex items-center gap-2 animate-in fade-in slide-in-from-top-1">
+                  <div className="p-2 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400 text-[10px] flex items-center gap-2 animate-in fade-in slide-in-from-top-1">
                     <AlertTriangle size={12} />
                     {profileError}
                   </div>
                 )}
 
-                <div className="grid grid-cols-3 gap-2">
-                  <div className="space-y-1">
-                    <label className="text-[9px] font-bold text-brand dark:text-gold/80 px-1">رقم الهوية الوطنية</label>
-                    <div className="w-full p-2 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl text-[11px] font-bold text-brand dark:text-white flex items-center justify-center">
+                <div className="grid grid-cols-3 gap-1.5">
+                  <div className="space-y-0.5">
+                    <label className="text-[8px] font-bold text-brand dark:text-gold/80 px-1">رقم الهوية الوطنية</label>
+                    <div className="w-full p-1.5 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg text-[11px] font-bold text-brand dark:text-white flex items-center justify-center">
                       {userData.nationalId || '—'}
                     </div>
                   </div>
-                  <div className="space-y-1">
-                    <label className="text-[9px] font-bold text-brand dark:text-gold/80 px-1">رقم الجوال <span className="text-red-500">*</span></label>
+                  <div className="space-y-0.5">
+                    <label className="text-[8px] font-bold text-brand dark:text-gold/80 px-1">رقم الجوال <span className="text-red-500">*</span></label>
                     <input 
                       type="tel" 
                       placeholder="05xxxxxxxx"
                       value={userData.mobile || ''}
                       onChange={(e) => { setUserData({...userData, mobile: e.target.value}); setProfileError(''); }}
                       onKeyDown={onlyNumbers}
-                      className="w-full p-2 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl text-[11px] focus:border-gold outline-none dark:text-white dir-ltr text-right"
+                      className="w-full p-1.5 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg text-[11px] focus:border-gold outline-none dark:text-white dir-ltr text-right"
                     />
                   </div>
-                  <div className="space-y-1">
-                    <label className="text-[9px] font-bold text-brand dark:text-gold/80 px-1">العمر</label>
+                  <div className="space-y-0.5">
+                    <label className="text-[8px] font-bold text-brand dark:text-gold/80 px-1">العمر</label>
                     <input 
                       type="text" 
                       inputMode="numeric"
@@ -546,41 +546,41 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                       onKeyDown={onlyNumbers}
                       value={userData.age || ''}
                       onChange={(e) => setUserData({...userData, age: e.target.value.replace(/\D/g, '')})}
-                      className="w-full p-2 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl text-[11px] focus:border-gold outline-none dark:text-white"
+                      className="w-full p-1.5 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg text-[11px] focus:border-gold outline-none dark:text-white"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-3 gap-2">
-                  <div className="space-y-1">
-                    <label className="text-[9px] font-bold text-brand dark:text-gold/80 px-1">المنطقة <span className="text-red-500">*</span></label>
+                <div className="grid grid-cols-3 gap-1.5">
+                  <div className="space-y-0.5">
+                    <label className="text-[8px] font-bold text-brand dark:text-gold/80 px-1">المنطقة <span className="text-red-500">*</span></label>
                     <select 
                       value={userData.region || ''} 
                       onChange={(e) => { setUserData({...userData, region: e.target.value, city: ''}); setProfileError(''); }}
-                      className="w-full p-2 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl text-[11px] focus:border-gold outline-none dark:text-white"
+                      className="w-full p-1.5 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg text-[11px] focus:border-gold outline-none dark:text-white"
                     >
                       <option value="">اختر</option>
                       {Object.keys(REGION_CITIES).map(r => <option key={r} value={r}>{r}</option>)}
                     </select>
                   </div>
-                  <div className="space-y-1">
-                    <label className="text-[9px] font-bold text-brand dark:text-gold/80 px-1">المدينة <span className="text-red-500">*</span></label>
+                  <div className="space-y-0.5">
+                    <label className="text-[8px] font-bold text-brand dark:text-gold/80 px-1">المدينة <span className="text-red-500">*</span></label>
                     <select 
                       value={userData.city || ''} 
                       onChange={(e) => { setUserData({...userData, city: e.target.value}); setProfileError(''); }}
-                      className="w-full p-2 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl text-[11px] focus:border-gold outline-none dark:text-white"
+                      className="w-full p-1.5 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg text-[11px] focus:border-gold outline-none dark:text-white"
                       disabled={!userData.region}
                     >
                       <option value="">اختر</option>
                       {userData.region && REGION_CITIES[userData.region]?.map(c => <option key={c} value={c}>{c}</option>)}
                     </select>
                   </div>
-                  <div className="space-y-1">
-                    <label className="text-[9px] font-bold text-brand dark:text-gold/80 px-1">الحالة الوظيفية <span className="text-red-500">*</span></label>
+                  <div className="space-y-0.5">
+                    <label className="text-[8px] font-bold text-brand dark:text-gold/80 px-1">الحالة الوظيفية <span className="text-red-500">*</span></label>
                     <select 
                       value={userData.jobStatus || ''} 
                       onChange={(e) => { setUserData({...userData, jobStatus: e.target.value}); setProfileError(''); }}
-                      className="w-full p-2 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl text-[11px] focus:border-gold outline-none dark:text-white"
+                      className="w-full p-1.5 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg text-[11px] focus:border-gold outline-none dark:text-white"
                     >
                       <option value="">اختر الحالة</option>
                       <option value="موظف حكومي">موظف حكومي</option>
@@ -591,60 +591,60 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                   </div>
                 </div>
 
-                <div className="space-y-1">
-                  <label className="text-[9px] font-bold text-brand dark:text-gold/80 px-1">اسم العميل (ثلاثي) <span className="text-red-500">*</span></label>
-                  <div className="grid grid-cols-3 gap-2">
+                <div className="space-y-0.5">
+                  <label className="text-[8px] font-bold text-brand dark:text-gold/80 px-1">اسم العميل (ثلاثي) <span className="text-red-500">*</span></label>
+                  <div className="grid grid-cols-3 gap-1.5">
                     <input 
                       type="text" 
                       placeholder="الأول"
                       value={userData.firstName || ''}
                       onChange={(e) => setUserData({...userData, firstName: e.target.value})}
-                      className="w-full p-2 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl text-[11px] focus:border-gold outline-none dark:text-white"
+                      className="w-full p-1.5 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg text-[11px] focus:border-gold outline-none dark:text-white"
                     />
                     <input 
                       type="text" 
                       placeholder="الأوسط"
                       value={userData.middleName || ''}
                       onChange={(e) => setUserData({...userData, middleName: e.target.value})}
-                      className="w-full p-2 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl text-[11px] focus:border-gold outline-none dark:text-white"
+                      className="w-full p-1.5 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg text-[11px] focus:border-gold outline-none dark:text-white"
                     />
                     <input 
                       type="text" 
                       placeholder="الأخير"
                       value={userData.lastName || ''}
                       onChange={(e) => setUserData({...userData, lastName: e.target.value})}
-                      className="w-full p-2 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl text-[11px] focus:border-gold outline-none dark:text-white"
+                      className="w-full p-1.5 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg text-[11px] focus:border-gold outline-none dark:text-white"
                     />
                   </div>
                 </div>
 
-                <div className="space-y-1">
-                  <label className="text-[9px] font-bold text-brand dark:text-gold/80 px-1">الجهة المالية <span className="text-red-500">*</span></label>
+                <div className="space-y-0.5">
+                  <label className="text-[8px] font-bold text-brand dark:text-gold/80 px-1">الجهة المالية <span className="text-red-500">*</span></label>
                   <select 
                     value={userData.bank || ''} 
                     onChange={(e) => { setUserData({...userData, bank: e.target.value}); setProfileError(''); }}
-                    className="w-full p-2 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl text-[11px] focus:border-gold outline-none dark:text-white"
+                    className="w-full p-1.5 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg text-[11px] focus:border-gold outline-none dark:text-white"
                   >
                     <option value="">اختر البنك أو الجهة التمويلية</option>
                     {BANKS.map(b => <option key={b} value={b}>{b}</option>)}
                   </select>
                 </div>
 
-                <div className="space-y-1">
-                  <label className="text-[9px] font-bold text-brand dark:text-gold/80 px-1">البريد الإلكتروني <span className="text-[8px] text-muted/60">(اختياري)</span></label>
-                  <p className="text-[8px] text-muted/50 px-1">لاستلام التقارير ونتائج الخدمات</p>
+                <div className="space-y-0.5">
+                  <label className="text-[8px] font-bold text-brand dark:text-gold/80 px-1">البريد الإلكتروني <span className="text-[8px] text-muted/60">(اختياري)</span></label>
+                  <p className="text-[7px] text-muted/50 px-1">لاستلام التقارير ونتائج الخدمات</p>
                   <input 
                     type="email" 
                     placeholder="example@email.com"
                     value={userData.email || ''}
                     onChange={(e) => setUserData({...userData, email: e.target.value})}
-                    className="w-full p-2 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl text-[11px] focus:border-gold outline-none dark:text-white dir-ltr text-right"
+                    className="w-full p-1.5 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg text-[11px] focus:border-gold outline-none dark:text-white dir-ltr text-right"
                   />
                 </div>
 
                 <Button
                   onClick={handleSaveProfile} 
-                  className="w-full py-3 mt-2 bg-gold text-brand hover:bg-gold/90 border-none text-sm"
+                  className="w-full py-2.5 mt-1 bg-gold text-brand hover:bg-gold/90 border-none text-sm"
                 >
                   حفظ ومتابعة
                 </Button>
