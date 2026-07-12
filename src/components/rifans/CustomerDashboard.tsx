@@ -1240,12 +1240,22 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                           {/* Personal Info */}
                           <div className="bg-white dark:bg-[#12031a] rounded-[24px] border border-gold/20 p-3 shadow-sm relative overflow-hidden" dir="rtl">
                             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold/30 to-transparent"></div>
-                            <div className="flex items-center gap-2 mb-3">
-                              <div className="w-7 h-7 rounded-lg bg-gold/10 flex items-center justify-center text-gold border border-gold/20">
-                                <User size={16} />
+                            <button
+                              type="button"
+                              onClick={() => setIsPersonalInfoOpen(v => !v)}
+                              className="w-full flex items-center justify-between gap-2 mb-3"
+                            >
+                              <div className="flex items-center gap-2">
+                                <div className="w-7 h-7 rounded-lg bg-gold/10 flex items-center justify-center text-gold border border-gold/20">
+                                  <User size={16} />
+                                </div>
+                                <h3 className="text-[14px] font-black text-brand dark:text-gold">البيانات الشخصية</h3>
                               </div>
-                              <h3 className="text-[14px] font-black text-brand dark:text-gold">البيانات الشخصية</h3>
-                            </div>
+                              <ChevronDown
+                                size={18}
+                                className={`text-gold transition-transform duration-300 ease-in-out ${isPersonalInfoOpen ? 'rotate-180' : ''}`}
+                              />
+                            </button>
 
                             <div className="grid grid-cols-1 gap-3">
                               {/* First row: First Name, Middle Name, Last Name */}
