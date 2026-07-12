@@ -1213,71 +1213,67 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                       ];
                      return (
                        <>
-                         {/* Hero — profile completion */}
-                        <div className="relative overflow-hidden rounded-[22px] p-5 bg-gradient-to-bl from-[#3a0a4d] via-brand to-[#160521] shadow-[0_20px_40px_-18px_rgba(34,4,44,0.7)]">
-                          <div className="absolute -left-8 -top-8 w-40 h-40 rounded-full border border-gold/10" />
-                          <div className="flex items-start justify-between gap-4">
-                            <div className="flex-1 text-right">
-                              <div className="text-[12px] text-gold/70 mb-1">مرحباً،</div>
-                              <div className="text-[20px] font-black text-gold leading-tight truncate">{userData.fullName || 'أكمل بياناتك'}</div>
-                              <div className="mt-4 grid grid-cols-2 gap-2">
-                                <div className="rounded-xl bg-white/5 border border-white/10 px-3 py-2">
-                                  <div className="text-[9px] text-white/50 mb-0.5 flex items-center gap-1 justify-end"><Clock size={9}/> آخر دخول</div>
-                                  <div className="text-[11px] text-white font-bold text-right">اليوم {timeStr}</div>
-                                </div>
-                                <div className="rounded-xl bg-white/5 border border-white/10 px-3 py-2">
-                                  <div className="text-[9px] text-white/50 mb-0.5 flex items-center gap-1 justify-end"><CreditCard size={9}/> رقم الملف</div>
-                                  <div className="text-[10px] text-white font-bold font-mono text-right truncate">{userData.fileNumber || '---'}</div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="flex flex-col items-center shrink-0">
-                              <div className="relative w-[86px] h-[86px]">
-                                <svg viewBox="0 0 80 80" className="w-full h-full -rotate-90">
-                                  <circle cx="40" cy="40" r="34" stroke="rgba(199,169,105,0.15)" strokeWidth="6" fill="none"/>
-                                  <circle cx="40" cy="40" r="34" stroke="#C7A969" strokeWidth="6" fill="none" strokeLinecap="round" strokeDasharray={dash} strokeDashoffset={dash - (dash * completion / 100)} />
-                                </svg>
-                                <div className="absolute inset-0 flex items-center justify-center text-gold text-[16px] font-black">{completion}%</div>
-                              </div>
-                              <div className="text-[9px] text-white/60 mt-1">درجة اكتمال الملف</div>
-                              <button onClick={() => setShowCompleteProfile(true)} className="mt-2 bg-gold text-brand text-[10px] font-bold px-3 py-1.5 rounded-lg">إكمال الملف</button>
-                            </div>
-                          </div>
-                        </div>
+                          {/* Hero — profile completion */}
+                         <div className="relative h-[158px] overflow-hidden rounded-[20px] px-6 py-5 bg-gradient-to-bl from-[#320540] via-brand to-[#19011f] shadow-[0_18px_34px_-18px_rgba(34,4,44,0.65)]" dir="rtl">
+                           <div className="absolute -left-14 -top-10 w-[178px] h-[178px] rounded-full border border-gold/10" />
+                           <div className="relative z-[1] flex h-full items-start justify-between gap-4">
+                             <div className="flex-1 min-w-0 text-right pt-1">
+                               <div className="text-[12px] text-gold/70 mb-2">مرحباً،</div>
+                               <div className="text-[24px] font-black text-gold leading-tight truncate">{userData.fullName || 'أكمل بياناتك'}</div>
+                               <div className="mt-6 grid grid-cols-2 gap-2.5">
+                                 <div className="h-[50px] rounded-[14px] bg-white/5 border border-white/10 px-3 py-2">
+                                   <div className="text-[10px] text-white/50 mb-1 flex items-center gap-1 justify-end"><Clock size={10}/> آخر دخول</div>
+                                   <div className="text-[13px] text-white font-black text-right">اليوم {timeStr}</div>
+                                 </div>
+                                 <div className="h-[50px] rounded-[14px] bg-white/5 border border-white/10 px-3 py-2">
+                                   <div className="text-[10px] text-white/50 mb-1 flex items-center gap-1 justify-end"><CreditCard size={10}/> رقم الملف</div>
+                                   <div className="text-[12px] text-white font-black font-mono text-right truncate">{userData.fileNumber || '---'}</div>
+                                 </div>
+                               </div>
+                             </div>
+                             <div className="flex w-[102px] shrink-0 flex-col items-center pt-1">
+                               <div className="relative w-[94px] h-[94px]">
+                                 <svg viewBox="0 0 80 80" className="w-full h-full -rotate-90">
+                                   <circle cx="40" cy="40" r="34" stroke="rgba(199,169,105,0.15)" strokeWidth="6" fill="none"/>
+                                   <circle cx="40" cy="40" r="34" stroke="#C7A969" strokeWidth="6" fill="none" strokeLinecap="round" strokeDasharray={dash} strokeDashoffset={dash - (dash * completion / 100)} />
+                                 </svg>
+                                 <div className="absolute inset-0 flex items-center justify-center text-gold text-[18px] font-black">{completion}%</div>
+                               </div>
+                               <div className="text-[11px] text-white/60 mt-1 whitespace-nowrap">درجة اكتمال الملف</div>
+                               <button onClick={() => setShowCompleteProfile(true)} className="mt-2 h-[28px] min-w-[78px] bg-gold text-brand text-[12px] font-black px-3 rounded-[8px]">إكمال الملف</button>
+                             </div>
+                           </div>
+                         </div>
 
-                        {/* Quick actions — single row, all 6 side by side */}
-                        <div className="grid grid-cols-6 gap-2 -mx-1 px-1 py-1" dir="rtl">
+                         {/* Quick actions — single row, all 6 side by side */}
+                         <div className="grid grid-cols-6 gap-1.5 -mx-4 px-4 py-3 bg-white/40" dir="rtl">
                           {quickActions.map((a, i) => (
-                            <button key={i} onClick={a.onClick} className="w-full aspect-square min-h-[72px] rounded-2xl bg-white dark:bg-[#12031a] border border-gold/40 flex flex-col items-center justify-center gap-1 hover:border-gold transition-all shadow-sm">
-                              <a.icon size={20} className="text-brand dark:text-gold" strokeWidth={1.5} />
-                              <span className="text-[10px] font-bold text-brand dark:text-white whitespace-nowrap">{a.label}</span>
+                             <button key={i} onClick={a.onClick} className="w-full h-[52px] rounded-[12px] bg-white dark:bg-[#12031a] border border-gold/60 flex flex-col items-center justify-center gap-0.5 hover:border-gold transition-all shadow-[0_6px_14px_rgba(34,4,44,0.05)]">
+                               <a.icon size={19} className="text-brand dark:text-gold" strokeWidth={1.8} />
+                               <span className="text-[10px] leading-none font-black text-brand dark:text-white whitespace-nowrap">{a.label}</span>
                             </button>
                           ))}
                         </div>
 
                          {/* Requires action — red overdue invoice */}
                         {overdue && (
-                          <>
-                            <h3 className="text-[13px] font-black text-brand dark:text-white text-right pt-1">يتطلب إجراء منك</h3>
-                            <div className="rounded-2xl bg-red-50/70 dark:bg-red-950/30 border border-red-100 dark:border-red-900/40 p-3.5">
-                              <div className="flex items-start gap-3 mb-3">
-                                <div className="flex-1 text-right">
-                                  <div className="text-[14px] font-black text-red-600">فاتورة مستحقة الدفع</div>
-                                  <div className="text-[10px] text-gray-600 dark:text-gray-400 mt-1 leading-relaxed">لديك فاتورة رقم {overdue.invoice_number || overdue.number || '---'} بمبلغ {formatAmount(overdue.amount || 0)} ر.س</div>
-                                </div>
-                                <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center border border-red-200 shrink-0 relative">
-                                  <Receipt size={18} className="text-red-500" />
-                                  <span className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-red-500 border-2 border-white flex items-center justify-center text-white text-[8px] font-black">!</span>
-                                </div>
+                          <div className="-mx-4 px-4 pt-7 pb-7 bg-[#F8F6FB]">
+                            <h3 className="text-[18px] font-black text-brand dark:text-white text-right mb-6">يتطلب إجراء منك</h3>
+                            <div className="relative h-[112px] rounded-[18px] bg-red-50/70 dark:bg-red-950/30 border border-red-100 dark:border-red-900/40 px-5 py-5" dir="ltr">
+                              <div className="absolute left-7 top-7 w-12 h-12 rounded-[14px] bg-white flex items-center justify-center border border-red-200 shrink-0">
+                                <Receipt size={22} className="text-red-500" />
+                                <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-red-500 border-2 border-white flex items-center justify-center text-white text-[9px] font-black">!</span>
                               </div>
-                              <div className="flex items-center justify-between gap-2">
-                                <button onClick={() => setActiveTab('invoices')} className="text-[10px] text-brand/70 dark:text-gold font-bold flex items-center gap-1">
-                                  عرض جميع الفواتير <ArrowRight size={11} />
-                                </button>
-                                <button onClick={() => setActiveTab('invoices')} className="bg-brand text-white text-[11px] font-bold px-4 py-2 rounded-xl">سداد الآن</button>
+                              <div className="absolute right-5 top-7 text-right" dir="rtl">
+                                <div className="text-[20px] leading-none font-black text-red-600">فاتورة مستحقة الدفع</div>
+                                <div className="text-[12px] text-gray-600 dark:text-gray-400 mt-3 leading-relaxed">لديك فاتورة رقم -- بمبلغ {formatAmount(overdue.amount || 0)} ر.س</div>
                               </div>
+                              <button onClick={() => setActiveTab('invoices')} className="absolute left-7 bottom-6 text-[13px] text-brand/70 dark:text-gold font-black flex items-center gap-1" dir="rtl">
+                                عرض جميع الفواتير <ArrowRight size={14} />
+                              </button>
+                              <button onClick={() => setActiveTab('invoices')} className="absolute right-5 bottom-5 h-[44px] min-w-[118px] bg-brand text-white text-[14px] font-black px-6 rounded-[14px]">سداد الآن</button>
                             </div>
-                          </>
+                          </div>
                         )}
                       </>
                     );
