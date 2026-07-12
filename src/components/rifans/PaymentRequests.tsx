@@ -258,8 +258,8 @@ export const AdminPaymentRequests: React.FC = () => {
                 <div className="flex justify-between items-center text-[11px]">
                   <span className="text-muted flex items-center gap-1"><Clock size={10} /> {new Date(r.created_at).toLocaleDateString('ar-SA')}</span>
                   <div className="flex gap-2">
-                    <span className="font-bold text-brand dark:text-gold">{formatAmount(r.amount_sar)} ر.س</span>
-                    <span className="text-muted">/ ${formatAmount(r.amount_usd)}</span>
+                    <span className="font-bold text-brand dark:text-gold font-mono">{formatAmount(r.amount_sar)} ر.س</span>
+                    <span className="text-muted font-mono">/ ${formatAmount(r.amount_usd)}</span>
                   </div>
                 </div>
               </div>
@@ -335,7 +335,7 @@ export const CustomerPaymentRequests: React.FC<CustomerPaymentRequestsProps> = (
           {/* Body matching uploaded design */}
           <div className="space-y-2 text-right text-[12px] text-brand dark:text-white leading-relaxed">
             <p>
-              تم إصدار فاتورة بمبلغ : <span className="font-black text-gold">{formatAmount(r.amount_sar)} ر.س</span>
+              تم إصدار فاتورة بمبلغ : <span className="font-black text-gold font-mono">{formatAmount(r.amount_sar)} ر.س</span>
             </p>
             {r.description && (
               <p>
@@ -351,13 +351,13 @@ export const CustomerPaymentRequests: React.FC<CustomerPaymentRequestsProps> = (
 
           {/* USD/SAR boxes */}
           <div className="grid grid-cols-2 gap-2 my-3">
-            <div className="border border-gold/30 rounded-xl p-2 text-center bg-gray-50 dark:bg-[#1a0830]">
+              <div className="border border-gold/30 rounded-xl p-2 text-center bg-gray-50 dark:bg-[#1a0830]">
               <div className="text-[9px] text-muted mb-0.5">USD</div>
-              <div className="text-[13px] font-black text-brand dark:text-gold">${formatAmount(r.amount_usd)}</div>
+              <div className="text-[13px] font-black text-brand dark:text-gold font-mono">${formatAmount(r.amount_usd)}</div>
             </div>
             <div className="border border-gold/30 rounded-xl p-2 text-center bg-gray-50 dark:bg-[#1a0830]">
               <div className="text-[9px] text-muted mb-0.5">SAR</div>
-              <div className="text-[13px] font-black text-brand dark:text-gold">{formatAmount(r.amount_sar)} ر.س</div>
+              <div className="text-[13px] font-black text-brand dark:text-gold font-mono">{formatAmount(r.amount_sar)} ر.س</div>
             </div>
           </div>
 
