@@ -395,7 +395,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
                         <td style={{ ...tableCellStyle, borderLeft: '1px solid #e8e0ed' }}>{idx === 0 ? (submission.data.bank || 'الجهة المالية') : ''}</td>
                         <td style={{ ...tableCellStyle, borderLeft: '1px solid #e8e0ed' }}>{product.type}</td>
                         <td style={{ ...tableCellStyle, borderLeft: '1px solid #e8e0ed', fontFamily: 'monospace', fontSize: '16pt' }}>{product.accountNumber || product.account_number || '---'}</td>
-                        <td style={{ ...tableCellStyle, fontWeight: 700, color: '#b91c1c', fontSize: '17pt' }}>{formatAmount(product.amount)}</td>
+                        <td style={{ ...tableCellStyle, fontWeight: 700, color: '#b91c1c', fontSize: '17pt', fontFamily: 'monospace' }}>{formatAmount(product.amount)}</td>
                       </tr>
                     ))}
                     {/* Total row */}
@@ -403,7 +403,7 @@ const ContractPage: React.FC<ContractPageProps> = ({ submissionId, onClose }) =>
                       <td colSpan={3} style={{ ...tableCellStyle, fontWeight: 700, fontSize: '17pt', borderTop: '2px solid #d4c8d9', borderLeft: '1px solid #d4c8d9', borderBottom: 'none' }}>
                         إجمالي المديونية
                       </td>
-                      <td style={{ ...tableCellStyle, fontWeight: 700, fontSize: '17pt', color: '#22042C', borderTop: '2px solid #d4c8d9', borderBottom: 'none' }}>
+                      <td style={{ ...tableCellStyle, fontWeight: 700, fontSize: '17pt', color: '#22042C', borderTop: '2px solid #d4c8d9', borderBottom: 'none', fontFamily: 'monospace' }}>
                         {formatAmount(totalDebt)} ريال سعودي
                       </td>
                     </tr>
