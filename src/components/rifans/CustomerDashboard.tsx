@@ -73,6 +73,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
   const [isUploading, setIsUploading] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [unreadChatCount, setUnreadChatCount] = useState(0);
+  const [isPersonalInfoOpen, setIsPersonalInfoOpen] = useState(true);
 
   // Fetch unread chat messages count
   useEffect(() => {
