@@ -146,7 +146,7 @@ const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
           <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-xl transition-colors">
             <X size={20} />
           </button>
-          <span className="text-sm font-bold text-brand">فاتورة رقم {invoice.id}</span>
+          <span className="text-sm font-bold text-brand">فاتورة رقم <span className="font-mono">{invoice.id}</span></span>
         </div>
         <div className="flex items-center gap-2">
           <button onClick={handleDownload} disabled={isDownloading} className="p-2 hover:bg-gray-100 rounded-xl transition-colors text-gold">
@@ -228,14 +228,14 @@ const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
                     <tr key={i} className="border-b border-gray-200">
                       <td className="p-2.5 text-brand">{p.type}</td>
                       <td className="p-2.5 text-muted font-mono">{p.accountNumber || '---'}</td>
-                      <td className="p-2.5 font-bold text-brand">{formatAmount(p.amount)} ر.س</td>
+                      <td className="p-2.5 font-bold text-brand font-mono">{formatAmount(p.amount)} ر.س</td>
                     </tr>
                   ))}
                 </tbody>
                 <tfoot>
                   <tr className="bg-gray-50 border-t-2 border-gold/40">
                     <td colSpan={2} className="p-2.5 font-black text-brand text-right">إجمالي المديونية</td>
-                    <td className="p-2.5 font-black text-brand">{formatAmount(totalDebt)} ر.س</td>
+                    <td className="p-2.5 font-black text-brand font-mono">{formatAmount(totalDebt)} ر.س</td>
                   </tr>
                 </tfoot>
               </table>
@@ -252,12 +252,12 @@ const InvoicePage: React.FC<InvoicePageProps> = ({ submissionId, onClose }) => {
                 {!isRescheduling && (
                   <div className="flex justify-between items-center text-xs">
                     <span className="text-muted">إجمالي المبلغ الأساسي:</span>
-                    <span className="font-bold text-brand">{formatAmount(totalDebt)} ر.س</span>
+                    <span className="font-bold text-brand font-mono">{formatAmount(totalDebt)} ر.س</span>
                   </div>
                 )}
                 <div className="flex justify-between items-center pt-2 border-t border-gold/30">
                   <span className="text-sm font-black text-brand">المبلغ المستحق</span>
-                  <span className="text-lg font-black text-gold">{formatAmount(invoice.amount)} ر.س</span>
+                  <span className="text-lg font-black text-gold font-mono">{formatAmount(invoice.amount)} ر.س</span>
                 </div>
               </div>
               {invoice.status !== 'paid' && (

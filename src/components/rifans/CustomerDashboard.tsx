@@ -1109,7 +1109,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                        <div className="flex items-center gap-2">
                          <Receipt className="text-gold" size={16} />
                          <h3 className="text-[13px] font-bold text-brand dark:text-white">
-                           فاتورة رقم {inv.id}
+                           فاتورة رقم <span className="font-mono">{inv.id}</span>
                          </h3>
                        </div>
                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${inv.status === 'paid' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>
@@ -1123,7 +1123,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                      </p>
                      <div className="flex justify-between items-center mb-3">
                        <span className="text-[11px] text-muted">{new Date(inv.created_at).toLocaleDateString('ar-SA')}</span>
-                       <span className="text-sm font-black text-gold">{formatAmount(inv.amount)} ر.س</span>
+                       <span className="text-sm font-black text-gold font-mono">{formatAmount(inv.amount)} ر.س</span>
                      </div>
                      <button 
                        onClick={() => window.location.hash = `#/invoice/${inv.submission_id}`}
@@ -1156,7 +1156,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                      <div className="flex justify-between items-start mb-2">
                        <div className="flex items-center gap-2">
                          <FileText className="text-gold" size={16} />
-                         <h3 className="text-[13px] font-bold text-brand dark:text-white">سند لأمر رقم {note.id}</h3>
+                         <h3 className="text-[13px] font-bold text-brand dark:text-white">سند لأمر رقم <span className="font-mono">{note.id}</span></h3>
                        </div>
                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${note.status === 'signed' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>
                          {note.status === 'signed' ? 'موقّع' : 'بانتظار التوقيع'}
@@ -1164,7 +1164,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                      </div>
                      <div className="flex justify-between items-center mb-3">
                        <span className="text-[11px] text-muted">{new Date(note.created_at).toLocaleDateString('ar-SA')}</span>
-                       <span className="text-sm font-black text-gold">{formatAmount(note.amount)} ر.س</span>
+                       <span className="text-sm font-black text-gold font-mono">{formatAmount(note.amount)} ر.س</span>
                      </div>
                      <button
                        onClick={() => window.location.hash = `#/promissory/${note.id}`}
@@ -1292,10 +1292,10 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                                       type="text" 
                                       value={userData.lastName || ''} 
                                       onChange={(e) => setUserData({...userData, lastName: e.target.value})}
-                                      className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none"
+                                      className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none font-mono"
                                     />
                                   ) : (
-                                    <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">
+                                    <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5 font-mono">
                                       {userData.lastName || ''}
                                     </div>
                                   )}
@@ -1328,11 +1328,11 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                                       inputMode="numeric"
                                       value={userData.mobile || ''} 
                                       readOnly
-                                      className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] font-bold tracking-wider focus:border-gold outline-none dir-ltr text-left bg-gray-50 cursor-not-allowed opacity-80"
+                                      className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] font-bold tracking-wider focus:border-gold outline-none dir-ltr text-left bg-gray-50 cursor-not-allowed opacity-80 font-mono"
                                       placeholder="05xxxxxxxx"
                                     />
                                   ) : (
-                                    <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5 dir-ltr text-right">
+                                    <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5 dir-ltr text-right font-mono">
                                       {userData.mobile || ''}
                                     </div>
                                   )}
@@ -1345,11 +1345,11 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                                       inputMode="numeric"
                                       value={userData.age || ''} 
                                       onChange={(e) => setUserData({...userData, age: e.target.value.replace(/\D/g, '')})}
-                                      className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none"
+                                      className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none font-mono"
                                       placeholder="بالسنوات"
                                     />
                                   ) : (
-                                    <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">
+                                    <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5 font-mono">
                                       {userData.age || ''}
                                     </div>
                                   )}

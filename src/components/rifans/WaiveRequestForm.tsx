@@ -534,7 +534,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
            <h2 className="text-[22px] font-extrabold text-brand mb-2">تم استلام طلبك بنجاح</h2>
            <p className="text-[13px] text-muted mb-6 leading-relaxed">
              شكراً لك. تم تسجيل طلب الإعفاء الخاص بك برقم 
-             <span className="font-bold text-brand block mt-1 text-[16px]">{requestId}</span>
+             <span className="font-bold text-brand block mt-1 text-[16px] font-mono">{requestId}</span>
              سيقوم فريقنا بالتواصل معك قريباً لاستكمال الإجراءات.
            </p>
            <Button onClick={onClose} className="w-full">العودة للرئيسية</Button>
@@ -591,11 +591,11 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
              {/* Row 2: National ID & Mobile */}
              <div>
                 <label className="block text-[11px] font-bold text-brand mb-1">رقم الهوية <span className="text-red-500">*</span></label>
-                <input type="text" name="nationalId" inputMode="numeric" onKeyDown={onlyNumbers} maxLength={10} required value={formData.nationalId} onChange={(e) => setFormData({...formData, nationalId: e.target.value})} disabled={isViewOnly} className="w-full py-0.5 px-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none disabled:bg-gray-50 disabled:cursor-not-allowed" placeholder="10 أرقام" />
+                <input type="text" name="nationalId" inputMode="numeric" onKeyDown={onlyNumbers} maxLength={10} required value={formData.nationalId} onChange={(e) => setFormData({...formData, nationalId: e.target.value})} disabled={isViewOnly} className="w-full py-0.5 px-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none disabled:bg-gray-50 disabled:cursor-not-allowed font-mono" placeholder="10 أرقام" />
              </div>
              <div>
                 <label className="block text-[11px] font-bold text-brand mb-1">رقم الجوال <span className="text-red-500">*</span></label>
-                <input type="text" name="mobile" inputMode="numeric" required value={formData.mobile} onChange={(e) => { const val = e.target.value.replace(/\D/g, '').slice(0, 10); setFormData({...formData, mobile: val}); }} onKeyDown={onlyNumbers} maxLength={10} disabled={isViewOnly} className="w-full py-0.5 px-1.5 rounded-lg border border-gold/30 text-[12px] font-bold tracking-wider focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none text-left dir-ltr disabled:bg-gray-50 disabled:cursor-not-allowed" placeholder="05xxxxxxxx" />
+                <input type="text" name="mobile" inputMode="numeric" required value={formData.mobile} onChange={(e) => { const val = e.target.value.replace(/\D/g, '').slice(0, 10); setFormData({...formData, mobile: val}); }} onKeyDown={onlyNumbers} maxLength={10} disabled={isViewOnly} className="w-full py-0.5 px-1.5 rounded-lg border border-gold/30 text-[12px] font-bold tracking-wider focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none text-left dir-ltr disabled:bg-gray-50 disabled:cursor-not-allowed font-mono" placeholder="05xxxxxxxx" />
                 <p className="text-[9px] text-muted mt-0.5 pr-1">يبدأ بـ 05 - 10 أرقام</p>
              </div>
 
@@ -618,7 +618,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
              {/* Row 4: Age & Job Status */}
              <div>
                 <label className="block text-[11px] font-bold text-brand mb-1">العمر <span className="text-red-500">*</span></label>
-                <input type="text" name="age" inputMode="numeric" onKeyDown={onlyNumbers} required value={formData.age} onChange={(e) => setFormData({...formData, age: e.target.value})} disabled={isViewOnly} className="w-full py-0.5 px-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none disabled:bg-gray-50 disabled:cursor-not-allowed" placeholder="بالسنوات" />
+                <input type="text" name="age" inputMode="numeric" onKeyDown={onlyNumbers} required value={formData.age} onChange={(e) => setFormData({...formData, age: e.target.value})} disabled={isViewOnly} className="w-full py-0.5 px-1.5 rounded-lg border border-gold/30 text-[12px] focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none disabled:bg-gray-50 disabled:cursor-not-allowed font-mono" placeholder="بالسنوات" />
              </div>
              <div>
                 <label className="block text-[11px] font-bold text-brand mb-1">الحالة الوظيفية <span className="text-red-500">*</span></label>
@@ -669,7 +669,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                           value={product.accountNumber || ''}
                           onChange={(e) => updateProduct(product.id, 'accountNumber', e.target.value.replace(/\D/g, ''))}
                           disabled={isViewOnly}
-                          className="w-full py-1 px-2 rounded-[10px] border border-gold/20 text-[12px] disabled:bg-gray-50 disabled:cursor-not-allowed" 
+                          className="w-full py-1 px-2 rounded-[10px] border border-gold/20 text-[12px] disabled:bg-gray-50 disabled:cursor-not-allowed font-mono" 
                           placeholder="رقم الحساب الجاري"
                          />
                       </div>
@@ -684,7 +684,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                           value={product.amount}
                           onChange={(e) => updateProduct(product.id, 'amount', e.target.value.replace(/\D/g, ''))}
                           disabled={isViewOnly}
-                          className="w-full py-1 px-2 rounded-[10px] border border-gold/20 text-[12px] disabled:bg-gray-50 disabled:cursor-not-allowed" 
+                          className="w-full py-1 px-2 rounded-[10px] border border-gold/20 text-[12px] disabled:bg-gray-50 disabled:cursor-not-allowed font-mono" 
                           placeholder="0.00"
                         />
                       </div>
@@ -737,7 +737,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
 
               <div className="mt-4 pt-3 border-t border-gold/10 flex justify-between items-center">
                 <span className="text-[12px] text-muted font-bold">إجمالي المبالغ المحجوزة:</span>
-                <span className="text-[14px] font-extrabold text-brand tabular-nums">{formatAmount(totalAmount)} ر.س</span>
+                <span className="text-[14px] font-extrabold text-brand tabular-nums font-mono">{formatAmount(totalAmount)} ر.س</span>
               </div>
             </div>
           ) : (
@@ -777,7 +777,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                            value={product.accountNumber || ''}
                            onChange={(e) => updateProduct(product.id, 'accountNumber', e.target.value.replace(/\D/g, ''))}
                            disabled={isViewOnly}
-                           className="w-full py-1 px-2 rounded-[10px] border border-gold/20 text-[12px] disabled:bg-gray-50 disabled:cursor-not-allowed"
+                            className="w-full py-1 px-2 rounded-[10px] border border-gold/20 text-[12px] disabled:bg-gray-50 disabled:cursor-not-allowed font-mono"
                            placeholder="رقم الحساب"
                          />
                        </div>
@@ -792,7 +792,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                            value={product.amount}
                            onChange={(e) => updateProduct(product.id, 'amount', e.target.value.replace(/\D/g, ''))}
                            disabled={isViewOnly}
-                           className="w-full py-1 px-2 rounded-[10px] border border-gold/20 text-[12px] disabled:bg-gray-50 disabled:cursor-not-allowed"
+                            className="w-full py-1 px-2 rounded-[10px] border border-gold/20 text-[12px] disabled:bg-gray-50 disabled:cursor-not-allowed font-mono"
                            placeholder="0.00"
                          />
                        </div>
@@ -816,7 +816,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
 
               <div className="mt-4 pt-3 border-t border-gold/10 flex justify-between items-center">
                  <span className="text-[12px] text-muted font-bold">المجموع الكلي:</span>
-                 <span className="text-[14px] font-extrabold text-brand tabular-nums">{formatAmount(totalAmount)} ر.س</span>
+                 <span className="text-[14px] font-extrabold text-brand tabular-nums font-mono">{formatAmount(totalAmount)} ر.س</span>
               </div>
             </div>
           )}

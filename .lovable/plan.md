@@ -1,73 +1,31 @@
-## الهدف
-إعادة تصميم لوحة تحكم العميل (`CustomerDashboard`) لنسخة الجوال فقط لتتشابه مع الصور المرفقة من حيث:
-- كبر حجم الخط ووضوحه
-- ارتفاع الحقول المريح (12h)
-- تباعد مريح بين الحقول والبطاقات
-- هوامش جانبية واضحة للصفحة
-- بطاقات بيضاء بحواف دائرية كبيرة وظلال ناعمة (Bento Grid)
+Plan: Unify Number Font to Monospace Across the Site
 
-بدون تغيير سطح المكتب، وبدون تغيير أي منطق/بيانات.
+Goal: Make every numeric value in the site use the same monospace font (`font-mono`) currently applied to the national ID number, so all numbers render consistently and are easy to read/scan.
 
-## القرارات المعتمدة
-- **الألوان**: هوية ريفانس — `#22042C` بنفسجي غامق، `#C7A969` ذهبي، خلفية `#FAFAF7`، حدود `#EDE7DC`
-- **الخط**: Cairo للعناوين + Tajawal للنصوص (إضافة Cairo من Google Fonts في `index.html` وتسجيله في `tailwind.config.ts` كـ `font-display`)
-- **التخطيط**: Bento Grid — بطاقات بأحجام مختلفة على الشاشة الرئيسية
+Scope: Frontend CSS/Tailwind only — no data or business logic changes.
 
-## ملفات التعديل
-- `src/components/rifans/CustomerDashboard.tsx` — تعديل بصري داخل `useIsMobile()` فقط
-- `index.html` — إضافة رابط Google Fonts لخط Cairo
-- `tailwind.config.ts` — إضافة `font-display: ['Cairo', ...]`
+Implementation steps:
 
-## التغييرات البصرية (جوال فقط)
+1. Audit number display locations
+   - Search the codebase for all places that display numeric data (national IDs, mobile numbers, ages, amounts/prices, invoice totals, submission IDs, file numbers, request counts, contract numbers, bank account numbers, IBANs, etc.).
+   - Focus on the components listed in the codebase context: CustomerDashboard, PaymentRequests, WaiveRequestForm, OpenRequestBuilder, AuthPage, ProfileCompletionModal, ClientCard, InvoicePage, ContractPage, etc.
 
-### هوامش الصفحة
-- حاوية رئيسية: `px-5 py-6`
-- خلفية عامة: `#FAFAF7`
-- مسافة بين الأقسام: `space-y-4`
+2. Define the consistent style
+   - Apply `font-mono` to all numeric display elements.
+   - Keep existing font size, color, weight, and layout unchanged — only change the font family.
+   - For text inputs that accept numbers, add `font-mono` to the input field while keeping current padding/height/border.
 
-### الهيدر
-- ارتفاع مريح `h-16`، عنوان الصفحة في المنتصف بخط `text-[18px] font-bold font-display`
-- تحته التاريخ بالعربي `text-[12px] text-gray-500`
-- زر الخروج يسارًا وأيقونة قائمة يمينًا داخل حاوية دائرية `rounded-full bg-white shadow-sm`
+3. Update components in priority order
+   - CustomerDashboard: national ID, mobile, age, salary, submission IDs, file numbers, invoice amounts.
+   - PaymentRequests: amounts, request IDs, account numbers.
+   - WaiveRequestForm / OpenRequestBuilder: amounts, IDs, phone numbers.
+   - AuthPage: mobile/national ID inputs.
+   - InvoicePage / ContractPage: amounts, dates, invoice numbers.
+   - ClientCard: card numbers/validity dates.
 
-### بطاقة بيانات العميل (Bento كبير)
-- بطاقة بيضاء `rounded-3xl p-5 shadow-[0_2px_12px_rgba(34,4,44,0.06)]`
-- اسم العميل عنوان كبير `text-[20px] font-extrabold font-display text-[#22042C]`
-- تحت الاسم "بيانات العميل" رمادي `text-[13px]`
-- أيقونة دائرية ذهبية `w-14 h-14 rounded-2xl bg-[#EDE7DC]` في الطرف
-- ثلاث حقول (رقم الملف، الجوال، البريد) كل واحد:
-  - ارتفاع `h-12`
-  - خلفية `bg-[#FAFAF7]` مع حد `border border-[#EDE7DC] rounded-2xl px-4`
-  - Label ذهبي صغير `text-[12px] text-[#C7A969]` + أيقونة
-  - القيمة `text-[15px] font-semibold text-[#22042C]`
-  - مسافة بينها `space-y-3`
+4. Verify
+   - Run TypeScript check (`tsc --noEmit`).
+   - Run production build to catch any CSS/compilation errors.
+   - Optionally capture a screenshot of the dashboard to confirm number styling is consistent.
 
-### شبكة المؤشرات (Bento 2×2 مختلف الأحجام)
-- بطاقة كبيرة عرضها كامل: "ملخص الحساب" (عدد الطلبات النشطة والمبلغ)
-  - رقم كبير `text-[24px] font-extrabold` بلون البنفسجي
-- تحتها شبكة 2×2 `grid grid-cols-2 gap-3`:
-  - بطاقات: الطلبات / العقود / الفواتير / سندات الأمر
-  - كل بطاقة `rounded-2xl bg-white p-4` مع أيقونة ملوّنة صغيرة `w-9 h-9 rounded-xl`
-  - العنوان `text-[13px] text-gray-500`، الرقم `text-[22px] font-extrabold`
-  - شارة صغيرة أسفلها كـ CC/AL/PF بألوان مختلفة
-
-### أزرار الإجراءات السريعة
-- شريط أفقي فيه 4 أزرار (طلب جديد، محادثة، فواتير، مستندات)
-- كل زر بطاقة `rounded-2xl bg-white p-3` أيقونة أعلى ونص تحت `text-[12px] font-semibold`
-- المسافة `gap-3`
-
-### التبويبات (Bottom Tabs)
-- ارتفاع `h-16`، أيقونة `w-6 h-6`، نص `text-[11px] font-semibold`
-- الشريحة النشطة بلون ذهبي مع خلفية دائرية خفيفة
-
-### الأزرار العامة
-- ارتفاع `h-12 rounded-2xl text-[15px] font-bold`
-- الأساسي: تعبئة `#22042C` بنص أبيض / أو ذهبي `#C7A969`
-- الثانوي: حد فقط بلون البنفسجي
-
-## ضمانات
-- كل التعديلات مغلّفة بـ `useIsMobile()` — سطح المكتب لا يتأثر إطلاقًا
-- لا تعديل على أي استعلام Supabase أو منطق تبويب
-- الحفاظ على هوية ريفانس (بنفسجي `#22042C` + ذهبي `#C7A969`)
-- لا صور أشخاص، لا أيقونات خارج المكتبة الحالية `lucide-react`
-- Font-size داخل الحقول ≥ 16px لتجنّب zoom iOS تلقائيًا
+Out of scope: changing font sizes, colors, layout, or form behavior; only the font family of numbers will be touched.
