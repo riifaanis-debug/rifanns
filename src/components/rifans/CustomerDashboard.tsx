@@ -519,6 +519,78 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                   </div>
                 )}
 
+                <div className="grid grid-cols-3 gap-2">
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-bold text-brand dark:text-gold/80 px-1">رقم الهوية الوطنية</label>
+                    <div className="w-full p-2 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl text-[11px] font-bold text-brand dark:text-white flex items-center justify-center">
+                      {userData.nationalId || '—'}
+                    </div>
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-bold text-brand dark:text-gold/80 px-1">رقم الجوال <span className="text-red-500">*</span></label>
+                    <input 
+                      type="tel" 
+                      placeholder="05xxxxxxxx"
+                      value={userData.mobile || ''}
+                      onChange={(e) => { setUserData({...userData, mobile: e.target.value}); setProfileError(''); }}
+                      onKeyDown={onlyNumbers}
+                      className="w-full p-2 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl text-[11px] focus:border-gold outline-none dark:text-white dir-ltr text-right"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-bold text-brand dark:text-gold/80 px-1">العمر</label>
+                    <input 
+                      type="text" 
+                      inputMode="numeric"
+                      placeholder="بالسنوات"
+                      onKeyDown={onlyNumbers}
+                      value={userData.age || ''}
+                      onChange={(e) => setUserData({...userData, age: e.target.value.replace(/\D/g, '')})}
+                      className="w-full p-2 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl text-[11px] focus:border-gold outline-none dark:text-white"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-2">
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-bold text-brand dark:text-gold/80 px-1">المنطقة <span className="text-red-500">*</span></label>
+                    <select 
+                      value={userData.region || ''} 
+                      onChange={(e) => { setUserData({...userData, region: e.target.value, city: ''}); setProfileError(''); }}
+                      className="w-full p-2 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl text-[11px] focus:border-gold outline-none dark:text-white"
+                    >
+                      <option value="">اختر</option>
+                      {Object.keys(REGION_CITIES).map(r => <option key={r} value={r}>{r}</option>)}
+                    </select>
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-bold text-brand dark:text-gold/80 px-1">المدينة <span className="text-red-500">*</span></label>
+                    <select 
+                      value={userData.city || ''} 
+                      onChange={(e) => { setUserData({...userData, city: e.target.value}); setProfileError(''); }}
+                      className="w-full p-2 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl text-[11px] focus:border-gold outline-none dark:text-white"
+                      disabled={!userData.region}
+                    >
+                      <option value="">اختر</option>
+                      {userData.region && REGION_CITIES[userData.region]?.map(c => <option key={c} value={c}>{c}</option>)}
+                    </select>
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-bold text-brand dark:text-gold/80 px-1">الحالة الوظيفية <span className="text-red-500">*</span></label>
+                    <select 
+                      value={userData.jobStatus || ''} 
+                      onChange={(e) => { setUserData({...userData, jobStatus: e.target.value}); setProfileError(''); }}
+                      className="w-full p-2 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl text-[11px] focus:border-gold outline-none dark:text-white"
+                    >
+                      <option value="">اختر الحالة</option>
+                      <option value="موظف حكومي">موظف حكومي</option>
+                      <option value="موظف قطاع خاص">موظف قطاع خاص</option>
+                      <option value="متقاعد">متقاعد</option>
+                      <option value="لا يوجد عمل">لا يوجد عمل</option>
+                    </select>
+                  </div>
+                </div>
+
                 <div className="space-y-1">
                   <label className="text-[9px] font-bold text-brand dark:text-gold/80 px-1">اسم العميل (ثلاثي) <span className="text-red-500">*</span></label>
                   <div className="grid grid-cols-3 gap-2">
@@ -543,81 +615,6 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                       onChange={(e) => setUserData({...userData, lastName: e.target.value})}
                       className="w-full p-2 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl text-[11px] focus:border-gold outline-none dark:text-white"
                     />
-                  </div>
-                </div>
-
-                  <div className="grid grid-cols-2 gap-2">
-                  <div className="space-y-1">
-                    <label className="text-[9px] font-bold text-brand dark:text-gold/80 px-1">العمر</label>
-                    <input 
-                      type="text" 
-                      inputMode="numeric"
-                      placeholder="بالسنوات"
-                      onKeyDown={onlyNumbers}
-                      value={userData.age || ''}
-                      onChange={(e) => setUserData({...userData, age: e.target.value.replace(/\D/g, '')})}
-                      className="w-full p-2 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl text-[11px] focus:border-gold outline-none dark:text-white"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="text-[9px] font-bold text-brand dark:text-gold/80 px-1">رقم الهوية</label>
-                    <div className="w-full p-2 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl text-[11px] font-bold text-brand dark:text-white flex items-center justify-center">
-                      {userData.nationalId || '—'}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="space-y-1">
-                    <label className="text-[9px] font-bold text-brand dark:text-gold/80 px-1">رقم الجوال <span className="text-red-500">*</span></label>
-                    <input 
-                      type="tel" 
-                      placeholder="05xxxxxxxx"
-                      value={userData.mobile || ''}
-                      onChange={(e) => { setUserData({...userData, mobile: e.target.value}); setProfileError(''); }}
-                      onKeyDown={onlyNumbers}
-                      className="w-full p-2 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl text-[11px] focus:border-gold outline-none dark:text-white dir-ltr text-right"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="text-[9px] font-bold text-brand dark:text-gold/80 px-1">الحالة الوظيفية <span className="text-red-500">*</span></label>
-                    <select 
-                      value={userData.jobStatus || ''} 
-                      onChange={(e) => { setUserData({...userData, jobStatus: e.target.value}); setProfileError(''); }}
-                      className="w-full p-2 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl text-[11px] focus:border-gold outline-none dark:text-white"
-                    >
-                      <option value="">اختر الحالة</option>
-                      <option value="موظف حكومي">موظف حكومي</option>
-                      <option value="موظف قطاع خاص">موظف قطاع خاص</option>
-                      <option value="متقاعد">متقاعد</option>
-                      <option value="لا يوجد عمل">لا يوجد عمل</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="space-y-1">
-                    <label className="text-[9px] font-bold text-brand dark:text-gold/80 px-1">المنطقة <span className="text-red-500">*</span></label>
-                    <select 
-                      value={userData.region || ''} 
-                      onChange={(e) => { setUserData({...userData, region: e.target.value, city: ''}); setProfileError(''); }}
-                      className="w-full p-2 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl text-[11px] focus:border-gold outline-none dark:text-white"
-                    >
-                      <option value="">اختر</option>
-                      {Object.keys(REGION_CITIES).map(r => <option key={r} value={r}>{r}</option>)}
-                    </select>
-                  </div>
-                  <div className="space-y-1">
-                    <label className="text-[9px] font-bold text-brand dark:text-gold/80 px-1">المدينة <span className="text-red-500">*</span></label>
-                    <select 
-                      value={userData.city || ''} 
-                      onChange={(e) => { setUserData({...userData, city: e.target.value}); setProfileError(''); }}
-                      className="w-full p-2 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl text-[11px] focus:border-gold outline-none dark:text-white"
-                      disabled={!userData.region}
-                    >
-                      <option value="">اختر</option>
-                      {userData.region && REGION_CITIES[userData.region]?.map(c => <option key={c} value={c}>{c}</option>)}
-                    </select>
                   </div>
                 </div>
 
