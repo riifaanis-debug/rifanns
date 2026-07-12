@@ -1203,14 +1203,14 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                    const overdue = invoices.find((i:any) => (i.status || '').toLowerCase() !== 'paid');
                    const now = new Date();
                    const timeStr = now.toLocaleTimeString('ar-SA', { hour: 'numeric', minute: '2-digit' });
-                     const quickActions = [
-                       { icon: Receipt, label: 'فواتيري', onClick: () => setActiveTab('invoices') },
-                       { icon: PenTool, label: 'عقودي', onClick: () => setActiveTab('contracts') },
-                       { icon: FileText, label: 'طلباتي', onClick: () => setActiveTab('requests') },
-                       { icon: FolderOpen, label: 'مستنداتي', onClick: () => setIsEditing(true) },
-                       { icon: FileText, label: 'سندات الأمر', onClick: () => setActiveTab('promissory') },
-                       { icon: Plus, label: 'طلب جديد', onClick: () => { window.location.hash = '#/waive-info'; onClose(); } },
-                     ];
+                      const quickActions = [
+                        { icon: Plus, label: 'طلب جديد', onClick: () => { window.location.hash = '#/waive-info'; onClose(); } },
+                        { icon: FileText, label: 'سندات الأمر', onClick: () => setActiveTab('promissory') },
+                        { icon: FolderOpen, label: 'مستنداتي', onClick: () => setIsEditing(true) },
+                        { icon: FileText, label: 'طلباتي', onClick: () => setActiveTab('requests') },
+                        { icon: PenTool, label: 'عقودي', onClick: () => setActiveTab('contracts') },
+                        { icon: Receipt, label: 'فواتيري', onClick: () => setActiveTab('invoices') },
+                      ];
                      return (
                        <>
                          {/* Hero — profile completion */}
