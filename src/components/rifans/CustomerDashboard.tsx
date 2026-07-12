@@ -1195,7 +1195,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
 
                  {/* === Mobile Dashboard Overview (matches mockup 100%) === */}
                  {(() => {
-                   const profileFields = [userData.firstName, userData.lastName, userData.nationalId, userData.mobile, userData.email, userData.jobStatus, userData.region, userData.city, userData.bank, userData.age];
+                   const profileFields = [userData.firstName, userData.lastName, userData.nationalId, userData.mobile, userData.email, userData.jobStatus, userData.region, userData.city, userData.age];
                    const completion = Math.round((profileFields.filter(Boolean).length / profileFields.length) * 100);
                    const dash = 2 * Math.PI * 34;
                    const overdue = invoices.find((i:any) => (i.status || '').toLowerCase() !== 'paid');
@@ -1431,20 +1431,6 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                                 </div>
                               </div>
 
-                              <div className="grid grid-cols-1 gap-3">
-                                {/* Bank / Financial Entity */}
-                                <div>
-                                  <label className="text-[9px] text-muted block mb-1">الجهة المالية</label>
-                                  {isEditing ? (
-                                    <select value={userData.bank || ''} onChange={(e) => setUserData({...userData, bank: e.target.value})} className="w-full py-1 px-2 rounded-[8px] border border-gray-200 text-[11px] bg-white dark:bg-white/5 focus:border-gold outline-none dark:text-white">
-                                      <option value="">اختر البنك أو الجهة التمويلية</option>
-                                      {BANKS.map(b => <option key={b} value={b}>{b}</option>)}
-                                    </select>
-                                  ) : (
-                                    <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">{userData.bank || '---'}</div>
-                                  )}
-                              </div>
-                            </div>
                             </div>
                           </div>
                           </div>
