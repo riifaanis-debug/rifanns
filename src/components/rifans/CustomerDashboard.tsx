@@ -1203,155 +1203,86 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                    const overdue = invoices.find((i:any) => (i.status || '').toLowerCase() !== 'paid');
                    const now = new Date();
                    const timeStr = now.toLocaleTimeString('ar-SA', { hour: 'numeric', minute: '2-digit' });
-                    const quickActions = [
-                      { icon: Plus, label: 'طلب جديد', onClick: () => { window.location.hash = '#/waive-info'; onClose(); } },
-                      { icon: PenTool, label: 'عقودي', onClick: () => setActiveTab('contracts') },
-                      { icon: Receipt, label: 'دفع فاتورة', onClick: () => setActiveTab('invoices') },
-                      { icon: Edit, label: 'سندات الأمر', onClick: () => setActiveTab('promissory') },
-                      { icon: FolderOpen, label: 'مستنداتي', onClick: () => setIsEditing(true) },
-                      { icon: User, label: 'بياناتي', onClick: () => setIsEditing(true) },
-                    ];
-                    return (
-                      <>
-                        {/* Hero — profile completion */}
-                       <div className="relative overflow-hidden rounded-[22px] p-5 bg-gradient-to-bl from-[#3a0a4d] via-brand to-[#160521] shadow-[0_20px_40px_-18px_rgba(34,4,44,0.7)]">
-                         <div className="absolute -left-8 -top-8 w-40 h-40 rounded-full border border-gold/10" />
-                         <div className="flex items-start justify-between gap-4">
-                           <div className="flex-1 text-right">
-                             <div className="text-[12px] text-gold/70 mb-1">مرحباً،</div>
-                             <div className="text-[20px] font-black text-gold leading-tight truncate">{userData.fullName || 'أكمل بياناتك'}</div>
-                             <div className="mt-4 grid grid-cols-2 gap-2">
-                               <div className="rounded-xl bg-white/5 border border-white/10 px-3 py-2">
-                                 <div className="text-[9px] text-white/50 mb-0.5 flex items-center gap-1 justify-end"><Clock size={9}/> آخر دخول</div>
-                                 <div className="text-[11px] text-white font-bold text-right">اليوم {timeStr}</div>
-                               </div>
-                               <div className="rounded-xl bg-white/5 border border-white/10 px-3 py-2">
-                                 <div className="text-[9px] text-white/50 mb-0.5 flex items-center gap-1 justify-end"><CreditCard size={9}/> رقم الملف</div>
-                                 <div className="text-[10px] text-white font-bold font-mono text-right truncate">{userData.fileNumber || '---'}</div>
-                               </div>
-                             </div>
-                           </div>
-                           <div className="flex flex-col items-center shrink-0">
-                             <div className="relative w-[86px] h-[86px]">
-                               <svg viewBox="0 0 80 80" className="w-full h-full -rotate-90">
-                                 <circle cx="40" cy="40" r="34" stroke="rgba(199,169,105,0.15)" strokeWidth="6" fill="none"/>
-                                 <circle cx="40" cy="40" r="34" stroke="#C7A969" strokeWidth="6" fill="none" strokeLinecap="round" strokeDasharray={dash} strokeDashoffset={dash - (dash * completion / 100)} />
-                               </svg>
-                               <div className="absolute inset-0 flex items-center justify-center text-gold text-[16px] font-black">{completion}%</div>
-                             </div>
-                             <div className="text-[9px] text-white/60 mt-1">درجة اكتمال الملف</div>
-                             <button onClick={() => setShowCompleteProfile(true)} className="mt-2 bg-gold text-brand text-[10px] font-bold px-3 py-1.5 rounded-lg">إكمال الملف</button>
-                           </div>
-                         </div>
-                       </div>
+                     const quickActions = [
+                       { icon: Receipt, label: 'فواتيري', onClick: () => setActiveTab('invoices') },
+                       { icon: PenTool, label: 'عقودي', onClick: () => setActiveTab('contracts') },
+                       { icon: FileText, label: 'طلباتي', onClick: () => setActiveTab('requests') },
+                       { icon: FolderOpen, label: 'مستنداتي', onClick: () => setIsEditing(true) },
+                       { icon: FileText, label: 'سندات الأمر', onClick: () => setActiveTab('promissory') },
+                       { icon: Plus, label: 'طلب جديد', onClick: () => { window.location.hash = '#/waive-info'; onClose(); } },
+                     ];
+                     return (
+                       <>
+                         {/* Hero — profile completion */}
+                        <div className="relative overflow-hidden rounded-[22px] p-5 bg-gradient-to-bl from-[#3a0a4d] via-brand to-[#160521] shadow-[0_20px_40px_-18px_rgba(34,4,44,0.7)]">
+                          <div className="absolute -left-8 -top-8 w-40 h-40 rounded-full border border-gold/10" />
+                          <div className="flex items-start justify-between gap-4">
+                            <div className="flex-1 text-right">
+                              <div className="text-[12px] text-gold/70 mb-1">مرحباً،</div>
+                              <div className="text-[20px] font-black text-gold leading-tight truncate">{userData.fullName || 'أكمل بياناتك'}</div>
+                              <div className="mt-4 grid grid-cols-2 gap-2">
+                                <div className="rounded-xl bg-white/5 border border-white/10 px-3 py-2">
+                                  <div className="text-[9px] text-white/50 mb-0.5 flex items-center gap-1 justify-end"><Clock size={9}/> آخر دخول</div>
+                                  <div className="text-[11px] text-white font-bold text-right">اليوم {timeStr}</div>
+                                </div>
+                                <div className="rounded-xl bg-white/5 border border-white/10 px-3 py-2">
+                                  <div className="text-[9px] text-white/50 mb-0.5 flex items-center gap-1 justify-end"><CreditCard size={9}/> رقم الملف</div>
+                                  <div className="text-[10px] text-white font-bold font-mono text-right truncate">{userData.fileNumber || '---'}</div>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex flex-col items-center shrink-0">
+                              <div className="relative w-[86px] h-[86px]">
+                                <svg viewBox="0 0 80 80" className="w-full h-full -rotate-90">
+                                  <circle cx="40" cy="40" r="34" stroke="rgba(199,169,105,0.15)" strokeWidth="6" fill="none"/>
+                                  <circle cx="40" cy="40" r="34" stroke="#C7A969" strokeWidth="6" fill="none" strokeLinecap="round" strokeDasharray={dash} strokeDashoffset={dash - (dash * completion / 100)} />
+                                </svg>
+                                <div className="absolute inset-0 flex items-center justify-center text-gold text-[16px] font-black">{completion}%</div>
+                              </div>
+                              <div className="text-[9px] text-white/60 mt-1">درجة اكتمال الملف</div>
+                              <button onClick={() => setShowCompleteProfile(true)} className="mt-2 bg-gold text-brand text-[10px] font-bold px-3 py-1.5 rounded-lg">إكمال الملف</button>
+                            </div>
+                          </div>
+                        </div>
 
-                        {/* Section title */}
-                       {overdue && (
-                         <>
-                           <h3 className="text-[13px] font-black text-brand dark:text-white text-right pt-1">يتطلب إجراء منك</h3>
-                           <div className="rounded-2xl bg-red-50/70 dark:bg-red-950/30 border border-red-100 dark:border-red-900/40 p-3.5">
-                             <div className="flex items-start gap-3 mb-3">
-                               <div className="flex-1 text-right">
-                                 <div className="text-[14px] font-black text-red-600">فاتورة مستحقة الدفع</div>
-                                 <div className="text-[10px] text-gray-600 dark:text-gray-400 mt-1 leading-relaxed">لديك فاتورة رقم {overdue.invoice_number || overdue.number || '---'} بمبلغ {formatAmount(overdue.amount || 0)} ر.س</div>
-                               </div>
-                               <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center border border-red-200 shrink-0 relative">
-                                 <Receipt size={18} className="text-red-500" />
-                                 <span className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-red-500 border-2 border-white flex items-center justify-center text-white text-[8px] font-black">!</span>
-                               </div>
-                             </div>
-                             <div className="flex items-center justify-between gap-2">
-                               <button onClick={() => setActiveTab('invoices')} className="bg-brand text-white text-[11px] font-bold px-4 py-2 rounded-xl">سداد الآن</button>
-                               <button onClick={() => setActiveTab('invoices')} className="text-[10px] text-brand/70 dark:text-gold font-bold flex items-center gap-1">
-                                 عرض جميع الفواتير <ArrowRight size={11} />
-                               </button>
-                             </div>
-                           </div>
-                         </>
-                       )}
+                        {/* Quick actions — horizontal scroll row (matches mockup) */}
+                        <div className="flex gap-2 overflow-x-auto no-scrollbar -mx-1 px-1 py-1" dir="rtl">
+                          {quickActions.map((a, i) => (
+                            <button key={i} onClick={a.onClick} className="shrink-0 w-[72px] h-[72px] rounded-2xl bg-white dark:bg-[#12031a] border border-gold/40 flex flex-col items-center justify-center gap-1 hover:border-gold transition-all shadow-sm">
+                              <a.icon size={20} className="text-brand dark:text-gold" strokeWidth={1.5} />
+                              <span className="text-[10px] font-bold text-brand dark:text-white">{a.label}</span>
+                            </button>
+                          ))}
+                        </div>
 
-                       {/* Header — quick actions */}
-                       <h3 className="text-[13px] font-black text-brand dark:text-white text-right pt-1">إجراءات سريعة</h3>
+                         {/* Requires action — red overdue invoice */}
+                        {overdue && (
+                          <>
+                            <h3 className="text-[13px] font-black text-brand dark:text-white text-right pt-1">يتطلب إجراء منك</h3>
+                            <div className="rounded-2xl bg-red-50/70 dark:bg-red-950/30 border border-red-100 dark:border-red-900/40 p-3.5">
+                              <div className="flex items-start gap-3 mb-3">
+                                <div className="flex-1 text-right">
+                                  <div className="text-[14px] font-black text-red-600">فاتورة مستحقة الدفع</div>
+                                  <div className="text-[10px] text-gray-600 dark:text-gray-400 mt-1 leading-relaxed">لديك فاتورة رقم {overdue.invoice_number || overdue.number || '---'} بمبلغ {formatAmount(overdue.amount || 0)} ر.س</div>
+                                </div>
+                                <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center border border-red-200 shrink-0 relative">
+                                  <Receipt size={18} className="text-red-500" />
+                                  <span className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-red-500 border-2 border-white flex items-center justify-center text-white text-[8px] font-black">!</span>
+                                </div>
+                              </div>
+                              <div className="flex items-center justify-between gap-2">
+                                <button onClick={() => setActiveTab('invoices')} className="bg-brand text-white text-[11px] font-bold px-4 py-2 rounded-xl">سداد الآن</button>
+                                <button onClick={() => setActiveTab('invoices')} className="text-[10px] text-brand/70 dark:text-gold font-bold flex items-center gap-1">
+                                  عرض جميع الفواتير <ArrowRight size={11} />
+                                </button>
+                              </div>
+                            </div>
+                          </>
+                        )}
+                      </>
+                    );
+                  })()}
 
-                       {/* Quick actions grid 3x2 */}
-                       <div className="grid grid-cols-3 gap-2">
-                         {quickActions.map((a, i) => (
-                           <button key={i} onClick={a.onClick} className="rounded-2xl bg-white dark:bg-[#12031a] border border-gold/15 p-3 flex flex-col items-center gap-1.5 hover:border-gold/50 transition-all shadow-sm">
-                             <div className="w-9 h-9 rounded-xl bg-gold/10 flex items-center justify-center">
-                               <a.icon size={16} className="text-brand dark:text-gold" />
-                             </div>
-                             <span className="text-[10px] font-bold text-brand dark:text-white">{a.label}</span>
-                           </button>
-                         ))}
-                       </div>
-
-                       {/* 3-column recent lists — طلبات / عقود / سندات */}
-                       <div className="grid grid-cols-3 gap-2 pt-1">
-                         {/* آخر سندات الأمر */}
-                         <div className="rounded-2xl bg-white dark:bg-[#12031a] border border-gold/15 p-2.5 shadow-sm">
-                           <div className="flex items-center justify-between mb-2">
-                             <button onClick={() => setActiveTab('promissory')} className="text-[8px] text-muted">عرض جميع السندات</button>
-                             <h4 className="text-[10px] font-black text-brand dark:text-white">آخر سندات الأمر</h4>
-                           </div>
-                           <div className="space-y-1.5">
-                             {promissoryNotes.slice(0,2).map((n:any) => (
-                               <div key={n.id} className="text-right border-t border-gold/10 pt-1.5 first:border-0 first:pt-0">
-                                 <div className="flex items-center justify-between gap-1">
-                                   <span className={`text-[7px] font-bold px-1.5 py-0.5 rounded ${n.status === 'signed' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>{n.status === 'signed' ? 'موقّع' : 'بانتظار'}</span>
-                                   <div className="text-[8px] font-bold text-brand dark:text-white truncate">سند رقم</div>
-                                 </div>
-                                 <div className="text-[8px] font-mono text-brand/70 dark:text-gold/70 truncate mt-0.5">{n.note_number || '---'}</div>
-                                 <div className="text-[7px] text-muted mt-0.5">{new Date(n.created_at).toLocaleDateString('ar-SA', { day:'numeric', month:'short' })}</div>
-                               </div>
-                             ))}
-                             {promissoryNotes.length === 0 && <div className="text-[8px] text-muted text-center py-2">لا يوجد</div>}
-                           </div>
-                         </div>
-
-                         {/* آخر العقود */}
-                         <div className="rounded-2xl bg-white dark:bg-[#12031a] border border-gold/15 p-2.5 shadow-sm">
-                           <div className="flex items-center justify-between mb-2">
-                             <button onClick={() => setActiveTab('contracts')} className="text-[8px] text-muted">عرض جميع العقود</button>
-                             <h4 className="text-[10px] font-black text-brand dark:text-white">آخر العقود</h4>
-                           </div>
-                           <div className="space-y-1.5">
-                             {contracts.slice(0,2).map((c:any) => (
-                               <div key={c.id} className="text-right border-t border-gold/10 pt-1.5 first:border-0 first:pt-0">
-                                 <div className="flex items-center justify-between gap-1">
-                                   <span className="text-[7px] font-bold px-1.5 py-0.5 rounded bg-green-100 text-green-700">نشط</span>
-                                   <div className="text-[8px] font-bold text-brand dark:text-white truncate">{c.contract_type || 'عقد'}</div>
-                                 </div>
-                                 <div className="text-[8px] font-mono text-brand/70 dark:text-gold/70 truncate mt-0.5">{c.contract_number || '---'}</div>
-                                 <div className="text-[7px] text-muted mt-0.5">{new Date(c.created_at).toLocaleDateString('ar-SA', { day:'numeric', month:'short' })}</div>
-                               </div>
-                             ))}
-                             {contracts.length === 0 && <div className="text-[8px] text-muted text-center py-2">لا يوجد</div>}
-                           </div>
-                         </div>
-
-                         {/* آخر الطلبات */}
-                         <div className="rounded-2xl bg-white dark:bg-[#12031a] border border-gold/15 p-2.5 shadow-sm">
-                           <div className="flex items-center justify-between mb-2">
-                             <button onClick={() => setActiveTab('requests')} className="text-[8px] text-muted">عرض جميع الطلبات</button>
-                             <h4 className="text-[10px] font-black text-brand dark:text-white">آخر الطلبات</h4>
-                           </div>
-                           <div className="space-y-1.5">
-                             {requests.slice(0,2).map((r:any) => (
-                               <div key={r.id} className="text-right border-t border-gold/10 pt-1.5 first:border-0 first:pt-0">
-                                 <div className="flex items-center justify-between gap-1">
-                                   <span className={`text-[7px] font-bold px-1.5 py-0.5 rounded ${r.status === 'completed' ? 'bg-green-100 text-green-700' : r.status === 'pending_client' ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'}`}>{r.status === 'completed' ? 'مكتمل' : r.status === 'pending_client' ? 'بانتظار' : 'قيد الدراسة'}</span>
-                                   <div className="text-[8px] font-bold text-brand dark:text-white truncate">{r.request_type || 'طلب'}</div>
-                                 </div>
-                                 <div className="text-[7px] text-muted mt-0.5 text-right">{new Date(r.created_at).toLocaleDateString('ar-SA', { day:'numeric', month:'short', year:'numeric' })}</div>
-                               </div>
-                             ))}
-                             {requests.length === 0 && <div className="text-[8px] text-muted text-center py-2">لا يوجد</div>}
-                           </div>
-                         </div>
-                       </div>
-                     </>
-                   );
-                 })()}
 
 
                {/* Info Sections with Improved Design */}
