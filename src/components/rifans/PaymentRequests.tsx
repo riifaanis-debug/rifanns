@@ -156,14 +156,14 @@ export const AdminPaymentRequests: React.FC = () => {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="ابحث بالاسم / الهوية / الجوال"
-              className="w-full pr-9 pl-3 py-2.5 text-[13px] rounded-xl border border-gold/30 bg-white dark:bg-[#1a0830] text-brand dark:text-white focus:outline-none focus:border-gold"
+              className="w-full pr-9 pl-3 py-1 text-[13px] rounded-xl border border-gold/30 bg-white dark:bg-[#1a0830] text-brand dark:text-white focus:outline-none focus:border-gold"
               style={{ fontSize: '16px' }}
             />
           </div>
           <select
             value={selectedUserId}
             onChange={(e) => setSelectedUserId(e.target.value)}
-            className="w-full px-3 py-2.5 text-[13px] rounded-xl border border-gold/30 bg-white dark:bg-[#1a0830] text-brand dark:text-white focus:outline-none focus:border-gold"
+            className="w-full px-3 py-1 text-[13px] rounded-xl border border-gold/30 bg-white dark:bg-[#1a0830] text-brand dark:text-white focus:outline-none focus:border-gold"
             style={{ fontSize: '16px' }}
           >
             <option value="">— اختر العميل —</option>
@@ -184,7 +184,7 @@ export const AdminPaymentRequests: React.FC = () => {
             value={amountSar}
             onChange={(e) => setAmountSar(e.target.value)}
             placeholder="0.00"
-            className="w-full px-3 py-2.5 text-[14px] font-bold rounded-xl border border-gold/30 bg-white dark:bg-[#1a0830] text-brand dark:text-white focus:outline-none focus:border-gold"
+            className="w-full px-3 py-1 text-[14px] font-bold rounded-xl border border-gold/30 bg-white dark:bg-[#1a0830] text-brand dark:text-white focus:outline-none focus:border-gold"
             style={{ fontSize: '16px' }}
           />
         </div>
@@ -200,7 +200,7 @@ export const AdminPaymentRequests: React.FC = () => {
             value={amountUsd}
             readOnly
             placeholder="0.00"
-            className="w-full px-3 py-2.5 text-[14px] font-bold rounded-xl border border-gold/30 bg-gray-50 dark:bg-[#0a0114] text-brand dark:text-white"
+            className="w-full px-3 py-1 text-[14px] font-bold rounded-xl border border-gold/30 bg-gray-50 dark:bg-[#0a0114] text-brand dark:text-white"
             style={{ fontSize: '16px' }}
           />
         </div>
@@ -213,7 +213,7 @@ export const AdminPaymentRequests: React.FC = () => {
             onChange={(e) => setDescription(e.target.value)}
             rows={2}
             placeholder="مثال: أتعاب خدمة إعادة جدولة"
-            className="w-full px-3 py-2.5 text-[13px] rounded-xl border border-gold/30 bg-white dark:bg-[#1a0830] text-brand dark:text-white focus:outline-none focus:border-gold resize-none"
+            className="w-full px-3 py-1 text-[13px] rounded-xl border border-gold/30 bg-white dark:bg-[#1a0830] text-brand dark:text-white focus:outline-none focus:border-gold resize-none"
             style={{ fontSize: '16px' }}
           />
         </div>
