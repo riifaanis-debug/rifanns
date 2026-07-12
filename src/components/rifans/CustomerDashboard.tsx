@@ -1109,7 +1109,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                        <div className="flex items-center gap-2">
                          <Receipt className="text-gold" size={16} />
                          <h3 className="text-[13px] font-bold text-brand dark:text-white">
-                           فاتورة رقم {inv.id}
+                           فاتورة رقم <span className="font-mono">{inv.id}</span>
                          </h3>
                        </div>
                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${inv.status === 'paid' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>
@@ -1123,7 +1123,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                      </p>
                      <div className="flex justify-between items-center mb-3">
                        <span className="text-[11px] text-muted">{new Date(inv.created_at).toLocaleDateString('ar-SA')}</span>
-                       <span className="text-sm font-black text-gold">{formatAmount(inv.amount)} ر.س</span>
+                       <span className="text-sm font-black text-gold font-mono">{formatAmount(inv.amount)} ر.س</span>
                      </div>
                      <button 
                        onClick={() => window.location.hash = `#/invoice/${inv.submission_id}`}
@@ -1156,7 +1156,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                      <div className="flex justify-between items-start mb-2">
                        <div className="flex items-center gap-2">
                          <FileText className="text-gold" size={16} />
-                         <h3 className="text-[13px] font-bold text-brand dark:text-white">سند لأمر رقم {note.id}</h3>
+                         <h3 className="text-[13px] font-bold text-brand dark:text-white">سند لأمر رقم <span className="font-mono">{note.id}</span></h3>
                        </div>
                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${note.status === 'signed' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>
                          {note.status === 'signed' ? 'موقّع' : 'بانتظار التوقيع'}
@@ -1164,7 +1164,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                      </div>
                      <div className="flex justify-between items-center mb-3">
                        <span className="text-[11px] text-muted">{new Date(note.created_at).toLocaleDateString('ar-SA')}</span>
-                       <span className="text-sm font-black text-gold">{formatAmount(note.amount)} ر.س</span>
+                       <span className="text-sm font-black text-gold font-mono">{formatAmount(note.amount)} ر.س</span>
                      </div>
                      <button
                        onClick={() => window.location.hash = `#/promissory/${note.id}`}
