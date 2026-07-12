@@ -712,7 +712,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
            <button 
              onClick={() => setActiveTab('profile')}
              className={`flex-1 min-w-[80px] py-2.5 rounded-[12px] text-[11px] font-bold transition-all flex flex-col items-center justify-center gap-1
-               ${activeTab === 'profile' ? 'bg-brand text-gold shadow-md' : 'bg-white text-muted border border-gray-100 hover:bg-gray-50'}`}
+               ${false ? 'bg-brand text-gold shadow-md' : 'bg-white text-muted border border-gray-100 hover:bg-gray-50'}`}
            >
              <User size={14} />
              بياناتي
