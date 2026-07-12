@@ -706,7 +706,8 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
            </div>
         </div>
 
-        {/* Tabs - بياناتي، طلباتي، عقودي، فواتيري */}
+        {/* Tabs - hidden on profile (mockup uses quick-action row instead) */}
+        {activeTab !== 'profile' && (
         <div className="flex p-4 gap-1.5 overflow-x-auto no-scrollbar">
            <button 
              onClick={() => setActiveTab('profile')}
@@ -765,6 +766,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
              سداد المدفوعات
            </button>
         </div>
+        )}
 
         {/* Content */}
         <div className="flex-1 overflow-y-auto px-4 pb-8 custom-scrollbar">
