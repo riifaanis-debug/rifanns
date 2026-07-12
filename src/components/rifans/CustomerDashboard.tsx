@@ -1245,20 +1245,11 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                           {/* Personal Info */}
                           <div className="bg-white dark:bg-[#12031a] rounded-[24px] border border-gold/20 p-3 shadow-sm relative overflow-hidden" dir="rtl">
                             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold/30 to-transparent"></div>
-                            <div className="flex flex-col gap-2 mb-3">
-                              <div className="flex items-center gap-2">
-                                <div className="w-7 h-7 rounded-lg bg-gold/10 flex items-center justify-center text-gold border border-gold/20">
-                                  <User size={16} />
-                                </div>
-                                <h3 className="text-[14px] font-black text-brand dark:text-gold">البيانات الشخصية</h3>
+                            <div className="flex items-center gap-2 mb-3">
+                              <div className="w-7 h-7 rounded-lg bg-gold/10 flex items-center justify-center text-gold border border-gold/20">
+                                <User size={16} />
                               </div>
-                              <button 
-                                onClick={() => setShowCompleteProfile(true)}
-                                className="text-[8px] font-bold text-white bg-brand dark:bg-gold dark:text-brand px-2 py-0.5 rounded-full shadow hover:scale-105 transition-transform flex items-center gap-1 w-fit self-end"
-                              >
-                                <UserPlus size={9} />
-                                إكمال الملف الشخصي
-                              </button>
+                              <h3 className="text-[14px] font-black text-brand dark:text-gold">البيانات الشخصية</h3>
                             </div>
 
                             <div className="grid grid-cols-1 gap-3">
