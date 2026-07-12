@@ -1345,11 +1345,11 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                                       inputMode="numeric"
                                       value={userData.age || ''} 
                                       onChange={(e) => setUserData({...userData, age: e.target.value.replace(/\D/g, '')})}
-                                      className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none"
+                                      className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none font-mono"
                                       placeholder="بالسنوات"
                                     />
                                   ) : (
-                                    <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">
+                                    <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5 font-mono">
                                       {userData.age || ''}
                                     </div>
                                   )}
