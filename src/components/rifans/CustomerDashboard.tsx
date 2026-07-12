@@ -1292,10 +1292,10 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                                       type="text" 
                                       value={userData.lastName || ''} 
                                       onChange={(e) => setUserData({...userData, lastName: e.target.value})}
-                                      className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none"
+                                      className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none font-mono"
                                     />
                                   ) : (
-                                    <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">
+                                    <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5 font-mono">
                                       {userData.lastName || ''}
                                     </div>
                                   )}
@@ -1328,11 +1328,11 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                                       inputMode="numeric"
                                       value={userData.mobile || ''} 
                                       readOnly
-                                      className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] font-bold tracking-wider focus:border-gold outline-none dir-ltr text-left bg-gray-50 cursor-not-allowed opacity-80"
+                                      className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] font-bold tracking-wider focus:border-gold outline-none dir-ltr text-left bg-gray-50 cursor-not-allowed opacity-80 font-mono"
                                       placeholder="05xxxxxxxx"
                                     />
                                   ) : (
-                                    <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5 dir-ltr text-right">
+                                    <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5 dir-ltr text-right font-mono">
                                       {userData.mobile || ''}
                                     </div>
                                   )}
