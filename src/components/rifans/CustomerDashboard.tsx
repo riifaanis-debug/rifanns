@@ -1198,36 +1198,30 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                    const completion = Math.round((profileFields.filter(Boolean).length / profileFields.length) * 100);
                    const dash = 2 * Math.PI * 34;
                    const overdue = invoices.find((i:any) => (i.status || '').toLowerCase() !== 'paid');
-                   const now = new Date();
-                   const timeStr = now.toLocaleTimeString('ar-SA', { hour: 'numeric', minute: '2-digit' });
-                      const quickActions = [
-                        { icon: Plus, label: 'طلب جديد', onClick: () => { window.location.hash = '#/waive-info'; onClose(); } },
-                        { icon: FileText, label: 'سندات الأمر', onClick: () => setActiveTab('promissory') },
-                        { icon: FolderOpen, label: 'مستنداتي', onClick: () => setIsEditing(true) },
-                        { icon: FileText, label: 'طلباتي', onClick: () => setActiveTab('requests') },
-                        { icon: PenTool, label: 'عقودي', onClick: () => setActiveTab('contracts') },
-                        { icon: Receipt, label: 'فواتيري', onClick: () => setActiveTab('invoices') },
-                      ];
-                     return (
-                       <>
-                          {/* Hero — profile completion */}
-                          <div className="relative min-h-[150px] overflow-hidden rounded-[18px] px-3 py-4 bg-gradient-to-bl from-[#320540] via-brand to-[#19011f] shadow-[0_18px_34px_-18px_rgba(34,4,44,0.65)]" dir="rtl">
-                            <div className="absolute -left-14 -top-10 w-[160px] h-[160px] rounded-full border border-gold/10" />
-                            <div className="relative z-[1] flex h-full items-start justify-between gap-3">
-                              <div className="flex-1 min-w-0 text-right">
-                                <div className="text-[10px] text-gold/70 mb-1">مرحباً،</div>
-                                <div className="text-[16px] font-black text-gold leading-tight truncate">{userData.fullName || 'أكمل بياناتك'}</div>
-                                <div className="mt-3 grid grid-cols-2 gap-2">
-                                  <div className="rounded-[10px] bg-white/5 border border-white/10 px-2 py-1.5">
-                                    <div className="text-[9px] text-white/50 mb-0.5 flex items-center gap-1 justify-end"><Clock size={9}/> آخر دخول</div>
-                                    <div className="text-[10px] text-white font-black text-right truncate">اليوم {timeStr}</div>
-                                  </div>
-                                  <div className="rounded-[10px] bg-white/5 border border-white/10 px-2 py-1.5">
-                                    <div className="text-[9px] text-white/50 mb-0.5 flex items-center gap-1 justify-end"><CreditCard size={9}/> رقم الملف</div>
-                                    <div className="text-[10px] text-white font-black font-mono text-right truncate">{userData.fileNumber || '---'}</div>
-                                  </div>
-                                </div>
-                              </div>
+                       const quickActions = [
+                         { icon: Plus, label: 'طلب جديد', onClick: () => { window.location.hash = '#/waive-info'; onClose(); } },
+                         { icon: FileText, label: 'سندات الأمر', onClick: () => setActiveTab('promissory') },
+                         { icon: FolderOpen, label: 'مستنداتي', onClick: () => setIsEditing(true) },
+                         { icon: FileText, label: 'طلباتي', onClick: () => setActiveTab('requests') },
+                         { icon: PenTool, label: 'عقودي', onClick: () => setActiveTab('contracts') },
+                         { icon: Receipt, label: 'فواتيري', onClick: () => setActiveTab('invoices') },
+                       ];
+                      return (
+                        <>
+                           {/* Hero — profile completion */}
+                           <div className="relative min-h-[150px] overflow-hidden rounded-[18px] px-3 py-4 bg-gradient-to-bl from-[#320540] via-brand to-[#19011f] shadow-[0_18px_34px_-18px_rgba(34,4,44,0.65)]" dir="rtl">
+                             <div className="absolute -left-14 -top-10 w-[160px] h-[160px] rounded-full border border-gold/10" />
+                             <div className="relative z-[1] flex h-full items-start justify-between gap-3">
+                               <div className="flex-1 min-w-0 text-right">
+                                 <div className="text-[10px] text-gold/70 mb-1">مرحباً،</div>
+                                 <div className="text-[16px] font-black text-gold leading-tight truncate">{userData.fullName || 'أكمل بياناتك'}</div>
+                                 <div className="mt-3 grid grid-cols-1 gap-2">
+                                   <div className="rounded-[10px] bg-white/5 border border-white/10 px-2 py-1.5">
+                                     <div className="text-[9px] text-white/50 mb-0.5 flex items-center gap-1 justify-end"><CreditCard size={9}/> رقم الملف</div>
+                                     <div className="text-[10px] text-white font-black font-mono text-right truncate">{userData.fileNumber || '---'}</div>
+                                   </div>
+                                 </div>
+                               </div>
                               <div className="flex w-[74px] shrink-0 flex-col items-center">
                                 <div className="relative w-[64px] h-[64px]">
                                   <svg viewBox="0 0 80 80" className="w-full h-full -rotate-90">
