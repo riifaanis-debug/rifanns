@@ -1260,142 +1260,88 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                             <div
                               className={`overflow-hidden transition-all duration-300 ease-in-out ${isPersonalInfoOpen ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'}`}
                             >
-                            <div className="grid grid-cols-1 gap-3">
-                              {/* First row: First Name, Middle Name, Last Name */}
-                              <div className="grid grid-cols-3 gap-1.5">
-                                <div>
-                                  <label className="text-[9px] text-muted block mb-1">الاسم الأول</label>
+                            <div className="grid grid-cols-1 gap-4">
+                              {/* الاسم الثلاثي */}
+                              <div>
+                                <label className="text-[13px] font-bold text-brand dark:text-gold block mb-2 text-right">الاسم الثلاثي <span className="text-red-500">*</span></label>
+                                <div className="grid grid-cols-3 gap-2" dir="rtl">
                                   {isEditing ? (
-                                    <input 
-                                      type="text" 
-                                      value={userData.firstName || ''} 
-                                      onChange={(e) => setUserData({...userData, firstName: e.target.value})}
-                                      className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none"
-                                    />
+                                    <>
+                                      <input type="text" value={userData.firstName || ''} onChange={(e) => setUserData({...userData, firstName: e.target.value})} placeholder="الأول" className="w-full py-3 px-5 rounded-full border border-gray-200 text-[13px] text-brand placeholder:text-gray-300 focus:border-gold outline-none bg-white text-right" />
+                                      <input type="text" value={userData.middleName || ''} onChange={(e) => setUserData({...userData, middleName: e.target.value})} placeholder="الأوسط" className="w-full py-3 px-5 rounded-full border border-gray-200 text-[13px] text-brand placeholder:text-gray-300 focus:border-gold outline-none bg-white text-right" />
+                                      <input type="text" value={userData.lastName || ''} onChange={(e) => setUserData({...userData, lastName: e.target.value})} placeholder="الأخير" className="w-full py-3 px-5 rounded-full border border-gray-200 text-[13px] text-brand placeholder:text-gray-300 focus:border-gold outline-none bg-white text-right" />
+                                    </>
                                   ) : (
-                                    <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">
-                                      {userData.firstName || ''}
-                                    </div>
-                                  )}
-                                </div>
-                                <div>
-                                  <label className="text-[9px] text-muted block mb-1">الاسم الأوسط</label>
-                                  {isEditing ? (
-                                    <input 
-                                      type="text" 
-                                      value={userData.middleName || ''} 
-                                      onChange={(e) => setUserData({...userData, middleName: e.target.value})}
-                                      className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none"
-                                    />
-                                  ) : (
-                                    <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">
-                                      {userData.middleName || ''}
-                                    </div>
-                                  )}
-                                </div>
-                                <div>
-                                  <label className="text-[9px] text-muted block mb-1">الاسم الأخير</label>
-                                  {isEditing ? (
-                                    <input 
-                                      type="text" 
-                                      value={userData.lastName || ''} 
-                                      onChange={(e) => setUserData({...userData, lastName: e.target.value})}
-                                      className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none font-mono"
-                                    />
-                                  ) : (
-                                    <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5 font-mono">
-                                      {userData.lastName || ''}
-                                    </div>
+                                    <>
+                                      <div className="w-full py-3 px-5 rounded-full border border-gray-200 text-[13px] text-brand dark:text-white bg-white dark:bg-white/5 text-right">{userData.firstName || '—'}</div>
+                                      <div className="w-full py-3 px-5 rounded-full border border-gray-200 text-[13px] text-brand dark:text-white bg-white dark:bg-white/5 text-right">{userData.middleName || '—'}</div>
+                                      <div className="w-full py-3 px-5 rounded-full border border-gray-200 text-[13px] text-brand dark:text-white bg-white dark:bg-white/5 text-right">{userData.lastName || '—'}</div>
+                                    </>
                                   )}
                                 </div>
                               </div>
 
-                              {/* Second row: National ID, Mobile, Age */}
-                              <div className="grid grid-cols-3 gap-1.5">
+                              {/* رقم الهوية & رقم الجوال */}
+                              <div className="grid grid-cols-2 gap-3">
                                 <div>
-                                  <label className="text-[9px] text-muted block mb-1">رقم الهوية الوطنية</label>
+                                  <label className="text-[13px] font-bold text-brand dark:text-gold block mb-2 text-right">رقم الهوية <span className="text-red-500">*</span></label>
                                   {isEditing ? (
-                                    <input 
-                                      type="text" 
-                                      value={userData.nationalId || ''} 
-                                      readOnly
-                                      className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none bg-gray-50 cursor-not-allowed opacity-80"
-                                    />
+                                    <input type="text" value={userData.nationalId || ''} readOnly placeholder="10 أرقام" className="w-full py-3 px-5 rounded-full border border-gray-200 text-[13px] text-brand placeholder:text-gray-300 focus:border-gold outline-none bg-gray-50 cursor-not-allowed text-right font-mono" />
                                   ) : (
-                                    <div className="text-[12px] font-medium text-brand dark:text-white font-mono py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5 flex items-center gap-1.5">
-                                      <CreditCard size={10} />
-                                      {userData.nationalId || ''}
-                                    </div>
+                                    <div className="w-full py-3 px-5 rounded-full border border-gray-200 text-[13px] text-brand dark:text-white bg-white dark:bg-white/5 text-right font-mono">{userData.nationalId || '—'}</div>
                                   )}
                                 </div>
                                 <div>
-                                  <label className="text-[9px] text-muted block mb-1">رقم الجوال</label>
+                                  <label className="text-[13px] font-bold text-brand dark:text-gold block mb-2 text-right">رقم الجوال <span className="text-red-500">*</span></label>
                                   {isEditing ? (
-                                    <input 
-                                      type="tel" 
-                                      inputMode="numeric"
-                                      value={userData.mobile || ''} 
-                                      readOnly
-                                      className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] font-bold tracking-wider focus:border-gold outline-none dir-ltr text-left bg-gray-50 cursor-not-allowed opacity-80 font-mono"
-                                      placeholder="05xxxxxxxx"
-                                    />
+                                    <input type="tel" inputMode="numeric" value={userData.mobile || ''} readOnly placeholder="05xxxxxxxx" className="w-full py-3 px-5 rounded-full border border-gray-200 text-[13px] text-brand placeholder:text-gray-300 focus:border-gold outline-none bg-gray-50 cursor-not-allowed dir-ltr text-left font-mono" />
                                   ) : (
-                                    <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5 dir-ltr text-right font-mono">
-                                      {userData.mobile || ''}
-                                    </div>
+                                    <div className="w-full py-3 px-5 rounded-full border border-gray-200 text-[13px] text-brand dark:text-white bg-white dark:bg-white/5 dir-ltr text-left font-mono">{userData.mobile || '—'}</div>
                                   )}
-                                </div>
-                                <div>
-                                  <label className="text-[9px] text-muted block mb-1">العمر</label>
-                                  {isEditing ? (
-                                    <input 
-                                      type="text" 
-                                      inputMode="numeric"
-                                      value={userData.age || ''} 
-                                      onChange={(e) => setUserData({...userData, age: e.target.value.replace(/\D/g, '')})}
-                                      className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none font-mono"
-                                      placeholder="بالسنوات"
-                                    />
-                                  ) : (
-                                    <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5 font-mono">
-                                      {userData.age || ''}
-                                    </div>
-                                  )}
+                                  <p className="text-[10px] text-gray-400 mt-1 text-right">يبدأ بـ 05 - 10 أرقام</p>
                                 </div>
                               </div>
 
-                              {/* Third row: Region, City, Job Status */}
-                              <div className="grid grid-cols-3 gap-1.5">
+                              {/* المنطقة & المدينة */}
+                              <div className="grid grid-cols-2 gap-3">
                                 <div>
-                                  <label className="text-[9px] text-muted block mb-1">المنطقة</label>
+                                  <label className="text-[13px] font-bold text-brand dark:text-gold block mb-2 text-right">المنطقة <span className="text-red-500">*</span></label>
                                   {isEditing ? (
-                                    <select value={userData.region || ''} onChange={(e) => setUserData({...userData, region: e.target.value, city: ''})} className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none bg-white dark:bg-white/5 dark:text-white">
+                                    <select value={userData.region || ''} onChange={(e) => setUserData({...userData, region: e.target.value, city: ''})} className="w-full py-3 px-5 rounded-full border border-gray-200 text-[13px] text-brand focus:border-gold outline-none bg-white dark:bg-white/5 dark:text-white text-right">
                                       <option value="">اختر المنطقة</option>
                                       {Object.keys(REGION_CITIES).map(r => <option key={r} value={r}>{r}</option>)}
                                     </select>
                                   ) : (
-                                    <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">{userData.region || '---'}</div>
+                                    <div className="w-full py-3 px-5 rounded-full border border-gray-200 text-[13px] text-brand dark:text-white bg-white dark:bg-white/5 text-right">{userData.region || '—'}</div>
                                   )}
                                 </div>
                                 <div>
-                                  <label className="text-[9px] text-muted block mb-1">المدينة</label>
+                                  <label className="text-[13px] font-bold text-brand dark:text-gold block mb-2 text-right">المدينة <span className="text-red-500">*</span></label>
                                   {isEditing ? (
-                                    <select value={userData.city || ''} onChange={(e) => setUserData({...userData, city: e.target.value})} className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none bg-white dark:bg-white/5 dark:text-white" disabled={!userData.region}>
+                                    <select value={userData.city || ''} onChange={(e) => setUserData({...userData, city: e.target.value})} disabled={!userData.region} className="w-full py-3 px-5 rounded-full border border-gray-200 text-[13px] text-brand focus:border-gold outline-none bg-white dark:bg-white/5 dark:text-white text-right">
                                       <option value="">اختر المدينة</option>
                                       {userData.region && REGION_CITIES[userData.region]?.map(c => <option key={c} value={c}>{c}</option>)}
                                     </select>
                                   ) : (
-                                    <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">{userData.city || '---'}</div>
+                                    <div className="w-full py-3 px-5 rounded-full border border-gray-200 text-[13px] text-brand dark:text-white bg-white dark:bg-white/5 text-right">{userData.city || '—'}</div>
+                                  )}
+                                </div>
+                              </div>
+
+                              {/* العمر & الحالة الوظيفية */}
+                              <div className="grid grid-cols-2 gap-3">
+                                <div>
+                                  <label className="text-[13px] font-bold text-brand dark:text-gold block mb-2 text-right">العمر <span className="text-red-500">*</span></label>
+                                  {isEditing ? (
+                                    <input type="text" inputMode="numeric" value={userData.age || ''} onChange={(e) => setUserData({...userData, age: e.target.value.replace(/\D/g, '')})} placeholder="بالسنوات" className="w-full py-3 px-5 rounded-full border border-gray-200 text-[13px] text-brand placeholder:text-gray-300 focus:border-gold outline-none bg-white text-right font-mono" />
+                                  ) : (
+                                    <div className="w-full py-3 px-5 rounded-full border border-gray-200 text-[13px] text-brand dark:text-white bg-white dark:bg-white/5 text-right font-mono">{userData.age || '—'}</div>
                                   )}
                                 </div>
                                 <div>
-                                  <label className="text-[9px] text-muted block mb-1">الحالة الوظيفية</label>
+                                  <label className="text-[13px] font-bold text-brand dark:text-gold block mb-2 text-right">الحالة الوظيفية <span className="text-red-500">*</span></label>
                                   {isEditing ? (
-                                    <select 
-                                      value={userData.jobStatus || ''} 
-                                      onChange={(e) => setUserData({...userData, jobStatus: e.target.value})}
-                                      className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] bg-white focus:border-gold outline-none"
-                                    >
+                                    <select value={userData.jobStatus || ''} onChange={(e) => setUserData({...userData, jobStatus: e.target.value})} className="w-full py-3 px-5 rounded-full border border-gray-200 text-[13px] text-brand bg-white focus:border-gold outline-none text-right">
                                       <option value="">اختر الحالة</option>
                                       <option value="موظف حكومي">موظف حكومي</option>
                                       <option value="موظف قطاع خاص">موظف قطاع خاص</option>
@@ -1403,46 +1349,32 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ user, onClose, on
                                       <option value="لا يوجد عمل">لا يوجد عمل</option>
                                     </select>
                                   ) : (
-                                    <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">
-                                      {userData.jobStatus || ''}
-                                    </div>
+                                    <div className="w-full py-3 px-5 rounded-full border border-gray-200 text-[13px] text-brand dark:text-white bg-white dark:bg-white/5 text-right">{userData.jobStatus || '—'}</div>
                                   )}
                                 </div>
                               </div>
 
-                              {/* Email */}
-                              <div className="grid grid-cols-1 gap-2">
-                                <div>
-                                  <label className="text-[9px] text-muted block mb-1">البريد الإلكتروني <span className="text-[8px] text-muted/60">(اختياري)</span></label>
-                                  <p className="text-[7px] text-muted/50 mb-1">لاستلام التقارير ونتائج الخدمات</p>
-                                  {isEditing ? (
-                                    <input 
-                                      type="email" 
-                                      value={userData.email || ''} 
-                                      onChange={(e) => setUserData({...userData, email: e.target.value})}
-                                      className="w-full py-0.5 px-1.5 rounded-[8px] border border-gray-200 text-[11px] focus:border-gold outline-none dir-ltr text-left"
-                                      placeholder="example@email.com"
-                                    />
-                                  ) : (
-                                    <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5 dir-ltr text-right">
-                                      {userData.email || '—'}
-                                    </div>
-                                  )}
-                                </div>
+                              {/* الجهة المالية */}
+                              <div>
+                                <label className="text-[13px] font-bold text-brand dark:text-gold block mb-2 text-right">الجهة المالية <span className="text-red-500">*</span></label>
+                                {isEditing ? (
+                                  <select value={userData.bank || ''} onChange={(e) => setUserData({...userData, bank: e.target.value})} className="w-full py-3 px-5 rounded-full border border-gray-200 text-[13px] text-brand bg-white dark:bg-white/5 focus:border-gold outline-none dark:text-white text-right">
+                                    <option value="">اختر البنك أو الجهة التمويلية</option>
+                                    {BANKS.map(b => <option key={b} value={b}>{b}</option>)}
+                                  </select>
+                                ) : (
+                                  <div className="w-full py-3 px-5 rounded-full border border-gray-200 text-[13px] text-brand dark:text-white bg-white dark:bg-white/5 text-right">{userData.bank || '—'}</div>
+                                )}
                               </div>
 
-                              <div className="grid grid-cols-1 gap-3">
-                                {/* Bank / Financial Entity */}
-                                <div>
-                                  <label className="text-[9px] text-muted block mb-1">الجهة المالية</label>
-                                  {isEditing ? (
-                                    <select value={userData.bank || ''} onChange={(e) => setUserData({...userData, bank: e.target.value})} className="w-full py-1 px-2 rounded-[8px] border border-gray-200 text-[11px] bg-white dark:bg-white/5 focus:border-gold outline-none dark:text-white">
-                                      <option value="">اختر البنك أو الجهة التمويلية</option>
-                                      {BANKS.map(b => <option key={b} value={b}>{b}</option>)}
-                                    </select>
-                                  ) : (
-                                    <div className="text-[12px] font-medium text-brand dark:text-white py-0.5 px-1.5 bg-gray-50 dark:bg-white/5 rounded-[8px] border border-gray-100 dark:border-white/5">{userData.bank || '---'}</div>
-                                  )}
+                              {/* البريد الإلكتروني (اختياري) */}
+                              <div>
+                                <label className="text-[13px] font-bold text-brand dark:text-gold block mb-2 text-right">البريد الإلكتروني <span className="text-[11px] font-normal text-muted/60">(اختياري)</span></label>
+                                {isEditing ? (
+                                  <input type="email" value={userData.email || ''} onChange={(e) => setUserData({...userData, email: e.target.value})} placeholder="example@email.com" className="w-full py-3 px-5 rounded-full border border-gray-200 text-[13px] text-brand placeholder:text-gray-300 focus:border-gold outline-none bg-white dir-ltr text-left" />
+                                ) : (
+                                  <div className="w-full py-3 px-5 rounded-full border border-gray-200 text-[13px] text-brand dark:text-white bg-white dark:bg-white/5 dir-ltr text-left">{userData.email || '—'}</div>
+                                )}
                               </div>
                             </div>
                             </div>
