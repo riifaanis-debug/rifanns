@@ -896,7 +896,7 @@ const WaiveRequestForm: React.FC<WaiveRequestFormProps> = ({ onClose, prefill })
                        </div>
                        )}
                        {isViewOnly && (
-                         <div className="flex-1 p-2 rounded-[10px] border border-gold/20 text-[11px] bg-gray-50">
+                          <div className="flex-1 py-1 px-2 rounded-[10px] border border-gold/20 text-[11px] bg-gray-50">
                            <span className="truncate">{doc.fileName || 'لا يوجد مرفق'}</span>
                          </div>
                        )}
